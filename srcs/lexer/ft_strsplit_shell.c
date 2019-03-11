@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strsplit_shell.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/01 11:25:54 by tcollard          #+#    #+#             */
-/*   Updated: 2019/03/02 16:02:26 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/parser_lexer.h"
 
 static int			ft_word_counter(char *str, char c)
 {

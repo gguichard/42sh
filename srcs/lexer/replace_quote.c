@@ -1,18 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   replace_quote.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/01 11:26:07 by tcollard          #+#    #+#             */
-/*   Updated: 2019/03/07 11:43:20 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/parser_lexer.h"
+#include "../../includes/builtins.h"
 
-static void	short_cut(char **s, t_env *lst_env)
+static void	short_cut(char **s, t_var *lst_env)
 {
 	char	*dir;
 
@@ -64,7 +54,7 @@ void		replace_str(char **str, char *insert, int pos)
 	}
 }
 
-static int	replace_env_var(char **str, int i, t_env *lst_env)
+static int	replace_env_var(char **str, int i, t_var *lst_env)
 {
 	char	*key;
 	char	*value;
@@ -74,12 +64,12 @@ static int	replace_env_var(char **str, int i, t_env *lst_env)
 	value = NULL;
 	while ((*str)[i + x] && x < 80 && ft_isalnum((*str)[i + x]) == 1)
 		x += 1;
-	if (x >= 80)
-	{
-		write(2, "21sh: env: error too long arguments\n", 36);
-		return (-1);
-	}
-	else if ((*str)[x] == '?')
+	// if (x >= 80)
+	// {
+	// 	write(2, "21sh: env: error too long arguments\n", 36);
+	// 	return (-1);
+	// }
+	if ((*str)[x] == '?')
 		replace_val_ret(str, i, x + 1);
 	else
 	{
@@ -92,7 +82,7 @@ static int	replace_env_var(char **str, int i, t_env *lst_env)
 	return (0);
 }
 
-int			remove_quote(char **s, int *i, t_env *lst_env, t_alloc **alloc)
+int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc **alloc)
 {
 	char	*sub;
 	char	quote;
@@ -121,7 +111,7 @@ int			remove_quote(char **s, int *i, t_env *lst_env, t_alloc **alloc)
 	return (1);
 }
 
-int			convert_quote(char **s, t_env **lst_env, t_alloc **alloc)
+int			convert_quote(char **s, t_var **lst_env, t_alloc **alloc)
 {
 	int		i;
 

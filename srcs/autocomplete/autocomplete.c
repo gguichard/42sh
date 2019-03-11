@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "libft.h"
 #include "convert_path_to_tab.h"
 #include "shell.h"
 #include "autocomplete.h"

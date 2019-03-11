@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include "libft.h"
+#include "shell.h"
 #include "autocomplete.h"
 
 int		valid_file_for_ac(t_ac_rdir_inf *acrd)

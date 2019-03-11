@@ -1,18 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 12:07:27 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/19 15:14:30 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/builtins.h"
 
-int	echo_builtins(t_ast *elem, t_env **lst_env, t_alloc **alloc)
+int	echo_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 {
 	int i;
 	int option;

@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "libft.h"
 #include "shell.h"
 #include "autocomplete.h"
 

@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   analyzer_tools.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/16 19:17:43 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/28 17:12:59 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
 
-int	dispatch_cmd(t_ast *elem, t_env **lst_env, char **tab_path,
+int	dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)
 {
 	int					i;
@@ -40,7 +28,7 @@ int	dispatch_cmd(t_ast *elem, t_env **lst_env, char **tab_path,
 	return (ret);
 }
 
-int	dispatch_logic(t_ast *elem, t_env **lst_env, char **tab_path,
+int	dispatch_logic(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)
 {
 	(void)tab_path;
@@ -63,7 +51,7 @@ int	dispatch_logic(t_ast *elem, t_env **lst_env, char **tab_path,
 	return (-1);
 }
 
-int	dispatch_redir(t_ast *elem, t_env **lst_env, char **tab_path,
+int	dispatch_redir(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)
 {
 	static char		*tab_redir[7] = {">", ">>", ">>&", "<", "<<<", "<>", "<<"};
@@ -86,7 +74,7 @@ int	dispatch_redir(t_ast *elem, t_env **lst_env, char **tab_path,
 	return (1);
 }
 
-int	dispatch_operator(t_ast *elem, t_env **lst_env, char **tab_path,
+int	dispatch_operator(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)
 {
 	(void)tab_path;
@@ -97,7 +85,7 @@ int	dispatch_operator(t_ast *elem, t_env **lst_env, char **tab_path,
 	return (1);
 }
 
-int	dispatch_agreg(t_ast *elem, t_env **lst_env, char **tab_path,
+int	dispatch_agreg(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)
 {
 	static char	*tab_agreg[4] = {"&>", "&>>", ">&", "<&"};

@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_closing_quote.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/01 11:25:41 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/21 20:58:14 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/parser_lexer.h"
 
 int		check_opening_quote(char **str, t_alloc *alloc)
 {
@@ -43,17 +32,19 @@ int		find_closing(char **str, int *i, t_alloc *alloc)
 		*i += 1;
 	if ((*str)[*i] == c)
 		return (1);
-	else
-	{
-		if (!(tmp = missing_quote_prompt(c, alloc)))
-			return (0);
-		(!(save = ft_strdup(*str))) ? ft_exit_malloc() : 0;
-		free(*str);
-		if (!(*str = ft_strjoin(save, tmp)))
-			ft_exit_malloc();
-		free(save);
-		free(tmp);
-		*i = ft_strlen(*str);
-	}
+
+	(void)alloc;
+	// else
+	// {
+	// 	if (!(tmp = missing_quote_prompt(c, alloc)))
+	// 		return (0);
+	// 	(!(save = ft_strdup(*str))) ? ft_exit_malloc() : 0;
+	// 	free(*str);
+	// 	if (!(*str = ft_strjoin(save, tmp)))
+	// 		ft_exit_malloc();
+	// 	free(save);
+	// 	free(tmp);
+	// 	*i = ft_strlen(*str);
+	// }
 	return (1);
 }

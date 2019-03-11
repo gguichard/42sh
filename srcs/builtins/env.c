@@ -1,25 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/17 12:43:30 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/22 22:59:13 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/builtins.h"
 
-static void		add_env(t_env **lst_env, char *env, int x)
+static void		add_env(t_var **lst_env, char *env, int x)
 {
-	t_env	*tmp;
-	t_env	*new;
+	t_var	*tmp;
+	t_var	*new;
 	size_t	len;
 
 	tmp = *lst_env;
-	if (!(new = (t_env*)malloc(sizeof(t_env))))
+	if (!(new = (t_var*)malloc(sizeof(t_var))))
 		ft_exit_malloc();
 	len = ft_strlen(env);
 	new->key = ft_strsub(env, 0, x);
@@ -35,11 +24,11 @@ static void		add_env(t_env **lst_env, char *env, int x)
 	}
 }
 
-static t_env	*lst_env_dup(t_env **orig, t_env **add)
+static t_var	*lst_env_dup(t_var **orig, t_var **add)
 {
-	t_env *tmp;
-	t_env *dup;
-	t_env *swap;
+	t_var *tmp;
+	t_var *dup;
+	t_var *swap;
 
 	tmp = *orig;
 	dup = NULL;
@@ -64,7 +53,7 @@ static t_env	*lst_env_dup(t_env **orig, t_env **add)
 	return (dup);
 }
 
-int				env_cp(char **env, t_env **lst_env)
+int				env_cp(char **env, t_var **lst_env)
 {
 	int		i;
 	int		x;
@@ -92,12 +81,12 @@ int				env_cp(char **env, t_env **lst_env)
 	return (1);
 }
 
-int				env_builtins(t_ast *elem, t_env **lst_env, t_alloc **alloc)
+int				env_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 {
 	int		i;
 	int		option;
 	char	*s;
-	t_env	*tmp;
+	t_var	*tmp;
 	char	**save_input;
 
 	s = NULL;

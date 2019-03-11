@@ -3,7 +3,6 @@
 
 # include <dirent.h>
 # include <sys/stat.h>
-# include "libft.h"
 # include "shell.h"
 
 typedef enum		e_ac_suff_type

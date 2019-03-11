@@ -1,8 +1,6 @@
 #ifndef HASHTABLE_H
 # define HASHTABLE_H
 
-# include "libft.h"
-
 # define DEF_BUCKET_COUNT 2053
 
 typedef struct	s_hashentry

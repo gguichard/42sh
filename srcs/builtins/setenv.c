@@ -1,20 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   setenv.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/05 12:08:41 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/21 17:10:11 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/builtins.h"
 
-int	setenv_builtins(t_ast *elem, t_env **lst_env, t_alloc **alloc)
+int	setenv_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 {
-	t_env *tmp;
+	t_var *tmp;
 
 	(void)alloc;
 	tmp = *lst_env;

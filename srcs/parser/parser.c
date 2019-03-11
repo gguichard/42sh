@@ -1,16 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/01 11:48:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/03/02 14:03:52 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/parser_lexer.h"
+#include "../../includes/error.h"
 
 static t_ast	*get_available_node(t_ast **sort)
 {
@@ -68,7 +58,7 @@ static void		clean_tab_and_ast(char **input, t_ast *lst)
 	del_lst_ast(&lst);
 }
 
-void			parser(char **input, t_ast *lst, t_env **lst_env,
+void			parser(char **input, t_ast *lst, t_var **lst_env,
 				t_alloc **alloc)
 {
 	int		i;
@@ -93,6 +83,8 @@ void			parser(char **input, t_ast *lst, t_env **lst_env,
 	}
 	sort_ast(lst, &sort);
 	(*alloc)->ast = &lst;
-	(complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc) : 0;
+
+	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc) : 0;
+
 	clean_tab_and_ast(input, lst);
 }

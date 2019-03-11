@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "libft.h"
+#include "shell.h"
 #include "autocomplete.h"
 
 int		build_ac_suff(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs

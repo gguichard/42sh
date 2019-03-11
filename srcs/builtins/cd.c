@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/16 14:10:02 by jocohen           #+#    #+#             */
-/*   Updated: 2019/02/28 12:33:56 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/builtins.h"
 
 static int	check_access(char *dir, char *folder)
 {
@@ -61,9 +50,9 @@ static int	check_options(t_ast *elem, int *options, t_alloc **alloc)
 	return (check_arg_cd(elem, i));
 }
 
-static int	modif_oldpwd(t_env **lst_env, char *buf)
+static int	modif_oldpwd(t_var **lst_env, char *buf)
 {
-	t_env	*tmp;
+	t_var	*tmp;
 
 	tmp = NULL;
 	if ((tmp = find_elem_env(lst_env, "OLDPWD"))
@@ -83,9 +72,9 @@ static int	modif_oldpwd(t_env **lst_env, char *buf)
 	return (0);
 }
 
-static int	modif_env(char *dir, t_env **lst_env, int options, char *buf)
+static int	modif_env(char *dir, t_var **lst_env, int options, char *buf)
 {
-	t_env	*tmp;
+	t_var	*tmp;
 
 	modif_oldpwd(lst_env, buf);
 	tmp = find_elem_env(lst_env, "PWD");
@@ -97,7 +86,7 @@ static int	modif_env(char *dir, t_env **lst_env, int options, char *buf)
 	return (0);
 }
 
-int			cd_builtins(t_ast *elem, t_env **lst_env, t_alloc **alloc)
+int			cd_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 {
 	int			i;
 	int			options;

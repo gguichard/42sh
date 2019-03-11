@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   unsetenv.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/05 12:10:12 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/13 14:48:02 by jocohen          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/shell.h"
+#include "../../includes/builtins.h"
 
 static int	check_unsetenv_error(t_ast *elem)
 {
@@ -21,10 +10,10 @@ static int	check_unsetenv_error(t_ast *elem)
 	return (0);
 }
 
-static int	unset_exist_env(t_ast *elem, t_env *lst_env)
+static int	unset_exist_env(t_ast *elem, t_var *lst_env)
 {
-	t_env	*tmp;
-	t_env	*tmp_next;
+	t_var	*tmp;
+	t_var	*tmp_next;
 
 	tmp = lst_env;
 	tmp_next = tmp->next;
@@ -45,9 +34,9 @@ static int	unset_exist_env(t_ast *elem, t_env *lst_env)
 	return (0);
 }
 
-int			unsetenv_builtins(t_ast *elem, t_env **lst_env, t_alloc **alloc)
+int			unsetenv_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 {
-	t_env	*tmp;
+	t_var	*tmp;
 
 	(void)alloc;
 	tmp = *lst_env;
