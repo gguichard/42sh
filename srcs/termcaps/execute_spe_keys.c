@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 12:25:49 by jocohen           #+#    #+#             */
-/*   Updated: 2019/02/21 12:00:08 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/03/02 15:39:59 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,14 @@ void	del_char(t_buf *input, int type, t_env **lst)
 			return ;
 		cursor_movement(input, -1);
 		put_term_rout("dc");
-		ft_memmove(input->s + input->x, input->s + input->x
-			+ lenbyte(input->s[input->x]), ft_strlen(input->s + input->x + 1)
-				+ lenbyte(input->s[input->x]));
+		ft_memmove(input->s + input->x, input->s + input->x + 1,
+			ft_strlen(input->s + input->x + 1) + 1);
 		reactualize_output(input, lst);
 	}
 	else if (input->s[input->x])
 	{
-		ft_memmove(input->s + input->x, input->s + input->x
-			+ lenbyte(input->s[input->x]), ft_strlen(input->s + input->x + 1)
-				+ lenbyte(input->s[input->x]));
+		ft_memmove(input->s + input->x, input->s + input->x + 1,
+			ft_strlen(input->s + input->x + 1) + 1);
 		put_term_rout("dc");
 		reactualize_output(input, lst);
 	}

@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 11:18:48 by jocohen           #+#    #+#             */
-/*   Updated: 2019/02/22 21:47:27 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/02 15:34:11 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ void	input_visual_char(t_alloc *al, char k)
 		ft_memmove(al->input->s + al->input->x + 1, al->input->s + al->input->x,
 			ft_strlen(al->input->s + al->input->x) + 1);
 		al->input->s[al->input->x++] = k;
-		if (((display_sizing(0) + ft_strlen_u8(al->input->s))
+		if (((display_sizing(0) + ft_strlen(al->input->s))
 			/ window_width_size()) != prev_line)
 			reactualize_output(al->input, al->env);
 	}
-	else if (g_u8 && (unsigned char)k >= 0xC0 && (unsigned char)k <= 0xF4)
-		input_u8(al, (unsigned char)k, lenbyte(k));
 }
 
 void	analyse_input(t_alloc *al, char k)

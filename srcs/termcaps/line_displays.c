@@ -25,7 +25,7 @@ void	delete_line_pos(t_buf *input, t_env **lst)
 	put_term_rout("cd");
 	caller_display(*lst, input, 0);
 	write_str(input->s, 0);
-	x = display_sizing(0) + ft_strlen_u8(input->s);
+	x = display_sizing(0) + ft_strlen(input->s);
 	input->pos.l = x / window_width_size();
 	input->pos.c = x % window_width_size();
 	check_last_char_column(input);
@@ -72,7 +72,7 @@ void	redisplay_line_selec(t_buf *selec, t_buf *input, t_env **lst)
 	put_term_rout("cd");
 	caller_display(*lst, input, 0);
 	display_spe_line(selec, input);
-	x = display_sizing(0) + ft_strlen_u8(input->s);
+	x = display_sizing(0) + ft_strlen(input->s);
 	input->pos.l = x / window_width_size();
 	input->pos.c = x % window_width_size();
 	check_last_char_column(input);

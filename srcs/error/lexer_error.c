@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/02 11:52:14 by tcollard          #+#    #+#             */
-/*   Updated: 2019/03/01 18:50:07 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/02 16:06:16 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_error_redir_format(char *ope, int len)
 	int			i;
 	int			size;
 	int			save;
-	static char	*operator[16] = {">>", ">>&", ">&-", ">&", ">", "<<<", "<<",
+	static char	*operator[16] = {">>", ">>&", ">&", ">&", ">", "<<<", "<<",
 	"<>", "<&-", "<", "&>>", "&>", "&&", "&", "||", "|"};
 
 	i = 0;

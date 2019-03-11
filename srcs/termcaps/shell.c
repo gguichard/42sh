@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 10:31:12 by jocohen           #+#    #+#             */
-/*   Updated: 2019/02/22 21:38:02 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/03/07 14:32:02 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ int		main(int ac, char **av, char **env)
 {
 	t_env		*lst;
 	t_alloc		al;
+	int			i;
 
-	g_u8 = 0;
-	if (ac == 2 && !ft_strcmp(av[1], "-u"))
-		g_u8 = 1;
+	(void)ac;
+	(void)av;
+	i = 0;
 	g_ret[0] = 0;
 	g_ret[1] = 0;
 	g_in_exec = 0;
@@ -31,6 +32,8 @@ int		main(int ac, char **av, char **env)
 	al.env = 0;
 	al.history = 0;
 	al.input = 0;
+	while (i < 10)
+		al.fd[i++] = -1;
 	env_cp(env, &lst);
 	al.env = &lst;
 	prompt(&al);

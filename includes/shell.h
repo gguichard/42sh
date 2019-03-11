@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/24 12:01:28 by jocohen           #+#    #+#             */
-/*   Updated: 2019/02/28 17:28:51 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/07 11:47:40 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct			s_alloc
 	t_buf				*input;
 	t_ast				**ast;
 	t_env				**env;
-	int					fd[3];
+	int					fd[10];
 }						t_alloc;
 
 typedef int				(*t_dispatch)(t_ast*, t_env **lst_env, char **tab_path,
@@ -112,7 +112,6 @@ int						g_pid;
 int						g_ret[2];
 int						g_resize;
 char					*g_clip;
-int						g_u8;
 
 /*
 ********************************************************************************
@@ -232,11 +231,6 @@ void					delete_line_pos(t_buf *input, t_env **lst);
 void					display_spe_line(t_buf *selec, t_buf *input);
 void					redisplay_line_selec(t_buf *selec, t_buf *input,
 											t_env **lst);
-void					input_u8(t_alloc *al, unsigned char k, size_t nb_byte);
-void					add_u8_buff(t_alloc *al, size_t nb_byte,
-									unsigned char *uc, size_t prev_line);
-size_t					ft_strlen_u8(const char *s);
-size_t					lenbyte(char k);
 size_t					check_prev_char(t_buf *input);
 
 /*
@@ -457,7 +451,8 @@ void					add_input_prev_cmd(char **s, int end, int start,
 void					get_last_index_split(int *i, char *s, int *wd);
 int						main(int argc, char **argv, char **env);
 int						check_opening_quote(char **str, t_alloc *alloc);
-int						ft_is_redir(t_ast *elem, int fd[3], t_alloc *alloc);
+int						ft_is_redir(t_ast *elem, int fd[3], t_alloc *alloc,
+						t_env **lst_env);
 int						ft_is_agreg(t_ast *elem, int fd[3], t_alloc *alloc);
 int						heredoc_content(t_alloc *alloc, t_ast *elem, char *s);
 int						get_last_index(int *i, char *s, int *save,

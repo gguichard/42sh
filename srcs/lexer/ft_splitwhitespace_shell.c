@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 11:25:49 by tcollard          #+#    #+#             */
-/*   Updated: 2019/03/01 23:34:47 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/05 14:39:45 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static int	ft_word_counter(char *s, unsigned int *nb_word)
 			{
 				if (check_redir(s, &i, nb_word) == -1)
 					return (-1);
-				*nb_word += (s[i] && ft_isspace(s[i]) == 0 && s[i + 1]) ? 1 : 0;
+				(ft_isoperator(s[i])) ? i += 1 : 0;
+				*nb_word += (s[i] && ft_isspace(s[i]) == 0) ? 1 : 0;
 				i += (s[i] && ft_isspace(s[i]) == 0) ? 1 : 0;
 			}
 			else

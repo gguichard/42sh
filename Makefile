@@ -6,7 +6,7 @@
 #    By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/26 16:54:18 by tcollard          #+#    #+#              #
-#    Updated: 2019/02/22 19:54:17 by jocohen          ###   ########.fr        #
+#    Updated: 2019/03/02 15:22:30 by jocohen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 .PHONY: all, clean, fclean, re, debug, norme
@@ -58,7 +58,6 @@ SRC =	$(PATH_LEXER)check_closing_quote.c \
 		$(PATH_TOOLS)split_tools_2.c \
 		$(PATH_TOOLS)quote_tools.c \
 		$(PATH_TOOLS)parser_tools.c \
-		$(PATH_TOOLS)utf8.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
 		$(PATH_TOOLS)env_tools.c \
 		$(PATH_TOOLS)env_tools_2.c \
