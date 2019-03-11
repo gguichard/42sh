@@ -44,7 +44,7 @@ size_t				count_same_char(const char *str1, const char *str2);
 int					strlist_insert_sort(t_list **lst, t_list *elem);
 
 void				check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
-		, t_ac_suff_inf *acs, t_list *var_lst);
+		, t_ac_suff_inf *acs, t_var *var_lst);
 
 /*
 ** Remplie le t_ac_suff_inf avec les informations pour autocompleter une
