@@ -1,4 +1,8 @@
-#include "../../includes/shell.h"
+#include "shell.h"
+#include "operator.h"
+#include "builtins.h"
+#include "parser_lexer.h"
+
 
 int	dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)

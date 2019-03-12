@@ -83,6 +83,7 @@ void			parser(char **input, t_ast *lst, t_var **lst_env,
 	}
 	sort_ast(lst, &sort);
 	(*alloc)->ast = &lst;
+	analyzer(sort, lst_env, alloc);
 
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc) : 0;
 
