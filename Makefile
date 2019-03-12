@@ -44,7 +44,8 @@ SRC =	main.c \
 		$(PATH_TOOLS)ast_tools.c \
 		$(PATH_TOOLS)parser_tools.c \
 		$(PATH_TOOLS)env_tools.c \
-		$(PATH_TOOLS)env_tools_2.c
+		$(PATH_TOOLS)env_tools_2.c \
+		$(PATH_TOOLS)builtins_tools.c
 
 OBJ = $(SRC:.c=.o)
 

@@ -24,4 +24,7 @@ void	display_env(t_var *lst);
 void	convert_lst_tab(t_var *lst_env, char ***tab_str);
 char	*get_env_value(t_var *lst_env, char *str);
 
+int		is_builtins(t_alloc *alloc, const char *built_name);
+
+
 #endif
