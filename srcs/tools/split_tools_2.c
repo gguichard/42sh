@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-# include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 static void	check_before_operator(char *s, int *i, unsigned int *nb_word)
 {
@@ -37,20 +37,20 @@ int			check_pos_operator(char *s, int *i, int wn, int *wd_search)
 int			check_operator(char *s, int *i, unsigned int *nb_word, size_t len)
 {
 	int			x;
-	static char	*operator[15] = {">>", ">>&", ">&", ">", "<<<", "<<",
-	"<>", "<", "<&", "&>>", "&>", "&&", "&", "||", "|"};
+	static char	*operator[11] = {">>", ">&", ">", "<<", "<", "<&", "&>", "&&",
+	"&", "||", "|"};
 
 	x = 0;
-	while (x < 15)
+	while (x < 11)
 	{
 		if (ft_strlen(operator[x]) == len && ft_strncmp(&s[*i], operator[x],
 			len) == 0)
 			break ;
 		x += 1;
 	}
-	if (x == 15)
+	if (x == 11)
 		return (ft_error_redir_format(&s[*i], len));
-	else if (x >= 9)
+	else if (x >= 6)
 		*nb_word += (*i > 0 && ft_isspace(s[*i - 1]) == 0) ? 1 : 0;
 	else
 		check_before_operator(s, i, nb_word);
@@ -61,21 +61,21 @@ int			type_operator(char const *s, int *i)
 {
 	int			x;
 	size_t		len;
-	static char	*operator[15] = {">>", ">>&", ">&", ">", "<<<", "<<",
-	"<>", "<", "<&", "&>>", "&>", "&&", "&", "||", "|"};
+	static char	*operator[11] = {">>", ">&", ">", "<<", "<", "<&", "&>", "&&",
+	"&", "||", "|"};
 
 	x = 0;
 	len = 0;
 	while (s[*i + len] && ft_isoperator(s[*i + len]) == 1)
 		len += 1;
-	while (x < 15)
+	while (x < 11)
 	{
 		if (ft_strlen(operator[x]) == len && ft_strncmp(&s[*i], operator[x],
 			len) == 0)
 			break ;
 		x += 1;
 	}
-	if (x >= 9)
+	if (x >= 6)
 		return (1);
 	return (0);
 }

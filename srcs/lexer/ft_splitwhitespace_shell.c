@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 static int	ft_word_counter(char *s, unsigned int *nb_word)
 {

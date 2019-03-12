@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 static char	*get_back_quote_exec(int fd)
 {
@@ -51,13 +51,13 @@ static int	lexer_back_quote(char *input, t_var **lst_env, t_alloc *alloc)
 		return (0);
 	}
 	// set_terminal(1);
-	read_lexer(lexer, lst_env, lst, &alloc);
+	read_lexer(lexer, lst_env, lst, alloc);
 	// set_terminal(0);
 	ft_memdel((void **)&input);
 	return (1);
 }
 
-char		*ft_back_quote(char *sub, t_var *lst_env, t_alloc **alloc)
+char		*ft_back_quote(char *sub, t_var *lst_env, t_alloc *alloc)
 {
 	char	*str;
 	int		i;
@@ -65,7 +65,7 @@ char		*ft_back_quote(char *sub, t_var *lst_env, t_alloc **alloc)
 	i = 0;
 	str = ft_strjoin(sub, " > /tmp/.back_quote.txt");
 	ft_memdel((void **)&sub);
-	if (!lexer_back_quote(str, &lst_env, *alloc))
+	if (!lexer_back_quote(str, &lst_env, alloc))
 		return (0);
 	sub = get_back_quote_exec(0);
 	while (sub && sub[i])

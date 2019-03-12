@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/error.h"
+#include "shell.h"
+#include "error.h"
 
 int	check_error_lst(t_ast *lst)
 {
@@ -37,13 +37,13 @@ int	ft_error_redir_format(char *ope, int len)
 	int			i;
 	int			size;
 	int			save;
-	static char	*operator[16] = {">>", ">>&", ">&", ">&", ">", "<<<", "<<",
-	"<>", "<&-", "<", "&>>", "&>", "&&", "&", "||", "|"};
+	static char	*operator[11] = {">>", ">&", ">", "<<",
+	"<&", "<", "&>", "&&", "&", "||", "|"};
 
 	i = 0;
 	save = -1;
 	size = 1;
-	while (i < 16)
+	while (i < 11)
 	{
 		if (ft_strncmp(operator[i], ope, size) == 0)
 		{

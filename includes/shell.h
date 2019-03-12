@@ -13,7 +13,6 @@
 # include "../libft/includes/libft.h"
 # include "../libft/includes/printf.h"
 # include "hashtable.h"
-// # include "error.h"
 
 /*
 ************************************ DEFINE ************************************
@@ -109,6 +108,11 @@ void	del_alloc(t_alloc **alloc);
 int		ret_status(void);
 int		replace_val_ret(char **str, int i, int x);
 
+//TOOLS TO PRINT LST AST
+void	read_lst(t_ast *lst, int active);
+void	read_sort_descent(t_ast *sort, int active);
+void	reinit_print(t_ast *lst, int active);
+
 
 /*
 *********************************** GLOBALS ***********************************
@@ -119,12 +123,5 @@ int						g_pid;
 int						g_ret[2];
 int						g_resize;
 char					*g_clip;
-
-// # include "parser_lexer.h"
-// # include "autocomplete.h"
-// # include "builtins.h"
-// # include "convert_path_to_tab.h"
-// # include "error.h"
-// # include "expand_vars.h"
 
 #endif

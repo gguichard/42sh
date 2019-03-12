@@ -22,25 +22,26 @@ t_hashtable		*make_exectable(void)
 	return (new_exectable);
 }
 
-const char		*get_exec_path(t_hashtable *exectable, const char *name)
+const char		*get_exec_path(t_hashtable *exectable, const char *name
+		, int hit_incr)
 {
 	t_hashentry		*hashentry;
 
 	hashentry = get_hashentry(exectable, name);
 	if (hashentry != NULL)
 	{
-		++((t_execentry*)hashentry->value)->hits;
+		((t_execentry*)hashentry->value)->hits += hit_incr;
 		return (((t_execentry*)hashentry->value)->path);
 	}
 	return (NULL);
 }
 
 int				set_exec_path(t_hashtable *exectable, const char *name
-		, const char *path)
+		, const char *path, int def_hits)
 {
 	t_execentry		new_execentry;
 
-	new_execentry.hits = 1;
+	new_execentry.hits = def_hits;
 	if ((new_execentry.path = ft_strdup(path)) == NULL)
 		return (0);
 	return (replace_hashentry(exectable, name, &new_execentry

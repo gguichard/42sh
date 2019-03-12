@@ -39,14 +39,9 @@ SRC =	main.c \
 		$(PATH_LEXER)ft_splitwhitespace_shell.c \
 		$(PATH_LEXER)ft_strsplit_shell.c \
 		$(PATH_LEXER)lexer.c \
-		$(PATH_LEXER)lexer_tools.c \
 		$(PATH_LEXER)replace_quote.c \
 		$(PATH_LEXER)replace_val_ret.c \
-		$(PATH_LEXER)split_tools.c \
-		$(PATH_LEXER)split_tools_2.c \
-		$(PATH_PARSER)ast_tools.c \
 		$(PATH_PARSER)fill_ast.c \
-		$(PATH_PARSER)fill_ast_tools.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)parser_tools.c \
 		$(PATH_PARSER)analyzer.c \

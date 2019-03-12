@@ -1,6 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
-#include "../../includes/builtins.h"
+#include "shell.h"
+#include "parser_lexer.h"
+#include "builtins.h"
 
 static void	short_cut(char **s, t_var *lst_env)
 {
@@ -64,11 +64,6 @@ static int	replace_env_var(char **str, int i, t_var *lst_env)
 	value = NULL;
 	while ((*str)[i + x] && x < 80 && ft_isalnum((*str)[i + x]) == 1)
 		x += 1;
-	// if (x >= 80)
-	// {
-	// 	write(2, "21sh: env: error too long arguments\n", 36);
-	// 	return (-1);
-	// }
 	if ((*str)[x] == '?')
 		replace_val_ret(str, i, x + 1);
 	else
@@ -82,7 +77,7 @@ static int	replace_env_var(char **str, int i, t_var *lst_env)
 	return (0);
 }
 
-int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc **alloc)
+int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc)
 {
 	char	*sub;
 	char	quote;
@@ -111,7 +106,7 @@ int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc **alloc)
 	return (1);
 }
 
-int			convert_quote(char **s, t_var **lst_env, t_alloc **alloc)
+int			convert_quote(char **s, t_var **lst_env, t_alloc *alloc)
 {
 	int		i;
 

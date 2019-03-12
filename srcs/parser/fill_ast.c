@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 static void	fill_input_redir(char **s, t_ast *elem, int *pos, int nb_wd)
 {
@@ -60,24 +60,24 @@ static int	fill_operator(char **s, int x, t_ast *elem, int *i)
 {
 	int			z;
 	size_t		l;
-	static char	*ope[16] = {">", ">>", ">>&", "<", "<<<", "<>", "<<",
-	"&>", "&>>", ">&", "<&-", ">&-", "&", "|", "&&", "||"};
+	static char	*ope[11] = {">", ">>", "<", "<<", "&>", ">&", "<&", "&", "|",
+	"&&", "||"};
 
 	z = -1;
 	l = 0;
 	while (s[*i][x + l] && (ft_isoperator(s[*i][x + l]) == 1
 	|| s[*i][x + l] == '-'))
 		l += 1;
-	while (z++ < 16)
+	while (z++ < 11)
 		if (ft_strlen(ope[z]) == l && ft_strncmp(&s[*i][x], ope[z], l) == 0)
 			break ;
-	if (z < 6)
+	if (z < 3)
 		elem->type = REDIR;
-	else if (z == 6)
+	else if (z == 3)
 		elem->type = HEREDOC;
-	else if (z < 12)
+	else if (z < 7)
 		elem->type = AGREG;
-	else if (z < 14)
+	else if (z < 9)
 		elem->type = OPERATOR;
 	else
 		elem->type = LOGIC;

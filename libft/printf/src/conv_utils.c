@@ -6,11 +6,12 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 19:14:14 by gguichar          #+#    #+#             */
-/*   Updated: 2018/12/10 10:11:17 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/05 18:26:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
 #include "printf.h"
 
 long long			pf_value(t_pf *pf)

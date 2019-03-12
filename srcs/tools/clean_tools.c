@@ -1,4 +1,4 @@
-#include "../../includes/shell.h"
+#include "shell.h"
 
 void	delete_str_tab(char **tab_str)
 {
