@@ -16,9 +16,10 @@ t_hashtable		*make_exectable(void);
 
 /*
 ** Retourne le chemin de l'executable, ou NULL s'il n'est pas dans la table.
-** Incremente le compteur hits si l'entree existe.
+** Incremente le compteur hits de hit_incr si l'entree existe.
 */
-const char		*get_exec_path(t_hashtable *exectable, const char *name);
+const char		*get_exec_path(t_hashtable *exectable, const char *name
+		, int hit_incr);
 
 /*
 ** Ajoute (ou remplace si deja existante) une entree dans l'exectable liant
