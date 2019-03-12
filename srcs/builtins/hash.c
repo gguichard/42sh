@@ -61,7 +61,7 @@ static int	print_exectable(t_hashtable *exectable)
 }
 
 //TODO gerer "hash utility"
-int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 {
 	int		par_idx;
 	t_opts	*opts;
@@ -77,9 +77,9 @@ int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 		return (1);
 	}
 	if (opts->value == 0)
-		return (!print_exectable((*alloc)->exectable));
+		return (!print_exectable(alloc->exectable));
 	if (has_opt(opts, 'r'))
-		delete_hashentries((*alloc)->exectable);
+		delete_hashentries(alloc->exectable);
 	par_idx = opts->index;
 	while (elem->input[par_idx] != NULL)
 	{

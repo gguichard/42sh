@@ -63,29 +63,29 @@ void	del_double_tab(char **tab1, char **tab2)
 		delete_str_tab(tab2);
 }
 
-void	del_alloc(t_alloc **alloc)
+void	del_alloc(t_alloc *alloc)
 {
-	if (!(*alloc))
+	if (!alloc)
 		return ;
-	// if ((*alloc)->history)
+	// if (alloc->history)
 	// {
-	// 	ft_del_hist((*alloc)->history);
-	// 	(*alloc)->history = NULL;
+	// 	ft_del_hist(alloc->history);
+	// 	alloc->history = NULL;
 	// }
-	if ((*alloc)->input)
+	if (alloc->input)
 	{
-		((*alloc)->input->s) ? free((*alloc)->input->s) : 0;
-		(*alloc)->input = NULL;
+		(alloc->input->s) ? free(alloc->input->s) : 0;
+		alloc->input = NULL;
 	}
-	if ((*alloc)->var)
+	if (alloc->var)
 	{
-		del_lst_env((*alloc)->var);
-		(*alloc)->var = NULL;
+		del_lst_env(alloc->var);
+		alloc->var = NULL;
 	}
-	if ((*alloc)->ast)
+	if (alloc->ast)
 	{
-		del_lst_ast((*alloc)->ast);
-		(*alloc)->ast = NULL;
+		del_lst_ast(alloc->ast);
+		alloc->ast = NULL;
 	}
-	*alloc = NULL;
+	alloc = NULL;
 }

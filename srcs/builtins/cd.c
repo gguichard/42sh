@@ -23,7 +23,7 @@ static int	check_access(char *dir, char *folder)
 	return (-1);
 }
 
-static int	check_options(t_ast *elem, int *options, t_alloc **alloc)
+static int	check_options(t_ast *elem, int *options, t_alloc *alloc)
 {
 	int	i;
 	int	x;
@@ -87,7 +87,7 @@ static int	modif_env(char *dir, t_var **lst_env, int options, char *buf)
 	return (0);
 }
 
-int			cd_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int			cd_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 {
 	int			i;
 	int			options;

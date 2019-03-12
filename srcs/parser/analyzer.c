@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "parser_lexer.h"
 
-int	analyzer(t_ast *sort, t_var **lst_env, t_alloc **alloc)
+int	analyzer(t_ast *sort, t_var **lst_env, t_alloc *alloc)
 {
 	static t_dispatch	dispatch[] = { &dispatch_cmd, &dispatch_redir,
 						&dispatch_redir, &dispatch_agreg, &dispatch_operator,

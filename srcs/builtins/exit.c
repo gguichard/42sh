@@ -1,7 +1,7 @@
 #include "../../includes/shell.h"
 #include "../../includes/builtins.h"
 
-int	exit_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int	exit_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 {
 	(void)lst_env;
 	(void)alloc;

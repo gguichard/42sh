@@ -59,7 +59,7 @@ int		dispatch_operator(t_ast *elem, t_var **lst_env, char **tab_path,
 int		dispatch_redir(t_ast *elem, t_var **lst_env, char **tab_path,
 		t_alloc *alloc);
 int		dispatch_logic(t_ast *elem, t_var **lst_env, char **tab_path,
-		t_alloc **lloc);
+		t_alloc *alloc);
 int		dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
 		t_alloc *alloc);
 

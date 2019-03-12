@@ -3,15 +3,15 @@
 
 # include "shell.h"
 
-int		cd_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
-int		echo_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
-int		env_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
+int		cd_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
+int		echo_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
+int		env_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
 int		env_cp(char **env, t_var **lst_env);
-int		exit_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
-int		setenv_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
-int		unsetenv_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
+int		exit_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
+int		setenv_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
+int		unsetenv_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
 int		exec_input(t_ast *elem, t_var *lst_env, char **tab_path);
-int		hash_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc);
+int		hash_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc);
 
 /*
 ************************************ TOOLS *************************************
