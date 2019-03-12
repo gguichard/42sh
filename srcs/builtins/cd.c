@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "builtins.h"
+#include "error.h"
 
 static int	check_access(char *dir, char *folder)
 {

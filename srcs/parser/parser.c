@@ -82,9 +82,9 @@ void			parser(char **input, t_ast *lst, t_var **lst_env,
 		sort = sort->next;
 	}
 	sort_ast(lst, &sort);
-	alloc->ast = &lst;
-	read_sort_descent(sort, 1);
-	reinit_print(lst, 1);
+	(*alloc)->ast = &lst;
+	analyzer(sort, lst_env, alloc);
+
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc) : 0;
 
 	clean_tab_and_ast(input, lst);
