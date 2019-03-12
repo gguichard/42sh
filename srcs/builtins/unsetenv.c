@@ -1,5 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/builtins.h"
+#include "shell.h"
+#include "builtins.h"
+#include "error.h"
 
 static int	check_unsetenv_error(t_ast *elem)
 {

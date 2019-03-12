@@ -1,5 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/builtins.h"
+#include "shell.h"
+#include "builtins.h"
+#include "error.h"
 
 t_var	*find_elem_env(t_var **lst, char *key)
 {
@@ -34,6 +35,7 @@ void	add_elem_env(t_var **lst, char *key, char *value)
 	if (!(new->value = ft_strdup(value)))
 		ft_exit_malloc();
 	new->next = NULL;
+	new->is_env = 1;
 	if (!(*lst))
 		*lst = new;
 	else
