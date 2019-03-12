@@ -17,6 +17,7 @@ int		main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	lst_env = NULL;
+	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDOUT_FILENO, &line)) > 0)
 	{
 		//parse line etc;
