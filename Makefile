@@ -14,6 +14,7 @@ PATH_ERROR = error/
 PATH_EXEC = exec/
 PATH_LEXER = lexer/
 PATH_PARSER = parser/
+PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
 
 INCLUDE = ./includes
@@ -25,6 +26,12 @@ SRC =	main.c \
 		$(PATH_ERROR)error_malloc.c \
 		$(PATH_ERROR)lexer_error.c \
 		$(PATH_ERROR)parser_error.c \
+		$(PATH_ERROR)error_redirection.c \
+		$(PATH_ERROR)error_cd.c \
+		$(PATH_ERROR)error_fd.c \
+		$(PATH_ERROR)error_setenv.c \
+		$(PATH_ERROR)error_unsetenv.c \
+		$(PATH_ERROR)exec_error.c \
 		$(PATH_LEXER)back_quote_tools.c \
 		$(PATH_LEXER)check_closing_quote.c \
 		$(PATH_LEXER)check_cmd_pipe.c \
@@ -41,8 +48,28 @@ SRC =	main.c \
 		$(PATH_PARSER)fill_ast_tools.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)parser_tools.c \
+		$(PATH_PARSER)analyzer.c \
+		$(PATH_PARSER)analyzer_tools.c \
+		$(PATH_OPERATOR)agregation.c \
+		$(PATH_OPERATOR)heredoc.c \
+		$(PATH_OPERATOR)redirection.c \
+		$(PATH_OPERATOR)job_control.c \
+		$(PATH_OPERATOR)pipe.c \
+		$(PATH_OPERATOR)agreg_tools.c \
+		$(PATH_OPERATOR)heredoc_tools.c \
+		$(PATH_OPERATOR)redirection_tools.c \
+		$(PATH_BUILT)cd.c \
+		$(PATH_BUILT)cd_slash_tools.c \
+		$(PATH_BUILT)builtins_tools.c \
+		$(PATH_BUILT)echo.c \
+		$(PATH_BUILT)env_tools_2.c \
+		$(PATH_BUILT)env_tools.c \
+		$(PATH_BUILT)env.c \
+		$(PATH_BUILT)exec_input.c \
+		$(PATH_BUILT)exit.c \
+		$(PATH_BUILT)setenv.c \
+		$(PATH_BUILT)unsetenv.c \
 		$(PATH_TOOLS)clean_tools.c \
-		$(PATH_BUILT)env_tools_2.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -63,6 +90,7 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_EXEC) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_LEXER) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -o $@ -c $<
 
@@ -74,6 +102,7 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_EXEC) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_LEXER) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 
