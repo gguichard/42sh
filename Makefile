@@ -18,6 +18,7 @@ PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
 
 INCLUDE = ./includes
+INCLUDE_LIBFT = ./libft/includes
 PATH_LIB = ./libft/
 PATH_SRC = ./srcs/
 PATH_OBJ = ./obj/
@@ -92,7 +93,7 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
-	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -o $@ -c $<
+	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
 	@/bin/rm -f $(OBJS)
