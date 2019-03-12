@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 15:05:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/01/28 17:42:54 by fwerner          ###   ########.fr       */
+/*   Updated: 2018/12/19 17:14:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,8 +205,6 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int				ft_min(int a, int b);
 
 int				ft_max(int a, int b);
-
-double			ft_ceil(double x);
 
 int				ft_abs(int n);
 
