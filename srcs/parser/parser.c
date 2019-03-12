@@ -1,6 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
-#include "../../includes/error.h"
+#include "shell.h"
+#include "parser_lexer.h"
+#include "error.h"
 
 static t_ast	*get_available_node(t_ast **sort)
 {
@@ -59,7 +59,7 @@ static void		clean_tab_and_ast(char **input, t_ast *lst)
 }
 
 void			parser(char **input, t_ast *lst, t_var **lst_env,
-				t_alloc **alloc)
+				t_alloc *alloc)
 {
 	int		i;
 	t_ast	*sort;
@@ -82,8 +82,9 @@ void			parser(char **input, t_ast *lst, t_var **lst_env,
 		sort = sort->next;
 	}
 	sort_ast(lst, &sort);
-	(*alloc)->ast = &lst;
-
+	alloc->ast = &lst;
+	read_sort_descent(sort, 1);
+	reinit_print(lst, 1);
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc) : 0;
 
 	clean_tab_and_ast(input, lst);

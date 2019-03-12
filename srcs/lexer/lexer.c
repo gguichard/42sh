@@ -1,9 +1,9 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 
 void		clean_input(char *str, t_ast *lst, t_var **lst_env,
-	t_alloc **alloc)
+			t_alloc *alloc)
 {
 	char	**split;
 
@@ -14,7 +14,7 @@ void		clean_input(char *str, t_ast *lst, t_var **lst_env,
 }
 
 void		read_lexer(char **lexer, t_var **lst_env, t_ast *lst,
-	t_alloc **alloc)
+			t_alloc *alloc)
 {
 	int	i;
 	int	x;
@@ -59,7 +59,7 @@ void		lexer(char *input, t_var **lst_env, t_alloc *alloc)
 
 	// set_terminal(1);
 
-	read_lexer(lexer, lst_env, lst, &alloc);
+	read_lexer(lexer, lst_env, lst, alloc);
 
 	// set_terminal(0);
 

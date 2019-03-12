@@ -1,4 +1,4 @@
-#include "../../includes/shell.h"
+#include "shell.h"
 
 int	dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
 	t_alloc **alloc)

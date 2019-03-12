@@ -42,6 +42,7 @@ SRC =	main.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)parser_tools.c \
 		$(PATH_TOOLS)clean_tools.c \
+		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_BUILT)env_tools_2.c
 
 OBJ = $(SRC:.c=.o)

@@ -1,6 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
-#include "../../includes/error.h"
+#include "shell.h"
+#include "parser_lexer.h"
+#include "error.h"
 
 t_ast	*create_new_elem(t_ast **lst)
 {

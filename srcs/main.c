@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdlib.h>
-#include "../includes/shell.h"
-#include "../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 // #include "get_next_line.h"
 // #include "printf.h"

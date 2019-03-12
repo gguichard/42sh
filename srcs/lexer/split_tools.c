@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-# include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 void	in_quote(char const *s, int *i)
 {
@@ -52,7 +52,7 @@ int		check_redir(char *s, int *i, unsigned int *nb_word)
 	x = 0;
 	while (ft_isoperator(s[*i + x]) == 1)
 		x += 1;
-	if (x > 3)
+	if (x > 2)
 		return (ft_error_redir_format(&s[*i], x));
 	else if (check_operator(s, i, nb_word, x) == 1)
 	{

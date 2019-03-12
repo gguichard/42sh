@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 void		fill_last_elem(char **s, int i, int save, t_ast *new)
 {
