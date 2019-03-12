@@ -11,18 +11,19 @@ int		main(int argc, char **argv)
 {
 	int		gnl_ret;
 	char	*line;
-	t_var	*lst_env;
+	t_var	*lst;
 	t_alloc	alloc;
 
 	(void)argc;
 	(void)argv;
-	lst_env = NULL;
+	lst = NULL;
+	alloc = set_alloc(lst);
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDOUT_FILENO, &line)) > 0)
 	{
 		//parse line etc;
 		write(1, "> ", 2);
-		lexer(line, &lst_env, &alloc);
+		lexer(line, &lst, &alloc);
 		// free(line);
 	}
 	ft_printf("GNL ret : %d\n", gnl_ret);

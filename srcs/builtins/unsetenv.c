@@ -34,7 +34,7 @@ static int	unset_exist_env(t_ast *elem, t_var *lst_env)
 	return (0);
 }
 
-int			unsetenv_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int			unsetenv_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	t_var	*tmp;
 

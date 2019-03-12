@@ -86,7 +86,7 @@ static int	modif_env(char *dir, t_var **lst_env, int options, char *buf)
 	return (0);
 }
 
-int			cd_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int			cd_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int			i;
 	int			options;

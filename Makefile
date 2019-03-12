@@ -45,7 +45,28 @@ SRC =	main.c \
 		$(PATH_TOOLS)parser_tools.c \
 		$(PATH_TOOLS)env_tools.c \
 		$(PATH_TOOLS)env_tools_2.c \
-		$(PATH_TOOLS)builtins_tools.c
+		$(PATH_TOOLS)builtins_tools.c \
+		$(PATH_TOOLS)alloc_starter_tools.c \
+		$(PATH_BUILT)bg.c\
+		$(PATH_BUILT)cd.c\
+		$(PATH_BUILT)echo.c\
+		$(PATH_BUILT)env.c\
+		$(PATH_BUILT)exit.c\
+		$(PATH_BUILT)export.c\
+		$(PATH_BUILT)fg.c\
+		$(PATH_BUILT)hash.c\
+		$(PATH_BUILT)job.c\
+		$(PATH_BUILT)set.c\
+		$(PATH_BUILT)setenv.c\
+		$(PATH_BUILT)type.c\
+		$(PATH_BUILT)unset.c\
+		$(PATH_BUILT)unsetenv.c
+
+
+
+
+
+
 
 OBJ = $(SRC:.c=.o)
 

@@ -81,7 +81,7 @@ int				env_cp(char **env, t_var **lst_env)
 	return (1);
 }
 
-int				env_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int				env_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int		i;
 	int		option;

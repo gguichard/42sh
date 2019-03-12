@@ -61,9 +61,9 @@ static int	print_exectable(t_hashtable *exectable)
 
 //TODO gerer "hash utility"
 //TODO gerer "hash -r"
-int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
+int			hash_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	(void)elem;
 	(void)lst_env;
-	return (!print_exectable((*alloc)->exectable));
+	return (!print_exectable(alloc->exectable));
 }
