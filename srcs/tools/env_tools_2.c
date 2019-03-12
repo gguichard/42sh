@@ -1,6 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/builtins.h"
-#include "../../includes/error.h"
+#include "shell.h"
+#include "builtins.h"
+#include "error.h"
 
 void		convert_lst_tab(t_var *lst_env, char ***tab_str)
 {

@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 int		check_opening_quote(char **str, t_alloc *alloc)
 {

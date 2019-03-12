@@ -1,5 +1,5 @@
-#include "../../includes/shell.h"
-#include "../../includes/parser_lexer.h"
+#include "shell.h"
+#include "parser_lexer.h"
 
 // static int	prompt_pipe(char **input, t_alloc *alloc)
 // {

@@ -1,4 +1,4 @@
-#include "../../includes/shell.h"
+#include "shell.h"
 
 int	analyzer(t_ast *sort, t_var **lst_env, t_alloc **alloc)
 {
