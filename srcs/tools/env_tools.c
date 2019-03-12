@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "builtins.h"
+#include "error.h"
 
 t_var	*find_elem_env(t_var **lst, char *key)
 {
