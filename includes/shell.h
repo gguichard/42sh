@@ -106,6 +106,8 @@ void	del_lst_env(t_var **lst);
 void	del_lst_ast(t_ast **lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc **alloc);
+int		ret_status(void);
+int		replace_val_ret(char **str, int i, int x);
 
 
 /*
