@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/12 17:16:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 22:06:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <term.h>
 #include "cmdline.h"
 
-static void	add_char_to_input(struct s_input *input, char c)
+void		add_char_to_input(struct s_input *input, char c)
 {
 	int		new_cap;
 	char	*new_buffer;
@@ -48,11 +48,10 @@ void		update_cmdline_after_offset(t_cmdline *cmdline)
 			, cmdline->input.buffer + cmdline->input.offset
 			, cmdline->input.size - cmdline->input.offset);
 	ft_putchar(' ');
-	tputs(tgoto(tgetstr("cm", NULL), cmdline->cursor.x - 1
-				, cmdline->cursor.y - 1), 1, t_putchar);
+	go_to_cursor_pos(cmdline->cursor);
 }
 
-static void	write_char_in_cmdline(t_cmdline *cmdline, char c)
+void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 {
 	t_cursor	new_pos;
 
@@ -63,7 +62,8 @@ static void	write_char_in_cmdline(t_cmdline *cmdline, char c)
 	{
 		tputs(tgetstr("cr", NULL), 1, t_putchar);
 		tputs(tgetstr("do", NULL), 1, t_putchar);
-		set_cursor_pos(&cmdline->cursor);
+		cmdline->cursor.x = 1;
+		cmdline->cursor.y += 1;
 	}
 	if (cmdline->input.offset != cmdline->input.size)
 		update_cmdline_after_offset(cmdline);
@@ -78,8 +78,6 @@ void		read_input(t_cmdline *cmdline)
 	{
 		if ((seq = get_escape_sequence(&cmdline->esc_keys, c)) != NULL)
 			handle_sequence_char(cmdline, seq, c);
-		else if (c == 127)
-			handle_backspace_key(cmdline);
 		else if (ft_isprint(c))
 		{
 			add_char_to_input(&cmdline->input, c);

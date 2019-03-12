@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/12 16:49:33 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 22:05:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,14 @@
 t_esc_seq	*get_esc_seqs(void)
 {
 	static t_esc_seq	seqs[] = {
-		{"\033[D", MODE_BOTH, handle_move_left},
-		{"\033[C", MODE_BOTH, handle_move_right},
+		{"\033[D", MODE_COMMON, handle_move_left},
+		{"\033[C", MODE_COMMON, handle_move_right},
+		{"\033[1;2D", MODE_COMMON, handle_prev_word},
+		{"\033[1;2C", MODE_COMMON, handle_next_word},
 		{"\033[3~", MODE_INSERT, handle_delete_key},
-		{NULL, MODE_BOTH, NULL}
+		{"\177", MODE_INSERT, handle_backspace_key},
+		{"\033\012", MODE_INSERT, handle_test_newline},
+		{NULL, MODE_COMMON, NULL}
 	};
 
 	return (seqs);
@@ -61,13 +65,15 @@ const char	*get_escape_sequence(t_esc_keys *keys, char c)
 
 	keys->buffer[keys->offset] = c;
 	keys->size += 1;
-	keys->offset += 1;
 	seqs = get_esc_seqs();
 	idx = 0;
 	while (seqs[idx].fn != NULL)
 	{
 		if (ft_strnequ(seqs[idx].str, keys->buffer, keys->size))
+		{
+			keys->offset += 1;
 			return (seqs[idx].str);
+		}
 		idx++;
 	}
 	reset_escape_keys(keys);

@@ -6,15 +6,16 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:00:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/11 16:42:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 21:55:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "libft.h"
+#include <term.h>
 #include "cmdline.h"
 
-int	set_cursor_pos(t_cursor *cursor)
+int		set_cursor_pos(t_cursor *cursor)
 {
 	char		buffer[32];
 	ssize_t		ret;
@@ -33,4 +34,13 @@ int	set_cursor_pos(t_cursor *cursor)
 		return (1);
 	}
 	return (0);
+}
+
+void	go_to_cursor_pos(t_cursor cursor)
+{
+	static char	*cm_str = NULL;
+
+	if (cm_str == NULL)
+		cm_str = tgetstr("cm", NULL);
+	tputs(tgoto(cm_str, cursor.x - 1, cursor.y - 1), 1, t_putchar);
 }
