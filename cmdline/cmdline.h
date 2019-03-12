@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/11 17:16:08 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 17:15:18 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@
 
 # define INPUT_SIZE_INCR 1024
 
-typedef struct s_cmdline	t_cmdline;
-typedef struct s_cursor	t_cursor;
-
-enum	e_prompt
+enum			e_prompt
 {
 	PROMPT_DEFAULT = 0,
 	PROMPT_BACKSLASH,
@@ -30,7 +27,13 @@ enum	e_prompt
 	PROMPT_HEREDOC
 };
 
-struct	s_input
+typedef struct	s_cursor
+{
+	int	x;
+	int	y;
+}				t_cursor;
+
+struct			s_input
 {
 	char	*buffer;
 	int		capacity;
@@ -38,26 +41,68 @@ struct	s_input
 	int		offset;
 };
 
-struct	s_cursor
+typedef enum	e_esc_mode
 {
-	int	x;
-	int	y;
-};
+	MODE_INSERT,
+	MODE_VISUAL,
+	MODE_BOTH
+}				t_esc_mode;
 
-struct	s_cmdline
+typedef struct	s_esc_keys
+{
+	char	buffer[8];
+	int		size;
+	int		offset;
+}				t_esc_keys;
+
+typedef struct	s_cmdline
 {
 	enum e_prompt	prompt_type;
 	struct s_input	input;
 	struct winsize	winsize;
 	t_cursor		cursor;
-};
+	t_esc_keys		esc_keys;
+}				t_cmdline;
 
-int			setup_term(void);
-int			reset_term(void);
+typedef struct	s_esc_seq
+{
+	char		*str;
+	t_esc_mode	mode;
+	int			(*fn)(t_cmdline *cmdline);
+}				t_esc_seq;
 
-void		print_prompt(t_cmdline *cmdline);
-void		read_input(t_cmdline *cmdline);
+/*
+** TERM INIT/MISC.
+*/
 
-int			set_cursor_pos(t_cursor *cursor);
+int				setup_term(void);
+int				reset_term(void);
+int				update_winsize(t_cmdline *cmdline);
+int				set_cursor_pos(t_cursor *cursor);
+
+/*
+** INPUT/OUTPUT.
+*/
+
+void			update_cmdline_after_offset(t_cmdline *cmdline);
+
+void			print_prompt(t_cmdline *cmdline);
+void			read_input(t_cmdline *cmdline);
+
+int				t_putchar(int c);
+
+/*
+** ESCAPE SEQUENCES.
+*/
+
+void			handle_sequence_char(t_cmdline *cmdline, const char *seq
+		, char c);
+const char		*get_escape_sequence(t_esc_keys *keys, char c);
+
+int				handle_move_left(t_cmdline *cmdline);
+int				handle_move_right(t_cmdline *cmdline);
+
+int				handle_backspace_key(t_cmdline *cmdline);
+int				handle_delete_key(t_cmdline *cmdline);
 
 #endif

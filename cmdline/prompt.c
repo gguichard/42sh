@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:47:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/11 15:56:43 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 17:17:33 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_prompt(t_cmdline *cmdline)
 		ft_printf("def> ");
 	else if (cmdline->prompt_type == PROMPT_BACKSLASH)
 		ft_printf("> ");
-	else if (cmdline->prompt_type== PROMPT_QUOTE)
+	else if (cmdline->prompt_type == PROMPT_QUOTE)
 		ft_printf("quote> ");
 	else if (cmdline->prompt_type == PROMPT_DQUOTE)
 		ft_printf("dquote> ");

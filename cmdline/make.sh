@@ -1,3 +1,3 @@
 make -C libft
 echo "make cmdline"
-gcc -I libft/includes *.c libft/libft.a -o cmdline
+gcc -fsanitize=address -g -ltermcap -I . -I libft/includes *.c **/**.c libft/libft.a

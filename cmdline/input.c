@@ -6,13 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/11 17:18:17 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 17:16:41 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
+#include <term.h>
 #include "cmdline.h"
 
 static void	add_char_to_input(struct s_input *input, char c)
@@ -41,20 +42,48 @@ static void	add_char_to_input(struct s_input *input, char c)
 	input->size += 1;
 }
 
+void		update_cmdline_after_offset(t_cmdline *cmdline)
+{
+	write(STDOUT_FILENO
+			, cmdline->input.buffer + cmdline->input.offset
+			, cmdline->input.size - cmdline->input.offset);
+	ft_putchar(' ');
+	tputs(tgoto(tgetstr("cm", NULL), cmdline->cursor.x - 1
+				, cmdline->cursor.y - 1), 1, t_putchar);
+}
+
+static void	write_char_in_cmdline(t_cmdline *cmdline, char c)
+{
+	t_cursor	new_pos;
+
+	write(STDOUT_FILENO, &c, 1);
+	if (cmdline->cursor.x < cmdline->winsize.ws_col)
+		cmdline->cursor.x += 1;
+	else
+	{
+		tputs(tgetstr("cr", NULL), 1, t_putchar);
+		tputs(tgetstr("do", NULL), 1, t_putchar);
+		set_cursor_pos(&cmdline->cursor);
+	}
+	if (cmdline->input.offset != cmdline->input.size)
+		update_cmdline_after_offset(cmdline);
+}
+
 void		read_input(t_cmdline *cmdline)
 {
-	char	c;
+	char		c;
+	const char	*seq;
 
-	while (read(STDIN_FILENO, &c, 1))
+	while (read(STDIN_FILENO, &c, 1) && c != 4)
 	{
-		if (c == 4)
-			break ;
-		if (c == 10)
-			ft_putchar('\n');
-		if (c >= 32 && c != 127)
+		if ((seq = get_escape_sequence(&cmdline->esc_keys, c)) != NULL)
+			handle_sequence_char(cmdline, seq, c);
+		else if (c == 127)
+			handle_backspace_key(cmdline);
+		else if (ft_isprint(c))
 		{
 			add_char_to_input(&cmdline->input, c);
-			write(STDOUT_FILENO, &c, 1);
+			write_char_in_cmdline(cmdline, c);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:08:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/11 15:39:14 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/12 13:49:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ int	reset_term(void)
 		return (0);
 	term.c_lflag |= (ICANON | ECHO | ECHONL);
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		return (0);
+	return (1);
+}
+
+int	update_winsize(t_cmdline *cmdline)
+{
+	if (ioctl(0, TIOCGWINSZ, &cmdline->winsize) == -1)
 		return (0);
 	return (1);
 }
