@@ -12,6 +12,7 @@
 # include "../libft/includes/get_next_line.h"
 # include "../libft/includes/libft.h"
 # include "../libft/includes/printf.h"
+# include "hashtable.h"
 // # include "error.h"
 
 /*
@@ -87,6 +88,7 @@ typedef struct			s_alloc
 	t_ast				**ast;
 	t_var				**var;
 	t_builtin			*builtins;
+	t_hashtable			*exectable;
 	int					fd[10];
 }						t_alloc;
 
@@ -122,6 +124,5 @@ char					*g_clip;
 // # include "convert_path_to_tab.h"
 // # include "error.h"
 // # include "expand_vars.h"
-// # include "hashtable.h"
 
 #endif
