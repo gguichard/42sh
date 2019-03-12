@@ -2,6 +2,11 @@
 #include "exectable.h"
 #include "builtins.h"
 
+/*
+** Affiche le contenu du bucket passe en parametre. Retourne 0 en cas d'erreur
+** et 1 en cas de succes.
+*/
+
 static int	print_bucket_hash_inf(t_list *hashentry_lst)
 {
 	t_execentry		*execentry;
@@ -25,24 +30,40 @@ static int	print_bucket_hash_inf(t_list *hashentry_lst)
 	return (1);
 }
 
+/*
+** Affiche les informations sur la table de hash des executables. Retourne 0
+** en cas d'erreur et 1 en cas de succes.
+*/
+
+static int	print_exectable(t_hashtable *exectable)
+{
+	size_t	bucket_idx;
+	int		hash_found;
+
+	hash_found = 0;
+	bucket_idx = 0;
+	while (bucket_idx < exectable->bucket_count)
+	{
+		if (exectable->buckets[bucket_idx] != NULL)
+		{
+			if (!hash_found && ft_printf("hits    command\n") == -1)
+				return (0);
+			hash_found = 1;
+			if (!print_bucket_hash_inf(exectable->buckets[bucket_idx]))
+				return (0);
+		}
+		++bucket_idx;
+	}
+	if (!hash_found && ft_printf("hash: hash table empty\n") == -1)
+		return (0);
+	return (1);
+}
+
 //TODO gerer "hash utility"
 //TODO gerer "hash -r"
 int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc **alloc)
 {
-	t_hashtable		*exectable;
-	size_t			bucket_idx;
-
 	(void)elem;
 	(void)lst_env;
-	exectable = (*alloc)->exectable;
-	if (ft_printf("hits    command\n") == -1)
-		return (1);
-	bucket_idx = 0;
-	while (bucket_idx < exectable->bucket_count)
-	{
-		if (!print_bucket_hash_inf(exectable->buckets[bucket_idx]))
-			return (1);
-		++bucket_idx;
-	}
-	return (0);
+	return (!print_exectable((*alloc)->exectable));
 }
