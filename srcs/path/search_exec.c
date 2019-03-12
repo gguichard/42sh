@@ -33,7 +33,7 @@ static t_error	check_is_valid_path(const char *file_path)
 }
 
 char			*search_exec(t_var *var_lst, const char *exec_name
-		, t_error *error);
+		, t_error *error)
 {
 	char	*file_path;
 	char	**path_tab;
@@ -46,7 +46,8 @@ char			*search_exec(t_var *var_lst, const char *exec_name
 		index = -1;
 		while (path_tab[++index] != NULL)
 		{
-			if ((file_path = get_binary_path(path_tab[index], binary)) == NULL)
+			if ((file_path = get_binary_path(path_tab[index], exec_name))
+					== NULL)
 			{
 				*error = ERRC_UNEXPECTED;
 				break ;
