@@ -22,10 +22,10 @@ const char		*get_exec_path(t_hashtable *exectable, const char *name);
 
 /*
 ** Ajoute (ou remplace si deja existante) une entree dans l'exectable liant
-** l'executable name au chemin path, hits sera set a 1. Retourne 0 en
+** l'executable name au chemin path, hits sera set a def_hits. Retourne 0 en
 ** cas d'erreur et 1 en cas de succes.
 */
 int				set_exec_path(t_hashtable *exectable, const char *name
-		, const char *path);
+		, const char *path, int def_hits);
 
 #endif

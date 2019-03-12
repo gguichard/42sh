@@ -36,11 +36,11 @@ const char		*get_exec_path(t_hashtable *exectable, const char *name)
 }
 
 int				set_exec_path(t_hashtable *exectable, const char *name
-		, const char *path)
+		, const char *path, int def_hits)
 {
 	t_execentry		new_execentry;
 
-	new_execentry.hits = 1;
+	new_execentry.hits = def_hits;
 	if ((new_execentry.path = ft_strdup(path)) == NULL)
 		return (0);
 	return (replace_hashentry(exectable, name, &new_execentry
