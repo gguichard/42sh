@@ -23,7 +23,7 @@ int		main(int argc, char **argv)
 		return (1);
 	lst_env = NULL;
 	write(1, "> ", 2);
-	while ((gnl_ret = get_next_line(STDOUT_FILENO, &line)) > 0)
+	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{
 		//parse line etc;
 		lexer(line, &lst_env, &alloc);
