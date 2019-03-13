@@ -2,12 +2,11 @@
 #include "parser_lexer.h"
 #include "operator.h"
 
-int	agreg_1(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_1(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;
 
-	(void)tab_path;
 	i = 0;
 	while (i < 10)
 		fd[i++] = -1;
@@ -23,12 +22,11 @@ int	agreg_1(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 	return (0);
 }
 
-int	agreg_2(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_2(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;
 
-	(void)tab_path;
 	i = 0;
 	while (i < 10)
 		fd[i++] = -1;
@@ -44,7 +42,7 @@ int	agreg_2(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 	return (0);
 }
 
-int	agreg_3(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_3(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd_redir;
 	int	ret1;
@@ -52,7 +50,6 @@ int	agreg_3(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 	int	fd[10];
 	int	i;
 
-	(void)tab_path;
 	i = 0;
 	while (i < 10)
 		fd[i++] = -1;
@@ -72,16 +69,15 @@ int	agreg_3(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 	return (0);
 }
 
-int	agreg_4(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_4(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd_close;
 	int	fd_save;
 	int	tmp;
 
-	(void)tab_path;
 	fd_close = (ft_isdigit(elem->input[0][0]) == 1) ?
 		ft_atoi(elem->input[0]) : 1;
-fd_save = dup(fd_close);
+	fd_save = dup(fd_close);
 	while (fd_save < 3)
 	{
 		tmp = fd_save;
@@ -96,12 +92,11 @@ fd_save = dup(fd_close);
 	return (0);
 }
 
-int	agreg_5(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_5(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd_close;
 	int	fd_save;
 
-	(void)tab_path;
 	fd_close = (ft_isdigit(elem->input[0][0]) == 1) ?
 		ft_atoi(elem->input[0]) : 1;
 	fd_save = dup(fd_close);

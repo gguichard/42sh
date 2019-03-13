@@ -1,7 +1,7 @@
 #ifndef HASHTABLE_H
 # define HASHTABLE_H
 
-# include "../libft/includes/libft.h"
+# include "libft.h"
 
 # define DEF_BUCKET_COUNT 2053
 

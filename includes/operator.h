@@ -30,17 +30,12 @@ void					redirection_3(t_ast *elem, t_var *lst_env,
 ******************************** REDIRECTION ***********************************
 */
 
-int						agreg_1(t_ast *elem, t_var *lst_env, char **tab_path,
-						t_alloc *alloc);
-int						agreg_2(t_ast *elem, t_var *lst_env, char **tab_path,
-						t_alloc *alloc);
-int						agreg_3(t_ast *elem, t_var *lst_env, char **tab_path,
-						t_alloc *alloc);
-int						agreg_4(t_ast *elem, t_var *lst_env, char **tab_path,
-						t_alloc *alloc);
-int						agreg_5(t_ast *elem, t_var *lst_env, char **tab_path,
-						t_alloc *alloc);
-int						ft_fd_exist(char *str_fd);						
+int						agreg_1(t_ast *elem, t_var *lst_env, t_alloc *alloc);
+int						agreg_2(t_ast *elem, t_var *lst_env, t_alloc *alloc);
+int						agreg_3(t_ast *elem, t_var *lst_env, t_alloc *alloc);
+int						agreg_4(t_ast *elem, t_var *lst_env, t_alloc *alloc);
+int						agreg_5(t_ast *elem, t_var *lst_env, t_alloc *alloc);
+int						ft_fd_exist(char *str_fd);
 int						ft_is_redir(t_ast *elem, int *fd, t_alloc *alloc,
 						t_var *lst_env);
 int						ft_is_agreg(t_ast *elem, int *fd, t_alloc *alloc);
