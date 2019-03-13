@@ -1,6 +1,8 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include "libft.h"
 #include "shell.h"
+#include "exectable.h"
 #include "parser_lexer.h"
 
 // #include "get_next_line.h"
@@ -16,14 +18,17 @@ int		main(int argc, char **argv)
 
 	(void)argc;
 	(void)argv;
+	ft_bzero(&alloc, sizeof(t_alloc));
+	if ((alloc.exectable = make_exectable()) == NULL)
+		return (1);
 	lst_env = NULL;
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDOUT_FILENO, &line)) > 0)
 	{
 		//parse line etc;
-		write(1, "> ", 2);
 		lexer(line, &lst_env, &alloc);
-		// free(line);
+		write(1, "> ", 2);
+		//free(line);
 	}
 	ft_printf("GNL ret : %d\n", gnl_ret);
 	return (0);
