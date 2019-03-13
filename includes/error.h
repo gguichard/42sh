@@ -30,6 +30,10 @@ int		exec_right_error(int err, char *files, char ***path_all);
 int		error_setenv(int i);
 int		error_unsetenv(int i, char *s);
 int		ft_fd_exist(char *str_fd);
+int		error_set(char *str);
+int		error_unset(char *str);
+
+
 
 /*
 ** Free la variable var et retourne err.

@@ -33,6 +33,8 @@ SRC =	main.c \
 		$(PATH_ERROR)error_redirection.c \
 		$(PATH_ERROR)error_cd.c \
 		$(PATH_ERROR)error_fd.c \
+		$(PATH_ERROR)error_set.c \
+		$(PATH_ERROR)error_unset.c \
 		$(PATH_ERROR)error_setenv.c \
 		$(PATH_ERROR)error_unsetenv.c \
 		$(PATH_ERROR)exec_error.c \
