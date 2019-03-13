@@ -3,8 +3,8 @@
 
 # include <stdlib.h>
 
-# define DOUBLEQUOTE_SPE_CHAR "$`\"\\\n"
-# define BACKQUOTE_SPE_CHAR "$`\\"
+# define DBQUOTE_SPE_CHAR "$`\"\\\n"
+# define SUBCMD_SPE_CHAR "$`\\"
 
 typedef enum	e_str_cmd_err
 {
@@ -16,8 +16,8 @@ typedef enum	e_str_cmd_err
 typedef struct	s_str_cmd_inf
 {
 	int						is_in_quote;
-	int						is_in_doublequote;
-	int						is_in_backquote;
+	int						is_in_dbquote;
+	int						is_in_subcmd;
 	int						is_in_var_bracket;
 	size_t					pos;
 	const char				*str;

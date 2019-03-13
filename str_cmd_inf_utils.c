@@ -3,12 +3,8 @@
 
 void	scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str)
 {
-	str_cmd_inf->is_in_quote = 0;
-	str_cmd_inf->is_in_doublequote = 0;
-	str_cmd_inf->is_in_var_bracket = 0;
-	str_cmd_inf->pos = 0;
+	ft_bzero(str_cmd_inf, sizeof(t_str_cmd_inf));
 	str_cmd_inf->str = str;
-	str_cmd_inf->sub_var_bracket = NULL;
 }
 
 void	scmd_delete(t_str_cmd_inf *str_cmd_inf)
