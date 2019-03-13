@@ -30,8 +30,12 @@ static t_builtin	*set_tab_builtins(void)
 t_alloc				set_alloc(t_var *lst)
 {
 	t_alloc	al;
+	int		x;
 
 	al.var = lst;
+	x = 0;
+	while (x < 10)
+		al.fd[x++] = -1;
 	al.builtins = set_tab_builtins();
 	if (!(al.exectable =  make_exectable()))
 		ft_exit_malloc();
