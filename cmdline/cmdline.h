@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 11:19:31 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 12:40:11 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,9 @@ int				handle_next_word(t_cmdline *cmdline);
 
 int				handle_home_key(t_cmdline *cmdline);
 int				handle_end_key(t_cmdline *cmdline);
+
+int				handle_cursor_up(t_cmdline *cmdline);
+int				handle_cursor_down(t_cmdline *cmdline);
 
 /*
  * INSERT MODE.

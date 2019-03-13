@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 11:18:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 12:40:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ t_esc_seq	*get_esc_seqs(void)
 		{"\033\012", MODE_INSERT, handle_test_newline},
 		{"\033[H", MODE_COMMON, handle_home_key},
 		{"\033[F", MODE_COMMON, handle_end_key},
+		{"\033[1;2A", MODE_COMMON, handle_cursor_up},
+		{"\033[1;2B", MODE_COMMON, handle_cursor_down},
 		{NULL, MODE_COMMON, NULL}
 	};
 
