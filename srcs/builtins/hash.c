@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "search_exec.h"
 #include "options.h"
 #include "exectable.h"
 #include "builtins.h"
@@ -60,10 +61,38 @@ static int	print_exectable(t_hashtable *exectable)
 	return (1);
 }
 
-//TODO gerer "hash utility"
+static int	add_execs_to_hashtable(char **exec_name_tab, t_var *var_lst
+		, t_hashtable *exectable)
+{
+	t_error		error;
+	char		*exec_path;
+	int			has_error;
+
+	has_error = 0;
+	while (*exec_name_tab != NULL)
+	{
+		if ((exec_path = search_exec(var_lst, *exec_name_tab, &error)) != NULL)
+		{
+			if (!set_exec_path(exectable, *exec_name_tab, exec_path, 0))
+			{
+				ft_dprintf(STDERR_FILENO, "42sh: hash: unknown error\n");
+				has_error = 1;
+			}
+			free(exec_path);
+		}
+		else
+		{
+			ft_dprintf(STDERR_FILENO, "42sh: hash: %s: not found\n"
+					, *exec_name_tab);
+			has_error = 1;
+		}
+		++exec_name_tab;
+	}
+	return (!has_error);
+}
+
 int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 {
-	int		par_idx;
 	t_opts	*opts;
 
 	(void)lst_env;
@@ -76,16 +105,9 @@ int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 		ft_dprintf(STDERR_FILENO, "42sh: hash: usage: hash [-r] [name ...]\n");
 		return (1);
 	}
-	if (opts->value == 0)
+	if (opts->value == 0 && elem->input[opts->index] == NULL)
 		return (!print_exectable(alloc->exectable));
 	if (has_opt(opts, 'r'))
 		delete_hashentries(alloc->exectable);
-	par_idx = opts->index;
-	while (elem->input[par_idx] != NULL)
-	{
-		//TODO a faire
-		ft_printf("add %s to hashtable\n");
-		++par_idx;
-	}
-	return (0);
+	return (!add_execs_to_hashtable(elem->input, *lst_env, alloc->exectable));
 }
