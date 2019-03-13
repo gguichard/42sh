@@ -9,20 +9,21 @@ int	dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
 {
 	int					i;
 	int					ret;
-	static char			*lst_built[6] = {"cd", "echo", "setenv", "unsetenv",
-	"env", "exit"};
+	static char			*lst_built[7] = {"cd", "echo", "setenv", "unsetenv",
+	"env", "exit", "hash"};
 	static t_builtins	dispatch[] = { &cd_builtins, &echo_builtins,
-		&setenv_builtins, &unsetenv_builtins, &env_builtins, &exit_builtins };
+		&setenv_builtins, &unsetenv_builtins, &env_builtins, &exit_builtins,
+		&hash_builtins };
 
 	i = 0;
 	ret = 0	;
-	while (i < 6)
+	while (i < 7)
 	{
 		if (ft_strcmp(elem->input[0], lst_built[i]) == 0)
 			break ;
 		i += 1;
 	}
-	if (i < 6)
+	if (i < 7)
 	{
 		ret = dispatch[i](elem, lst_env, alloc);
 		delete_str_tab(tab_path);

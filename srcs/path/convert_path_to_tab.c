@@ -23,7 +23,7 @@ static size_t	count_subpath(const char *path)
 	return (subpath_count);
 }
 
-static int		process_cur_path(char **path_cpy, char **cur_path
+static int		process_cur_path(const char **path_cpy, char **cur_path
 		, t_var *var_lst)
 {
 	char	*next_sep;
@@ -46,29 +46,22 @@ static int		process_cur_path(char **path_cpy, char **cur_path
 
 char			**convert_path_to_tab(t_var *var_lst)
 {
-	char	*path_base;
-	char	*path_cpy;
-	size_t	path_count;
-	char	**path_tab;
-	size_t	path_idx;
+	const char	*path_base;
+	size_t		path_count;
+	char		**path_tab;
+	size_t		path_idx;
 
-	if ((path_base = get_env_value(var_lst, "PATH")) == NULL)
-		return (NULL);
-	path_cpy = path_base;
-	path_count = count_subpath(path_cpy);
+	path_base = get_env_value(var_lst, "PATH");
+	path_count = count_subpath(path_base);
 	if ((path_tab = (char**)malloc(sizeof(char*) * (path_count + 1))) == NULL)
-		return (ft_memdel((void**)&path_base));
+		return (NULL);
 	path_tab[path_count] = NULL;
 	path_idx = 0;
 	while (path_idx < path_count)
 	{
-		if (!process_cur_path(&path_cpy, path_tab + path_idx, var_lst))
-		{
-			free(path_base);
+		if (!process_cur_path(&path_base, path_tab + path_idx, var_lst))
 			return (ft_strtab_free(path_tab));
-		}
 		++path_idx;
 	}
-	free(path_base);
 	return (path_tab);
 }
