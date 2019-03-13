@@ -66,10 +66,10 @@ void	del_alloc(t_alloc *alloc)
 {
 	if (!alloc)
 		return ;
-	// if ((*alloc)->history)
+	// if (alloc->history)
 	// {
-	// 	ft_del_hist((*alloc)->history);
-	// 	(*alloc)->history = NULL;
+	// 	ft_del_hist(alloc->history);
+	// 	alloc->history = NULL;
 	// }
 	if (alloc->input)
 	{

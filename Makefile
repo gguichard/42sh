@@ -14,9 +14,11 @@ PATH_ERROR = error/
 PATH_EXEC = exec/
 PATH_LEXER = lexer/
 PATH_PARSER = parser/
+PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
 
 INCLUDE = ./includes
+INCLUDE_LIBFT = ./libft/includes
 PATH_LIB = ./libft/
 PATH_SRC = ./srcs/
 PATH_OBJ = ./obj/
@@ -25,6 +27,12 @@ SRC =	main.c \
 		$(PATH_ERROR)error_malloc.c \
 		$(PATH_ERROR)lexer_error.c \
 		$(PATH_ERROR)parser_error.c \
+		$(PATH_ERROR)error_redirection.c \
+		$(PATH_ERROR)error_cd.c \
+		$(PATH_ERROR)error_fd.c \
+		$(PATH_ERROR)error_setenv.c \
+		$(PATH_ERROR)error_unsetenv.c \
+		$(PATH_ERROR)exec_error.c \
 		$(PATH_LEXER)check_closing_quote.c \
 		$(PATH_LEXER)check_cmd_pipe.c \
 		$(PATH_LEXER)ft_splitwhitespace_shell.c \
@@ -34,6 +42,19 @@ SRC =	main.c \
 		$(PATH_LEXER)replace_val_ret.c \
 		$(PATH_PARSER)fill_ast.c \
 		$(PATH_PARSER)parser.c \
+		$(PATH_PARSER)analyzer.c \
+		$(PATH_OPERATOR)agregation.c \
+		$(PATH_OPERATOR)heredoc.c \
+		$(PATH_OPERATOR)redirection.c \
+		$(PATH_OPERATOR)job_control.c \
+		$(PATH_OPERATOR)pipe.c \
+		$(PATH_BUILT)cd.c \
+		$(PATH_BUILT)echo.c \
+		$(PATH_BUILT)env.c \
+		$(PATH_BUILT)exec_input.c \
+		$(PATH_BUILT)exit.c \
+		$(PATH_BUILT)setenv.c \
+		$(PATH_BUILT)unsetenv.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \
@@ -61,12 +82,12 @@ SRC =	main.c \
 		$(PATH_BUILT)type.c\
 		$(PATH_BUILT)unset.c\
 		$(PATH_BUILT)unsetenv.c
-
-
-
-
-
-
+		$(PATH_TOOLS)analyzer_tools.c \
+		$(PATH_TOOLS)agreg_tools.c \
+		$(PATH_TOOLS)heredoc_tools.c \
+		$(PATH_TOOLS)redirection_tools.c \
+		$(PATH_TOOLS)cd_slash_tools.c \
+		$(PATH_TOOLS)cd_tools.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -87,8 +108,9 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_EXEC) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_LEXER) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
-	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -o $@ -c $<
+	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
 	@/bin/rm -f $(OBJS)
@@ -98,6 +120,7 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_EXEC) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_LEXER) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 

@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "options.h"
 #include "exectable.h"
 #include "builtins.h"
 
@@ -63,7 +64,29 @@ static int	print_exectable(t_hashtable *exectable)
 //TODO gerer "hash -r"
 int			hash_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
-	(void)elem;
+	int		par_idx;
+	t_opts	*opts;
+
 	(void)lst_env;
-	return (!print_exectable(alloc->exectable));
+	if ((opts = parse_opts(elem->input, "r")) == NULL)
+		return (1);
+	if (opts->error != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: hash: -%c: invalid option\n"
+				, opts->error);
+		ft_dprintf(STDERR_FILENO, "42sh: hash: usage: hash [-r] [name ...]\n");
+		return (1);
+	}
+	if (opts->value == 0)
+		return (!print_exectable(alloc->exectable));
+	if (has_opt(opts, 'r'))
+		delete_hashentries(alloc->exectable);
+	par_idx = opts->index;
+	while (elem->input[par_idx] != NULL)
+	{
+		//TODO a faire
+		ft_printf("add %s to hashtable\n");
+		++par_idx;
+	}
+	return (0);
 }

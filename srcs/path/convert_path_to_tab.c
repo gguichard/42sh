@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "libft.h"
 #include "shell.h"
+#include "builtins.h"
 #include "expand_vars.h"
 #include "convert_path_to_tab.h"
 

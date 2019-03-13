@@ -1,5 +1,6 @@
-#include "../../includes/shell.h"
-#include "../../includes/builtins.h"
+#include "shell.h"
+#include "builtins.h"
+#include "error.h"
 
 int	setenv_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {

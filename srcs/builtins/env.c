@@ -1,5 +1,7 @@
-#include "../../includes/shell.h"
-#include "../../includes/builtins.h"
+#include "shell.h"
+#include "builtins.h"
+#include "parser_lexer.h"
+#include "error.h"
 
 static void		add_env(t_var **lst_env, char *env, int x)
 {

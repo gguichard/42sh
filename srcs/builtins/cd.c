@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "builtins.h"
+#include "error.h"
 
 static int	check_access(char *dir, char *folder)
 {
@@ -22,7 +23,7 @@ static int	check_access(char *dir, char *folder)
 	return (-1);
 }
 
-static int	check_options(t_ast *elem, int *options, t_alloc **alloc)
+static int	check_options(t_ast *elem, int *options, t_alloc *alloc)
 {
 	int	i;
 	int	x;
