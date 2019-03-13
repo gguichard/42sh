@@ -91,7 +91,7 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_var *var_lst
 	return (!has_error);
 }
 
-int			hash_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
+int			hash_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	t_opts	*opts;
 

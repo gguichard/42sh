@@ -3,7 +3,7 @@
 #include "exectable.h"
 #include "hashtable.h"
 
-int	type_builtins(t_ast *elem, t_var **lst_env, t_alloc *alloc)
+int	type_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int			i;
 	int			ret;

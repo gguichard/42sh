@@ -13,7 +13,7 @@ int		main(int argc, char **argv)
 {
 	int		gnl_ret;
 	char	*line;
-	t_var	*lst_env;
+	t_var	*lst;
 	t_alloc	alloc;
 
 	(void)argc;
@@ -21,7 +21,9 @@ int		main(int argc, char **argv)
 	ft_bzero(&alloc, sizeof(t_alloc));
 	if ((alloc.exectable = make_exectable()) == NULL)
 		return (1);
-	lst_env = NULL;
+	lst = NULL;
+	alloc = set_alloc(lst);
+
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{

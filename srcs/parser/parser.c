@@ -55,7 +55,7 @@ static void		sort_ast(t_ast *lst, t_ast **sort)
 static void		clean_tab_and_ast(char **input, t_ast *lst)
 {
 	delete_str_tab(input);
-	del_lst_ast(&lst);
+	del_lst_ast(lst);
 }
 
 void			parser(char **input, t_ast *lst, t_var **lst_env,
@@ -82,11 +82,11 @@ void			parser(char **input, t_ast *lst, t_var **lst_env,
 		sort = sort->next;
 	}
 	sort_ast(lst, &sort);
-	alloc->ast = &lst;
+	alloc->ast = lst;
 	read_sort_descent(sort, 1);
 	reinit_print(lst, 1);
 	analyzer(sort, lst_env, alloc);
-
+	
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc) : 0;
 
 	clean_tab_and_ast(input, lst);

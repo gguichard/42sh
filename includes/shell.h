@@ -74,18 +74,21 @@ typedef struct			s_ast
 	struct s_ast		*right;
 }						t_ast;
 
+struct					s_alloc;
+typedef int				(*t_built_fun)(t_ast *, t_var *, struct s_alloc *);
+
 typedef struct			s_builtin
 {
-	char				*name;
-	int					(*builtin_fun)(t_ast *, int, char **);
+	const char			*name;
+	t_built_fun			*built_fun;
 }						t_builtin;
 
 typedef struct			s_alloc
 {
-	t_historic			**history;
+	t_historic			*history;
 	t_buf				*input;
-	t_ast				**ast;
-	t_var				**var;
+	t_ast				*ast;
+	t_var				*var;
 	t_builtin			*builtins;
 	t_hashtable			*exectable;
 	int					fd[10];
@@ -101,10 +104,11 @@ typedef int				(*t_builtins)(t_ast *elem, t_var **lst_env,
 */
 
 void	delete_str_tab(char **tab_str);
-void	del_lst_env(t_var **lst);
-void	del_lst_ast(t_ast **lst);
+void	del_lst_env(t_var *lst);
+void	del_lst_ast(t_ast *lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
+t_alloc	set_alloc(t_var *lst);
 int		ret_status(void);
 int		replace_val_ret(char **str, int i, int x);
 
