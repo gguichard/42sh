@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 12:40:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 19:49:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct	s_cmdline
 	t_cursor		cursor;
 	t_esc_keys		esc_keys;
 	int				row;
+	int				saved_col;
 }				t_cmdline;
 
 typedef struct	s_esc_seq

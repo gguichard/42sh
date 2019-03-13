@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 09:56:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 19:51:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(int argc, char **argv)
 	(void)argv;
 	tgetent(NULL, "xterm-256color");
 	ft_memset(&cmdline, 0, sizeof(t_cmdline));
+	cmdline.saved_col = -1;
 	setup_term();
 	update_winsize(&cmdline);
 	cmdline.prompt.type = PROMPT_DEFAULT;

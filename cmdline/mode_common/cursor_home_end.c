@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 21:43:51 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 12:32:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 19:50:57 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	handle_home_key(t_cmdline *cmdline)
 {
+	cmdline->saved_col = -1;
 	cmdline->input.offset = 0;
 	cmdline->cursor.x = cmdline->prompt.offset + 1;
 	cmdline->cursor.y -= cmdline->row;
@@ -41,6 +42,7 @@ int	handle_end_key(t_cmdline *cmdline)
 		}
 		cmdline->input.offset += 1;
 	}
+	cmdline->saved_col = -1;
 	cmdline->cursor.x = col;
 	cmdline->cursor.y += rows;
 	cmdline->row += rows;

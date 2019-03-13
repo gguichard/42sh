@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:15:36 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 11:43:18 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 19:50:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int	get_leftmost_column(t_cmdline *cmdline)
 
 int			handle_move_left(t_cmdline *cmdline)
 {
+	cmdline->saved_col = -1;
 	if (cmdline->input.offset == 0)
 		return (0);
 	if (cmdline->cursor.x != 1)
@@ -58,6 +59,7 @@ int			handle_move_left(t_cmdline *cmdline)
 
 int			handle_move_right(t_cmdline *cmdline)
 {
+	cmdline->saved_col = -1;
 	if (cmdline->input.offset == cmdline->input.size)
 		return (0);
 	if (cmdline->cursor.x != cmdline->winsize.ws_col

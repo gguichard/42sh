@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 19:56:15 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/12 20:08:28 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 19:52:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	handle_prev_word(t_cmdline *cmdline)
 {
+	cmdline->saved_col = -1;
 	if (cmdline->input.offset == 0)
 		return (0);
 	while (cmdline->input.offset > 0
@@ -31,6 +32,7 @@ int	handle_prev_word(t_cmdline *cmdline)
 
 int	handle_next_word(t_cmdline *cmdline)
 {
+	cmdline->saved_col = -1;
 	if (cmdline->input.offset == cmdline->input.size)
 		return (0);
 	while (cmdline->input.offset < cmdline->input.size
