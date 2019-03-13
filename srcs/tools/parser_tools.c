@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "error.h"
 
-t_ast	*create_new_elem(t_ast *lst)
+t_ast	*create_new_elem(t_ast **lst)
 {
 	t_ast	*new;
 
@@ -16,7 +16,7 @@ t_ast	*create_new_elem(t_ast *lst)
 	new->back = NULL;
 	new->left = NULL;
 	new->right = NULL;
-	(lst == NULL) ? lst = new : 0;
+	(*lst == NULL) ? *lst = new : 0;
 	return (new);
 }
 
@@ -30,13 +30,13 @@ t_ast	*get_last_elem(t_ast *lst)
 	return (elem);
 }
 
-t_ast	*add_new_elem(t_ast *lst)
+t_ast	*add_new_elem(t_ast **lst)
 {
 	t_ast	*end;
 	t_ast	*new;
 
 	new = create_new_elem(lst);
-	end = get_last_elem(lst);
+	end = get_last_elem(*lst);
 	end->next = new;
 	new->back = end;
 	return (new);

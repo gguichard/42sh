@@ -50,7 +50,7 @@ char	*ft_back_quote(char *sub, t_var *lst_env, t_alloc *alloc);
 */
 
 void	parser(char **input, t_ast *lst, t_var *lst_env, t_alloc *alloc);
-void	fill_ast(char **s, t_ast *lst, int save, int i);
+void	fill_ast(char **s, t_ast **lst, int save, int i);
 int		analyzer(t_ast *sort, t_var *lst_env, t_alloc *alloc);
 int		dispatch_agreg(t_ast *elem, t_var *lst_env, char **tab_path,
 		t_alloc *alloc);
@@ -67,9 +67,9 @@ int		dispatch_cmd(t_ast *elem, t_var *lst_env, char **tab_path,
 ********************************* PARSER TOOLS *********************************
 */
 
-t_ast	*create_new_elem(t_ast *lst);
+t_ast	*create_new_elem(t_ast **lst);
 t_ast	*get_last_elem(t_ast *lst);
-t_ast	*add_new_elem(t_ast *lst);
+t_ast	*add_new_elem(t_ast **lst);
 void	check_quote(char *s);
 void	replace_quote(char *s, int *i);
 void	ft_custom_memmove(char *dst, char *src, size_t len);
@@ -85,7 +85,7 @@ int		get_last_operator(int *i, char *s, int *save, char **input);
 int		get_last_digit(int *i, char *s, int *save, char **input);
 void	fill_input(char **s, int end, int start, t_ast *elem);
 void	fill_last_elem(char **s, int i, int save, t_ast *new);
-void	link_new_node(t_ast *sort, t_ast *tmp, t_ast *node);
+void	link_new_node(t_ast **sort, t_ast *tmp, t_ast *node);
 void	add_input_prev_cmd(char **s, int end, int start, t_ast *elem);
 
 /*

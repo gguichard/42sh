@@ -97,7 +97,7 @@ static int	go_end_quote(char **s, int i, int *x)
 	return (1);
 }
 
-void		fill_ast(char **s, t_ast *lst, int save, int i)
+void		fill_ast(char **s, t_ast **lst, int save, int i)
 {
 	t_ast	*tmp;
 	int		x;
