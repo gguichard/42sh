@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/12 22:06:48 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 11:19:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,20 @@ typedef struct	s_esc_keys
 	int		offset;
 }				t_esc_keys;
 
+struct			s_prompt
+{
+	enum e_prompt	type;
+	int				offset;
+};
+
 typedef struct	s_cmdline
 {
-	enum e_prompt	prompt_type;
+	struct s_prompt	prompt;
 	struct s_input	input;
 	struct winsize	winsize;
 	t_cursor		cursor;
 	t_esc_keys		esc_keys;
+	int				row;
 }				t_cmdline;
 
 typedef struct	s_esc_seq
@@ -109,6 +116,9 @@ int				handle_move_left(t_cmdline *cmdline);
 int				handle_move_right(t_cmdline *cmdline);
 int				handle_prev_word(t_cmdline *cmdline);
 int				handle_next_word(t_cmdline *cmdline);
+
+int				handle_home_key(t_cmdline *cmdline);
+int				handle_end_key(t_cmdline *cmdline);
 
 /*
  * INSERT MODE.

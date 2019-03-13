@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/12 22:06:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/13 10:31:00 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,18 @@ void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 	t_cursor	new_pos;
 
 	write(STDOUT_FILENO, &c, 1);
-	if (cmdline->cursor.x < cmdline->winsize.ws_col)
+	if (c != '\n' && cmdline->cursor.x < cmdline->winsize.ws_col)
 		cmdline->cursor.x += 1;
 	else
 	{
-		tputs(tgetstr("cr", NULL), 1, t_putchar);
-		tputs(tgetstr("do", NULL), 1, t_putchar);
+		if (c != '\n')
+		{
+			tputs(tgetstr("cr", NULL), 1, t_putchar);
+			tputs(tgetstr("do", NULL), 1, t_putchar);
+		}
 		cmdline->cursor.x = 1;
 		cmdline->cursor.y += 1;
+		cmdline->row += 1;
 	}
 	if (cmdline->input.offset != cmdline->input.size)
 		update_cmdline_after_offset(cmdline);
