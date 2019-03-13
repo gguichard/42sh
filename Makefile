@@ -16,6 +16,9 @@ PATH_LEXER = lexer/
 PATH_PARSER = parser/
 PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
+PATH_HASHTABLE = hashtable/
+PATH_PATH = path/
+PATH_TMPPASSURGARDERCA = autocomplete/ac_utils_mais_pe_plus_general_jsp/
 
 INCLUDE = ./includes
 INCLUDE_LIBFT = ./libft/includes
@@ -33,6 +36,7 @@ SRC =	main.c \
 		$(PATH_ERROR)error_setenv.c \
 		$(PATH_ERROR)error_unsetenv.c \
 		$(PATH_ERROR)exec_error.c \
+		$(PATH_ERROR)error_utils.c \
 		$(PATH_LEXER)check_closing_quote.c \
 		$(PATH_LEXER)check_cmd_pipe.c \
 		$(PATH_LEXER)ft_splitwhitespace_shell.c \
@@ -55,6 +59,7 @@ SRC =	main.c \
 		$(PATH_BUILT)exit.c \
 		$(PATH_BUILT)setenv.c \
 		$(PATH_BUILT)unsetenv.c \
+		$(PATH_BUILT)hash.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \
@@ -87,7 +92,15 @@ SRC =	main.c \
 		$(PATH_TOOLS)heredoc_tools.c \
 		$(PATH_TOOLS)redirection_tools.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
-		$(PATH_TOOLS)cd_tools.c
+		$(PATH_TOOLS)cd_tools.c \
+		$(PATH_HASHTABLE)exectable.c \
+		$(PATH_HASHTABLE)hashtable.c \
+		$(PATH_HASHTABLE)hashtable_delete.c \
+		$(PATH_HASHTABLE)hashtable_utils.c \
+		$(PATH_PATH)check_path.c \
+		$(PATH_PATH)convert_path_to_tab.c \
+		$(PATH_PATH)search_exec.c \
+		$(PATH_TMPPASSURGARDERCA)expand_vars.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -110,6 +123,9 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
+	@mkdir -p $(PATH_OBJ)$(PATH_TMPPASSURGARDERCA) 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
@@ -122,6 +138,9 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_TMPPASSURGARDERCA) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 
 fclean: clean
