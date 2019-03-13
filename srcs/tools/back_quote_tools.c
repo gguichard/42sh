@@ -30,7 +30,7 @@ static char	*get_back_quote_exec(int fd)
 	return (sub);
 }
 
-static int	lexer_back_quote(char *input, t_var **lst_env, t_alloc *alloc)
+static int	lexer_back_quote(char *input, t_var *lst_env, t_alloc *alloc)
 {
 	int		i;
 	char	**lexer;
@@ -65,7 +65,7 @@ char		*ft_back_quote(char *sub, t_var *lst_env, t_alloc *alloc)
 	i = 0;
 	str = ft_strjoin(sub, " > /tmp/.back_quote.txt");
 	ft_memdel((void **)&sub);
-	if (!lexer_back_quote(str, &lst_env, alloc))
+	if (!lexer_back_quote(str, lst_env, alloc))
 		return (0);
 	sub = get_back_quote_exec(0);
 	while (sub && sub[i])

@@ -7,7 +7,7 @@ int	setenv_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	t_var *tmp;
 
 	(void)alloc;
-	tmp = *lst_env;
+	tmp = lst_env;
 	if (elem->input[1] && ft_strchr(elem->input[1], '='))
 		return (error_setenv(2));
 	else if (!elem->input[1] || !elem->input[2])

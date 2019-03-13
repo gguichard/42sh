@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "operator.h"
 
-int	agreg_1(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_1(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;
@@ -23,7 +23,7 @@ int	agreg_1(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
 	return (0);
 }
 
-int	agreg_2(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_2(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;
@@ -44,7 +44,7 @@ int	agreg_2(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
 	return (0);
 }
 
-int	agreg_3(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_3(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 {
 	int	fd_redir;
 	int	ret1;
@@ -72,7 +72,7 @@ int	agreg_3(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
 	return (0);
 }
 
-int	agreg_4(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_4(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 {
 	int	fd_close;
 	int	fd_save;
@@ -96,7 +96,7 @@ fd_save = dup(fd_close);
 	return (0);
 }
 
-int	agreg_5(t_ast *elem, t_var **lst_env, char **tab_path, t_alloc *alloc)
+int	agreg_5(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 {
 	int	fd_close;
 	int	fd_save;

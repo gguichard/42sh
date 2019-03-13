@@ -2,27 +2,27 @@
 #include "builtins.h"
 #include "error.h"
 
-t_var	*find_elem_env(t_var **lst, char *key)
+t_var	*find_elem_env(t_var *lst, char *key)
 {
 	t_var *tmp;
 
-	tmp = *lst;
+	tmp = lst;
 	while (tmp && ft_strcmp(key, tmp->key) != 0)
 		tmp = tmp->next;
 	return (tmp);
 }
 
-t_var	*get_last_elem_env(t_var **lst)
+t_var	*get_last_elem_env(t_var *lst)
 {
 	t_var	*tmp;
 
-	tmp = *lst;
+	tmp = lst;
 	while (tmp && tmp->next)
 		tmp = tmp->next;
 	return (tmp);
 }
 
-void	add_elem_env(t_var **lst, char *key, char *value)
+void	add_elem_env(t_var *lst, char *key, char *value)
 {
 	t_var	*new;
 	t_var	*last;
@@ -36,13 +36,13 @@ void	add_elem_env(t_var **lst, char *key, char *value)
 		ft_exit_malloc();
 	new->next = NULL;
 	new->is_env = 1;
-	if (!(*lst))
-		*lst = new;
+	if (!lst)
+		lst = new;
 	else
 		last->next = new;
 }
 
-void	add_shlvl(t_var **lst)
+void	add_shlvl(t_var *lst)
 {
 	t_var	*shlvl;
 	int		lvl;

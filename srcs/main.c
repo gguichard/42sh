@@ -23,12 +23,11 @@ int		main(int argc, char **argv)
 		return (1);
 	lst = NULL;
 	alloc = set_alloc(lst);
-
 	write(1, "> ", 2);
-	while ((gnl_ret = get_next_line(STDOUT_FILENO, &line)) > 0)
+	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{
 		//parse line etc;
-		lexer(line, &lst_env, &alloc);
+		lexer(line, lst, &alloc);
 		write(1, "> ", 2);
 		//free(line);
 	}

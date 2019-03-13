@@ -31,9 +31,6 @@ t_alloc				set_alloc(t_var *lst)
 {
 	t_alloc	al;
 
-	al.history = NULL;
-	al.input = NULL;
-	al.ast = NULL;
 	al.var = lst;
 	al.builtins = set_tab_builtins();
 	if (!(al.exectable =  make_exectable()))

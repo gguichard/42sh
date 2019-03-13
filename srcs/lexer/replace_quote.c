@@ -106,22 +106,22 @@ int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc)
 	return (1);
 }
 
-int			convert_quote(char **s, t_var **lst_env, t_alloc *alloc)
+int			convert_quote(char **s, t_var *lst_env, t_alloc *alloc)
 {
 	int		i;
 
 	i = 0;
-	short_cut(s, *lst_env);
+	short_cut(s, lst_env);
 	while (s && (*s)[i])
 	{
 		if ((*s)[i] == '$')
 		{
-			if (replace_env_var(s, i, *lst_env) == -1)
+			if (replace_env_var(s, i, lst_env) == -1)
 				return (-1);
 		}
 		else if (ft_isquote((*s)[i]) == 1)
 		{
-			if (!(remove_quote(s, &i, *lst_env, alloc)))
+			if (!(remove_quote(s, &i, lst_env, alloc)))
 				return (-1);
 			i -= 1;
 		}

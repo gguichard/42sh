@@ -2,7 +2,7 @@
 #include "operator.h"
 #include "parser_lexer.h"
 
-void	redirection_1(t_ast *elem, t_var **lst_env, t_alloc *alloc)
+void	redirection_1(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;
@@ -20,7 +20,7 @@ void	redirection_1(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 	reinit_fd(fd, alloc);
 }
 
-void	redirection_2(t_ast *elem, t_var **lst_env, t_alloc *alloc)
+void	redirection_2(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;
@@ -38,7 +38,7 @@ void	redirection_2(t_ast *elem, t_var **lst_env, t_alloc *alloc)
 	reinit_fd(fd, alloc);
 }
 
-void	redirection_3(t_ast *elem, t_var **lst_env, t_alloc *alloc)
+void	redirection_3(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	fd[10];
 	int	i;

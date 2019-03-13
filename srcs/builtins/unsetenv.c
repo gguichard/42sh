@@ -40,17 +40,17 @@ int			unsetenv_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	t_var	*tmp;
 
 	(void)alloc;
-	tmp = *lst_env;
+	tmp = lst_env;
 	if (check_unsetenv_error(elem) == -1)
 		return (-1);
 	else if (ft_strcmp(elem->input[1], tmp->key) == 0)
 	{
-		*lst_env = tmp->next;
+		lst_env = tmp->next;
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);
 	}
-	else if (unset_exist_env(elem, *lst_env) == -1)
+	else if (unset_exist_env(elem, lst_env) == -1)
 		return (-1);
 	g_ret[0] = 0;
 	return (0);

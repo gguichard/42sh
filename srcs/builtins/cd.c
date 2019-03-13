@@ -51,7 +51,7 @@ static int	check_options(t_ast *elem, int *options, t_alloc *alloc)
 	return (check_arg_cd(elem, i));
 }
 
-static int	modif_oldpwd(t_var **lst_env, char *buf)
+static int	modif_oldpwd(t_var *lst_env, char *buf)
 {
 	t_var	*tmp;
 
@@ -73,7 +73,7 @@ static int	modif_oldpwd(t_var **lst_env, char *buf)
 	return (0);
 }
 
-static int	modif_env(char *dir, t_var **lst_env, int options, char *buf)
+static int	modif_env(char *dir, t_var *lst_env, int options, char *buf)
 {
 	t_var	*tmp;
 
@@ -100,9 +100,9 @@ int			cd_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	buf_pwd = getcwd(0, PATH_MAX);
 	if (!find_elem_env(lst_env, "PWD"))
 		add_elem_env(lst_env, "PWD", buf_pwd);
-	dir = cd_predef(elem->input[i], *lst_env, options, buf_pwd);
+	dir = cd_predef(elem->input[i], lst_env, options, buf_pwd);
 	if (!dir)
-		dir = get_dir(get_env_value(*lst_env, "$PWD"),
+		dir = get_dir(get_env_value(lst_env, "$PWD"),
 		ft_strsplit(elem->input[i], '/'), options, buf_pwd);
 	ft_memdel((void **)&buf_pwd);
 	if ((ft_strcmp(dir, "") != 0 && check_access(dir, elem->input[i]) == -1)

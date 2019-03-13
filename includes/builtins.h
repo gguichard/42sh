@@ -24,10 +24,10 @@ int		exec_input(t_ast *elem, t_var *lst_env, char **tab_path);
 ************************************ TOOLS *************************************
 */
 
-t_var	*find_elem_env(t_var **lst, char *key);
-t_var	*get_last_elem_env(t_var **lst);
-void	add_elem_env(t_var **lst, char *key, char *value);
-void	add_shlvl(t_var **lst);
+t_var	*find_elem_env(t_var *lst, char *key);
+t_var	*get_last_elem_env(t_var *lst);
+void	add_elem_env(t_var *lst, char *key, char *value);
+void	add_shlvl(t_var *lst);
 void	display_env(t_var *lst);
 void	convert_lst_tab(t_var *lst_env, char ***tab_str);
 char	*get_env_value(t_var *lst_env, char *str);

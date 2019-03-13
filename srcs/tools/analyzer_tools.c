@@ -4,7 +4,7 @@
 #include "parser_lexer.h"
 
 
-int	dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
+int	dispatch_cmd(t_ast *elem, t_var *lst_env, char **tab_path,
 	t_alloc *alloc)
 {
 	int					i;
@@ -29,11 +29,11 @@ int	dispatch_cmd(t_ast *elem, t_var **lst_env, char **tab_path,
 		delete_str_tab(tab_path);
 	}
 	else
-		ret = exec_input(elem, *lst_env, tab_path);
+		ret = exec_input(elem, lst_env, tab_path);
 	return (ret);
 }
 
-int	dispatch_logic(t_ast *elem, t_var **lst_env, char **tab_path,
+int	dispatch_logic(t_ast *elem, t_var *lst_env, char **tab_path,
 	t_alloc *alloc)
 {
 	(void)tab_path;
@@ -56,7 +56,7 @@ int	dispatch_logic(t_ast *elem, t_var **lst_env, char **tab_path,
 	return (-1);
 }
 
-int	dispatch_redir(t_ast *elem, t_var **lst_env, char **tab_path,
+int	dispatch_redir(t_ast *elem, t_var *lst_env, char **tab_path,
 	t_alloc *alloc)
 {
 	static char		*tab_redir[7] = {">", ">>", ">>&", "<", "<<<", "<>", "<<"};
@@ -79,18 +79,18 @@ int	dispatch_redir(t_ast *elem, t_var **lst_env, char **tab_path,
 	return (1);
 }
 
-int	dispatch_operator(t_ast *elem, t_var **lst_env, char **tab_path,
+int	dispatch_operator(t_ast *elem, t_var *lst_env, char **tab_path,
 	t_alloc *alloc)
 {
 	(void)tab_path;
 	if (ft_strcmp(elem->input[0], "|") == 0)
 		return (do_pipe(elem, lst_env, alloc));
 	else if (ft_strcmp(elem->input[0], "&") == 0)
-		return (job_control(elem, *lst_env));
+		return (job_control(elem, lst_env));
 	return (1);
 }
 
-int	dispatch_agreg(t_ast *elem, t_var **lst_env, char **tab_path,
+int	dispatch_agreg(t_ast *elem, t_var *lst_env, char **tab_path,
 	t_alloc *alloc)
 {
 	static char	*tab_agreg[4] = {"&>", "&>>", ">&", "<&"};

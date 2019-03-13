@@ -9,12 +9,12 @@ void		fill_last_elem(char **s, int i, int save, t_ast *new)
 		add_input_prev_cmd(s, i, save, new);
 }
 
-void		link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
+void		link_new_node(t_ast *sort, t_ast *tmp, t_ast *node)
 {
 	t_ast	*h_node;
 
 	h_node = node;
-	if ((*sort)->type == LOGIC)
+	if (sort->type == LOGIC)
 	{
 		if (node->right)
 		{
@@ -28,13 +28,13 @@ void		link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 	{
 		tmp->left = node;
 		node->back = tmp;
-		((*sort)->type != LOGIC) ? *sort = tmp : 0;
+		(sort->type != LOGIC) ? sort = tmp : 0;
 	}
 	else
 	{
-		tmp->left = *sort;
-		(*sort)->back = tmp;
-		*sort = tmp;
+		tmp->left = sort;
+		sort->back = tmp;
+		sort = tmp;
 	}
 }
 
@@ -97,7 +97,7 @@ void		add_input_prev_cmd(char **s, int end, int start, t_ast *elem)
 	{
 		while (elem->next)
 			elem = elem->next;
-		elem = add_new_elem(&elem);
+		elem = add_new_elem(elem);
 		return (fill_last_input(s, end, start, elem));
 	}
 	fill_input_prev_cmd(elem, start, end, s);

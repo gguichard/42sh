@@ -2,7 +2,7 @@
 #include "operator.h"
 #include "parser_lexer.h"
 
-static int	process_pipe_left(t_ast *elem, t_var **lst_env, t_alloc *alloc, int *fd)
+static int	process_pipe_left(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *fd)
 {
 	int	ret;
 
@@ -13,7 +13,7 @@ static int	process_pipe_left(t_ast *elem, t_var **lst_env, t_alloc *alloc, int *
 	exit(ret);
 }
 
-static int	process_pipe_right(t_ast *elem, t_var **lst_env, t_alloc *alloc, int *fd)
+static int	process_pipe_right(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *fd)
 {
 	int	ret;
 
@@ -24,7 +24,7 @@ static int	process_pipe_right(t_ast *elem, t_var **lst_env, t_alloc *alloc, int 
 	exit(ret);
 }
 
-int			do_pipe(t_ast *elem, t_var **lst_env, t_alloc *alloc)
+int			do_pipe(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
 	int	pid1;
 	int	pid2;

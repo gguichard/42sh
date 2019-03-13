@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 
 
-void		clean_input(char *str, t_ast *lst, t_var **lst_env,
+void		clean_input(char *str, t_ast *lst, t_var *lst_env,
 			t_alloc *alloc)
 {
 	char	**split;
@@ -13,7 +13,7 @@ void		clean_input(char *str, t_ast *lst, t_var **lst_env,
 	parser(split, lst, lst_env, alloc);
 }
 
-void		read_lexer(char **lexer, t_var **lst_env, t_ast *lst,
+void		read_lexer(char **lexer, t_var *lst_env, t_ast *lst,
 			t_alloc *alloc)
 {
 	int	i;
@@ -32,7 +32,7 @@ void		read_lexer(char **lexer, t_var **lst_env, t_ast *lst,
 	(lexer != NULL) ? free(lexer) : 0;
 }
 
-void		lexer(char *input, t_var **lst_env, t_alloc *alloc)
+void		lexer(char *input, t_var *lst_env, t_alloc *alloc)
 {
 	int		i;
 	char	**lexer;

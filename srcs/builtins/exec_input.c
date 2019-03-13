@@ -83,7 +83,7 @@ int			exec_input(t_ast *elem, t_var *lst_env, char **tab_path)
 	path_all = NULL;
 	tab_env = NULL;
 	if (!tab_path)
-		tab_path = (find_elem_env(&lst_env, "PATH")) ?
+		tab_path = (find_elem_env(lst_env, "PATH")) ?
 		ft_strsplit(get_env_value(lst_env, "$PATH"), ':') :
 		ft_strsplit("/usr/bin:/bin:/usr/sbin:/sbin", ':');
 	if (exec_rights(elem, tab_path, &path_all))
