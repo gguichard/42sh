@@ -32,14 +32,8 @@ t_alloc				set_alloc(t_var *lst)
 	t_alloc	al;
 	int		x;
 
-	// sort_ascii(&lst);
 	al.var = &lst;
-	// while ((*al.var))
-	// {
-	// 	ft_printf("%s=%s\n", (*al.var)->key, (*al.var)->value);
-	// 	al.var = &(*al.var)->next;
-	// }
-	sort_ascii(&lst);
+	sort_ascii(al.var);
 	x = 0;
 	while (x < 10)
 		al.fd[x++] = -1;
