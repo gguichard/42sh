@@ -6,12 +6,13 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 15:30:29 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 16:30:48 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
+#include <term.h>
+#include <stdlib.h>
 #include "cmdline.h"
 
 t_seq		*get_known_sequences(void)
@@ -61,8 +62,9 @@ void		handle_sequence_char(t_cmdline *cmdline, const char *seq, char c)
 		{
 			if (ft_strequ(seqs[idx].str, seq))
 			{
-				seqs[idx].fn(cmdline);
-				if (cmdline->visual.toggle)
+				if (!seqs[idx].fn(cmdline))
+					tputs(tgetstr("bl", NULL), 1, t_putchar);
+				else if (cmdline->visual.toggle)
 					update_visual_select(cmdline);
 				break ;
 			}

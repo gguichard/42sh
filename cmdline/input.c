@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 15:55:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 16:29:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void		read_input(t_cmdline *cmdline)
 			handle_sequence_char(cmdline, seq, c);
 		else if (ft_isprint(c) && !cmdline->visual.toggle)
 		{
+			cmdline->saved_col = -1;
 			add_char_to_input(&cmdline->input, c);
 			write_char_in_cmdline(cmdline, c);
 		}
