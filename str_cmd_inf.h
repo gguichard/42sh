@@ -24,11 +24,14 @@ typedef struct	s_str_cmd_inf
 */
 void			scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str);
 
+/*
+** Free le str_cmd_inf passe en parametre et toutes ses sub_str.
+*/
 void			scmd_delete(t_str_cmd_inf *str_cmd_inf);
 
 /*
 ** Retourne 1 si le curseur a la position actuelle n'est dans aucun enclosing
-** char (",',{,(), 0 sinon.
+** char (",',${,$(), 0 sinon.
 */
 int				scmd_cur_char_is_in_nothing(t_str_cmd_inf *str_cmd_inf);
 
