@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 12:33:57 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 13:17:27 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void		update_cmdline_after_offset(t_cmdline *cmdline)
 	write(STDOUT_FILENO
 			, cmdline->input.buffer + cmdline->input.offset
 			, cmdline->input.size - cmdline->input.offset);
-	ft_putchar(' ');
+	tputs(tgetstr("ce", NULL), 1, t_putchar);
+	tputs(tgetstr("cr", NULL), 1, t_putchar);
+	tputs(tgetstr("do", NULL), 1, t_putchar);
+	tputs(tgetstr("cd", NULL), 1, t_putchar);
 	go_to_cursor_pos(cmdline->cursor);
 }
 
@@ -55,6 +58,8 @@ void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 {
 	t_cursor	new_pos;
 
+	if (c == '\n')
+		tputs(tgetstr("ce", NULL), 1, t_putchar);
 	write(STDOUT_FILENO, &c, 1);
 	if (c != '\n' && (cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
 		cmdline->cursor.x += 1;
@@ -66,7 +71,7 @@ void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 			tputs(tgetstr("do", NULL), 1, t_putchar);
 		}
 		cmdline->cursor.x = 0;
-		if (cmdline->cursor.y < cmdline->winsize.ws_row)
+		if ((cmdline->cursor.y + 1) < cmdline->winsize.ws_row)
 			cmdline->cursor.y += 1;
 		cmdline->row += 1;
 	}
