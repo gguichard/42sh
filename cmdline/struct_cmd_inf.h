@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 11:27:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 14:19:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ struct			s_prompt
 	int				offset;
 };
 
+struct			s_visual
+{
+	int		toggle;
+	int		start_offset;
+	char	*clipboard;
+};
+
 typedef struct	s_cmdline
 {
 	struct s_prompt	prompt;
@@ -66,7 +73,7 @@ typedef struct	s_cmdline
 	t_seq_keys		seq_keys;
 	int				row;
 	int				saved_col;
-	int				visual_mode;
+	struct s_visual	visual;
 }				t_cmdline;
 
 typedef struct	s_seq

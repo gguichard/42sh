@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 11:43:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 15:30:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_seq		*get_known_sequences(void)
 		{"d", MODE_VISUAL, handle_cut_key},
 		{"y", MODE_VISUAL, handle_copy_key},
 		{"p", MODE_VISUAL, handle_paste_key},
+		{"P", MODE_VISUAL, handle_paste_before_key},
 		{NULL, MODE_COMMON, NULL}
 	};
 
@@ -61,6 +62,8 @@ void		handle_sequence_char(t_cmdline *cmdline, const char *seq, char c)
 			if (ft_strequ(seqs[idx].str, seq))
 			{
 				seqs[idx].fn(cmdline);
+				if (cmdline->visual.toggle)
+					update_visual_select(cmdline);
 				break ;
 			}
 			idx++;
@@ -72,9 +75,9 @@ static int	is_right_seq_mode(t_cmdline *cmdline, t_seq *seq)
 {
 	if (seq->mode == MODE_COMMON)
 		return (1);
-	else if (seq->mode == MODE_VISUAL && cmdline->visual_mode)
+	else if (seq->mode == MODE_VISUAL && cmdline->visual.toggle)
 		return (1);
-	else if (seq->mode == MODE_INSERT && !cmdline->visual_mode)
+	else if (seq->mode == MODE_INSERT && !cmdline->visual.toggle)
 		return (1);
 	else
 		return (0);
