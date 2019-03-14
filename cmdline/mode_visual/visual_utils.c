@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 14:50:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 16:21:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 20:25:23 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ int		vm_copy(t_cmdline *cmdline, int cut_hook)
 		ft_memcpy(cmdline->input.buffer + off_s
 				, cmdline->input.buffer + off_e
 				, cmdline->input.size - off_e);
-		go_to_offset(cmdline, 0);
-		tputs(tgetstr("ce", NULL), 1, t_putchar);
+		go_to_offset(cmdline, off_s);
 		tputs(tgetstr("cr", NULL), 1, t_putchar);
-		tputs(tgetstr("do", NULL), 1, t_putchar);
 		tputs(tgetstr("cd", NULL), 1, t_putchar);
 		cmdline->input.offset = off_s;
 		cmdline->input.size -= off;
