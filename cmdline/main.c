@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 19:51:29 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 12:33:07 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(int argc, char **argv)
 	cmdline.prompt.type = PROMPT_DEFAULT;
 	print_prompt(&cmdline);
 	set_cursor_pos(&cmdline.cursor);
+	cmdline.prompt.offset = cmdline.cursor.x;
 	read_input(&cmdline);
 	reset_term();
 	return (0);

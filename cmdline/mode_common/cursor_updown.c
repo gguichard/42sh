@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 12:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 10:47:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 12:44:00 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	handle_cursor_up(t_cmdline *cmdline)
 		cmdline->saved_col = cmdline->cursor.x;
 	if (cmdline->row == 0)
 		return (0);
-	offset = cmdline->input.offset - cmdline->cursor.x;
+	offset = cmdline->input.offset - cmdline->cursor.x - 1;
 	rightest_col = get_rightmost_column(cmdline, offset);
-	col = 1;
+	col = 0;
 	while (col < rightest_col && col < cmdline->saved_col)
 		col++;
 	cmdline->row -= 1;
@@ -33,7 +33,7 @@ int	handle_cursor_up(t_cmdline *cmdline)
 		offset = offset - (rightest_col - col);
 	else
 	{
-		col = cmdline->prompt.offset + 1;
+		col = cmdline->prompt.offset;
 		offset = 0;
 	}
 	cmdline->input.offset = offset;
@@ -57,14 +57,12 @@ int	handle_cursor_down(t_cmdline *cmdline)
 	while (offset < cmdline->input.size
 			&& (row != cmdline->row + 1 || col < cmdline->saved_col))
 	{
-		if (cmdline->input.buffer[offset] != '\n'
-				&& col < cmdline->winsize.ws_col)
-			col++;
-		else
+		if (cmdline->input.buffer[offset] == '\n'
+				|| ++col == cmdline->winsize.ws_col)
 		{
 			if (row != cmdline->row)
 				break ;
-			col = 1;
+			col = 0;
 			row++;
 		}
 		offset++;

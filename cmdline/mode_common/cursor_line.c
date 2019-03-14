@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:35:45 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 11:45:35 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 12:44:58 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,18 @@
 int	handle_line_start(t_cmdline *cmdline)
 {
 	cmdline->saved_col = INT_MIN;
-	if (cmdline->cursor.x > 1 && (cmdline->row != 0
-				|| cmdline->cursor.x > cmdline->prompt.offset + 1))
+	if (cmdline->cursor.x > 0 && (cmdline->row != 0
+				|| cmdline->cursor.x > cmdline->prompt.offset))
 	{
 		if (cmdline->row == 0)
 		{
 			cmdline->input.offset = 0;
-			cmdline->cursor.x = cmdline->prompt.offset + 1;
+			cmdline->cursor.x = cmdline->prompt.offset;
 		}
 		else
 		{
-			cmdline->input.offset = cmdline->input.offset
-				- (cmdline->cursor.x - 1);
-			cmdline->cursor.x = 1;
+			cmdline->input.offset = cmdline->input.offset - cmdline->cursor.x;
+			cmdline->cursor.x = 0;
 		}
 		go_to_cursor_pos(cmdline->cursor);
 	}
@@ -43,8 +42,9 @@ int	handle_line_end(t_cmdline *cmdline)
 	cmdline->saved_col = INT_MAX;
 	col = cmdline->cursor.x;
 	offset = cmdline->input.offset;
-	while (offset < cmdline->input.size && col < cmdline->winsize.ws_col
-			&& cmdline->input.buffer[offset] != '\n')
+	while (offset < cmdline->input.size
+			&& cmdline->input.buffer[offset] != '\n'
+			&& (col + 1) < cmdline->winsize.ws_col)
 	{
 		col++;
 		offset++;

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 11:20:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 12:33:57 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 	t_cursor	new_pos;
 
 	write(STDOUT_FILENO, &c, 1);
-	if (c != '\n' && cmdline->cursor.x < cmdline->winsize.ws_col)
+	if (c != '\n' && (cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
 		cmdline->cursor.x += 1;
 	else
 	{
@@ -65,7 +65,7 @@ void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 			tputs(tgetstr("cr", NULL), 1, t_putchar);
 			tputs(tgetstr("do", NULL), 1, t_putchar);
 		}
-		cmdline->cursor.x = 1;
+		cmdline->cursor.x = 0;
 		if (cmdline->cursor.y < cmdline->winsize.ws_row)
 			cmdline->cursor.y += 1;
 		cmdline->row += 1;
