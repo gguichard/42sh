@@ -18,7 +18,6 @@ PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
 PATH_HASHTABLE = hashtable/
 PATH_PATH = path/
-PATH_TMPPASSURGARDERCA = autocomplete/ac_utils_mais_pe_plus_general_jsp/
 
 INCLUDE = ./includes
 INCLUDE_LIBFT = ./libft/includes
@@ -96,7 +95,6 @@ SRC =	main.c \
 		$(PATH_PATH)check_path.c \
 		$(PATH_PATH)convert_path_to_tab.c \
 		$(PATH_PATH)search_exec.c \
-		$(PATH_TMPPASSURGARDERCA)expand_vars.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -121,7 +119,6 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
-	@mkdir -p $(PATH_OBJ)$(PATH_TMPPASSURGARDERCA) 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
@@ -136,7 +133,6 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_TMPPASSURGARDERCA) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 
 fclean: clean

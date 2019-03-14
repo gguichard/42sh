@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "builtins.h"
 
-static void	short_cut(char **s, t_var *lst_env)
+void		expand_home_shortcut(char **s, t_var *lst_env)
 {
 	char	*dir;
 
@@ -111,7 +111,7 @@ int			convert_quote(char **s, t_var *lst_env, t_alloc *alloc)
 	int		i;
 
 	i = 0;
-	short_cut(s, lst_env);
+	expand_home_shortcut(s, lst_env);
 	while (s && (*s)[i])
 	{
 		if ((*s)[i] == '$')
