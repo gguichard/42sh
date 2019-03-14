@@ -51,12 +51,12 @@ char	*ft_back_quote(char *sub, t_alloc *alloc);
 
 void	parser(char **input, t_ast *lst, t_alloc *alloc);
 void	fill_ast(char **s, t_ast **lst, int save, int i);
-int		analyzer(t_ast *sort, t_alloc *alloc);
-int		dispatch_agreg(t_ast *elem, t_alloc *alloc);
-int		dispatch_operator(t_ast *elem, t_alloc *alloc);
-int		dispatch_redir(t_ast *elem, t_alloc *alloc);
-int		dispatch_logic(t_ast *elem, t_alloc *alloc);
-int		dispatch_cmd(t_ast *elem, t_alloc *alloc);
+int		analyzer(t_ast *sort, t_alloc *alloc, int no_fork);
+int		dispatch_agreg(t_ast *elem, t_alloc *alloc, int no_fork);
+int		dispatch_operator(t_ast *elem, t_alloc *alloc, int no_fork);
+int		dispatch_redir(t_ast *elem, t_alloc *alloc, int no_fork);
+int		dispatch_logic(t_ast *elem, t_alloc *alloc, int no_fork);
+int		dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork);
 
 /*
 ********************************* PARSER TOOLS *********************************

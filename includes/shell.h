@@ -30,7 +30,6 @@
 ********************************** STRUCTURES **********************************
 */
 
-
 typedef struct			s_cursor
 {
 	size_t				l;
@@ -94,8 +93,7 @@ typedef struct			s_alloc
 	int					fd[10];
 }						t_alloc;
 
-typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc);
-typedef int				(*t_builtins)(t_ast *elem, t_alloc *alloc);
+typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
 
 /*
 ************************************ TOOLS *************************************

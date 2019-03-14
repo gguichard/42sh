@@ -9,8 +9,9 @@
 */
 
 int						do_pipe(t_ast *elem, t_alloc *alloc);
+int						do_not_fork(t_ast *elem, t_alloc *alloc);
 int						job_control(t_ast *elem, t_alloc *alloc);
-void					redirection(t_ast *elem, t_alloc *alloc);
+void					redirection(t_ast *elem, t_alloc *alloc, int no_fork);
 void					heredoc(t_ast *elem, t_alloc *alloc);
 int						complete_heredoc(t_ast *lst, t_alloc *alloc);
 
@@ -18,19 +19,19 @@ int						complete_heredoc(t_ast *lst, t_alloc *alloc);
 ******************************** REDIRECTION ***********************************
 */
 
-void					redirection_1(t_ast *elem, t_alloc *alloc);
-void					redirection_2(t_ast *elem, t_alloc *alloc);
-void					redirection_3(t_ast *elem, t_alloc *alloc);
+void					redirection_1(t_ast *elem, t_alloc *alloc, int no_fork);
+void					redirection_2(t_ast *elem, t_alloc *alloc, int no_fork);
+void					redirection_3(t_ast *elem, t_alloc *alloc, int no_fork);
 
 /*
 ******************************** REDIRECTION ***********************************
 */
 
-int						agreg_1(t_ast *elem, t_alloc *alloc);
-int						agreg_2(t_ast *elem, t_alloc *alloc);
-int						agreg_3(t_ast *elem, t_alloc *alloc);
-int						agreg_4(t_ast *elem, t_alloc *alloc);
-int						agreg_5(t_ast *elem, t_alloc *alloc);
+int						agreg_1(t_ast *elem, t_alloc *alloc, int no_fork);
+int						agreg_2(t_ast *elem, t_alloc *alloc, int no_fork);
+int						agreg_3(t_ast *elem, t_alloc *alloc, int no_fork);
+int						agreg_4(t_ast *elem, t_alloc *alloc, int no_fork);
+int						agreg_5(t_ast *elem, t_alloc *alloc, int no_fork);
 int						ft_fd_exist(char *str_fd);
 int						ft_is_redir(t_ast *elem, int *fd, t_alloc *alloc);
 int						ft_is_agreg(t_ast *elem, int *fd, t_alloc *alloc);

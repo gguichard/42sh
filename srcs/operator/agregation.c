@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "operator.h"
 
-int	agreg_1(t_ast *elem, t_alloc *alloc)
+int	agreg_1(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd[10];
 	int	i;
@@ -17,12 +17,12 @@ int	agreg_1(t_ast *elem, t_alloc *alloc)
 	(elem->type != AGREG) ? elem = elem->back : 0;
 	dup2(fd[1], 1);
 	dup2(fd[2], 2);
-	(elem) ? analyzer(elem->left, alloc) : 0;
+	(elem) ? analyzer(elem->left, alloc, no_fork) : 0;
 	reinit_fd(fd, alloc);
 	return (0);
 }
 
-int	agreg_2(t_ast *elem, t_alloc *alloc)
+int	agreg_2(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd[10];
 	int	i;
@@ -37,12 +37,12 @@ int	agreg_2(t_ast *elem, t_alloc *alloc)
 	(elem->type != AGREG) ? elem = elem->back : 0;
 	dup2(fd[1], 1);
 	dup2(fd[2], 2);
-	(elem) ? analyzer(elem->left, alloc) : 0;
+	(elem) ? analyzer(elem->left, alloc, no_fork) : 0;
 	reinit_fd(fd, alloc);
 	return (0);
 }
 
-int	agreg_3(t_ast *elem, t_alloc *alloc)
+int	agreg_3(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd_redir;
 	int	ret1;
@@ -64,12 +64,12 @@ int	agreg_3(t_ast *elem, t_alloc *alloc)
 	(elem->type != AGREG) ? elem = elem->back : 0;
 	if (ret1 == -1)
 		return (-1);
-	(elem) ? analyzer(elem->left, alloc) : 0;
+	(elem) ? analyzer(elem->left, alloc, no_fork) : 0;
 	reinit_fd(fd, alloc);
 	return (0);
 }
 
-int	agreg_4(t_ast *elem, t_alloc *alloc)
+int	agreg_4(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd_close;
 	int	fd_save;
@@ -86,13 +86,13 @@ int	agreg_4(t_ast *elem, t_alloc *alloc)
 	}
 	alloc->fd[fd_close] = fd_save;
 	close(fd_close);
-	analyzer(elem->left, alloc);
+	analyzer(elem->left, alloc, no_fork);
 	dup2(fd_save, fd_close);
 	alloc->fd[fd_close] = 0;
 	return (0);
 }
 
-int	agreg_5(t_ast *elem, t_alloc *alloc)
+int	agreg_5(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd_close;
 	int	fd_save;
@@ -101,7 +101,7 @@ int	agreg_5(t_ast *elem, t_alloc *alloc)
 		ft_atoi(elem->input[0]) : 1;
 	fd_save = dup(fd_close);
 	close(fd_close);
-	analyzer(elem->left, alloc);
+	analyzer(elem->left, alloc, no_fork);
 	dup2(fd_save, fd_close);
 	return (0);
 }

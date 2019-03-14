@@ -55,7 +55,7 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	return (path_exec);
 }
 
-int			exec_input(t_ast *elem, t_alloc *alloc)
+int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	pid_t	child;
 	int		hashable;
@@ -66,14 +66,19 @@ int			exec_input(t_ast *elem, t_alloc *alloc)
 	if (!(path_exec = exec_path(elem, alloc, &hashable)))
 		return (ret_status());
 	convert_lst_tab(alloc->var, &tab_env);
-	if (!(child = fork()))
+	if (no_fork == 1 || !(child = fork()))
 	{
-		//pipe close
 		if (g_pid == -1)
 			exit(130);
 		g_in_exec = 1;
 		execve(path_exec, elem->input, tab_env);
 		ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
+		if (no_fork == 1)
+		{
+			delete_str_tab(tab_env);
+			if (ft_strcmp(path_exec, elem->input[0]))
+				ft_memdel((void **)&path_exec);
+		}
 		exit(126);
 	}
 	g_pid = child;
