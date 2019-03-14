@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 14:51:50 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 15:55:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void		read_input(t_cmdline *cmdline)
 	{
 		if ((seq = get_sequence(cmdline, c)) != NULL)
 			handle_sequence_char(cmdline, seq, c);
-		else if (ft_isprint(c))
+		else if (ft_isprint(c) && !cmdline->visual.toggle)
 		{
 			add_char_to_input(&cmdline->input, c);
 			write_char_in_cmdline(cmdline, c);

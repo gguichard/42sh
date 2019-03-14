@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 15:33:49 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 15:43:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int				handle_line_start(t_cmdline *cmdline);
 int				handle_line_end(t_cmdline *cmdline);
 
 /*
-* INSERT MODE.
+** INSERT MODE.
 */
 int				handle_backspace_key(t_cmdline *cmdline);
 int				handle_delete_key(t_cmdline *cmdline);
@@ -83,7 +83,7 @@ int				handle_paste_key(t_cmdline *cmdline);
 int				handle_paste_before_key(t_cmdline *cmdline);
 
 /*
-* UTILS.
+** UTILS.
 */
 int				get_rightmost_column(t_cmdline *cmdline, int offset);
 void			go_to_offset(t_cmdline *cmdline, int offset);

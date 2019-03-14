@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 10:11:35 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 14:51:32 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 15:44:00 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,3 @@ void	go_to_offset(t_cmdline *cmdline, int offset)
 	}
 	go_to_cursor_pos(cursor);
 }
-
