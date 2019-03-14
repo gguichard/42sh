@@ -11,7 +11,7 @@ void	scmd_delete(t_str_cmd_inf *str_cmd_inf)
 {
 	if (str_cmd_inf != NULL)
 	{
-		scmd_delete(str_cmd_inf->sub_var_bracket);
+		scmd_delete(str_cmd_inf->sub_str_cmd);
 		free(str_cmd_inf);
 	}
 }

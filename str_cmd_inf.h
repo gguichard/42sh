@@ -3,25 +3,20 @@
 
 # include <stdlib.h>
 
-# define DBQUOTE_SPE_CHAR "$`\"\\\n"
-# define SUBCMD_SPE_CHAR "$`\\"
-
-typedef enum	e_str_cmd_err
-{
-	SCMDERR_NOERROR = 0,
-	SCMDERR_ENDTOOSOON,
-	SCMDERR_BADCHAR
-}				t_str_cmd_err;
+# define DBQUOTE_SPE_CHAR "$\"\\\n"
+# define SUBCMD_SPE_CHAR "$\\)"
+# define SCMD_TYPE_NOTHING 0
+# define SCMD_TYPE_VAR 1
+# define SCMD_TYPE_SUBCMD 2
 
 typedef struct	s_str_cmd_inf
 {
 	int						is_in_quote;
 	int						is_in_dbquote;
-	int						is_in_subcmd;
-	int						is_in_var_bracket;
 	size_t					pos;
 	const char				*str;
-	struct s_str_cmd_inf	*sub_var_bracket;
+	struct s_str_cmd_inf	*sub_str_cmd;
+	int						cur_str_cmd_type;
 }				t_str_cmd_inf;
 
 /*
