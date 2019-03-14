@@ -51,13 +51,11 @@ static void	redir_stdin(t_ast *elem, t_alloc *alloc, int *fd)
 		close(fd_file);
 }
 
-int			ft_is_redir(t_ast *elem, int *fd, t_alloc *alloc,
-			t_var *lst_env)
+int			ft_is_redir(t_ast *elem, int *fd, t_alloc *alloc)
 {
 	static char		*tab_redir[6] = {">", ">>", ">>&", "<", "<<<", "<>"};
 	int				i;
 
-	(void)lst_env;
 	i = -1;
 	if (!elem || !elem->input)
 		return (0);

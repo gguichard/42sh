@@ -6,12 +6,12 @@
 // JUST DISPLAY ALL VARIABLES
 // IF ARGUMENTS RETURN ERROR WITH USAGE
 
-int	set_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+int	set_builtins(t_ast *elem, t_alloc *alloc)
 {
 	t_var	*tmp;
 
 	(void)alloc;
-	tmp = lst_env;
+	tmp = *(alloc->var);
 	if (elem->input[1])
 		return (error_set(elem->input[1]));
 	while (tmp)

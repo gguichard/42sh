@@ -7,7 +7,7 @@
 // BUILTIN TYPE
 // ALIAS SEARCH TYPE NOT SET
 
-int			type_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+int			type_builtins(t_ast *elem, t_alloc *alloc)
 {
 	int		i;
 	int		ret;
@@ -22,7 +22,7 @@ int			type_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 			ret = ft_printf("%s is hashed (%s)\n", elem->input[i], path);
 		else if (is_builtins(alloc, elem->input[i]) == 1)
 			ret = ft_printf("%s is a shell builtin\n", elem->input[i]);
-		else if ((path = search_exec(lst_env, elem->input[i], 0)))
+		else if ((path = search_exec(*(alloc->var), elem->input[i], 0)))
 		{
 			ret = ft_printf("%s is %s\n", elem->input[i], path);
 			ft_strdel(&path);

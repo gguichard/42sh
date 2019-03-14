@@ -41,7 +41,7 @@ static int	del_elem_env_by_key(t_var **lst, const char *key)
 	return (0);
 }
 
-int			unset_builtins(t_ast *elem, t_var *lst_env,t_alloc *alloc)
+int			unset_builtins(t_ast *elem, t_alloc *alloc)
 {
 	int	i;
 	int	ret;
@@ -52,7 +52,7 @@ int			unset_builtins(t_ast *elem, t_var *lst_env,t_alloc *alloc)
 	while (elem->input[i])
 	{
 		if (!ft_strchr(elem->input[i], '='))
-			del_elem_env_by_key(&lst_env, elem->input[i]);
+			del_elem_env_by_key(alloc->var, elem->input[i]);
 		else
 			ret = error_unset(elem->input[i]);
 		i += 1;

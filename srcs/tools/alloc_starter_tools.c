@@ -8,7 +8,7 @@ static t_builtin	*set_tab_builtins(void)
 	t_builtin			*builtins;
 	static char			*lst_built[11] = {"echo", "cd", "exit", "type", "hash", "set",
 	"unset", "export", "jobs", "fg", "bg"};
-	static t_built_fun	lst_function[] = { &echo_builtins, &cd_builtins,
+	static t_built_fun	lst_function[] = { &echo_builtins, &cd_builtins, &exit_builtins,
 		&type_builtins, &hash_builtins, &set_builtins, &unset_builtins,
 		&export_builtins, &job_builtins, &fg_builtins, &bg_builtins };
 	int			i;
@@ -19,7 +19,7 @@ static t_builtin	*set_tab_builtins(void)
 	while (i < 11)
 	{
 		builtins[i].name = lst_built[i];
-		builtins[i].built_fun = &	lst_function[i];
+		builtins[i].built_fun = lst_function[i];
 		i += 1;
 	}
 	builtins[i].name = NULL;
@@ -27,18 +27,16 @@ static t_builtin	*set_tab_builtins(void)
 	return (builtins);
 }
 
-t_alloc				set_alloc(t_var *lst)
+void				set_alloc(t_alloc *al, t_var **lst)
 {
-	t_alloc	al;
 	int		x;
 
-	al.var = &lst;
-	sort_ascii(al.var);
+	al->var = lst;
+	sort_ascii(al->var);
 	x = 0;
 	while (x < 10)
-		al.fd[x++] = -1;
-	al.builtins = set_tab_builtins();
-	if (!(al.exectable =  make_exectable()))
+		al->fd[x++] = -1;
+	al->builtins = set_tab_builtins();
+	if (!(al->exectable =  make_exectable()))
 		ft_exit_malloc();
-	return (al);
 }

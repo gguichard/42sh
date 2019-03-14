@@ -46,7 +46,7 @@ static void	display_lst_env(t_var **lst)
 // 	(void)i;
 // }
 
-int	export_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+int	export_builtins(t_ast *elem, t_alloc *alloc)
 {
 	int	i;
 	int	ret;
@@ -57,7 +57,7 @@ int	export_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	if ((ret = check_options(elem, &i)) == 1)
 		return (ret);
 	if (i != 1)
-		display_lst_env(&lst_env);
+		display_lst_env(alloc->var);
 	// else
 	// 	add_elem_env(&lst_env, elem, i);
 	return (0);

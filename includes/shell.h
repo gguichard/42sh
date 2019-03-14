@@ -75,12 +75,12 @@ typedef struct			s_ast
 }						t_ast;
 
 struct					s_alloc;
-typedef int				(*t_built_fun)(t_ast *, t_var *, struct s_alloc *);
+typedef int				(*t_built_fun)(t_ast *, struct s_alloc *);
 
 typedef struct			s_builtin
 {
 	const char			*name;
-	t_built_fun			*built_fun;
+	t_built_fun			built_fun;
 }						t_builtin;
 
 typedef struct			s_alloc
@@ -94,10 +94,8 @@ typedef struct			s_alloc
 	int					fd[10];
 }						t_alloc;
 
-typedef int				(*t_dispatch)(t_ast *elem, t_var *lst_env, char **tab_path,
-						t_alloc *alloc);
-typedef int				(*t_builtins)(t_ast *elem, t_var *lst_env,
-						t_alloc *alloc);
+typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc);
+typedef int				(*t_builtins)(t_ast *elem, t_alloc *alloc);
 
 /*
 ************************************ TOOLS *************************************
@@ -108,8 +106,7 @@ void	del_lst_env(t_var **lst);
 void	del_lst_ast(t_ast *lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
-t_alloc	set_alloc(t_var *lst);
-int		env_cp(char **env, t_var **lst_env);
+void	set_alloc(t_alloc *al, t_var **lst);
 int		ret_status(void);
 int		replace_val_ret(char **str, int i, int x);
 void	sort_ascii(t_var **lst);

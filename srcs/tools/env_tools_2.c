@@ -2,6 +2,58 @@
 #include "builtins.h"
 #include "error.h"
 
+static void		add_env(t_var **lst_env, char *env, int x)
+{
+	t_var	*tmp;
+	t_var	*new;
+	size_t	len;
+
+	tmp = NULL;
+	if (!(new = (t_var*)malloc(sizeof(t_var))))
+		ft_exit_malloc();
+	len = ft_strlen(env);
+	new->key = ft_strsub(env, 0, x);
+	new->value = ft_strsub(env, x + 1, len - x - 1);
+	new->next = NULL;
+	if (!lst_env || !(*lst_env))
+		*lst_env = new;
+	else
+	{
+		tmp = *lst_env;
+		while (tmp->next != NULL)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
+int				env_cp(char **env, t_var **lst_env)
+{
+	int		i;
+	int		x;
+	char	*buf;
+
+	i = 0;
+	if (env[0] == NULL)
+	{
+		buf = getcwd(0, 0);
+		add_elem_env(lst_env, "PWD", buf);
+		ft_memdel((void **)&buf);
+	}
+	else if (!(*lst_env) && env)
+		while (env[i])
+		{
+			x = 0;
+			while (env[i][x] && env[i][x] != '=')
+				x += 1;
+			add_env(lst_env, env[i], x);
+			i += 1;
+		}
+	else if (!lst_env)
+		return (0);
+	add_shlvl(lst_env);
+	return (1);
+}
+
 void		convert_lst_tab(t_var *lst_env, char ***tab_str)
 {
 	t_var	*tmp;
