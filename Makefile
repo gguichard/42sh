@@ -37,6 +37,7 @@ SRC =	main.c \
 		$(PATH_ERROR)error_unset.c \
 		$(PATH_ERROR)error_setenv.c \
 		$(PATH_ERROR)error_unsetenv.c \
+		$(PATH_ERROR)error_export.c \
 		$(PATH_ERROR)exec_error.c \
 		$(PATH_ERROR)error_utils.c \
 		$(PATH_LEXER)check_closing_quote.c \
@@ -88,6 +89,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)redirection_tools.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
 		$(PATH_TOOLS)cd_tools.c \
+		$(PATH_TOOLS)sort_ascii_var.c \
 		$(PATH_HASHTABLE)exectable.c \
 		$(PATH_HASHTABLE)hashtable.c \
 		$(PATH_HASHTABLE)hashtable_delete.c \

@@ -62,7 +62,7 @@ int	agreg_3(t_ast *elem, t_var *lst_env, char **tab_path, t_alloc *alloc)
 	fd_redir = (dig == 1) ? ft_atoi(elem->input[0]) : 1;
 	(elem->right) ? elem->right->print = 1 : 0;
 	while (((ret1 = ft_is_agreg(elem, fd, alloc)) == 1
-		|| ft_is_redir(elem, fd, alloc, alloc->var) == 1) && elem->left)
+		|| ft_is_redir(elem, fd, alloc, lst_env) == 1) && elem->left)
 		elem = elem->left;
 	(elem->type != AGREG) ? elem = elem->back : 0;
 	if (ret1 == -1)

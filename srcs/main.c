@@ -9,7 +9,7 @@
 // #include "printf.h"
 
 //TODO faire un vrai main
-int		main(int argc, char **argv)
+int		main(int argc, char **argv, char **env)
 {
 	int		gnl_ret;
 	char	*line;
@@ -18,10 +18,14 @@ int		main(int argc, char **argv)
 
 	(void)argc;
 	(void)argv;
+	lst = NULL;
+
+	int i;
+	i = 0;
+	env_cp(env, &lst);
 	ft_bzero(&alloc, sizeof(t_alloc));
 	if ((alloc.exectable = make_exectable()) == NULL)
 		return (1);
-	lst = NULL;
 	alloc = set_alloc(lst);
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)

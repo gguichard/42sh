@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "builtins.h"
+#include "error.h"
 
 static int	check_options(t_ast *elem, int *i)
 {
@@ -31,15 +32,19 @@ static void	display_lst_env(t_var **lst)
 	}
 }
 
-static int	elem_env_exist(t_var **lst, char *name)
-{
-	
-}
+// static int	elem_env_exist(t_var **lst, char *name)
+// {
+// 	(void)lst;
+// 	(void)name;
+// 	return (0);
+// }
 
-static void	add_elem_env(t_var **lst, t_ast *elem, int i)
-{
-	while (elem->input[i])
-}
+// static void	add_elem_env(t_var **lst, t_ast *elem, int i)
+// {
+// 	(void)lst;
+// 	(void)elem;
+// 	(void)i;
+// }
 
 int	export_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 {
@@ -53,7 +58,7 @@ int	export_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 		return (ret);
 	if (i != 1)
 		display_lst_env(&lst_env);
-	else
-		add_elem_env(&lst_env, elem, i);
+	// else
+	// 	add_elem_env(&lst_env, elem, i);
 	return (0);
 }

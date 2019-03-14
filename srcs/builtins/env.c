@@ -3,21 +3,22 @@
 #include "parser_lexer.h"
 #include "error.h"
 
-static void		add_env(t_var *lst_env, char *env, int x)
+static void		add_env(t_var **lst_env, char *env, int x)
 {
 	t_var	*tmp;
 	t_var	*new;
 	size_t	len;
 
-	tmp = lst_env;
+	tmp = *lst_env;
 	if (!(new = (t_var*)malloc(sizeof(t_var))))
 		ft_exit_malloc();
 	len = ft_strlen(env);
 	new->key = ft_strsub(env, 0, x);
 	new->value = ft_strsub(env, x + 1, len - x - 1);
+	new->is_env = 1;
 	new->next = NULL;
-	if (!lst_env)
-		lst_env = new;
+	if (!(*lst_env))
+		*lst_env = new;
 	else
 	{
 		while (tmp->next != NULL)
@@ -51,11 +52,11 @@ static t_var	*lst_env_dup(t_var *orig, t_var *add)
 			add_elem_env(dup, tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
-	del_lst_env(add);
+	del_lst_env(&add);
 	return (dup);
 }
 
-int				env_cp(char **env, t_var *lst_env)
+int				env_cp(char **env, t_var **lst_env)
 {
 	int		i;
 	int		x;
@@ -65,10 +66,10 @@ int				env_cp(char **env, t_var *lst_env)
 	if (env[0] == NULL)
 	{
 		buf = getcwd(0, 0);
-		add_elem_env(lst_env, "PWD", buf);
+		add_elem_env(*lst_env, "PWD", buf);
 		ft_memdel((void **)&buf);
 	}
-	else if (!lst_env && env)
+	else if (!(*lst_env) && env)
 		while (env[i])
 		{
 			x = 0;
@@ -79,7 +80,7 @@ int				env_cp(char **env, t_var *lst_env)
 		}
 	else if (!lst_env)
 		return (0);
-	add_shlvl(lst_env);
+	add_shlvl(*lst_env);
 	return (1);
 }
 
@@ -97,7 +98,7 @@ int				env_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	option = (elem->input[1] && ft_strcmp(elem->input[1], "-i") == 0) ? 1 : 0;
 	i = option;
 	while (++i && elem->input[i] && (s = ft_strchr(elem->input[i], '=')))
-		add_env(tmp, elem->input[i], ft_strlen(elem->input[i]) - ft_strlen(s));
+		add_env(&tmp, elem->input[i], ft_strlen(elem->input[i]) - ft_strlen(s));
 	save_input = elem->input;
 	elem->input = &(elem->input[i]);
 	if (option == 0)
@@ -107,6 +108,6 @@ int				env_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	ft_strsplit(get_env_value(lst_env, "$PATH"), ':'), alloc) :
 	display_env(tmp);
 	elem->input = save_input;
-	del_lst_env(tmp);
+	del_lst_env(&tmp);
 	return (0);
 }
