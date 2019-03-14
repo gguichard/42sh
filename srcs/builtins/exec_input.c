@@ -33,7 +33,7 @@ static char	*check_right_alias(char *alias)
 	return (alias);
 }
 
-static char	*exec_path(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *hashable)
+static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 {
 	t_hashentry	*alias;
 	char		*path_exec;
@@ -51,11 +51,11 @@ static char	*exec_path(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *hashabl
 	else if ((alias = get_hashentry(alloc->exectable, elem->input[0])))
 		path_exec = check_right_alias((char *)alias->value);
 	else
-		path_exec = srch_exec(lst_env, elem, hashable);
+		path_exec = srch_exec(alloc->var, elem, hashable);
 	return (path_exec);
 }
 
-int			exec_input(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+int			exec_input(t_ast *elem, t_alloc *alloc)
 {
 	pid_t	child;
 	int		hashable;
@@ -63,11 +63,12 @@ int			exec_input(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	char	*path_exec;
 
 	hashable = 0;
-	if (!(path_exec = exec_path(elem, lst_env, alloc, &hashable)))
+	if (!(path_exec = exec_path(elem, alloc, &hashable)))
 		return (ret_status());
-	convert_lst_tab(lst_env, &tab_env);
+	convert_lst_tab(alloc->var, &tab_env);
 	if (!(child = fork()))
 	{
+		//pipe close
 		if (g_pid == -1)
 			exit(130);
 		g_in_exec = 1;

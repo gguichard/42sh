@@ -27,9 +27,9 @@ int		main(int argc, char **argv)
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{
 		//parse line etc;
-		lexer(line, lst, &alloc);
+		lexer(line, &alloc);
 		write(1, "> ", 2);
-		//free(line);
+		ft_memdel((void **)&line);
 	}
 	ft_printf("GNL ret : %d\n", gnl_ret);
 	return (0);

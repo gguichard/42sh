@@ -75,7 +75,7 @@ typedef struct			s_ast
 }						t_ast;
 
 struct					s_alloc;
-typedef int				(*t_built_fun)(t_ast *, t_var *, struct s_alloc *);
+typedef int				(*t_built_fun)(t_ast *, struct s_alloc *);
 
 typedef struct			s_builtin
 {
@@ -94,9 +94,8 @@ typedef struct			s_alloc
 	int					fd[10];
 }						t_alloc;
 
-typedef int				(*t_dispatch)(t_ast *elem, t_var *lst_env, t_alloc *alloc);
-typedef int				(*t_builtins)(t_ast *elem, t_var *lst_env,
-						t_alloc *alloc);
+typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc);
+typedef int				(*t_builtins)(t_ast *elem, t_alloc *alloc);
 
 /*
 ************************************ TOOLS *************************************

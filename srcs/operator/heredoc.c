@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "operator.h"
 
-static int		pipe_exec(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *fd)
+static int		pipe_exec(t_ast *elem, t_alloc *alloc, int *fd)
 {
 	int		ret;
 	t_ast	*tmp;
@@ -15,7 +15,7 @@ static int		pipe_exec(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *fd)
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	ret = analyzer(tmp, lst_env, alloc);
+	ret = analyzer(tmp, alloc);
 	exit(ret);
 }
 
@@ -42,7 +42,7 @@ int				complete_heredoc(t_ast *lst, t_alloc *alloc)
 	return (1);
 }
 
-void			heredoc(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+void			heredoc(t_ast *elem, t_alloc *alloc)
 {
 	int		pid1;
 	int		fd[2];
@@ -56,7 +56,7 @@ void			heredoc(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	{
 		g_pid = pid1;
 		if (!(pid2 = fork()))
-			pipe_exec(elem->left, lst_env, alloc, fd);
+			pipe_exec(elem->left, alloc, fd);
 		else
 		{
 			g_pid = pid2;

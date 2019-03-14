@@ -2,19 +2,17 @@
 #include "parser_lexer.h"
 
 
-void		clean_input(char *str, t_ast *lst, t_var *lst_env,
-			t_alloc *alloc)
+void		clean_input(char *str, t_ast *lst, t_alloc *alloc)
 {
 	char	**split;
 
 	split = NULL;
 	if ((split = ft_splitwhitespace_shell(str)) == NULL)
 		return ;
-	parser(split, lst, lst_env, alloc);
+	parser(split, lst, alloc);
 }
 
-void		read_lexer(char **lexer, t_var *lst_env, t_ast *lst,
-			t_alloc *alloc)
+void		read_lexer(char **lexer, t_ast *lst, t_alloc *alloc)
 {
 	int	i;
 	int	x;
@@ -25,14 +23,14 @@ void		read_lexer(char **lexer, t_var *lst_env, t_ast *lst,
 		x = 0;
 		while (lexer[i][x] && ft_isspace(lexer[i][x]))
 			x += 1;
-		(lexer[i][x]) ? clean_input(lexer[i], lst, lst_env, alloc) : 0;
+		(lexer[i][x]) ? clean_input(lexer[i], lst, alloc) : 0;
 		ft_memdel((void **)&(lexer[i]));
 		i += 1;
 	}
 	(lexer != NULL) ? free(lexer) : 0;
 }
 
-void		lexer(char *input, t_var *lst_env, t_alloc *alloc)
+void		lexer(char *input, t_alloc *alloc)
 {
 	int		i;
 	char	**lexer;
@@ -52,16 +50,11 @@ void		lexer(char *input, t_var *lst_env, t_alloc *alloc)
 
 	i = (input[i] == ';' && input[i + 1] != ';') ? 1 : 0;
 	if ((lexer = ft_strsplit_shell(&input[i], ';')) == NULL)
-	{
-		ft_memdel((void **)&input);
 		return ;
-	}
 
 	// set_terminal(1);
 
-	read_lexer(lexer, lst_env, lst, alloc);
+	read_lexer(lexer, lst, alloc);
 
 	// set_terminal(0);
-
-	ft_memdel((void **)&input);
 }
