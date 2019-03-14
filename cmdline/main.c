@@ -6,13 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 13:40:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 16:37:52 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "cmdline.h"
+#include <stdlib.h>
 #include <term.h>
+#include "cmdline.h"
 
 int	main(int argc, char **argv)
 {
@@ -32,5 +33,7 @@ int	main(int argc, char **argv)
 	cmdline.prompt.offset = cmdline.cursor.x;
 	read_input(&cmdline);
 	reset_term();
+	free(cmdline.input.buffer);
+	free(cmdline.visual.clipboard);
 	return (0);
 }
