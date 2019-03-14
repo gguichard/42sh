@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 21:43:51 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 12:35:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 13:00:21 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ int	handle_end_key(t_cmdline *cmdline)
 	col = cmdline->cursor.x;
 	while (cmdline->input.offset < cmdline->input.size)
 	{
-		if (cmdline->input.buffer[cmdline->input.offset] == '\n'
-				|| ++col == cmdline->winsize.ws_col)
+		if (cmdline->input.buffer[cmdline->input.offset] != '\n'
+				&& (col + 1) < cmdline->winsize.ws_col)
+			col++;
+		else
 		{
 			col = 0;
 			rows++;

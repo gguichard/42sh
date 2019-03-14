@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 12:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 12:44:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 13:01:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,10 @@ int	handle_cursor_down(t_cmdline *cmdline)
 	while (offset < cmdline->input.size
 			&& (row != cmdline->row + 1 || col < cmdline->saved_col))
 	{
-		if (cmdline->input.buffer[offset] == '\n'
-				|| ++col == cmdline->winsize.ws_col)
+		if (cmdline->input.buffer[offset] != '\n'
+				&& (col + 1) < cmdline->winsize.ws_col)
+			col++;
+		else
 		{
 			if (row != cmdline->row)
 				break ;
