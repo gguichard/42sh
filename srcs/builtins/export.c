@@ -6,9 +6,10 @@ static int	check_options(t_ast *elem, int *i)
 {
 	int	x;
 
-	x = 1;
+	x = 0;
 	while (elem->input[*i] && elem->input[*i][x] == '-')
 	{
+		x = 1;
 		while (elem->input[*i][x] == 'p')
 			x += 1;
 		if (elem->input[*i][x])
@@ -19,16 +20,13 @@ static int	check_options(t_ast *elem, int *i)
 	return (0);
 }
 
-static void	display_lst_env(t_var **lst)
+static void	display_lst_env(t_var *lst)
 {
-	t_var *tmp;
-
-	tmp = *lst;
-	while (tmp)
+	while (lst)
 	{
-		if (tmp->is_env == 1)
-			ft_printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
-		tmp = tmp->next;
+		if (lst->is_env == 1)
+			ft_printf("declare -x %s=\"%s\"\n", lst->key, lst->value);
+		lst = lst->next;
 	}
 }
 
@@ -57,7 +55,7 @@ int	export_builtins(t_ast *elem, t_alloc *alloc)
 	if ((ret = check_options(elem, &i)) == 1)
 		return (ret);
 	if (i != 1)
-		display_lst_env(alloc->var);
+		display_lst_env(*(alloc->var));
 	// else
 	// 	add_elem_env(&lst_env, elem, i);
 	return (0);
