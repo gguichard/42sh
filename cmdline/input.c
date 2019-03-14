@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 17:15:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 11:20:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void		read_input(t_cmdline *cmdline)
 
 	while (read(STDIN_FILENO, &c, 1) && c != 4)
 	{
-		if ((seq = get_escape_sequence(&cmdline->esc_keys, c)) != NULL)
+		if ((seq = get_sequence(cmdline, c)) != NULL)
 			handle_sequence_char(cmdline, seq, c);
 		else if (ft_isprint(c))
 		{

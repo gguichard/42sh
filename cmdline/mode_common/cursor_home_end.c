@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 21:43:51 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 10:51:58 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 11:48:20 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int	handle_home_key(t_cmdline *cmdline)
 	cmdline->cursor.y -= cmdline->row;
 	cmdline->row = 0;
 	go_to_cursor_pos(cmdline->cursor);
-	return (0);
+	return (1);
 }
 
 int	handle_end_key(t_cmdline *cmdline)
 {
-	int	col;
 	int	rows;
+	int	col;
 
 	rows = 0;
 	col = cmdline->cursor.x;
@@ -48,5 +48,5 @@ int	handle_end_key(t_cmdline *cmdline)
 	cmdline->cursor.y += rows;
 	cmdline->row += rows;
 	go_to_cursor_pos(cmdline->cursor);
-	return (0);
+	return (1);
 }
