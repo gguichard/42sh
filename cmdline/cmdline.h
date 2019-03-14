@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/13 19:49:29 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 10:41:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ typedef struct	s_esc_seq
 }				t_esc_seq;
 
 /*
- ** TERM INIT/MISC.
- */
+** TERM INIT/MISC.
+*/
 
 int				setup_term(void);
 int				reset_term(void);
@@ -90,8 +90,8 @@ int				set_cursor_pos(t_cursor *cursor);
 void			go_to_cursor_pos(t_cursor cursor);
 
 /*
- ** INPUT/OUTPUT.
- */
+** INPUT/OUTPUT.
+*/
 
 void			add_char_to_input(struct s_input *input, char c);
 void			write_char_in_cmdline(t_cmdline *cmdline, char c);
@@ -103,16 +103,16 @@ void			read_input(t_cmdline *cmdline);
 int				t_putchar(int c);
 
 /*
- ** ESCAPE SEQUENCES.
- */
+** ESCAPE SEQUENCES.
+*/
 
 void			handle_sequence_char(t_cmdline *cmdline, const char *seq
 		, char c);
 const char		*get_escape_sequence(t_esc_keys *keys, char c);
 
 /*
- ** COMMON moves.
- */
+** COMMON moves.
+*/
 int				handle_move_left(t_cmdline *cmdline);
 int				handle_move_right(t_cmdline *cmdline);
 int				handle_prev_word(t_cmdline *cmdline);
@@ -125,10 +125,15 @@ int				handle_cursor_up(t_cmdline *cmdline);
 int				handle_cursor_down(t_cmdline *cmdline);
 
 /*
- * INSERT MODE.
- */
+* INSERT MODE.
+*/
 int				handle_backspace_key(t_cmdline *cmdline);
 int				handle_delete_key(t_cmdline *cmdline);
 int				handle_test_newline(t_cmdline *cmdline);
+
+/*
+* UTILS.
+*/
+int				get_rightmost_column(t_cmdline *cmdline, int offset);
 
 #endif

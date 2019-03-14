@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 12:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 00:49:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/14 10:47:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,19 @@ int	handle_cursor_up(t_cmdline *cmdline)
 	if (cmdline->row == 0)
 		return (0);
 	offset = cmdline->input.offset - cmdline->cursor.x;
-	rightest_col = (cmdline->row - 1) == 0 ? (cmdline->prompt.offset + 1) : 1;
-	while (offset > 0
-			&& rightest_col < cmdline->winsize.ws_col
-			&& cmdline->input.buffer[offset] != '\n')
-	{
-		offset--;
-		rightest_col++;
-	}
+	rightest_col = get_rightmost_column(cmdline, offset);
 	col = 1;
 	while (col < rightest_col && col < cmdline->saved_col)
-	{
 		col++;
-		offset++;
+	cmdline->row -= 1;
+	if (cmdline->row != 0 || col > cmdline->prompt.offset)
+		offset = offset - (rightest_col - col);
+	else
+	{
+		col = cmdline->prompt.offset + 1;
+		offset = 0;
 	}
 	cmdline->input.offset = offset;
-	cmdline->row -= 1;
 	cmdline->cursor.x = col;
 	cmdline->cursor.y -= 1;
 	go_to_cursor_pos(cmdline->cursor);
