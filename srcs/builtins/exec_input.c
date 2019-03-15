@@ -55,6 +55,22 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	return (path_exec);
 }
 
+static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env)
+{
+	if (g_pid == -1)
+		exit(130);
+	g_in_exec = 1;
+	execve(path_exec, elem->input, tab_env);
+	ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
+	if (no_fork == 1)
+	{
+		delete_str_tab(tab_env);
+		if (ft_strcmp(path_exec, elem->input[0]))
+			ft_memdel((void **)&path_exec);
+	}
+	exit(126);
+}
+
 int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	pid_t	child;
@@ -67,20 +83,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 		return (ret_status());
 	convert_lst_tab(alloc->var, &tab_env);
 	if (no_fork == 1 || !(child = fork()))
-	{
-		if (g_pid == -1)
-			exit(130);
-		g_in_exec = 1;
-		execve(path_exec, elem->input, tab_env);
-		ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
-		if (no_fork == 1)
-		{
-			delete_str_tab(tab_env);
-			if (ft_strcmp(path_exec, elem->input[0]))
-				ft_memdel((void **)&path_exec);
-		}
-		exit(126);
-	}
+		execute_cmd(path_exec, elem, tab_env);
 	g_pid = child;
 	waitpid(child, &(g_ret[0]), 0);
 	g_ret[1] = 1;
