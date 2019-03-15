@@ -10,7 +10,6 @@ int	echo_builtins(t_ast *elem, t_alloc *alloc)
 	if (!elem->input[1])
 	{
 		write(1, "\n", 1);
-		g_ret[0] = 0;
 		return (0);
 	}
 	option = (ft_strcmp(elem->input[1], "-n") == 0) ? 1 : 0;
@@ -25,6 +24,5 @@ int	echo_builtins(t_ast *elem, t_alloc *alloc)
 		else
 			i += 1;
 	(option == 0) ? write(1, "\n", 1) : 0;
-	g_ret[0] = 0;
 	return (0);
 }

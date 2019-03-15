@@ -65,26 +65,32 @@ void			parser(char **input, t_ast *lst, t_alloc *alloc)
 
 	if (ft_error_parse_redir(input) == 1)
 	{
-		g_ret[0] = 1;
+		alloc->ret_val = 1;
 		return ;
 	}
 	fill_ast(input, &lst, 0, -1);
 	if (check_error_lst(lst) == 1)
+	{
+		alloc->ret_val = 1;
 		return (clean_tab_and_ast(input, lst));
+	}
 	sort = lst;
 	while (sort)
 	{
 		i = -1;
 		while (sort->input[++i])
 			if (convert_quote(&(sort->input[i]), alloc) == -1)
+			{
+				alloc->ret_val = 1;
 				return (clean_tab_and_ast(input, lst));
+			}
 		sort = sort->next;
 	}
 	sort_ast(lst, &sort);
 	alloc->ast = lst;
-	read_sort_descent(sort, 1);
-	reinit_print(lst, 1);
-	analyzer(sort, alloc, 0);
+	read_sort_descent(sort, p_debug);
+	reinit_print(lst, p_debug);
+	alloc->ret_val = analyzer(sort, alloc, 0);
 
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc, 0) : 0;
 

@@ -50,7 +50,10 @@ void		lexer(char *input, t_alloc *alloc)
 
 	i = (input[i] == ';' && input[i + 1] != ';') ? 1 : 0;
 	if ((lexer = ft_strsplit_shell(&input[i], ';')) == NULL)
+	{
+		alloc->ret_val = 1;
 		return ;
+	}
 
 	// set_terminal(1);
 

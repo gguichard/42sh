@@ -54,7 +54,7 @@ void		replace_str(char **str, char *insert, int pos)
 	}
 }
 
-static int	replace_env_var(char **str, int i, t_var *lst_env)
+static int	replace_env_var(char **str, int i, t_alloc *alloc)
 {
 	char	*key;
 	char	*value;
@@ -65,11 +65,11 @@ static int	replace_env_var(char **str, int i, t_var *lst_env)
 	while ((*str)[i + x] && x < 80 && ft_isalnum((*str)[i + x]) == 1)
 		x += 1;
 	if ((*str)[x] == '?')
-		replace_val_ret(str, i, x + 1);
+		replace_val_ret(str, i, x + 1, alloc->ret_val);
 	else
 	{
 		key = ft_strsub(*str, i, x);
-		value = get_env_value(lst_env, key);
+		value = get_env_value(*(alloc->var), key);
 		ft_delete_inside(str, i, x);
 		(value[0] != '\0') ? replace_str(str, value, i) : 0;
 		free(key);
@@ -91,7 +91,7 @@ int			remove_quote(char **s, int *i, t_alloc *alloc)
 		*i += 1;
 	sub = (ft_isquote(quote) == 1) ? ft_strsub(*s, save, *i - save) : NULL;
 	while (sub[x] && quote == '"')
-		x += (sub[x] == '$') ? replace_env_var(&sub, x, *(alloc->var)) : 1;
+		x += (sub[x] == '$') ? replace_env_var(&sub, x, alloc) : 1;
 	if (quote == '`')
 	{
 		if (!sub[0])
@@ -116,7 +116,7 @@ int			convert_quote(char **s, t_alloc *alloc)
 	{
 		if ((*s)[i] == '$')
 		{
-			if (replace_env_var(s, i, *(alloc->var)) == -1)
+			if (replace_env_var(s, i, alloc) == -1)
 				return (-1);
 		}
 		else if (ft_isquote((*s)[i]) == 1)

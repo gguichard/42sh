@@ -17,6 +17,11 @@ int		main(int argc, char **argv, char **env)
 	t_var	*lst;
 	t_alloc	alloc;
 
+	p_debug = 0;
+	if (argc > 1 && !ft_strcmp(argv[1], "-d"))
+		p_debug = 1;
+	else if (argc > 1)
+		ft_printf("usage : pour print l'ast -d\n");
 	(void)argc;
 	(void)argv;
 	lst = 0;

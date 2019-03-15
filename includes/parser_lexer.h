@@ -11,7 +11,6 @@ void	lexer(char *input, t_alloc *alloc);
 void	clean_input(char *str, t_ast *lst, t_alloc *alloc);
 void	replace_str(char **str, char *insert, int pos);
 void	read_lexer(char **lexer, t_ast *lst, t_alloc *alloc);
-int		replace_val_ret(char **str, int i, int x);
 void	expand_home_shortcut(char **s, t_var *lst_env);
 int		remove_quote(char **s, int *i, t_alloc *alloc);
 int		convert_quote(char **s, t_alloc *alloc);
@@ -20,7 +19,6 @@ int		find_closing(char **str, int *i, t_alloc *alloc);
 int		check_cmd_pipe(char **input, t_alloc *alloc);
 char	**ft_splitwhitespace_shell(char *s);
 char	**ft_strsplit_shell(char *str, char c);
-int		ret_status(void);
 
 
 /*
@@ -38,7 +36,6 @@ void	get_position(char const *s, int *i, int wn, int *iw);
 void	in_quote(char const *s, int *i);
 void	lettre_in_quote(char const *s, int *i, int *nb_lettre);
 void	nb_lettre_operator(char *s, int i, int *nb_lettre);
-int		replace_val_ret(char **str, int i, int x);
 int		check_pos_operator(char *s, int *i, int wn, int *wd_search);
 int		check_operator(char *s, int *i, unsigned int *nb_word, size_t len);
 int		type_operator(char const *s, int *i);

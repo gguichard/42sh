@@ -84,6 +84,7 @@ typedef struct			s_builtin
 
 typedef struct			s_alloc
 {
+	int					ret_val;
 	t_historic			*history;
 	t_buf				*input;
 	t_ast				*ast;
@@ -105,8 +106,8 @@ void	del_lst_ast(t_ast *lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
 void	set_alloc(t_alloc *al, t_var **lst);
-int		ret_status(void);
-int		replace_val_ret(char **str, int i, int x);
+int		ret_status(int ret_val);
+int		replace_val_ret(char **str, int i, int x, int err);
 void	insert_new_elem(t_var **lst, t_var *new);
 
 //TOOLS TO PRINT LST AST
@@ -124,5 +125,6 @@ int						g_pid;
 int						g_ret[2];
 int						g_resize;
 char					*g_clip;
+int						p_debug;
 
 #endif

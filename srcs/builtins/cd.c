@@ -45,7 +45,7 @@ static int	check_options(t_ast *elem, int *options, t_alloc *alloc)
 		if (ft_strcmp(elem->input[i], "-") == 0)
 			return (i);
 		else if (elem->input[i][x] != '\0')
-			return (error_cd(elem->input[i], 0));
+			return (check_arg_cd(elem, i));
 		i += 1;
 	}
 	return (check_arg_cd(elem, i));
@@ -83,7 +83,6 @@ static int	modif_env(char *dir, t_var **lst_env, int options, char *buf)
 	tmp->value = ft_strdup((options == 2) ? buf : dir);
 	ft_memdel((void **)&dir);
 	ft_memdel((void **)&buf);
-	g_ret[0] = 0;
 	return (0);
 }
 
@@ -96,7 +95,7 @@ int			cd_builtins(t_ast *elem, t_alloc *alloc)
 
 	options = 0;
 	if ((i = check_options(elem, &options, alloc)) == -1)
-		return (1);
+		return (2);
 	buf_pwd = getcwd(0, PATH_MAX);
 	if (!find_elem_env(*(alloc->var), "PWD"))
 		add_elem_env(alloc->var, "PWD", buf_pwd);

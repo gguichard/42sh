@@ -81,19 +81,18 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	hashable = 0;
 	child = 0;
 	if (!(path_exec = exec_path(elem, alloc, &hashable)))
-		return (ret_status());
+		return (127);
 	convert_lst_tab(*(alloc->var), &tab_env);
 	if (no_fork == 1 || !(child = fork()))
 		execute_cmd(path_exec, elem, tab_env, no_fork);
 	if (child == -1)
 		return (0);
 	g_pid = child;
-	waitpid(child, &(g_ret[0]), 0);
-	g_ret[1] = 1;
+	waitpid(child, &alloc->ret_val, 0);
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);
-	if (ft_strcmp(path_exec, elem->input[0]))
+	if (ft_strchr(elem->input[0], '/'))
 		ft_memdel((void **)&path_exec);
-	return (ret_status());
+	return (ret_status(alloc->ret_val));
 }

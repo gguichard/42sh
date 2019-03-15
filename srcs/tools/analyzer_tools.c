@@ -15,7 +15,7 @@ int	dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork)
 	{
 		if (ft_strcmp(elem->input[0], alloc->builtins[i].name) == 0)
 		{
-			alloc->builtins[i].built_fun(elem, alloc);
+			ret = alloc->builtins[i].built_fun(elem, alloc);
 			break ;
 		}
 		i += 1;
@@ -27,23 +27,22 @@ int	dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork)
 
 int	dispatch_logic(t_ast *elem, t_alloc *alloc, int no_fork)
 {
+	int		ret;
+
+	ret = 1;
 	if (ft_strcmp(elem->input[0], "&&") == 0)
 	{
-		analyzer(elem, alloc, no_fork);
-		if (ret_status() == 0)
-			analyzer(elem, alloc, no_fork);
-		if (ret_status() == 0)
-			return (0);
+		ret = analyzer(elem, alloc, no_fork);
+		if (ret == 0)
+			ret = analyzer(elem, alloc, no_fork);
 	}
 	else if (ft_strcmp(elem->input[0], "||") == 0)
 	{
-		analyzer(elem, alloc, no_fork);
-		if (ret_status() != 0)
-			analyzer(elem, alloc, no_fork);
-		if (ret_status() == 0)
-			return (0);
+		ret = analyzer(elem, alloc, no_fork);
+		if (ret != 0)
+			ret = analyzer(elem, alloc, no_fork);
 	}
-	return (-1);
+	return (ret);
 }
 
 int	dispatch_redir(t_ast *elem, t_alloc *alloc, int no_fork)
@@ -56,16 +55,16 @@ int	dispatch_redir(t_ast *elem, t_alloc *alloc, int no_fork)
 	&& ft_strcmp(elem->input[1], tab_redir[i]) != 0)
 		i += 1;
 	if (i == 0)
-		redirection_1(elem, alloc, no_fork);
+		i = redirection_1(elem, alloc, no_fork);
 	else if (i == 1 || i == 2)
-		redirection_2(elem, alloc, no_fork);
+		i = redirection_2(elem, alloc, no_fork);
 	else if (i == 3 || i == 4 || i == 5)
-		redirection_3(elem, alloc, no_fork);
+		i = redirection_3(elem, alloc, no_fork);
 	else if (i == 6)
-		heredoc(elem, alloc);
+		i = heredoc(elem, alloc);
 	else
-		dispatch_agreg(elem, alloc, no_fork);
-	return (1);
+		i = dispatch_agreg(elem, alloc, no_fork);
+	return (i);
 }
 
 int	dispatch_operator(t_ast *elem, t_alloc *alloc, int no_fork)

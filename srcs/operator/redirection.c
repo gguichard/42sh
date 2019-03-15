@@ -2,7 +2,7 @@
 #include "operator.h"
 #include "parser_lexer.h"
 
-void	redirection_1(t_ast *elem, t_alloc *alloc, int no_fork)
+int	redirection_1(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd[10];
 	int	i;
@@ -15,12 +15,12 @@ void	redirection_1(t_ast *elem, t_alloc *alloc, int no_fork)
 		elem = elem->left;
 	if (elem->back && elem->type != REDIR)
 		elem = elem->back;
-	if (elem->left)
-		analyzer(elem->left, alloc, no_fork);
+	i = (elem->left) ? analyzer(elem->left, alloc, no_fork) : 1;
 	reinit_fd(fd, alloc);
+	return (i);
 }
 
-void	redirection_2(t_ast *elem, t_alloc *alloc, int no_fork)
+int	redirection_2(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd[10];
 	int	i;
@@ -33,12 +33,12 @@ void	redirection_2(t_ast *elem, t_alloc *alloc, int no_fork)
 		elem = elem->left;
 	if (elem->back && elem->type != REDIR)
 		elem = elem->back;
-	if (elem->left)
-		analyzer(elem->left, alloc, no_fork);
+	i = (elem->left) ? analyzer(elem->left, alloc, no_fork) : 1;
 	reinit_fd(fd, alloc);
+	return (i);
 }
 
-void	redirection_3(t_ast *elem, t_alloc *alloc, int no_fork)
+int	redirection_3(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int	fd[10];
 	int	i;
@@ -50,7 +50,7 @@ void	redirection_3(t_ast *elem, t_alloc *alloc, int no_fork)
 		elem = elem->left;
 	if (elem->back && elem->type != REDIR)
 		elem = elem->back;
-	if (elem->left)
-		analyzer(elem->left, alloc, no_fork);
+	i = (elem->left) ? analyzer(elem->left, alloc, no_fork) : 1;
 	reinit_fd(fd, alloc);
+	return (i);
 }

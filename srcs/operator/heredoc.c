@@ -44,20 +44,20 @@ int				complete_heredoc(t_ast *lst, t_alloc *alloc)
 	return (1);
 }
 
-void			heredoc(t_ast *elem, t_alloc *alloc)
+int				heredoc(t_ast *elem, t_alloc *alloc)
 {
 	int		pid1;
 	int		fd[2];
 	int		pid2;
 
 	if (g_pid == -1 || !elem->heredoc || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
-		return ;
+		return (1);
 	else if (!pid1)
 		write_pipe(elem, fd);
 	else
 	{
 		if ((pid2 = fork()) == -1)
-			return ;
+			return (1);
 		else if (!pid2)
 			pipe_exec(elem->left, alloc, fd);
 		else
@@ -65,9 +65,9 @@ void			heredoc(t_ast *elem, t_alloc *alloc)
 			close(fd[1]);
 			close(fd[0]);
 			waitpid(pid1, NULL, 0);
-			waitpid(pid2, &g_ret[0], 0);
-			g_ret[1] = 1;
+			waitpid(pid2, &alloc->ret_val, 0);
 		}
 	}
 	ft_memdel((void **)&elem->heredoc);
+	return (ret_status(alloc->ret_val));
 }

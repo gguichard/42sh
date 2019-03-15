@@ -56,23 +56,22 @@ int			do_pipe(t_ast *elem, t_alloc *alloc)
 	int		fd[2];
 
 	if (g_pid == -1 || !elem->right || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
-		return (0);
+		return (1);
 	else if (!pid1)
 		process_pipe_left(elem->left, alloc, fd);
 	else
 	{
 		if ((pid2 = fork()) == -1)
-			return (0);
+			return (1);
 		else if (!pid2)
 			process_pipe_right(elem->right, alloc, fd);
 		else
 		{
 			close(fd[1]);
 			close(fd[0]);
-			waitpid(pid1, &(g_ret[0]), 0);
-			waitpid(pid2, &(g_ret[0]), 0);
-			g_ret[1] = 1;
+			waitpid(pid1, &alloc->ret_val, 0);
+			waitpid(pid2, &alloc->ret_val, 0);
 		}
 	}
-	return (1);
+	return (ret_status(alloc->ret_val));
 }

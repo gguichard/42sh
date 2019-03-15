@@ -11,17 +11,17 @@
 int						do_pipe(t_ast *elem, t_alloc *alloc);
 int						do_not_fork(t_ast *elem, t_alloc *alloc);
 int						job_control(t_ast *elem, t_alloc *alloc);
-void					redirection(t_ast *elem, t_alloc *alloc, int no_fork);
-void					heredoc(t_ast *elem, t_alloc *alloc);
+int						redirection(t_ast *elem, t_alloc *alloc, int no_fork);
+int						heredoc(t_ast *elem, t_alloc *alloc);
 int						complete_heredoc(t_ast *lst, t_alloc *alloc);
 
 /*
 ******************************** REDIRECTION ***********************************
 */
 
-void					redirection_1(t_ast *elem, t_alloc *alloc, int no_fork);
-void					redirection_2(t_ast *elem, t_alloc *alloc, int no_fork);
-void					redirection_3(t_ast *elem, t_alloc *alloc, int no_fork);
+int						redirection_1(t_ast *elem, t_alloc *alloc, int no_fork);
+int						redirection_2(t_ast *elem, t_alloc *alloc, int no_fork);
+int						redirection_3(t_ast *elem, t_alloc *alloc, int no_fork);
 
 /*
 ******************************** REDIRECTION ***********************************
