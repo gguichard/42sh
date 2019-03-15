@@ -22,8 +22,6 @@ int		main(int argc, char **argv, char **env)
 	lst = 0;
 	ft_bzero(&alloc, sizeof(t_alloc));
 	env_cp(env, &lst);
-	if ((alloc.exectable = make_exectable()) == NULL)
-		return (1);
 	set_alloc(&alloc, &lst);
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
@@ -33,6 +31,7 @@ int		main(int argc, char **argv, char **env)
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}
+	del_alloc(&alloc);
 	ft_printf("GNL ret : %d\n", gnl_ret);
 	return (0);
 }
