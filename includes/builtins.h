@@ -11,6 +11,7 @@ int		exit_builtins(t_ast *elem, t_alloc *alloc);
 int		setenv_builtins(t_ast *elem, t_alloc *alloc);
 int		unsetenv_builtins(t_ast *elem, t_alloc *alloc);
 int		hash_builtins(t_ast *elem, t_alloc *alloc);
+int		alias_builtins(t_ast *elem, t_alloc *alloc);
 int		type_builtins(t_ast *elem, t_alloc *alloc);
 int		set_builtins(t_ast *elem, t_alloc *alloc);
 int		unset_builtins(t_ast *elem, t_alloc *alloc);

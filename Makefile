@@ -59,6 +59,7 @@ SRC =	main.c \
 		$(PATH_BUILT)exec_input.c \
 		$(PATH_BUILT)exit.c \
 		$(PATH_BUILT)hash.c \
+		$(PATH_BUILT)alias.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \
