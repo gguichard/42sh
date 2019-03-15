@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 20:41:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/12 15:32:18 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/15 14:48:47 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,10 @@ static int	parse_cur_arg(t_opts *opts, char **argv)
 	return (index != 1);
 }
 
-t_opts		*parse_opts(char **argv, const char *optstring)
+t_opts		*parse_opts(t_opts *opts, char **argv, const char *optstring)
 {
-	t_opts	*opts;
-
+	ft_bzero(opts, sizeof(t_opts));
 	check_optstring(optstring);
-	opts = (t_opts *)malloc(sizeof(t_opts));
-	if (opts == NULL)
-		return (opts);
 	opts->value = 0;
 	opts->index = 1;
 	opts->error = 0;
