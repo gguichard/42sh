@@ -74,13 +74,15 @@ static void	fill_tab_env(char ***tab_str, t_var *lst)
 void		convert_lst_tab(t_var *lst_env, char ***tab_str)
 {
 	int		i;
+	t_var	*tmp;
 
 	i = 0;
-	while (lst_env)
+	tmp = lst_env;
+	while (tmp)
 	{
-		if (lst_env->is_env == 1 && lst_env->value)
+		if (tmp->is_env == 1 && tmp->value)
 			i += 1;
-		lst_env = lst_env->next;
+		tmp = tmp->next;
 	}
 	if (!(*tab_str = (char**)malloc(sizeof(char*) * (i + 1))))
 		ft_exit_malloc();
