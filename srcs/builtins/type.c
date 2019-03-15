@@ -3,13 +3,12 @@
 #include "exectable.h"
 #include "hashtable.h"
 
-int	type_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+int	type_builtins(t_ast *elem, t_alloc *alloc)
 {
 	int			i;
 	int			ret;
 	const char	*path;
 
-	(void)lst_env;
 	i = 1;
 	ret = 0;
 	while (elem->input[i])

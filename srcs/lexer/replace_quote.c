@@ -77,7 +77,7 @@ static int	replace_env_var(char **str, int i, t_var *lst_env)
 	return (0);
 }
 
-int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc)
+int			remove_quote(char **s, int *i, t_alloc *alloc)
 {
 	char	*sub;
 	char	quote;
@@ -91,7 +91,7 @@ int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc)
 		*i += 1;
 	sub = (ft_isquote(quote) == 1) ? ft_strsub(*s, save, *i - save) : NULL;
 	while (sub[x] && quote == '"')
-		x += (sub[x] == '$') ? replace_env_var(&sub, x, lst_env) : 1;
+		x += (sub[x] == '$') ? replace_env_var(&sub, x, alloc->var) : 1;
 	if (quote == '`')
 	{
 		if (!sub[0])
@@ -99,29 +99,33 @@ int			remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc)
 			ft_memdel((void **)&sub);
 			(!(sub = ft_strdup(""))) ? ft_exit_malloc() : 0;
 		}
-		else if (!(sub = ft_back_quote(sub, lst_env, alloc)))
+		else if (!(sub = ft_back_quote(sub, alloc)))
 			return (0);
 	}
 	(sub != NULL) ? ft_insert(s, sub, save - 1, *i) : 0;
 	return (1);
 }
 
-int			convert_quote(char **s, t_var *lst_env, t_alloc *alloc)
+int			convert_quote(char **s, t_alloc *alloc)
 {
 	int		i;
 
 	i = 0;
+<<<<<<< HEAD
 	expand_home_shortcut(s, lst_env);
+=======
+	short_cut(s, alloc->var);
+>>>>>>> execution
 	while (s && (*s)[i])
 	{
 		if ((*s)[i] == '$')
 		{
-			if (replace_env_var(s, i, lst_env) == -1)
+			if (replace_env_var(s, i, alloc->var) == -1)
 				return (-1);
 		}
 		else if (ft_isquote((*s)[i]) == 1)
 		{
-			if (!(remove_quote(s, &i, lst_env, alloc)))
+			if (!(remove_quote(s, &i, alloc)))
 				return (-1);
 			i -= 1;
 		}

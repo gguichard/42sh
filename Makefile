@@ -56,11 +56,8 @@ SRC =	main.c \
 		$(PATH_OPERATOR)pipe.c \
 		$(PATH_BUILT)cd.c \
 		$(PATH_BUILT)echo.c \
-		$(PATH_BUILT)env.c \
 		$(PATH_BUILT)exec_input.c \
 		$(PATH_BUILT)exit.c \
-		$(PATH_BUILT)setenv.c \
-		$(PATH_BUILT)unsetenv.c \
 		$(PATH_BUILT)hash.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \

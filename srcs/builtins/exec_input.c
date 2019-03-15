@@ -1,103 +1,96 @@
 #include "shell.h"
 #include "builtins.h"
 #include "error.h"
+#include "search_exec.h"
+#include "check_path.h"
+#include "hashtable.h"
 
-
-static char	**get_path_all(t_ast *elem, char **tab_path)
+static char	*srch_exec(t_var *lst_env, t_ast *elem, int *hashable)
 {
-	size_t	len;
-	size_t	i;
-	char	*tmp;
-	char	**path_all;
+	char	*s;
+	t_error	error;
 
-	len = 0;
-	i = 0;
-	tmp = NULL;
-	while (tab_path[len])
-		len += 1;
-	if (!(path_all = (char**)malloc(sizeof(char *) * (len + 1))))
-		ft_exit_malloc();
-	while (i < len)
+	s = 0;
+	s = search_exec(lst_env, elem->input[0], &error);
+	if (error != ERRC_NOERROR)
 	{
-		if (!(tmp = ft_strjoin(tab_path[i], "/")))
-			ft_exit_malloc();
-		if (!(path_all[i] = ft_strjoin(tmp, elem->input[0])))
-			ft_exit_malloc();
-		free(tmp);
-		i += 1;
+		ft_memdel((void **)&s);
+		exec_file_error(error, elem->input[0]);
 	}
-	path_all[i] = NULL;
-	return (path_all);
+	*hashable = 1;
+	return (s);
 }
 
-int			exec_rights(t_ast *elem, char **tab_path, char ***path_all)
+static char	*check_right_alias(char *alias)
 {
-	int	x;
+	t_error	error;
 
-	x = 0;
-	if (ft_strchr(elem->input[0], '/') && access(elem->input[0], X_OK) == -1
-		&& !access(elem->input[0], F_OK))
-		return (exec_right_error(2, elem->input[0], path_all));
-	if (!(*path_all = get_path_all(elem, tab_path)))
-		return (1);
-	while (tab_path && tab_path[0] != NULL && ft_strcmp(tab_path[0], "") != 0
-			&& (*path_all)[x])
+	if ((error = check_file_rights(alias, FT_FILE, X_OK)) != ERRC_NOERROR)
 	{
-		if (access((*path_all)[x], X_OK) == -1 && !access((*path_all)[x], F_OK))
-			return (exec_right_error(2, (*path_all)[x], path_all));
-		x += 1;
+		exec_file_error(error, alias);
+		return (0);
 	}
-	return (0);
+	return (alias);
 }
 
-static void	execute_cmd(t_ast *elem, char **tab_env, char **tab_path,
-		char **path_all)
+static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 {
-	int		x;
+	t_hashentry	*alias;
+	char		*path_exec;
+	t_error		error;
 
-	x = 0;
+	path_exec = 0;
+	alias = 0;
 	if (ft_strchr(elem->input[0], '/'))
-		execve(elem->input[0], elem->input, tab_env);
-	if (tab_path && tab_path[0] != NULL && ft_strcmp(tab_path[0], "") != 0)
-		while (path_all[x] != NULL)
-		{
-			execve(path_all[x], elem->input, tab_env);
-			x += 1;
-		}
-	exit(exec_error(-1, elem->input[0]));
+	{
+		if ((error = check_file_rights(elem->input[0], FT_FILE, X_OK)) != ERRC_NOERROR)
+			exec_file_error(error, elem->input[0]);
+		else
+			path_exec = elem->input[0];
+	}
+	else if ((alias = get_hashentry(alloc->exectable, elem->input[0])))
+		path_exec = check_right_alias((char *)alias->value);
+	else
+		path_exec = srch_exec(alloc->var, elem, hashable);
+	return (path_exec);
 }
 
-static int	clean_tab(char **tab_path, char **path_all, char **tab_env)
+static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env)
 {
-	del_double_tab(tab_path, tab_env);
-	delete_str_tab(path_all);
-	return (ret_status());
+	if (g_pid == -1)
+		exit(130);
+	g_in_exec = 1;
+	execve(path_exec, elem->input, tab_env);
+	ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
+	if (no_fork == 1)
+	{
+		delete_str_tab(tab_env);
+		if (ft_strcmp(path_exec, elem->input[0]))
+			ft_memdel((void **)&path_exec);
+	}
+	exit(126);
 }
 
-int			exec_input(t_ast *elem, t_var *lst_env, char **tab_path)
+int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	pid_t	child;
+	int		hashable;
 	char	**tab_env;
-	char	**path_all;
+	char	*path_exec;
 
-	path_all = NULL;
-	tab_env = NULL;
-	if (!tab_path)
-		tab_path = (find_elem_env(lst_env, "PATH")) ?
-		ft_strsplit(get_env_value(lst_env, "$PATH"), ':') :
-		ft_strsplit("/usr/bin:/bin:/usr/sbin:/sbin", ':');
-	if (exec_rights(elem, tab_path, &path_all))
-		return (clean_tab(tab_path, path_all, tab_env));
-	convert_lst_tab(lst_env, &tab_env);
-	if (!(child = fork()))
-	{
-		if (g_pid == -1)
-			exit(130);
-		g_in_exec = 1;
-		execute_cmd(elem, tab_env, tab_path, path_all);
-	}
+	hashable = 0;
+	if (!(path_exec = exec_path(elem, alloc, &hashable)))
+		return (ret_status());
+	convert_lst_tab(alloc->var, &tab_env);
+	if (no_fork == 1 || !(child = fork()))
+		execute_cmd(path_exec, elem, tab_env);
 	g_pid = child;
 	waitpid(child, &(g_ret[0]), 0);
 	g_ret[1] = 1;
-	return (clean_tab(tab_path, path_all, tab_env));
+	if (hashable == 1)
+		add_hashentry(alloc->exectable, elem->input[0], path_exec, sizeof(path_exec));
+	delete_str_tab(tab_env);
+	if (ft_strcmp(path_exec, elem->input[0]))
+		ft_memdel((void **)&path_exec);
+	return (ret_status());
 }

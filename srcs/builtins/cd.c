@@ -87,7 +87,7 @@ static int	modif_env(char *dir, t_var *lst_env, int options, char *buf)
 	return (0);
 }
 
-int			cd_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+int			cd_builtins(t_ast *elem, t_alloc *alloc)
 {
 	int			i;
 	int			options;
@@ -98,11 +98,11 @@ int			cd_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 	if ((i = check_options(elem, &options, alloc)) == -1)
 		return (1);
 	buf_pwd = getcwd(0, PATH_MAX);
-	if (!find_elem_env(lst_env, "PWD"))
-		add_elem_env(lst_env, "PWD", buf_pwd);
-	dir = cd_predef(elem->input[i], lst_env, options, buf_pwd);
+	if (!find_elem_env(alloc->var, "PWD"))
+		add_elem_env(alloc->var, "PWD", buf_pwd);
+	dir = cd_predef(elem->input[i], alloc->var, options, buf_pwd);
 	if (!dir)
-		dir = get_dir(get_env_value(lst_env, "$PWD"),
+		dir = get_dir(get_env_value(alloc->var, "$PWD"),
 		ft_strsplit(elem->input[i], '/'), options, buf_pwd);
 	ft_memdel((void **)&buf_pwd);
 	if ((ft_strcmp(dir, "") != 0 && check_access(dir, elem->input[i]) == -1)
@@ -112,5 +112,5 @@ int			cd_builtins(t_ast *elem, t_var *lst_env, t_alloc *alloc)
 		return (1);
 	}
 	(ft_strcmp(elem->input[i], "-") == 0) ? ft_printf("%s\n", dir) : 0;
-	return (modif_env(dir, lst_env, options, getcwd(0, PATH_MAX)));
+	return (modif_env(dir, alloc->var, options, getcwd(0, PATH_MAX)));
 }
