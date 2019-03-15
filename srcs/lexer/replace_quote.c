@@ -111,11 +111,7 @@ int			convert_quote(char **s, t_alloc *alloc)
 	int		i;
 
 	i = 0;
-<<<<<<< HEAD
 	expand_home_shortcut(s, lst_env);
-=======
-	short_cut(s, alloc->var);
->>>>>>> execution
 	while (s && (*s)[i])
 	{
 		if ((*s)[i] == '$')

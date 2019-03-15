@@ -12,14 +12,9 @@ void	clean_input(char *str, t_ast *lst, t_alloc *alloc);
 void	replace_str(char **str, char *insert, int pos);
 void	read_lexer(char **lexer, t_ast *lst, t_alloc *alloc);
 int		replace_val_ret(char **str, int i, int x);
-<<<<<<< HEAD
 void	expand_home_shortcut(char **s, t_var *lst_env);
 int		remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc);
 int		convert_quote(char **s, t_var *lst_env, t_alloc *alloc);
-=======
-int		remove_quote(char **s, int *i, t_alloc *alloc);
-int		convert_quote(char **s, t_alloc *alloc);
->>>>>>> execution
 int		check_opening_quote(char **str, t_alloc *alloc);
 int		find_closing(char **str, int *i, t_alloc *alloc);
 int		check_cmd_pipe(char **input, t_alloc *alloc);
