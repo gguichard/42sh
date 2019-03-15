@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "exectable.h"
+#include "hashtable.h"
 #include "parser_lexer.h"
 
 // #include "get_next_line.h"
@@ -20,6 +21,8 @@ int		main(int argc, char **argv)
 	(void)argv;
 	ft_bzero(&alloc, sizeof(t_alloc));
 	if ((alloc.exectable = make_exectable()) == NULL)
+		return (1);
+	if ((alloc.aliastable = make_def_hashtable()) == NULL)
 		return (1);
 	lst = NULL;
 	alloc = set_alloc(lst);
