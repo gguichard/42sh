@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 17:08:24 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:07:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "cmdline.h"
 
-t_seq		*get_known_sequences(void)
+static t_seq	*get_known_sequences(void)
 {
 	static t_seq	seqs[] = {
 		{"\033[D", MODE_COMMON, handle_move_left},
@@ -42,22 +42,22 @@ t_seq		*get_known_sequences(void)
 	return (seqs);
 }
 
-static void	reset_sequence(t_seq_keys *keys)
+static void		reset_sequence(t_seq_keys *keys)
 {
 	ft_memset(keys->buffer, 0, 8);
 	keys->size = 0;
 	keys->offset = 0;
 }
 
-void		handle_sequence(t_cmdline *cmdline, const char *seq)
+void			handle_sequence(t_cmdline *cmdline, const char *seq)
 {
 	t_seq	*seqs;
 	int		idx;
 
 	if (seq[cmdline->seq_keys.offset] == '\0')
 	{
-		seqs = get_known_sequences();
 		reset_sequence(&cmdline->seq_keys);
+		seqs = get_known_sequences();
 		idx = 0;
 		while (seqs[idx].fn != NULL)
 		{
@@ -74,19 +74,14 @@ void		handle_sequence(t_cmdline *cmdline, const char *seq)
 	}
 }
 
-static int	is_right_seq_mode(t_cmdline *cmdline, t_seq *seq)
+static int		is_right_seq_mode(t_cmdline *cmdline, t_seq *seq)
 {
-	if (seq->mode == MODE_COMMON)
-		return (1);
-	else if (seq->mode == MODE_VISUAL && cmdline->visual.toggle)
-		return (1);
-	else if (seq->mode == MODE_INSERT && !cmdline->visual.toggle)
-		return (1);
-	else
-		return (0);
+	return (seq->mode == MODE_COMMON
+			|| (seq->mode == MODE_VISUAL && cmdline->visual.toggle)
+			|| (seq->mode == MODE_INSERT && !cmdline->visual.toggle));
 }
 
-const char	*get_sequence(t_cmdline *cmdline, char c)
+const char		*get_sequence(t_cmdline *cmdline, char c)
 {
 	t_seq	*seqs;
 	int		idx;

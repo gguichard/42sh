@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 12:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 13:01:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:17:55 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	handle_cursor_up(t_cmdline *cmdline)
 
 	if (cmdline->saved_col == -1)
 		cmdline->saved_col = cmdline->cursor.x;
-	if (cmdline->row == 0)
+	if (cmdline->row == 0 || cmdline->cursor.y == 0)
 		return (0);
 	offset = cmdline->input.offset - cmdline->cursor.x - 1;
 	rightest_col = get_rightmost_column(cmdline, offset);
@@ -49,6 +49,8 @@ int	handle_cursor_down(t_cmdline *cmdline)
 	int	col;
 	int	offset;
 
+	if ((cmdline->cursor.y + 1) == cmdline->winsize.ws_row)
+		return (0);
 	if (cmdline->saved_col == -1)
 		cmdline->saved_col = cmdline->cursor.x;
 	row = cmdline->row;

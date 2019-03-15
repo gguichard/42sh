@@ -6,51 +6,28 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 17:06:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 19:14:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft.h"
 #include <term.h>
 #include "cmdline.h"
 
-void		add_char_to_input(struct s_input *input, char c)
-{
-	int		new_cap;
-	char	*new_buffer;
-
-	if (input->size == input->capacity)
-	{
-		new_cap = input->capacity + INPUT_SIZE_INCR;
-		new_buffer = (char *)malloc((new_cap + 1) * sizeof(char));
-		if (new_buffer == NULL)
-			return ;
-		if (input->buffer != NULL)
-			ft_memcpy(new_buffer, input->buffer, input->size);
-		new_buffer[input->size] = '\0';
-		input->capacity = new_cap;
-		input->buffer = new_buffer;
-	}
-	if (input->offset != input->size)
-		ft_memmove(input->buffer + input->offset + 1
-				, input->buffer + input->offset
-				, input->size - input->offset + 1);
-	input->buffer[input->offset] = c;
-	input->offset += 1;
-	input->size += 1;
-}
-
 void		update_cmdline_after_offset(t_cmdline *cmdline)
 {
-	write(STDOUT_FILENO
-			, cmdline->input.buffer + cmdline->input.offset
-			, cmdline->input.size - cmdline->input.offset);
-	go_to_cursor_pos(cmdline->cursor);
+	if (cmdline->input.offset != cmdline->input.size)
+	{
+		write(STDOUT_FILENO
+				, cmdline->input.buffer + cmdline->input.offset
+				, cmdline->input.size - cmdline->input.offset);
+		go_to_cursor_pos(cmdline->cursor);
+	}
 }
 
-void		write_char_in_cmdline(t_cmdline *cmdline, char c)
+static void	write_char_in_cmdline(t_cmdline *cmdline, char c)
 {
 	if (c == '\n')
 		tputs(tgetstr("ce", NULL), 1, t_putchar);
@@ -69,8 +46,34 @@ void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 			cmdline->cursor.y += 1;
 		cmdline->row += 1;
 	}
+	update_cmdline_after_offset(cmdline);
+}
+
+void		add_char_to_input(t_cmdline *cmdline, char c)
+{
+	int		new_cap;
+	char	*new_buffer;
+
+	if (cmdline->input.size == cmdline->input.capacity)
+	{
+		new_cap = cmdline->input.capacity + INPUT_SIZE_INCR;
+		new_buffer = (char *)malloc((new_cap + 1) * sizeof(char));
+		if (new_buffer == NULL)
+			return ;
+		if (cmdline->input.buffer != NULL)
+			ft_memcpy(new_buffer, cmdline->input.buffer, cmdline->input.size);
+		new_buffer[cmdline->input.size] = '\0';
+		cmdline->input.capacity = new_cap;
+		cmdline->input.buffer = new_buffer;
+	}
 	if (cmdline->input.offset != cmdline->input.size)
-		update_cmdline_after_offset(cmdline);
+		ft_memmove(cmdline->input.buffer + cmdline->input.offset + 1
+				, cmdline->input.buffer + cmdline->input.offset
+				, cmdline->input.size - cmdline->input.offset + 1);
+	cmdline->input.buffer[cmdline->input.offset] = c;
+	cmdline->input.offset += 1;
+	cmdline->input.size += 1;
+	write_char_in_cmdline(cmdline, c);
 }
 
 void		read_input(t_cmdline *cmdline)
@@ -85,8 +88,7 @@ void		read_input(t_cmdline *cmdline)
 		else if (ft_isprint(c) && !cmdline->visual.toggle)
 		{
 			cmdline->saved_col = -1;
-			add_char_to_input(&cmdline->input, c);
-			write_char_in_cmdline(cmdline, c);
+			add_char_to_input(cmdline, c);
 		}
 	}
 }
