@@ -23,25 +23,22 @@ static size_t	count_subpath(const char *path)
 	return (subpath_count);
 }
 
-static int		process_cur_path(const char **path_cpy, char **cur_path
+static int		process_cur_path(const char **path_base, char **cur_path
 		, t_var *var_lst)
 {
-	char	*next_sep;
+	const char	*next_sep;
 
-	next_sep = ft_strchr(*path_cpy, ':');
-	if (next_sep == *path_cpy || **path_cpy == '\0')
+	if ((next_sep = ft_strchr(*path_base, ':')) == NULL)
+		next_sep = *path_base + ft_strlen(*path_base);
+	if (next_sep == *path_base || **path_base == '\0')
 		*cur_path = ft_strdup(".");
-	else
-	{
-		if (next_sep != NULL)
-			*next_sep = '\0';
-		if ((*cur_path = ft_strdup(*path_cpy)) != NULL)
-			expand_home_shortcut(cur_path, var_lst);
-	}
+	else if ((*cur_path = ft_strndup(*path_base, next_sep - *path_base))
+			!= NULL)
+		expand_home_shortcut(cur_path, var_lst);
 	if (*cur_path == NULL)
 		return (0);
-	if (next_sep != NULL)
-		*path_cpy = next_sep + 1;
+	if (*next_sep != '\0')
+		*path_base = next_sep + 1;
 	return (1);
 }
 
@@ -52,7 +49,7 @@ char			**convert_path_to_tab(t_var *var_lst)
 	char		**path_tab;
 	size_t		path_idx;
 
-	path_base = get_env_value(var_lst, "PATH");
+	path_base = get_env_value(var_lst, "$PATH");
 	path_count = count_subpath(path_base);
 	if ((path_tab = (char**)malloc(sizeof(char*) * (path_count + 1))) == NULL)
 		return (NULL);
