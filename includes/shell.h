@@ -109,7 +109,7 @@ void	del_alloc(t_alloc *alloc);
 void	set_alloc(t_alloc *al, t_var **lst);
 int		ret_status(void);
 int		replace_val_ret(char **str, int i, int x);
-void	sort_ascii(t_var **lst);
+void	insert_new_elem(t_var **lst, t_var *new);
 
 //TOOLS TO PRINT LST AST
 void	read_lst(t_ast *lst, int active);

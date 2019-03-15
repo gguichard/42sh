@@ -20,7 +20,7 @@ static int	check_options(t_ast *elem, int *i)
 	return (0);
 }
 
-static void	display_lst_env(t_var *lst)
+static void	display_lst_var(t_var *lst)
 {
 	while (lst)
 	{
@@ -30,19 +30,30 @@ static void	display_lst_env(t_var *lst)
 	}
 }
 
-// static int	elem_env_exist(t_var **lst, char *name)
+// static void	add_new_var(t_var **lst, char *var)
 // {
-// 	(void)lst;
-// 	(void)name;
-// 	return (0);
+//
 // }
 
-// static void	add_elem_env(t_var **lst, t_ast *elem, int i)
-// {
-// 	(void)lst;
-// 	(void)elem;
-// 	(void)i;
-// }
+static void	export_var(t_var **lst, t_ast *elem, int i)
+{
+	t_var	*tmp;
+
+	(void)lst;
+	tmp = NULL;
+	while (elem->input[i])
+	{
+		// if (!(tmp = find_elem_env(*lst, key)))
+		// 	add_new_var(lst, elem->input[i]);
+		// else
+		// {
+			// ft_memdel((void **)&(tmp->value));
+			// if (!(tmp->value = ft_strdup(value)))
+				// ft_exit_malloc();
+		// }
+		i += 1;
+	}
+}
 
 int	export_builtins(t_ast *elem, t_alloc *alloc)
 {
@@ -55,8 +66,8 @@ int	export_builtins(t_ast *elem, t_alloc *alloc)
 	if ((ret = check_options(elem, &i)) == 1)
 		return (ret);
 	if (i != 1)
-		display_lst_env(*(alloc->var));
-	// else
-	// 	add_elem_env(&lst_env, elem, i);
+		display_lst_var(*(alloc->var));
+	else
+		export_var(alloc->var, elem, i);
 	return (0);
 }

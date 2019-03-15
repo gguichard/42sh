@@ -32,7 +32,6 @@ void				set_alloc(t_alloc *al, t_var **lst)
 	int		x;
 
 	al->var = lst;
-	sort_ascii(al->var);
 	x = 0;
 	while (x < 10)
 		al->fd[x++] = -1;

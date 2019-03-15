@@ -73,6 +73,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)env_tools_2.c \
 		$(PATH_TOOLS)builtins_tools.c \
 		$(PATH_TOOLS)alloc_starter_tools.c \
+		$(PATH_TOOLS)sort_tools.c \
 		$(PATH_BUILT)bg.c\
 		$(PATH_BUILT)export.c\
 		$(PATH_BUILT)fg.c\
@@ -86,7 +87,6 @@ SRC =	main.c \
 		$(PATH_TOOLS)redirection_tools.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
 		$(PATH_TOOLS)cd_tools.c \
-		$(PATH_TOOLS)sort_ascii_var.c \
 		$(PATH_HASHTABLE)exectable.c \
 		$(PATH_HASHTABLE)hashtable.c \
 		$(PATH_HASHTABLE)hashtable_delete.c \

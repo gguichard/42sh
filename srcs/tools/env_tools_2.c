@@ -16,15 +16,7 @@ static void		add_env(t_var **lst_env, char *env, int x)
 	new->value = ft_strsub(env, x + 1, len - x - 1);
 	new->is_env = 1;
 	new->next = NULL;
-	if (!lst_env || !(*lst_env))
-		*lst_env = new;
-	else
-	{
-		tmp = *lst_env;
-		while (tmp->next != NULL)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
+	insert_new_elem(lst_env, new);
 }
 
 int				env_cp(char **env, t_var **lst_env)
