@@ -68,6 +68,13 @@ void			parser(char **input, t_ast *lst, t_alloc *alloc)
 		g_ret[0] = 1;
 		return ;
 	}
+	int x = 0;
+	ft_printf("TEST:\n");
+	while (input[x])
+	{
+		ft_printf("input[%d]: %s\n", x, input[x]);
+		x += 1;
+	}
 	fill_ast(input, &lst, 0, -1);
 	if (check_error_lst(lst) == 1)
 		return (clean_tab_and_ast(input, lst));
@@ -82,11 +89,9 @@ void			parser(char **input, t_ast *lst, t_alloc *alloc)
 	}
 	sort_ast(lst, &sort);
 	alloc->ast = lst;
-	read_sort_descent(sort, 1);
-	reinit_print(lst, 1);
 	analyzer(sort, alloc, 0);
 
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc, 0) : 0;
 
-	clean_tab_and_ast(input, lst);
+	// clean_tab_and_ast(input, lst);
 }

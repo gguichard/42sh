@@ -7,10 +7,10 @@
 ************************************ LEXER *************************************
 */
 
-void	lexer(char *input, t_alloc *alloc);
-void	clean_input(char *str, t_ast *lst, t_alloc *alloc);
+char	***lexer(char *input, t_alloc *alloc);
+char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
-void	read_lexer(char **lexer, t_ast *lst, t_alloc *alloc);
+char	***read_lexer(char **lexer, char ***all_split_cmd);
 int		replace_val_ret(char **str, int i, int x);
 void	expand_home_shortcut(char **s, t_var *lst_env);
 int		remove_quote(char **s, int *i, t_alloc *alloc);

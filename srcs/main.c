@@ -9,6 +9,27 @@
 // #include "get_next_line.h"
 // #include "printf.h"
 
+static void	lexer_parser(char *line, t_alloc *alloc)
+{
+	char	***split_all_cmd;
+	t_ast	*sort_ast;
+	int		i;
+
+	i = 0;
+	sort_ast = NULL;
+	split_all_cmd = lexer(line, alloc);
+	while (split_all_cmd[i])
+	{
+		parser(split_all_cmd[i], sort_ast, alloc);
+		// read_sort_descent(sort_ast, 1);
+		// reinit_print(alloc->ast, 1);
+		delete_str_tab(split_all_cmd[i]);
+		del_lst_ast(alloc->ast);
+		i += 1;
+	}
+}
+
+
 //TODO faire un vrai main
 int		main(int argc, char **argv, char **env)
 {
@@ -27,7 +48,8 @@ int		main(int argc, char **argv, char **env)
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{
 		//parse line etc;
-		lexer(line, &alloc);
+		lexer_parser(line, &alloc);
+		// lexer(line, &alloc);
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}
