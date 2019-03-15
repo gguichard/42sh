@@ -2,7 +2,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "builtins.h"
-#include "expand_vars.h"
+#include "parser_lexer.h"
 #include "convert_path_to_tab.h"
 
 /*
@@ -35,7 +35,8 @@ static int		process_cur_path(const char **path_cpy, char **cur_path
 	{
 		if (next_sep != NULL)
 			*next_sep = '\0';
-		*cur_path = expand_home(*path_cpy, var_lst, 0);
+		if ((*cur_path = ft_strdup(*path_cpy)) != NULL)
+			expand_home_shortcut(cur_path, var_lst);
 	}
 	if (*cur_path == NULL)
 		return (0);

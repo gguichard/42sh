@@ -12,6 +12,7 @@ void	clean_input(char *str, t_ast *lst, t_var *lst_env, t_alloc *alloc);
 void	replace_str(char **str, char *insert, int pos);
 void	read_lexer(char **lexer, t_var *lst_env, t_ast *lst, t_alloc *alloc);
 int		replace_val_ret(char **str, int i, int x);
+void	expand_home_shortcut(char **s, t_var *lst_env);
 int		remove_quote(char **s, int *i, t_var *lst_env, t_alloc *alloc);
 int		convert_quote(char **s, t_var *lst_env, t_alloc *alloc);
 int		check_opening_quote(char **str, t_alloc *alloc);
