@@ -16,22 +16,22 @@ void	delete_str_tab(char **tab_str)
 	tab_str = NULL;
 }
 
-void	del_lst_env(t_var *lst)
+void	del_lst_env(t_var **lst)
 {
 	t_var	*tmp;
 
-	if (!lst)
+	if (!lst || !(*lst))
 		return ;
-	tmp = lst;
+	tmp = *lst;
 	while (tmp)
 	{
-		lst = tmp->next;
+		*lst = tmp->next;
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);
-		tmp = lst;
+		tmp = *lst;
 	}
-	lst = NULL;
+	*lst = NULL;
 }
 
 void	del_lst_ast(t_ast *lst)

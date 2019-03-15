@@ -10,7 +10,6 @@ static char	*srch_exec(t_var *lst_env, t_ast *elem, int *hashable)
 	char	*s;
 	t_error	error;
 
-	s = 0;
 	s = search_exec(lst_env, elem->input[0], &error);
 	if (error != ERRC_NOERROR)
 	{
@@ -51,7 +50,7 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	else if ((alias = get_hashentry(alloc->exectable, elem->input[0])))
 		path_exec = check_right_alias((char *)alias->value);
 	else
-		path_exec = srch_exec(alloc->var, elem, hashable);
+		path_exec = srch_exec(*(alloc->var), elem, hashable);
 	return (path_exec);
 }
 
@@ -82,7 +81,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	child = 0;
 	if (!(path_exec = exec_path(elem, alloc, &hashable)))
 		return (ret_status());
-	convert_lst_tab(alloc->var, &tab_env);
+	convert_lst_tab(*(alloc->var), &tab_env);
 	if (no_fork == 1 || !(child = fork()))
 		execute_cmd(path_exec, elem, tab_env, no_fork);
 	if (child == -1)

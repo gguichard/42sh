@@ -32,8 +32,11 @@ SRC =	main.c \
 		$(PATH_ERROR)error_redirection.c \
 		$(PATH_ERROR)error_cd.c \
 		$(PATH_ERROR)error_fd.c \
+		$(PATH_ERROR)error_set.c \
+		$(PATH_ERROR)error_unset.c \
 		$(PATH_ERROR)error_setenv.c \
 		$(PATH_ERROR)error_unsetenv.c \
+		$(PATH_ERROR)error_export.c \
 		$(PATH_ERROR)exec_error.c \
 		$(PATH_ERROR)error_utils.c \
 		$(PATH_LEXER)check_closing_quote.c \
@@ -72,6 +75,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)env_tools_2.c \
 		$(PATH_TOOLS)builtins_tools.c \
 		$(PATH_TOOLS)alloc_starter_tools.c \
+		$(PATH_TOOLS)sort_tools.c \
 		$(PATH_BUILT)bg.c\
 		$(PATH_BUILT)export.c\
 		$(PATH_BUILT)fg.c\

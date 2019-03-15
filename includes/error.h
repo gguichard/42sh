@@ -29,6 +29,11 @@ int		error_cd(char *err, int type);
 int		error_setenv(int i);
 int		error_unsetenv(int i, char *s);
 int		ft_fd_exist(char *str_fd);
+int		error_set(char *str);
+int		error_unset(char *str);
+int		error_export(char c);
+
+
 
 /*
 ** Free la variable var et retourne err.

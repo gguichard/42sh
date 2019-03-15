@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "libft.h"
 #include "shell.h"
+#include "builtins.h"
 #include "exectable.h"
 #include "parser_lexer.h"
 
@@ -9,7 +10,7 @@
 // #include "printf.h"
 
 //TODO faire un vrai main
-int		main(int argc, char **argv)
+int		main(int argc, char **argv, char **env)
 {
 	int		gnl_ret;
 	char	*line;
@@ -18,11 +19,12 @@ int		main(int argc, char **argv)
 
 	(void)argc;
 	(void)argv;
+	lst = 0;
 	ft_bzero(&alloc, sizeof(t_alloc));
+	env_cp(env, &lst);
 	if ((alloc.exectable = make_exectable()) == NULL)
 		return (1);
-	lst = NULL;
-	alloc = set_alloc(lst);
+	set_alloc(&alloc, &lst);
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{

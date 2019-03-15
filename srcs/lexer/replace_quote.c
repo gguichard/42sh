@@ -91,7 +91,7 @@ int			remove_quote(char **s, int *i, t_alloc *alloc)
 		*i += 1;
 	sub = (ft_isquote(quote) == 1) ? ft_strsub(*s, save, *i - save) : NULL;
 	while (sub[x] && quote == '"')
-		x += (sub[x] == '$') ? replace_env_var(&sub, x, alloc->var) : 1;
+		x += (sub[x] == '$') ? replace_env_var(&sub, x, *(alloc->var)) : 1;
 	if (quote == '`')
 	{
 		if (!sub[0])
@@ -111,12 +111,12 @@ int			convert_quote(char **s, t_alloc *alloc)
 	int		i;
 
 	i = 0;
-	expand_home_shortcut(s, alloc->var);
+	expand_home_shortcut(s, *(alloc->var));
 	while (s && (*s)[i])
 	{
 		if ((*s)[i] == '$')
 		{
-			if (replace_env_var(s, i, alloc->var) == -1)
+			if (replace_env_var(s, i, *(alloc->var)) == -1)
 				return (-1);
 		}
 		else if (ft_isquote((*s)[i]) == 1)

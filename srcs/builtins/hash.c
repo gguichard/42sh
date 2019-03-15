@@ -109,5 +109,5 @@ int			hash_builtins(t_ast *elem, t_alloc *alloc)
 	if (has_opt(opts, 'r'))
 		delete_hashentries(alloc->exectable);
 	return (!add_execs_to_hashtable(elem->input + opts->index
-				, alloc->var, alloc->exectable));
+				, *(alloc->var), alloc->exectable));
 }

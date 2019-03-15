@@ -1,0 +1,2 @@
+FOR EACH BUILTINS:
+	- REMOVE t_var and update by t_alloc->var
