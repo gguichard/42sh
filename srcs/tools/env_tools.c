@@ -2,24 +2,34 @@
 #include "builtins.h"
 #include "error.h"
 
+char	*get_key(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i += 1;
+	return (ft_strsub(str, 0, i));
+}
+
+char	*get_value(char *str)
+{
+	int		i;
+	size_t	len;
+
+	i = 0;
+	len = ft_strlen(str);
+	while (str[i] && str[i] != '=')
+		i += 1;
+	return (ft_strsub(str, i + 1, len - i - 1));
+}
+
 t_var	*find_elem_env(t_var *lst, char *key)
 {
 	t_var *tmp;
 
 	tmp = lst;
 	while (tmp && ft_strcmp(key, tmp->key) != 0)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-// REPLACE GET_LAST_ELEM BY INSERT_NEW_ELEM
-// TO SORT ASCII BY INSERTION
-t_var	*get_last_elem_env(t_var *lst)
-{
-	t_var	*tmp;
-
-	tmp = lst;
-	while (tmp && tmp->next)
 		tmp = tmp->next;
 	return (tmp);
 }
@@ -66,16 +76,4 @@ void	add_shlvl(t_var **lst)
 	}
 	else
 		add_elem_env(lst, "SHLVL", "1");
-}
-
-void	display_env(t_var *lst)
-{
-	t_var	*tmp;
-
-	tmp = lst;
-	while (tmp)
-	{
-		ft_printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
-	}
 }
