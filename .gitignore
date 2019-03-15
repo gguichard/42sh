@@ -1,6 +1,9 @@
-obj/
 *.o
-*.dSYM
+*.dSYM/
 42sh
 *.a
 .DS*
+*.d
+.*.swp
+21sh
+a.out
