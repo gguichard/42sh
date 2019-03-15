@@ -55,7 +55,7 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	return (path_exec);
 }
 
-static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env)
+static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
 {
 	if (g_pid == -1)
 		exit(130);
@@ -79,11 +79,14 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	char	*path_exec;
 
 	hashable = 0;
+	child = 0;
 	if (!(path_exec = exec_path(elem, alloc, &hashable)))
 		return (ret_status());
 	convert_lst_tab(alloc->var, &tab_env);
 	if (no_fork == 1 || !(child = fork()))
-		execute_cmd(path_exec, elem, tab_env);
+		execute_cmd(path_exec, elem, tab_env, no_fork);
+	if (child == -1)
+		return (0);
 	g_pid = child;
 	waitpid(child, &(g_ret[0]), 0);
 	g_ret[1] = 1;
