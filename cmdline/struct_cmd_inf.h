@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 14:19:35 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 16:53:30 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct	s_cmdline
 	struct s_prompt	prompt;
 	struct s_input	input;
 	struct winsize	winsize;
+	int				invalidate_size;
 	t_cursor		cursor;
 	t_seq_keys		seq_keys;
 	int				row;

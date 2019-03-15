@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 16:30:48 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 17:08:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,14 @@ static void	reset_sequence(t_seq_keys *keys)
 	keys->offset = 0;
 }
 
-void		handle_sequence_char(t_cmdline *cmdline, const char *seq, char c)
+void		handle_sequence(t_cmdline *cmdline, const char *seq)
 {
 	t_seq	*seqs;
 	int		idx;
 
 	if (seq[cmdline->seq_keys.offset] == '\0')
 	{
+		seqs = get_known_sequences();
 		reset_sequence(&cmdline->seq_keys);
 		idx = 0;
 		while (seqs[idx].fn != NULL)

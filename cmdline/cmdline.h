@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 15:43:49 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 17:06:23 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int				reset_term(void);
 int				update_winsize(t_cmdline *cmdline);
 int				set_cursor_pos(t_cursor *cursor);
 void			go_to_cursor_pos(t_cursor cursor);
+void			clear_after_cursor(t_cursor cursor, struct winsize winsize);
 
 /*
 ** INPUT/OUTPUT.
@@ -45,8 +46,7 @@ int				t_putchar(int c);
 ** ESCAPE SEQUENCES.
 */
 
-void			handle_sequence_char(t_cmdline *cmdline, const char *seq
-		, char c);
+void			handle_sequence(t_cmdline *cmdline, const char *seq);
 const char		*get_sequence(t_cmdline *cmdline, char c);
 
 /*
@@ -86,9 +86,14 @@ int				handle_paste_before_key(t_cmdline *cmdline);
 ** UTILS.
 */
 int				get_rightmost_column(t_cmdline *cmdline, int offset);
-void			go_to_offset(t_cmdline *cmdline, int offset);
+t_cursor		go_to_offset(t_cmdline *cmdline, int offset);
 void			update_visual_select(t_cmdline *cmdline);
 int				vm_copy(t_cmdline *cmdline, int cut_hook);
 int				vm_paste(t_cmdline *cmdline, int paste_after_cursor);
+
+/*
+** SIGNALS.
+*/
+void			handle_sigwinch(int sig);
 
 #endif

@@ -6,16 +6,19 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 16:37:52 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 15:24:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 #include <term.h>
+#include <signal.h>
 #include "cmdline.h"
 
-int	main(int argc, char **argv)
+t_cmdline	*g_cmdline = NULL;
+
+int			main(int argc, char **argv)
 {
 	t_cmdline	cmdline;
 
@@ -23,8 +26,10 @@ int	main(int argc, char **argv)
 	(void)argv;
 	tgetent(NULL, "xterm-256color");
 	ft_memset(&cmdline, 0, sizeof(t_cmdline));
+	g_cmdline = &cmdline;
 	cmdline.saved_col = -1;
 	setup_term();
+	signal(SIGWINCH, handle_sigwinch);
 	update_winsize(&cmdline);
 	cmdline.prompt.type = PROMPT_DEFAULT;
 	ft_printf("blabla");

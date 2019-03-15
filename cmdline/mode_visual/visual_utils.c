@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 14:50:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 20:25:23 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/15 12:12:22 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ void	update_visual_select(t_cmdline *cmdline)
 
 int		vm_copy(t_cmdline *cmdline, int cut_hook)
 {
-	int	off_s;
-	int	off_e;
-	int	off;
+	int			off_s;
+	int			off_e;
+	int			off;
+	t_cursor	new_cursor;
 
 	ft_strdel(&cmdline->visual.clipboard);
 	off_s = ft_min(cmdline->input.offset, cmdline->visual.start_offset);
@@ -52,11 +53,12 @@ int		vm_copy(t_cmdline *cmdline, int cut_hook)
 		ft_memcpy(cmdline->input.buffer + off_s
 				, cmdline->input.buffer + off_e
 				, cmdline->input.size - off_e);
-		go_to_offset(cmdline, off_s);
-		tputs(tgetstr("cr", NULL), 1, t_putchar);
-		tputs(tgetstr("cd", NULL), 1, t_putchar);
 		cmdline->input.offset = off_s;
 		cmdline->input.size -= off;
+		new_cursor = go_to_offset(cmdline, off_s);
+		cmdline->row -= (cmdline->cursor.y - new_cursor.y);
+		cmdline->cursor = new_cursor;
+		clear_after_cursor(new_cursor, cmdline->winsize);
 	}
 	handle_toggle_visual(cmdline);
 	return (1);
