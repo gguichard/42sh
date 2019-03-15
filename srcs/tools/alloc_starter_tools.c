@@ -8,7 +8,7 @@ static t_builtin	*set_tab_builtins(void)
 	t_builtin			*builtins;
 	static char			*lst_built[11] = {"echo", "cd", "exit", "type", "hash", "set",
 	"unset", "export", "jobs", "fg", "bg"};
-	static t_built_fun	lst_function[] = { &echo_builtins, &cd_builtins,
+	static t_built_fun	lst_function[] = { &echo_builtins, &cd_builtins, &exit_builtins,
 		&type_builtins, &hash_builtins, &set_builtins, &unset_builtins,
 		&export_builtins, &job_builtins, &fg_builtins, &bg_builtins };
 	int			i;
@@ -19,7 +19,7 @@ static t_builtin	*set_tab_builtins(void)
 	while (i < 11)
 	{
 		builtins[i].name = lst_built[i];
-		builtins[i].built_fun = &	lst_function[i];
+		builtins[i].built_fun = lst_function[i];
 		i += 1;
 	}
 	builtins[i].name = NULL;

@@ -1,36 +1,17 @@
 #include "shell.h"
+#include "error.h"
 
-int	exec_error(int err, char *files)
+void	exec_file_error(t_error err, char *files)
 {
-	size_t	len;
+	const char	*s;
 
-	(err == -1) ? write(2, "21sh: commande not found: ", 26) : 0;
-	if (err == -1)
+	s = error_to_str(err);
+	if (err == ERRC_UNEXPECTED)
 	{
-		len = ft_strlen(files);
-		write(2, files, len);
+		s = "malloc failed";
+		g_ret[0] = 1;
 	}
-	write(2, "\n", 1);
-	return (127);
-}
-
-int	exec_right_error(int err, char *files, char ***path_all)
-{
-	if (err == 1)
-	{
-		write(2, "21sh: ", 6);
-		write(2, files, ft_strlen(files));
-		write(2, ": no such file or directory\n", 28);
+	ft_dprintf(2, "42sh: %s: %s\n", files, error_to_str(err));
+	if (err == ERRC_CMDNOTFOUND)
 		g_ret[0] = 127;
-	}
-	else if (err == 2)
-	{
-		write(2, "21sh: ", 6);
-		write(2, files, ft_strlen(files));
-		write(2, ": permission denied\n", 20);
-		g_ret[0] = 126;
-	}
-	if (*path_all != NULL)
-		delete_str_tab(*path_all);
-	return (1);
 }

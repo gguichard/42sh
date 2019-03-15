@@ -2,20 +2,22 @@
 #include "parser_lexer.h"
 #include "operator.h"
 
-static int		pipe_exec(t_ast *elem, t_var *lst_env, t_alloc *alloc, int *fd)
+static int		pipe_exec(t_ast *elem, t_alloc *alloc, int *fd)
 {
 	int		ret;
 	t_ast	*tmp;
+	int		no_fork;
 
 	tmp = elem;
 	while (!ft_strcmp("<<", tmp->input[0]))
 		tmp = tmp->left;
 	if (!tmp)
 		exit(1);
+	no_fork = do_not_fork(tmp, alloc);
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	ret = analyzer(tmp, lst_env, alloc);
+	ret = analyzer(tmp, alloc, no_fork);
 	exit(ret);
 }
 
@@ -42,24 +44,24 @@ int				complete_heredoc(t_ast *lst, t_alloc *alloc)
 	return (1);
 }
 
-void			heredoc(t_ast *elem, t_var *lst_env, t_alloc *alloc)
+void			heredoc(t_ast *elem, t_alloc *alloc)
 {
 	int		pid1;
 	int		fd[2];
 	int		pid2;
 
-	if (!elem->heredoc || pipe(fd) == -1)
+	if (g_pid == -1 || !elem->heredoc || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
 		return ;
-	if (!(pid1 = fork()))
+	else if (!pid1)
 		write_pipe(elem, fd);
 	else
 	{
-		g_pid = pid1;
-		if (!(pid2 = fork()))
-			pipe_exec(elem->left, lst_env, alloc, fd);
+		if ((pid2 = fork()) == -1)
+			return ;
+		else if (!pid2)
+			pipe_exec(elem->left, alloc, fd);
 		else
 		{
-			g_pid = pid2;
 			close(fd[1]);
 			close(fd[0]);
 			waitpid(pid1, NULL, 0);

@@ -38,7 +38,7 @@ static void	agreg_type_3(int fd[10], t_ast *elem, t_alloc *alloc)
 		dup2(fd_redir, fd_new);
 	}
 	elem = elem->left;
-	while (ft_is_redir(elem, fd_tmp, alloc, alloc->var) == 1 && elem->left)
+	while (ft_is_redir(elem, fd_tmp, alloc) == 1 && elem->left)
 		elem = elem->left;
 	(elem) ? elem = elem->back : 0;
 	reinit_fd(fd_tmp, alloc);
