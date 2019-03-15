@@ -5,15 +5,14 @@
 
 int		alias_builtins(t_ast *elem, t_alloc *alloc)
 {
-	t_opts	*opts;
+	t_opts	opts;
 
 	(void)alloc;
-	if ((opts = parse_opts(elem->input, "")) == NULL)
-		return (1);
-	if (opts->error != 0)
+	parse_opts(&opts, elem->input, "");
+	if (opts.error != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: alias: -%c: invalid option\n"
-				, opts->error);
+				, opts.error);
 		ft_dprintf(STDERR_FILENO
 				, "42sh: alias: usage: alias [name[=value] ...]\n");
 		return (1);
