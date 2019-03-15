@@ -91,6 +91,7 @@ typedef struct			s_alloc
 	t_var				*var;
 	t_builtin			*builtins;
 	t_hashtable			*exectable;
+	t_hashtable			*aliastable;
 	int					fd[10];
 }						t_alloc;
 

@@ -90,6 +90,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
 		$(PATH_TOOLS)cd_tools.c \
 		$(PATH_HASHTABLE)exectable.c \
+		$(PATH_HASHTABLE)aliastable.c \
 		$(PATH_HASHTABLE)hashtable.c \
 		$(PATH_HASHTABLE)hashtable_delete.c \
 		$(PATH_HASHTABLE)hashtable_utils.c \
