@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "builtins.h"
 #include "error.h"
+#include "exectable.h"
 #include "search_exec.h"
 #include "check_path.h"
 #include "hashtable.h"
@@ -10,7 +11,6 @@ static char	*srch_exec(t_var *lst_env, t_ast *elem, int *hashable)
 	char	*s;
 	t_error	error;
 
-	s = 0;
 	s = search_exec(lst_env, elem->input[0], &error);
 	if (error != ERRC_NOERROR)
 	{
@@ -35,7 +35,7 @@ static char	*check_right_alias(char *alias)
 
 static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 {
-	t_hashentry	*alias;
+	const char	*alias;
 	char		*path_exec;
 	t_error		error;
 
@@ -48,10 +48,10 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 		else
 			path_exec = elem->input[0];
 	}
-	else if ((alias = get_hashentry(alloc->exectable, elem->input[0])))
-		path_exec = check_right_alias((char *)alias->value);
+	else if ((alias = get_exec_path(alloc->exectable, elem->input[0], 1)))
+		path_exec = ft_strdup(check_right_alias((char *)alias));
 	else
-		path_exec = srch_exec(alloc->var, elem, hashable);
+		path_exec = srch_exec(*(alloc->var), elem, hashable);
 	return (path_exec);
 }
 
@@ -82,7 +82,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	child = 0;
 	if (!(path_exec = exec_path(elem, alloc, &hashable)))
 		return (ret_status());
-	convert_lst_tab(alloc->var, &tab_env);
+	convert_lst_tab(*(alloc->var), &tab_env);
 	if (no_fork == 1 || !(child = fork()))
 		execute_cmd(path_exec, elem, tab_env, no_fork);
 	if (child == -1)
@@ -91,7 +91,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	waitpid(child, &(g_ret[0]), 0);
 	g_ret[1] = 1;
 	if (hashable == 1)
-		add_hashentry(alloc->exectable, elem->input[0], path_exec, sizeof(path_exec));
+		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);
 	if (ft_strcmp(path_exec, elem->input[0]))
 		ft_memdel((void **)&path_exec);

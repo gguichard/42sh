@@ -12,6 +12,8 @@ t_var	*find_elem_env(t_var *lst, char *key)
 	return (tmp);
 }
 
+// REPLACE GET_LAST_ELEM BY INSERT_NEW_ELEM
+// TO SORT ASCII BY INSERTION
 t_var	*get_last_elem_env(t_var *lst)
 {
 	t_var	*tmp;
@@ -22,32 +24,27 @@ t_var	*get_last_elem_env(t_var *lst)
 	return (tmp);
 }
 
-void	add_elem_env(t_var *lst, char *key, char *value)
+void	add_elem_env(t_var **lst, char *key, char *value)
 {
 	t_var	*new;
-	t_var	*last;
 
 	if (!(new = (t_var*)malloc(sizeof(t_var))))
 		ft_exit_malloc();
-	last = get_last_elem_env(lst);
 	if (!(new->key = ft_strdup(key)))
 		ft_exit_malloc();
 	if (!(new->value = ft_strdup(value)))
 		ft_exit_malloc();
 	new->next = NULL;
 	new->is_env = 1;
-	if (!lst)
-		lst = new;
-	else
-		last->next = new;
+	insert_new_elem(lst, new);
 }
 
-void	add_shlvl(t_var *lst)
+void	add_shlvl(t_var **lst)
 {
 	t_var	*shlvl;
 	int		lvl;
 
-	if ((shlvl = find_elem_env(lst, "SHLVL")) != NULL)
+	if ((shlvl = find_elem_env(*lst, "SHLVL")) != NULL)
 	{
 		lvl = (shlvl->value[0] == '-') ? 1 : 0;
 		while (ft_isdigit(shlvl->value[lvl]) == 1)
