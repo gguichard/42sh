@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 00:55:54 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 00:57:39 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_seq	*get_known_sequences(void)
 		{"j", MODE_VISUAL, handle_cursor_down},
 		{"k", MODE_VISUAL, handle_cursor_up},
 		{"b", MODE_VISUAL, handle_prev_word},
+		{"h", MODE_VISUAL, handle_move_left},
 		{"l", MODE_VISUAL, handle_move_right},
 		{"w", MODE_VISUAL, handle_next_word},
 		{"gg", MODE_VISUAL, handle_home_key},
