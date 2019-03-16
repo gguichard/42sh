@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:35:45 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 12:44:58 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 00:28:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	handle_line_start(t_cmdline *cmdline)
 {
-	cmdline->saved_col = INT_MIN;
+	cmdline->saved_col = 0;
 	if (cmdline->cursor.x > 0 && (cmdline->row != 0
 				|| cmdline->cursor.x > cmdline->prompt.offset))
 	{

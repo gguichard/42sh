@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 21:43:51 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 19:15:37 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 00:28:57 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	handle_home_key(t_cmdline *cmdline)
 {
 	if ((cmdline->cursor.y - cmdline->row) <= 0)
 		return (0);
-	cmdline->saved_col = INT_MIN;
+	cmdline->saved_col = 0;
 	cmdline->input.offset = 0;
 	cmdline->cursor.x = cmdline->prompt.offset;
 	cmdline->cursor.y -= cmdline->row;
