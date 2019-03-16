@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/16 17:57:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 00:14:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,53 +15,6 @@
 #include <unistd.h>
 #include <term.h>
 #include "cmdline.h"
-
-static void	print_line_by_line(t_cmdline *cmdline, t_cursor end_cursor)
-{
-	static const char	*ce_tcap = NULL;
-	const char			*buffer;
-	const char			*eol;
-	int					buff_len;
-	int					offset;
-
-	if (ce_tcap == NULL)
-		ce_tcap = tgetstr("ce", NULL);
-	buffer = cmdline->input.buffer + cmdline->input.offset;
-	buff_len = cmdline->input.size - cmdline->input.offset;
-	while (buff_len > 0)
-	{
-		eol = ft_memchr(buffer, '\n', buff_len);
-		offset = (eol == NULL) ? buff_len : (eol - buffer);
-		end_cursor.x += offset;
-		end_cursor.y += end_cursor.x / ft_max(1, cmdline->winsize.ws_col);
-		end_cursor.x %= ft_max(1, cmdline->winsize.ws_col);
-		write(STDOUT_FILENO, buffer, offset);
-		tputs(ce_tcap, 1, t_putchar);
-		if (eol != NULL)
-		{
-			write(STDOUT_FILENO, "\n", 1);
-			end_cursor.x = 0;
-			end_cursor.y += 1;
-			offset++;
-		}
-		buffer += offset;
-		buff_len -= offset;
-	}
-	if (end_cursor.y == cmdline->winsize.ws_row)
-	{
-		tputs(tgetstr("sf", NULL), 1, t_putchar);
-		cmdline->cursor.y -= 1;
-	}
-}
-
-void		update_cmdline_after_offset(t_cmdline *cmdline)
-{
-	if (cmdline->input.offset != cmdline->input.size)
-	{
-		print_line_by_line(cmdline, cmdline->cursor);
-		go_to_cursor_pos(cmdline->cursor);
-	}
-}
 
 static void	write_char_in_cmdline(t_cmdline *cmdline, char c)
 {
