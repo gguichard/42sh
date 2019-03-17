@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 18:57:54 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 00:36:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 #include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
-
-static void	update_cursor_next_line(t_cursor *end_cursor)
-{
-	write(STDOUT_FILENO, "\n", 1);
-	end_cursor->x = 0;
-	end_cursor->y += 1;
-}
 
 static void	print_mbstr(const wchar_t *buffer, int len)
 {
@@ -56,11 +49,30 @@ static void	update_end_cursor_print(t_cmdline *cmdline, t_cursor *end_cursor
 
 	if (ce_tcap == NULL)
 		ce_tcap = tgetstr("ce", NULL);
-	end_cursor->x += offset;
-	end_cursor->y += end_cursor->x / ft_max(1, cmdline->winsize.ws_col);
-	end_cursor->x %= ft_max(1, cmdline->winsize.ws_col);
-	print_mbstr(buffer, offset);
+	if (offset > 0)
+	{
+		end_cursor->x += offset;
+		end_cursor->y += end_cursor->x / ft_max(1, cmdline->winsize.ws_col);
+		end_cursor->x %= ft_max(1, cmdline->winsize.ws_col);
+		print_mbstr(buffer, offset);
+	}
 	tputs(ce_tcap, 1, t_putchar);
+}
+
+static void	fix_outbound_cursor(t_cmdline *cmdline, t_cursor *end_cursor)
+{
+	int	scroll_up;
+
+	if (end_cursor->y >= cmdline->winsize.ws_row)
+	{
+		scroll_up = (end_cursor->y - cmdline->winsize.ws_row) + 1;
+		cmdline->cursor.y -= scroll_up;
+		if (end_cursor->x == 0)
+		{
+			tputs(tgetstr("cr", NULL), 1, t_putchar);
+			tputs(tgetstr("sf", NULL), 1, t_putchar);
+		}
+	}
 }
 
 static void	print_line_by_line(t_cmdline *cmdline, t_cursor end_cursor)
@@ -79,17 +91,20 @@ static void	print_line_by_line(t_cmdline *cmdline, t_cursor end_cursor)
 		update_end_cursor_print(cmdline, &end_cursor, buffer, offset);
 		if (eol != NULL)
 		{
-			update_cursor_next_line(&end_cursor);
+			write(STDOUT_FILENO, "\n", 1);
+			if (offset != 0 && end_cursor.x == 0)
+			{
+				tputs(tgetstr("ce", NULL), 1, t_putchar);
+				write(STDOUT_FILENO, "\n", 1);
+			}
+			end_cursor.x = 0;
+			end_cursor.y += 1;
 			offset++;
 		}
 		buffer += offset;
 		buff_len -= offset;
 	}
-	if (end_cursor.y == cmdline->winsize.ws_row)
-	{
-		tputs(tgetstr("sf", NULL), 1, t_putchar);
-		cmdline->cursor.y -= 1;
-	}
+	fix_outbound_cursor(cmdline, &end_cursor);
 }
 
 void		update_cmdline_after_offset(t_cmdline *cmdline)
