@@ -93,7 +93,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);
-	if (ft_strcmp(path_exec, elem->input[0]))
+	if (!ft_strchr(elem->input[0], '/'))
 		ft_memdel((void **)&path_exec);
 	return (ret_status());
 }
