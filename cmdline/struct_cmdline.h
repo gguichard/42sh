@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   struct_cmd_inf.h                                   :+:      :+:    :+:   */
+/*   struct_cmdline.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 22:48:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 16:46:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCT_CMD_INF_H
-# define STRUCT_CMD_INF_H
+#ifndef STRUCT_CMDLINE_H
+# define STRUCT_CMDLINE_H
 
 # include <sys/ioctl.h>
+# include <wchar.h>
 
 enum				e_prompt
 {
@@ -33,7 +34,7 @@ typedef struct		s_cursor
 
 struct				s_input
 {
-	char			*buffer;
+	wchar_t			*buffer;
 	int				capacity;
 	int				size;
 	int				offset;
@@ -63,7 +64,7 @@ struct				s_visual
 {
 	int				toggle;
 	int				start_offset;
-	char			*clipboard;
+	wchar_t			*clipboard;
 };
 
 typedef struct		s_cmdline
@@ -81,7 +82,7 @@ typedef struct		s_cmdline
 
 typedef struct		s_seq
 {
-	char			*str;
+	const char		*str;
 	t_seq_mode		mode;
 	int				(*fn)(t_cmdline *cmdline);
 }					t_seq;

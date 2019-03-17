@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 22:49:57 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 17:23:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define CMDLINE_H
 
 # include <sys/ioctl.h>
-# include "struct_cmd_inf.h"
+# include <wchar.h>
+# include "struct_cmdline.h"
 
 # define INPUT_SIZE_INCR 1024
 
@@ -34,7 +35,7 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 */
 
 void		update_cmdline_after_offset(t_cmdline *cmdline);
-void		add_char_to_input(t_cmdline *cmdline, char c);
+void		add_char_to_input(t_cmdline *cmdline, wint_t c);
 
 void		print_prompt(t_cmdline *cmdline);
 void		read_input(t_cmdline *cmdline);
@@ -70,7 +71,6 @@ int			handle_line_end(t_cmdline *cmdline);
 */
 int			handle_backspace_key(t_cmdline *cmdline);
 int			handle_delete_key(t_cmdline *cmdline);
-int			handle_test_newline(t_cmdline *cmdline);
 
 /*
 ** VISUAL MODE.

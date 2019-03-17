@@ -6,13 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 00:16:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 16:49:39 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
 
@@ -24,7 +25,7 @@ static void	update_cursor_next_line(t_cursor *end_cursor)
 }
 
 static void	update_end_cursor_print(t_cmdline *cmdline, t_cursor *end_cursor
-		, int offset, const char *buffer)
+		, int offset, const wchar_t *buffer)
 {
 	static const char	*ce_tcap = NULL;
 
@@ -33,22 +34,22 @@ static void	update_end_cursor_print(t_cmdline *cmdline, t_cursor *end_cursor
 	end_cursor->x += offset;
 	end_cursor->y += end_cursor->x / ft_max(1, cmdline->winsize.ws_col);
 	end_cursor->x %= ft_max(1, cmdline->winsize.ws_col);
-	write(STDOUT_FILENO, buffer, offset);
+	write(STDOUT_FILENO, buffer, offset * sizeof(wint_t));
 	tputs(ce_tcap, 1, t_putchar);
 }
 
 static void	print_line_by_line(t_cmdline *cmdline, t_cursor end_cursor)
 {
-	const char	*buffer;
-	const char	*eol;
-	int			buff_len;
-	int			offset;
+	const wchar_t	*buffer;
+	const wchar_t	*eol;
+	int				buff_len;
+	int				offset;
 
 	buffer = cmdline->input.buffer + cmdline->input.offset;
 	buff_len = cmdline->input.size - cmdline->input.offset;
 	while (buff_len > 0)
 	{
-		eol = ft_memchr(buffer, '\n', buff_len);
+		eol = ft_wstrchr(buffer, L'\n');
 		offset = (eol == NULL) ? buff_len : (eol - buffer);
 		update_end_cursor_print(cmdline, &end_cursor, offset, buffer);
 		if (eol != NULL)

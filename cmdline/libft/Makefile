@@ -6,7 +6,7 @@
 #    By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/29 17:35:18 by gguichar          #+#    #+#              #
-#    Updated: 2018/12/20 21:33:25 by gguichar         ###   ########.fr        #
+#    Updated: 2019/03/17 16:51:10 by gguichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC		=	ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c \
 			ft_memmove.c ft_memchr.c ft_memcmp.c ft_strlen.c \
 			ft_strnlen.c ft_strdup.c ft_strndup.c ft_strcpy.c \
 			ft_strncpy.c ft_strcat.c ft_strncat.c ft_strlcat.c \
-			ft_strchr.c ft_strrchr.c ft_strstr.c ft_strnstr.c \
+			ft_strchr.c ft_wstrchr.c ft_strrchr.c ft_strstr.c ft_strnstr.c \
 			ft_strcmp.c ft_strncmp.c ft_simple_atoi.c ft_atoi.c ft_atoi_base.c \
 			ft_strtol.c ft_isalpha.c ft_isdigit.c ft_isalnum.c \
 			ft_isascii.c ft_isprint.c ft_toupper.c ft_tolower.c \

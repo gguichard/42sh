@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 01:30:28 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 17:23:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static const t_seq	g_seqs[] = {
 	{"\033[1;2C", MODE_COMMON, handle_next_word},
 	{"\033[3~", MODE_INSERT, handle_delete_key},
 	{"\177", MODE_INSERT, handle_backspace_key},
-	{"\033\012", MODE_INSERT, handle_test_newline},
 	{"\033[H", MODE_COMMON, handle_home_key},
 	{"\033[F", MODE_COMMON, handle_end_key},
 	{"\033[1;2A", MODE_COMMON, handle_cursor_up},
@@ -51,7 +50,7 @@ static const t_seq	g_seqs[] = {
 
 static void			reset_sequence(t_seq_keys *keys)
 {
-	ft_memset(keys->buffer, 0, 8);
+	ft_memset(keys->buffer, 0, sizeof(keys->buffer));
 	keys->size = 0;
 	keys->offset = 0;
 }
