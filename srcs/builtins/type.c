@@ -12,17 +12,18 @@ int			type_builtins(t_ast *elem, t_alloc *alloc)
 	int		i;
 	int		ret;
 	char	*path;
+	t_error	error;
 
-	i = 1;
+	i = 0;
 	ret = 0;
-	while (elem->input[i++])
+	while (elem->input[++i])
 		if (access(elem->input[i], F_OK) == 0 && access(elem->input[i], X_OK) == 0)
 			ret = ft_printf("%s is %s\n", elem->input[i], elem->input[i]);
 		else if ((path = (char *)get_exec_path(alloc->exectable, elem->input[i], 0)))
 			ret = ft_printf("%s is hashed (%s)\n", elem->input[i], path);
 		else if (is_builtins(alloc, elem->input[i]) == 1)
 			ret = ft_printf("%s is a shell builtin\n", elem->input[i]);
-		else if ((path = search_exec(*(alloc->var), elem->input[i], 0)))
+		else if ((path = search_exec(*(alloc->var), elem->input[i], &error)))
 		{
 			ret = ft_printf("%s is %s\n", elem->input[i], path);
 			ft_strdel(&path);
@@ -34,3 +35,7 @@ int			type_builtins(t_ast *elem, t_alloc *alloc)
 		}
 	return ((ret != 1 && ret != -1) ? 0 : 1);
 }
+
+// POUT T_ERROR QUI VA DANS SEARCH_EXEC
+// JE SAIS PAS SI IL FAUT LE SETTER DANS LA FONCTION / LE RECUPERER D'AVANT
+// OU LE RETOURNER
