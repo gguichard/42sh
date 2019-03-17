@@ -7,6 +7,7 @@ void		expand_home_shortcut(char **s, t_var *lst_env)
 	char	*dir;
 
 	dir = 0;
+
 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
 	{
 		dir = ft_strjoin(get_env_value(lst_env, "$HOME"),
@@ -112,7 +113,7 @@ int			convert_quote(char **s, t_alloc *alloc)
 
 	i = 0;
 	expand_home_shortcut(s, *(alloc->var));
-	while (s && (*s)[i])
+	while (s && (*s) && (*s)[i])
 	{
 		if ((*s)[i] == '$')
 		{

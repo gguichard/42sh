@@ -52,21 +52,24 @@ static void		sort_ast(t_ast *lst, t_ast **sort)
 	}
 }
 
-static void		clean_tab_and_ast(char **input, t_ast *lst)
+static t_ast	*clean_tab_and_ast(char **input, t_ast **lst)
 {
 	delete_str_tab(input);
 	del_lst_ast(lst);
+	return (NULL);
 }
 
-void			parser(char **input, t_ast *lst, t_alloc *alloc)
+t_ast			*parser(char **input, t_alloc *alloc)
 {
 	int		i;
 	t_ast	*sort;
+	t_ast	*lst;
 
+	lst = NULL;
 	if (ft_error_parse_redir(input) == 1)
 	{
 		g_ret[0] = 1;
-		return ;
+		return (NULL);
 	}
 	int x = 0;
 	ft_printf("TEST:\n");
@@ -77,19 +80,20 @@ void			parser(char **input, t_ast *lst, t_alloc *alloc)
 	}
 	fill_ast(input, &lst, 0, -1);
 	if (check_error_lst(lst) == 1)
-		return (clean_tab_and_ast(input, lst));
+		return (clean_tab_and_ast(input, &lst));
 	sort = lst;
 	while (sort)
 	{
 		i = -1;
 		while (sort->input[++i])
 			if (convert_quote(&(sort->input[i]), alloc) == -1)
-				return (clean_tab_and_ast(input, lst));
+				return (clean_tab_and_ast(input, &lst));
 		sort = sort->next;
 	}
 	sort_ast(lst, &sort);
 	alloc->ast = lst;
-	analyzer(sort, alloc, 0);
+	return (sort);
+	// analyzer(sort, alloc, 0);
 
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc, 0) : 0;
 

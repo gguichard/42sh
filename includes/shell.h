@@ -101,7 +101,7 @@ typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
 
 void	delete_str_tab(char **tab_str);
 void	del_lst_env(t_var **lst);
-void	del_lst_ast(t_ast *lst);
+void	del_lst_ast(t_ast **lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
 void	set_alloc(t_alloc *al, t_var **lst);

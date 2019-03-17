@@ -20,11 +20,12 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	split_all_cmd = lexer(line, alloc);
 	while (split_all_cmd[i])
 	{
-		parser(split_all_cmd[i], sort_ast, alloc);
+		sort_ast = parser(split_all_cmd[i], alloc);
+		analyzer(sort_ast, alloc, 0);
 		// read_sort_descent(sort_ast, 1);
 		// reinit_print(alloc->ast, 1);
 		delete_str_tab(split_all_cmd[i]);
-		del_lst_ast(alloc->ast);
+		del_lst_ast(&(alloc->ast));
 		i += 1;
 	}
 }
