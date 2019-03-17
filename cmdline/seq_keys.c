@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 01:22:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/17 01:30:28 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static const t_seq	g_seqs[] = {
 	{"G", MODE_VISUAL, handle_end_key},
 	{"0", MODE_VISUAL, handle_line_start},
 	{"$", MODE_VISUAL, handle_line_end},
-	{":q", MODE_VISUAL, handle_toggle_visual},
+	{":q\012", MODE_VISUAL, handle_toggle_visual},
 	{"\033\033", MODE_VISUAL, handle_toggle_visual},
 	{NULL, MODE_COMMON, NULL}
 };
