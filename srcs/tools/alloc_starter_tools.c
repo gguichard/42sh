@@ -37,6 +37,8 @@ void				set_alloc(t_alloc *al, t_var **lst)
 	while (x < 10)
 		al->fd[x++] = -1;
 	al->builtins = set_tab_builtins();
-	if (!(al->exectable =  make_exectable()))
+	if ((al->exectable = make_exectable()) == NULL)
+		ft_exit_malloc();
+	if ((al->aliastable = make_def_hashtable()) == NULL)
 		ft_exit_malloc();
 }

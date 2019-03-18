@@ -8,7 +8,7 @@ int	is_builtins(t_alloc *alloc, const char *built_name)
 	i = 0;
 	while (alloc->builtins[i].name)
 	{
-		if (ft_strequ(alloc->builtins[i].name, built_name) == 0)
+		if (ft_strequ(alloc->builtins[i].name, built_name) == 1)
 			return (1);
 		i += 1;
 	}

@@ -34,10 +34,14 @@ static int	lexer_back_quote(char *input, t_alloc *alloc)
 {
 	int		i;
 	char	**lexer;
+	char	***split_cmd;
 	t_ast	*lst;
 
+
+	(void)alloc;
 	i = 0;
 	lexer = NULL;
+	split_cmd = NULL;
 	lst = NULL;
 	// if (!check_opening_quote(&input, alloc) || !check_cmd_pipe(&input, alloc))
 	// {
@@ -51,7 +55,7 @@ static int	lexer_back_quote(char *input, t_alloc *alloc)
 		return (0);
 	}
 	// set_terminal(1);
-	read_lexer(lexer, lst, alloc);
+	read_lexer(lexer, split_cmd);
 	// set_terminal(0);
 	ft_memdel((void **)&input);
 	return (1);

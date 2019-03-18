@@ -10,6 +10,28 @@
 // #include "get_next_line.h"
 // #include "printf.h"
 
+static void	lexer_parser(char *line, t_alloc *alloc)
+{
+	char	***split_all_cmd;
+	t_ast	*sort_ast;
+	int		i;
+
+	i = 0;
+	sort_ast = NULL;
+	split_all_cmd = lexer(line, alloc);
+	while (split_all_cmd[i])
+	{
+		sort_ast = parser(split_all_cmd[i], alloc);
+		analyzer(sort_ast, alloc, 0);
+		// read_sort_descent(sort_ast, 1);
+		// reinit_print(alloc->ast, 1);
+		delete_str_tab(split_all_cmd[i]);
+		del_lst_ast(&(alloc->ast));
+		i += 1;
+	}
+}
+
+
 //TODO faire un vrai main
 int		main(int argc, char **argv, char **env)
 {
@@ -23,19 +45,17 @@ int		main(int argc, char **argv, char **env)
 	lst = 0;
 	ft_bzero(&alloc, sizeof(t_alloc));
 	env_cp(env, &lst);
-	if ((alloc.exectable = make_exectable()) == NULL)
-		return (1);
-	if ((alloc.aliastable = make_def_hashtable()) == NULL)
-		return (1);
 	set_alloc(&alloc, &lst);
 	write(1, "> ", 2);
 	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
 	{
 		//parse line etc;
-		lexer(line, &alloc);
+		lexer_parser(line, &alloc);
+		// lexer(line, &alloc);
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}
+	del_alloc(&alloc);
 	ft_printf("GNL ret : %d\n", gnl_ret);
 	return (0);
 }

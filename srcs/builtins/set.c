@@ -16,7 +16,8 @@ int	set_builtins(t_ast *elem, t_alloc *alloc)
 		return (error_set(elem->input[1]));
 	while (tmp)
 	{
-		ft_printf("%s=%s\n", tmp->key, tmp->value);
+		if (tmp->value)
+			ft_printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 	return (0);
