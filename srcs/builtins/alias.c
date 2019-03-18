@@ -56,8 +56,9 @@ static int	print_aliastable(t_hashtable *aliastable)
 
 int		add_or_print_aliases(char **params, t_hashtable *aliastable)
 {
-	char	*equ_pos;
-	int		no_error;
+	const char	*error_msg;
+	char		*equ_pos;
+	int			no_error;
 
 	no_error = 1;
 	while (*params != NULL)
@@ -69,8 +70,11 @@ int		add_or_print_aliases(char **params, t_hashtable *aliastable)
 		else
 		{
 			*equ_pos = '\0';
-			no_error = (set_alias_if_valid_and_print_err(aliastable, *params
-						, equ_pos + 1) && no_error);
+			no_error = (set_alias_if_valid(aliastable, *params, equ_pos + 1
+						, &error_msg) && no_error);
+			if (error_msg != NULL)
+				ft_dprintf(STDERR_FILENO, "42sh: alias: %s: %s\n", *params
+						, error_msg);
 		}
 		++params;
 	}
