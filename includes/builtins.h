@@ -8,6 +8,7 @@ int		echo_builtins(t_ast *elem, t_alloc *alloc);
 int		exit_builtins(t_ast *elem, t_alloc *alloc);
 int		hash_builtins(t_ast *elem, t_alloc *alloc);
 int		alias_builtins(t_ast *elem, t_alloc *alloc);
+int		unalias_builtins(t_ast *elem, t_alloc *alloc);
 int		type_builtins(t_ast *elem, t_alloc *alloc);
 int		set_builtins(t_ast *elem, t_alloc *alloc);
 int		unset_builtins(t_ast *elem, t_alloc *alloc);

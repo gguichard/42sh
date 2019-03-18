@@ -61,6 +61,12 @@ int				replace_hashentry(t_hashtable *hashtable, const char *key
 		, const void *value, size_t value_size);
 
 /*
+** Supprime et free l'element ayant pour clef key de la hashtable. Retourne 1
+** si l'element existait et la suppression a bien eu lieu, 0 sinon.
+*/
+int				remove_hashentry(t_hashtable *hashtable, const char *key);
+
+/*
 ** Free l'integralite des elements de la hashtable ainsi que la hashtable
 ** elle-meme.
 */
