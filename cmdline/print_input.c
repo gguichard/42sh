@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 00:36:24 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 23:08:17 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,9 @@ static void	print_line_by_line(t_cmdline *cmdline, t_cursor end_cursor)
 		update_end_cursor_print(cmdline, &end_cursor, buffer, offset);
 		if (eol != NULL)
 		{
-			write(STDOUT_FILENO, "\n", 1);
 			if (offset != 0 && end_cursor.x == 0)
-			{
-				tputs(tgetstr("ce", NULL), 1, t_putchar);
-				write(STDOUT_FILENO, "\n", 1);
-			}
+				print_go_next_line();
+			write(STDOUT_FILENO, "\n", 1);
 			end_cursor.x = 0;
 			end_cursor.y += 1;
 			offset++;

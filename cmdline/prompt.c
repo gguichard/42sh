@@ -6,25 +6,27 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:47:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/14 12:27:51 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 20:28:01 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "cmdline.h"
 
-void	print_prompt(t_cmdline *cmdline)
+const char	*get_prompt(t_cmdline *cmdline)
 {
 	if (cmdline->prompt.type == PROMPT_DEFAULT)
-		ft_printf("prompt> ");
+		return ("prompt> ");
 	else if (cmdline->prompt.type == PROMPT_BACKSLASH)
-		ft_printf("> ");
+		return ("> ");
 	else if (cmdline->prompt.type == PROMPT_QUOTE)
-		ft_printf("quote> ");
+		return ("quote> ");
 	else if (cmdline->prompt.type == PROMPT_DQUOTE)
-		ft_printf("dquote> ");
+		return ("dquote> ");
 	else if (cmdline->prompt.type == PROMPT_BRACKET)
-		ft_printf("bracket> ");
+		return ("bracket> ");
 	else if (cmdline->prompt.type == PROMPT_HEREDOC)
-		ft_printf("heredoc> ");
+		return ("heredoc> ");
+	else
+		return ("?> ");
 }

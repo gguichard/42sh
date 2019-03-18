@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 15:24:49 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 20:29:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,9 @@ int			main(int argc, char **argv)
 	setup_term();
 	signal(SIGWINCH, handle_sigwinch);
 	update_winsize(&cmdline);
-	cmdline.prompt.type = PROMPT_DEFAULT;
 	ft_printf("blabla");
-	print_prompt(&cmdline);
-	set_cursor_pos(&cmdline.cursor);
-	cmdline.prompt.offset = cmdline.cursor.x;
-	read_input(&cmdline);
+	cmdline.prompt.type = PROMPT_DEFAULT;
+	read_input(&cmdline, get_prompt(&cmdline));
 	reset_term();
 	free(cmdline.input.buffer);
 	free(cmdline.visual.clipboard);

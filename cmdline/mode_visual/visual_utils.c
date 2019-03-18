@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 14:50:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 15:51:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 22:08:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <wchar.h>
-#include <term.h>
 #include "cmdline.h"
-
-static void	print_visual_select(t_cmdline *cmdline, int off_s, int off_e)
-{
-	go_to_offset(cmdline, off_s);
-	if (cmdline->visual.toggle)
-		tputs(tgetstr("mr", NULL), 1, t_putchar);
-	write(STDOUT_FILENO, cmdline->input.buffer + off_s
-			, (off_e - off_s) * sizeof(wint_t));
-	if (cmdline->visual.toggle)
-		tputs(tgetstr("me", NULL), 1, t_putchar);
-}
-
-void		update_visual_select(t_cmdline *cmdline)
-{
-	static int	old_off_s = -1;
-	static int	old_off_e = -1;
-	int			off_s;
-	int			off_e;
-
-	off_s = ft_min(cmdline->visual.start_offset, cmdline->input.offset);
-	off_e = ft_max(cmdline->visual.start_offset, cmdline->input.offset);
-	if (!cmdline->visual.toggle)
-	{
-		old_off_s = -1;
-		old_off_e = -1;
-	}
-	else
-	{
-		if (old_off_s != -1 && old_off_e != -1)
-		{
-			go_to_offset(cmdline, old_off_s);
-			write(STDOUT_FILENO, cmdline->input.buffer + old_off_s
-					, (old_off_e - old_off_s) * sizeof(wint_t));
-		}
-		old_off_s = off_s;
-		old_off_e = off_e;
-	}
-	print_visual_select(cmdline, off_s, off_e);
-	go_to_cursor_pos(cmdline->cursor);
-}
 
 static void	vm_cut_hook(t_cmdline *cmdline, int off_s, int off_e, int off)
 {

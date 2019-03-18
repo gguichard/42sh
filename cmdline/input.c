@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 13:07:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 20:33:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,16 @@ static wint_t	get_full_unichar(unsigned char input)
 	return (unichar);
 }
 
-void			read_input(t_cmdline *cmdline)
+void			read_input(t_cmdline *cmdline, const char *prompt)
 {
 	unsigned char	input;
 	const char		*seq;
 	wint_t			unichar;
 
+	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
+	set_cursor_pos(&cmdline->cursor);
+	cmdline->prompt.str = prompt;
+	cmdline->prompt.offset = cmdline->cursor.x;
 	while (read(STDIN_FILENO, &input, sizeof(char)) && input != 4)
 	{
 		if ((seq = get_sequence(cmdline, input)) != NULL)

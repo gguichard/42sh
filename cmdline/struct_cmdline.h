@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 10:33:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 20:26:47 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct		s_seq_keys
 struct				s_prompt
 {
 	enum e_prompt	type;
+	const char		*str;
 	int				offset;
 };
 
