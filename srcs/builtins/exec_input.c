@@ -55,11 +55,10 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	return (path_exec);
 }
 
-static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
+void		execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
 {
 	if (g_pid == -1)
-		exit(130);
-	g_in_exec = 1;
+		exit(1);
 	execve(path_exec, elem->input, tab_env);
 	ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
 	if (no_fork == 1)
@@ -88,7 +87,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	if (child == -1)
 		return (0);
 	g_pid = child;
-	waitpid(child, &alloc->ret_val, 0);
+	waitpid(child, &alloc->ret_val, WUNTRACED);
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);

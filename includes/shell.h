@@ -9,6 +9,8 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <fcntl.h>
+# include <signal.h>
+# include <sys/wait.h>
 # include "../libft/includes/get_next_line.h"
 # include "../libft/includes/libft.h"
 # include "../libft/includes/printf.h"
@@ -96,6 +98,14 @@ typedef struct			s_alloc
 
 typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
 
+typedef struct			s_process
+{
+	char				**input;
+	int					pid;
+	int					gpid;
+	int					pos;
+}						t_process;
+
 /*
 ************************************ TOOLS *************************************
 */
@@ -120,11 +130,7 @@ void	reinit_print(t_ast *lst, int active);
 *********************************** GLOBALS ***********************************
 */
 
-int						g_in_exec;
-int						g_pid;
-int						g_ret[2];
-int						g_resize;
-char					*g_clip;
 int						p_debug;
+t_list					*g_jobs;
 
 #endif

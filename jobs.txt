@@ -1,0 +1,6 @@
+plan:
+	-une commande = un grp process setpgid
+	-ajout du process a la list
+	-quand SIGTSTP stop l'actuel process donc check pos dans la list pour voir qui est en front
+	-quand fg ou bg, SIGCONT au process en debut de list, pour fg waitpid
+	-jobs juste display la list
