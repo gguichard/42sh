@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 17:23:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 10:34:20 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "struct_cmdline.h"
 
 # define INPUT_SIZE_INCR 1024
+# define INPUT_MAX_CAPACITY 8192
 
 /*
 ** TERM INIT/MISC.

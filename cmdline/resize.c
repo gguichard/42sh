@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:20:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 16:57:23 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:01:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 extern t_cmdline	*g_cmdline;
 
-void				handle_sigwinch(int sig)
-{
-	(void)sig;
-	g_cmdline->invalidate_size = 1;
-}
-
-void				refresh_winsize(t_cmdline *cmdline)
+static void	refresh_winsize(t_cmdline *cmdline)
 {
 	int	row;
 	int	col;
@@ -44,4 +38,10 @@ void				refresh_winsize(t_cmdline *cmdline)
 		offset++;
 	}
 	cmdline->row = row;
+}
+
+void		handle_sigwinch(int sig)
+{
+	(void)sig;
+	refresh_winsize(g_cmdline);
 }
