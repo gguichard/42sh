@@ -15,7 +15,7 @@ static t_builtin	*set_tab_builtins(void)
 	int			i;
 
 	i = 0;
-	if (!(builtins = (t_builtin *)malloc(sizeof(t_builtin) * 12)))
+	if (!(builtins = (t_builtin *)malloc(sizeof(t_builtin) * 14)))
 		ft_exit_malloc();
 	while (i < 13)
 	{
