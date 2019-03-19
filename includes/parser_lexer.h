@@ -76,6 +76,8 @@ void	ft_custom_memmove(char *dst, char *src, size_t len);
 *********************************** AST TOOLS **********************************
 */
 
+void			sort_ast(t_ast *lst, t_ast **sort);
+
 
 void	get_last_index_split(int *i, char *s, int *wd);
 int		get_last_index(int *i, char *s, int *save, char **input);

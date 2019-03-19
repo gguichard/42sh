@@ -20,7 +20,7 @@
 
 # define LOGIC		4
 # define OPERATOR	3
-// # define AGREG		2
+# define AGREG		2
 # define REDIR		2
 # define HEREDOC	1
 # define CMD		0

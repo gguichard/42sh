@@ -27,28 +27,27 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	lst_tk = NULL;
 	split_cmd = NULL;
 	scmd_init(&scmd, line);
-
 	split_cmd = lexer(&scmd);
 	while (split_cmd && split_cmd[i])
 	{
-		ft_printf("LIST CMD N %d\n", i);
 		scmd_init(&scmd, split_cmd[i]);
 		lst_tk = split_cmd_token(&scmd);
-		sort_ast = parser(lst_tk, alloc);
+		if (!(sort_ast = parser(lst_tk, alloc)))
+			break ;
 
 		// j = 0;
-		// while (lst)
+		// while (lst_tk)
 		// {
-		// 	ft_printf("type[%d]: %d\nvalue[%d]: |%s|\n\n", j, get_tk(lst)->type, j, get_tk(lst)->token);
-		// 	lst = lst->next;
+		// 	ft_printf("type[%d]: %d\nvalue[%d]: |%s|\n\n", j, get_tk(lst_tk)->type, j, get_tk(lst_tk)->token);
+		// 	lst_tk = lst_tk->next;
 		// 	j += 1;
 		// }
 
-			// analyzer(sort_ast, alloc, 0);
-			// // read_sort_descent(sort_ast, 1);
-			// // reinit_print(alloc->ast, 1);
-			// delete_str_tab(split_all_cmd[i]);
-			// del_lst_ast(&(alloc->ast));
+		// analyzer(sort_ast, alloc, 0);
+		read_sort_descent(sort_ast, 1);
+		// reinit_print(alloc->ast, 1);
+		// delete_str_tab(split_all_cmd[i]);
+		// del_lst_ast(&(alloc->ast));
 
 		i += 1;
 	}
