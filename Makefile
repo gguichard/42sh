@@ -62,6 +62,8 @@ SRC =	main.c \
 		$(PATH_BUILT)exec_input.c \
 		$(PATH_BUILT)exit.c \
 		$(PATH_BUILT)hash.c \
+		$(PATH_BUILT)alias.c \
+		$(PATH_BUILT)unalias.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \
@@ -90,6 +92,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
 		$(PATH_TOOLS)cd_tools.c \
 		$(PATH_HASHTABLE)exectable.c \
+		$(PATH_HASHTABLE)aliastable.c \
 		$(PATH_HASHTABLE)hashtable.c \
 		$(PATH_HASHTABLE)hashtable_delete.c \
 		$(PATH_HASHTABLE)hashtable_utils.c \

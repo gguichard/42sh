@@ -4,6 +4,7 @@
 #include "shell.h"
 #include "builtins.h"
 #include "exectable.h"
+#include "hashtable.h"
 #include "parser_lexer.h"
 #include "str_cmd_inf.h"
 

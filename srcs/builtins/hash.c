@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "shell.h"
 #include "search_exec.h"
 #include "options.h"
