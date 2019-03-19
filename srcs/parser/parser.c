@@ -71,13 +71,13 @@ t_ast			*parser(char **input, t_alloc *alloc)
 		g_ret[0] = 1;
 		return (NULL);
 	}
-	int x = 0;
-	ft_printf("TEST:\n");
-	while (input[x])
-	{
-		ft_printf("input[%d]: %s\n", x, input[x]);
-		x += 1;
-	}
+	// int x = 0;
+	// ft_printf("TEST:\n");
+	// while (input[x])
+	// {
+	// 	ft_printf("input[%d]: %s\n", x, input[x]);
+	// 	x += 1;
+	// }
 	fill_ast(input, &lst, 0, -1);
 	if (check_error_lst(lst) == 1)
 		return (clean_tab_and_ast(input, &lst));

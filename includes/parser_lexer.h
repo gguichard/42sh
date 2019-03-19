@@ -3,11 +3,13 @@
 
 # include "shell.h"
 # include "error.h"
+# include "str_cmd_inf.h"
+
 /*
 ************************************ LEXER *************************************
 */
 
-char	***lexer(char *input, t_alloc *alloc);
+char	***lexer(t_str_cmd_inf *scmd, t_alloc *alloc);
 char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
 char	***read_lexer(char **lexer, char ***all_split_cmd);

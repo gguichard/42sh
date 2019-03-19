@@ -5,19 +5,22 @@
 #include "builtins.h"
 #include "exectable.h"
 #include "parser_lexer.h"
+#include "str_cmd_inf.h"
 
 // #include "get_next_line.h"
 // #include "printf.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
-	char	***split_all_cmd;
-	t_ast	*sort_ast;
-	int		i;
+	char			***split_all_cmd;
+	t_ast			*sort_ast;
+	t_str_cmd_inf	scmd;
+	int				i;
 
 	i = 0;
 	sort_ast = NULL;
-	split_all_cmd = lexer(line, alloc);
+	scmd_init(&scmd, line);
+	split_all_cmd = lexer(&scmd, alloc);
 	while (split_all_cmd && split_all_cmd[i])
 	{
 		sort_ast = parser(split_all_cmd[i], alloc);

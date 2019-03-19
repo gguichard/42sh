@@ -6,13 +6,25 @@ static int			ft_word_counter(char *str, char c)
 {
 	t_str_cmd_inf	scmd;
 	int				nb_word;
+	int				i;
 
 	scmd_init(&scmd, str);
 	nb_word = 1;
+	i = 1;
 	while (1)
 	{
 		if (!scmd_cur_char_is_escaped(&scmd) && scmd.str[scmd.pos] == c)
+		{
 			++nb_word;
+			while (ft_isspace(str[scmd.pos + i]))
+				i += 1;
+			if (str[scmd.pos + i] == c)
+			{
+				ft_dprintf(2, "42sh: syntax error near `;'\n");
+				nb_word = -1;
+				break ;
+			}
+		}
 		if (!scmd_move_to_next_char(&scmd))
 			break ;
 	}
