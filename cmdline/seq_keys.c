@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 10:22:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 11:21:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void				handle_sequence(t_cmdline *cmdline, const t_seq *seq)
 		reset_sequence(&cmdline->seq_keys);
 		if (!seq->fn(cmdline))
 			tputs(tgetstr("bl", NULL), 1, t_putchar);
-		else if (cmdline->visual.toggle)
+		else if (cmdline->visual.toggle && seq->mode != MODE_VISUAL)
 			update_visual_select(cmdline);
 	}
 }

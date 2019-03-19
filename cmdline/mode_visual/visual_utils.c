@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 14:50:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 22:08:32 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 11:22:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	vm_cut_hook(t_cmdline *cmdline, int off_s, int off_e, int off)
 	t_cursor	new_cursor;
 
 	ft_memcpy(cmdline->input.buffer + off_s, cmdline->input.buffer + off_e
-			, cmdline->input.size - off_e + 1);
+			, (cmdline->input.size - off_e + 1) * sizeof(wint_t));
 	cmdline->input.offset = off_s;
 	cmdline->input.size -= off;
 	new_cursor = go_to_offset(cmdline, off_s);
@@ -29,8 +29,9 @@ static void	vm_cut_hook(t_cmdline *cmdline, int off_s, int off_e, int off)
 	cmdline->cursor = new_cursor;
 	cmdline->visual.start_offset = off_s;
 	clear_after_cursor(new_cursor, cmdline->winsize);
-	write(STDOUT_FILENO, cmdline->input.buffer + off_s
-			, (cmdline->input.size - off_s) * sizeof(wint_t));
+	if (cmdline->input.size > off_s)
+		write(STDOUT_FILENO, cmdline->input.buffer + off_s
+				, (cmdline->input.size - off_s) * sizeof(wint_t));
 }
 
 int			vm_copy(t_cmdline *cmdline, int cut_hook)

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 22:06:22 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 22:08:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 11:25:06 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void		update_visual_select(t_cmdline *cmdline)
 	int			off_s;
 	int			off_e;
 
-	off_s = ft_min(cmdline->visual.start_offset, cmdline->input.offset);
-	off_e = ft_max(cmdline->visual.start_offset, cmdline->input.offset);
 	if (!cmdline->visual.toggle)
 	{
 		old_off_s = -1;
@@ -56,13 +54,16 @@ void		update_visual_select(t_cmdline *cmdline)
 	}
 	else
 	{
+		off_s = ft_min(cmdline->visual.start_offset, cmdline->input.offset);
 		if (old_off_s != -1 && old_off_s != off_s)
 			print_visual_unselect(cmdline, old_off_s, off_s);
+		off_e = ft_max(cmdline->visual.start_offset, cmdline->input.offset);
 		if (old_off_e != -1 && old_off_e != off_e)
 			print_visual_unselect(cmdline, old_off_e, off_e);
+		if (off_s != off_e)
+			print_visual_select(cmdline, off_s, off_e);
 		old_off_s = off_s;
 		old_off_e = off_e;
+		go_to_cursor_pos(cmdline->cursor);
 	}
-	print_visual_select(cmdline, off_s, off_e);
-	go_to_cursor_pos(cmdline->cursor);
 }

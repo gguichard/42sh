@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 10:21:51 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 10:53:36 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int			handle_paste_before_key(t_cmdline *cmdline);
 */
 int			get_rightmost_column(t_cmdline *cmdline, int offset);
 t_cursor	go_to_offset(t_cmdline *cmdline, int offset);
+void		recompute_cursor(t_cmdline *cmdline);
 
 void		update_visual_select(t_cmdline *cmdline);
 int			vm_copy(t_cmdline *cmdline, int cut_hook);
