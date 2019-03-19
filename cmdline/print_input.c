@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 23:08:17 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 09:56:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <term.h>
 #include "cmdline.h"
 
-static void	print_mbstr(const wchar_t *buffer, int len)
+void		print_mbstr(const wchar_t *buffer, size_t len)
 {
 	char	*str;
 	int		offset;
