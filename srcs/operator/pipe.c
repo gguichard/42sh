@@ -73,5 +73,5 @@ int			do_pipe(t_ast *elem, t_alloc *alloc)
 			waitpid(pid2, &alloc->ret_val, 0);
 		}
 	}
-	return (ret_status(alloc->ret_val));
+	return (ret_status(alloc->ret_val, 0));
 }

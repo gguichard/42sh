@@ -69,5 +69,5 @@ int				heredoc(t_ast *elem, t_alloc *alloc)
 		}
 	}
 	ft_memdel((void **)&elem->heredoc);
-	return (ret_status(alloc->ret_val));
+	return (ret_status(alloc->ret_val, 0));
 }

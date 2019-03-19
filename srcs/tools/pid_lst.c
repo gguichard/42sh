@@ -41,6 +41,6 @@ void			add_pid_lst(pid_t process, t_ast *elem)
 
 	if (!(job = create_job(process, elem->input)) || !(tmp = ft_lstnew(job, sizeof(t_job))))
 		return ;
-	ft_lstadd(&g_jobs, tmp);
+	ft_lstpush(&g_jobs, tmp);
 	ft_memdel((void **)&job);
 }

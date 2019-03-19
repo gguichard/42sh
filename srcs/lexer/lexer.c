@@ -55,7 +55,7 @@ char	***lexer(char *input, t_alloc *alloc)
 	if ((lexer = ft_strsplit_shell(&input[i], ';')) == NULL)
 	{
 		alloc->ret_val = 1;
-		return ;
+		return (0);
 	}
 
 	i = 0;

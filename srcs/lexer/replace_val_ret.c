@@ -51,15 +51,17 @@ static void		print_sig_message(int status)
 		print_sig_message_2(signal);
 }
 
-int				ret_status(int ret)
+int				ret_status(int ret, pid_t process)
 {
+	t_job	*job;
 	int		err;
 
 	err = 0;
 	if (WIFEXITED(ret))
 	{
 		err = WEXITSTATUS(ret);
-		((t_job *)(g_jobs->content))->state = DONE;
+		job = get_job_pid(process);
+		job->state = DONE;
 	}
 	else if (WIFSIGNALED(ret))
 	{
@@ -68,8 +70,11 @@ int				ret_status(int ret)
 	}
 	else if (WIFSTOPPED(ret))
 	{
-		((t_job *)(g_jobs->content))->state = STOPPED;
+		job = get_job_pid(process);
+		job->state = STOPPED;
+		job->status = ret;
 		err = WSTOPSIG(ret) + 128;
+		print_job(process);
 	}
 	return (err);
 }

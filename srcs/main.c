@@ -24,8 +24,6 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	{
 		sort_ast = parser(split_all_cmd[i], alloc);
 		analyzer(sort_ast, alloc, 0);
-		// read_sort_descent(sort_ast, 1);
-		// reinit_print(alloc->ast, 1);
 		delete_str_tab(split_all_cmd[i]);
 		del_lst_ast(&(alloc->ast));
 		i += 1;
@@ -60,6 +58,11 @@ void	check_jobs_finish(void)
 	{
 		job = tmp->content;
 		aft = tmp->next;
+		if (job->state == RUNNING && waitpid(job->pid, &job->status, WNOHANG))
+		{
+			job->state = DONE;
+			print_job(job->pid);
+		}
 		if (job->state == DONE)
 		{
 			if (prev)
@@ -94,8 +97,6 @@ int		main(int argc, char **argv, char **env)
 		p_debug = 1;
 	else if (argc > 1)
 		ft_printf("usage : pour print l'ast -d\n");
-	(void)argc;
-	(void)argv;
 	lst = 0;
 	ft_bzero(&alloc, sizeof(t_alloc));
 	env_cp(env, &lst);
@@ -106,8 +107,6 @@ int		main(int argc, char **argv, char **env)
 		//parse line etc;
 		lexer_parser(line, &alloc);
 		check_jobs_finish();
-		if (g_jobs)
-			write(1, "\n", 1);
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}

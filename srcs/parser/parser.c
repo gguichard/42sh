@@ -69,13 +69,13 @@ t_ast			*parser(char **input, t_alloc *alloc)
 	if (ft_error_parse_redir(input) == 1)
 	{
 		alloc->ret_val = 1;
-		return ;
+		return (0);
 	}
 	fill_ast(input, &lst, 0, -1);
 	if (check_error_lst(lst) == 1)
 	{
 		alloc->ret_val = 1;
-		return (clean_tab_and_ast(input, lst));
+		return (clean_tab_and_ast(input, &lst));
 	}
 	sort = lst;
 	while (sort)
@@ -85,7 +85,7 @@ t_ast			*parser(char **input, t_alloc *alloc)
 			if (convert_quote(&(sort->input[i]), alloc) == -1)
 			{
 				alloc->ret_val = 1;
-				return (clean_tab_and_ast(input, lst));
+				return (clean_tab_and_ast(input, &lst));
 			}
 		sort = sort->next;
 	}
@@ -93,8 +93,7 @@ t_ast			*parser(char **input, t_alloc *alloc)
 	alloc->ast = lst;
 	read_sort_descent(sort, p_debug);
 	reinit_print(lst, p_debug);
-	alloc->ret_val = analyzer(sort, alloc, 0);
-
+	return (sort);
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc, 0) : 0;
 
 	// clean_tab_and_ast(input, lst);

@@ -106,5 +106,5 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	delete_str_tab(tab_env);
 	if (!ft_strchr(elem->input[0], '/'))
 		ft_memdel((void **)&path_exec);
-	return (ret_status(alloc->ret_val));
+	return (ret_status(alloc->ret_val, child));
 }

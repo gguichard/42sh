@@ -11,7 +11,6 @@ char	***lexer(char *input, t_alloc *alloc);
 char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
 char	***read_lexer(char **lexer, char ***all_split_cmd);
-int		replace_val_ret(char **str, int i, int x);
 void	expand_home_shortcut(char **s, t_var *lst_env);
 int		remove_quote(char **s, int *i, t_alloc *alloc);
 int		convert_quote(char **s, t_alloc *alloc);

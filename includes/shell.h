@@ -111,6 +111,7 @@ typedef struct			s_job
 	char				*cmd;
 	int					pid;
 	int					gpid;
+	int					status;
 	t_job_state			state;
 }						t_job;
 
@@ -120,6 +121,9 @@ typedef struct			s_job
 
 void	signal_handle(int sig);
 void	redirect_term_controller(pid_t new_controler, int type);
+void	print_job(pid_t process);
+t_job	*get_job_pid(pid_t process);
+
 
 void	delete_str_tab(char **tab_str);
 void	del_lst_env(t_var **lst);
@@ -127,7 +131,7 @@ void	del_lst_ast(t_ast **lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
 void	set_alloc(t_alloc *al, t_var **lst);
-int		ret_status(int ret_val);
+int		ret_status(int ret_val, pid_t process);
 int		replace_val_ret(char **str, int i, int x, int err);
 void	insert_new_elem(t_var **lst, t_var *new);
 
