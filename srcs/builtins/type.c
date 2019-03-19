@@ -17,13 +17,13 @@ int			type_builtins(t_ast *elem, t_alloc *alloc)
 	i = 0;
 	ret = 0;
 	while (elem->input[++i])
-		if (access(elem->input[i], F_OK) == 0 && access(elem->input[i], X_OK) == 0)
-			ret = ft_printf("%s is %s\n", elem->input[i], elem->input[i]);
-		else if ((path = (char *)get_exec_path(alloc->exectable, elem->input[i], 0)))
+		if ((path = (char *)get_exec_path(alloc->exectable, elem->input[i], 0)))
 			ret = ft_printf("%s is hashed (%s)\n", elem->input[i], path);
 		else if (is_builtins(alloc, elem->input[i]) == 1)
 			ret = ft_printf("%s is a shell builtin\n", elem->input[i]);
-		else if ((path = search_exec(*(alloc->var), elem->input[i], &error)))
+		else if (ft_strchr(elem->input[i], '/') && access(elem->input[i], F_OK) == 0 && access(elem->input[i], X_OK) == 0)
+				ret = ft_printf("%s is %s\n", elem->input[i], elem->input[i]);
+		else if (!(ft_strchr(elem->input[i], '/')) && (path = search_exec(*(alloc->var), elem->input[i], &error)))
 		{
 			ret = ft_printf("%s is %s\n", elem->input[i], path);
 			ft_strdel(&path);
