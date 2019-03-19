@@ -57,11 +57,19 @@ int				ret_status(int ret)
 
 	err = 0;
 	if (WIFEXITED(ret))
+	{
 		err = WEXITSTATUS(ret);
+		((t_job *)(g_jobs->content))->state = DONE;
+	}
 	else if (WIFSIGNALED(ret))
 	{
 		print_sig_message(ret);
 		err = WTERMSIG(ret) + 128;
+	}
+	else if (WIFSTOPPED(ret))
+	{
+		((t_job *)(g_jobs->content))->state = STOPPED;
+		err = WSTOPSIG(ret) + 128;
 	}
 	return (err);
 }

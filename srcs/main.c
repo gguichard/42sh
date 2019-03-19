@@ -13,17 +13,46 @@
 //TODO faire un vrai main
 void	signal_handle(int sig)
 {
-	ft_printf("\n sig stp %d int %d actual sig %d pid %d\n", SIGTSTP, SIGINT, sig, g_pid);
-	if (sig == SIGTSTP && g_pid)
+	t_job	*tmp;
+
+	if (g_jobs)
 	{
-		ft_printf("STOP\n");
-		kill(g_pid, sig);
+		tmp = g_jobs->content;
+		if (sig == SIGTSTP)
+			tmp->state = STOPPED;
+		kill(tmp->pid, sig);
 	}
-	else if (sig == SIGINT)
+}
+
+void	check_jobs_finish(void)
+{
+	t_list	*prev;
+	t_list	*tmp;
+	t_list	*aft;
+	t_job	*job;
+
+	tmp = g_jobs;
+	prev = 0;
+	while (tmp)
 	{
-		if (g_pid > 0)
-			kill(g_pid, sig);
-		g_exec = 0;
+		job = tmp->content;
+		aft = tmp->next;
+		if (job->state == DONE)
+		{
+			if (prev)
+				prev->next = aft;
+			else
+				g_jobs = aft;
+			ft_memdel((void **)&(job->cmd));
+			ft_memdel((void **)&(tmp->content));
+			ft_memdel((void **)&tmp);
+			tmp = aft;
+		}
+		else
+		{
+			prev = tmp;
+			tmp = tmp->next;
+		}
 	}
 }
 
@@ -35,6 +64,7 @@ int		main(int argc, char **argv, char **env)
 	t_alloc	alloc;
 
 	p_debug = 0;
+	g_jobs = 0;
 	signal(SIGTSTP, signal_handle);
 	signal(SIGINT, signal_handle);
 	if (argc > 1 && !ft_strcmp(argv[1], "-d"))
@@ -54,6 +84,9 @@ int		main(int argc, char **argv, char **env)
 	{
 		//parse line etc;
 		lexer(line, &alloc);
+		check_jobs_finish();
+		if (g_jobs)
+			write(1, "\n", 1);
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}

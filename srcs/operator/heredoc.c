@@ -50,7 +50,7 @@ int				heredoc(t_ast *elem, t_alloc *alloc)
 	int		fd[2];
 	int		pid2;
 
-	if (g_pid == -1 || !elem->heredoc || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
+	if (!elem->heredoc || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
 		return (1);
 	else if (!pid1)
 		write_pipe(elem, fd);

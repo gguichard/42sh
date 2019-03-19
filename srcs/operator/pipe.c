@@ -55,7 +55,7 @@ int			do_pipe(t_ast *elem, t_alloc *alloc)
 	int		pid2;
 	int		fd[2];
 
-	if (g_pid == -1 || !elem->right || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
+	if (!elem->right || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
 		return (1);
 	else if (!pid1)
 		process_pipe_left(elem->left, alloc, fd);

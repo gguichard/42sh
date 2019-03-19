@@ -3,11 +3,28 @@
 
 int	fg_builtins(t_ast *elem, t_alloc *alloc)
 {
-	(void)elem;
-	if (g_pid > 0)
+	int		index;
+	t_list	*tmp;
+	t_job	*job;
+
+	index = 0;
+	tmp = g_jobs;
+	if (elem->input[1])
+		index = ft_atoi(elem->input[1]);
+	else
 	{
-		kill(g_pid, SIGCONT);
-		waitpid(g_pid, &alloc->ret_val, WUNTRACED);
+		while (tmp->next)
+			tmp = tmp->next;
 	}
-	return (0);
+	if (tmp)
+	{
+		job = tmp->content;
+		redirect_term_controller(job->pid, 0);
+		kill(job->pid, SIGCONT);
+		waitpid(job->pid, &alloc->ret_val, WUNTRACED);
+		redirect_term_controller(0, 1);
+	}
+	if (!tmp)
+		return (1);
+	return (ret_status(alloc->ret_val));
 }

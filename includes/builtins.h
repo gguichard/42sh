@@ -37,6 +37,7 @@ char	*cd_slash(char *dir, int options, char *buf_pwd);
 
 int		env_cp(char **env, t_var **lst_env);
 int		is_builtins(t_alloc *alloc, const char *built_name);
+void	add_pid_lst(pid_t process, t_ast *elem);
 
 
 #endif

@@ -55,10 +55,10 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	return (path_exec);
 }
 
-void		execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
+static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
 {
-	if (g_pid == -1)
-		exit(1);
+	setpgid(0, 0);
+	redirect_term_controller(0, 1);
 	execve(path_exec, elem->input, tab_env);
 	ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
 	if (no_fork == 1)
@@ -68,6 +68,18 @@ void		execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
 			ft_memdel((void **)&path_exec);
 	}
 	exit(126);
+}
+
+void	redirect_term_controller(pid_t new_controler, int type)
+{
+	if (type == 0)
+		tcsetpgrp(STDIN_FILENO, getpgid(new_controler));
+	else if (type == 1)
+	{
+		signal(SIGTTOU, SIG_IGN);
+		tcsetpgrp(STDIN_FILENO, getpgid(0));
+		signal(SIGTTOU, SIG_DFL);
+	}
 }
 
 int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
@@ -86,12 +98,13 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 		execute_cmd(path_exec, elem, tab_env, no_fork);
 	if (child == -1)
 		return (0);
-	g_pid = child;
+	add_pid_lst(child, elem);
 	waitpid(child, &alloc->ret_val, WUNTRACED);
+	redirect_term_controller(0, 1);
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);
-	if (ft_strchr(elem->input[0], '/'))
+	if (!ft_strchr(elem->input[0], '/'))
 		ft_memdel((void **)&path_exec);
 	return (ret_status(alloc->ret_val));
 }

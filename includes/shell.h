@@ -98,17 +98,27 @@ typedef struct			s_alloc
 
 typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
 
-typedef struct			s_process
+typedef enum			e_job_state
 {
-	char				**input;
+	RUNNING,
+	STOPPED,
+	DONE
+}						t_job_state;
+
+typedef struct			s_job
+{
+	char				*cmd;
 	int					pid;
 	int					gpid;
-	int					pos;
-}						t_process;
+	t_job_state			state;
+}						t_job;
 
 /*
 ************************************ TOOLS *************************************
 */
+
+void	signal_handle(int sig);
+void	redirect_term_controller(pid_t new_controler, int type);
 
 void	delete_str_tab(char **tab_str);
 void	del_lst_env(t_var **lst);

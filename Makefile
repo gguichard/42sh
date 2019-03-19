@@ -74,6 +74,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)builtins_tools.c \
 		$(PATH_TOOLS)alloc_starter_tools.c \
 		$(PATH_TOOLS)sort_tools.c \
+		$(PATH_TOOLS)pid_lst.c \
 		$(PATH_BUILT)bg.c\
 		$(PATH_BUILT)export.c\
 		$(PATH_BUILT)fg.c\
