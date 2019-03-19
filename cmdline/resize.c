@@ -6,42 +6,32 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:20:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 11:01:59 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 14:10:06 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include <unistd.h>
+#include <term.h>
 #include "cmdline.h"
 
 extern t_cmdline	*g_cmdline;
 
-static void	refresh_winsize(t_cmdline *cmdline)
+void				handle_sigwinch(int sig)
 {
-	int	row;
-	int	col;
-	int	offset;
+	t_cmdline	*cmdline;
 
-	set_cursor_pos(&cmdline->cursor);
-	update_winsize(cmdline);
-	row = 0;
-	col = cmdline->prompt.offset;
-	offset = 0;
-	while (offset < cmdline->input.offset)
-	{
-		if ((col + 1) < cmdline->winsize.ws_col
-				&& cmdline->input.buffer[offset] != '\n')
-			col++;
-		else
-		{
-			col = 0;
-			row++;
-		}
-		offset++;
-	}
-	cmdline->row = row;
-}
-
-void		handle_sigwinch(int sig)
-{
 	(void)sig;
-	refresh_winsize(g_cmdline);
+	cmdline = g_cmdline;
+	go_to_offset(cmdline, 0);
+	tputs(tgetstr("cr", NULL), 1, t_putchar);
+	tputs(tgetstr("cd", NULL), 1, t_putchar);
+	write(STDOUT_FILENO, cmdline->prompt.str, ft_strlen(cmdline->prompt.str));
+	update_winsize(cmdline);
+	cmdline->row = 0;
+	set_cursor_pos(&cmdline->cursor);
+	cmdline->prompt.offset = cmdline->cursor.x;
+	recompute_cursor(cmdline);
+	print_mbstr(cmdline->input.buffer, cmdline->input.size);
+	go_to_cursor_pos(cmdline->cursor);
 }
