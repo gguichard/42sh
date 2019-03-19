@@ -73,13 +73,13 @@ static void	set_type_elem(t_ast *elem, t_list **lst_tk, int *len)
 	{
 		*len += 1;
 		elem->type = REDIR;
+		*lst_tk = (*lst_tk)->next;
 	}
 	else if (i == 10)
 	{
 		// PRINT ERROR
 		ft_dprintf(2, "ERROR IN PARSER.C SET_ELEM_TYPE\n");
 	}
-	*lst_tk = (*lst_tk)->next;
 }
 
 t_ast	*create_elem(t_list **lst_tk)
