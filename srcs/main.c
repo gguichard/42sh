@@ -7,29 +7,49 @@
 #include "hashtable.h"
 #include "parser_lexer.h"
 #include "str_cmd_inf.h"
+#include "split_cmd_token.h"
+#include "token_inf.h"
 
 // #include "get_next_line.h"
 // #include "printf.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
-	char			***split_all_cmd;
+	char			**split_cmd;
 	t_ast			*sort_ast;
+	t_list			*lst_tk;
 	t_str_cmd_inf	scmd;
 	int				i;
+	// int				j;
 
 	i = 0;
 	sort_ast = NULL;
+	lst_tk = NULL;
+	split_cmd = NULL;
 	scmd_init(&scmd, line);
-	split_all_cmd = lexer(&scmd, alloc);
-	while (split_all_cmd && split_all_cmd[i])
+
+	split_cmd = lexer(&scmd);
+	while (split_cmd && split_cmd[i])
 	{
-		sort_ast = parser(split_all_cmd[i], alloc);
-		analyzer(sort_ast, alloc, 0);
-		// read_sort_descent(sort_ast, 1);
-		// reinit_print(alloc->ast, 1);
-		delete_str_tab(split_all_cmd[i]);
-		del_lst_ast(&(alloc->ast));
+		ft_printf("LIST CMD N %d\n", i);
+		scmd_init(&scmd, split_cmd[i]);
+		lst_tk = split_cmd_token(&scmd);
+		sort_ast = parser(lst_tk, alloc);
+
+		// j = 0;
+		// while (lst)
+		// {
+		// 	ft_printf("type[%d]: %d\nvalue[%d]: |%s|\n\n", j, get_tk(lst)->type, j, get_tk(lst)->token);
+		// 	lst = lst->next;
+		// 	j += 1;
+		// }
+
+			// analyzer(sort_ast, alloc, 0);
+			// // read_sort_descent(sort_ast, 1);
+			// // reinit_print(alloc->ast, 1);
+			// delete_str_tab(split_all_cmd[i]);
+			// del_lst_ast(&(alloc->ast));
+
 		i += 1;
 	}
 }

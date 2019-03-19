@@ -2,8 +2,12 @@
 #include "str_cmd_inf.h"
 #include "parser_lexer.h"
 
+/*
+** TODO: CLEAN INUTILE FONCTION
+*/
 
-static int	size_of_tab(char **lexer)
+
+int	size_of_tab(char **lexer)
 {
 	int	i;
 	int	x;
@@ -59,16 +63,13 @@ char	***read_lexer(char **lexer, char ***all_split_cmd)
 	return (all_split_cmd);
 }
 
-char	***lexer(t_str_cmd_inf *scmd, t_alloc *alloc)
+char	**lexer(t_str_cmd_inf *scmd)
 {
 	int		i;
 	char	**lexer;
-	char	***all_split_cmd;
 
-	(void)alloc;
 	i = 0;
 	lexer = NULL;
-	all_split_cmd = NULL;
 
 
 	// CLOSE CHECK QUOTE TO AVOID THE RECALL PROMPT TEST
@@ -89,10 +90,10 @@ char	***lexer(t_str_cmd_inf *scmd, t_alloc *alloc)
 	}
 	if ((lexer = ft_strsplit_shell((char*)scmd->str, ';')) == NULL)
 		return (NULL);
-	i = size_of_tab(lexer);
-	if (!(all_split_cmd = (char***)malloc(sizeof(char**) * (i + 1))))
-		ft_exit_malloc();
-	all_split_cmd = read_lexer(lexer, all_split_cmd);
-	all_split_cmd[i] = NULL;
-	return (all_split_cmd);
+	// i = size_of_tab(lexer);
+	// if (!(all_split_cmd = (char**)malloc(sizeof(char*) * (i + 1))))
+	// 	ft_exit_malloc();
+	// all_split_cmd = read_lexer(lexer, all_split_cmd);
+	// all_split_cmd[i] = NULL;
+	return (lexer);
 }
