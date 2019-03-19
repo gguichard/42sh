@@ -66,18 +66,20 @@ t_ast			*parser(char **input, t_alloc *alloc)
 	t_ast	*lst;
 
 	lst = NULL;
-	if (ft_error_parse_redir(input) == 1)
-	{
-		g_ret[0] = 1;
-		return (NULL);
-	}
-	// int x = 0;
-	// ft_printf("TEST:\n");
-	// while (input[x])
+	// if (ft_error_parse_redir(input) == 1)
 	// {
-	// 	ft_printf("input[%d]: %s\n", x, input[x]);
-	// 	x += 1;
+	// 	g_ret[0] = 1;
+	// 	return (NULL);
 	// }
+
+	int x = 0;
+	ft_printf("PARSER INPUT:\n");
+	while (input[x])
+	{
+		ft_printf("input[%d]: %s\n", x, input[x]);
+		x += 1;
+	}
+
 	fill_ast(input, &lst, 0, -1);
 	if (check_error_lst(lst) == 1)
 		return (clean_tab_and_ast(input, &lst));

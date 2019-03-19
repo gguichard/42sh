@@ -79,8 +79,6 @@ char	***lexer(t_str_cmd_inf *scmd, t_alloc *alloc)
 	// 	return ;
 	// }
 
-	// historic_entry(ft_strdup(input), alloc->history, *lst_env);
-
 	while (ft_isspace(scmd->str[scmd->pos]))
 		scmd_move_to_next_char(scmd);
 	if (scmd->str[scmd->pos] && (ft_isoperator(scmd->str[scmd->pos]) == 1
@@ -89,7 +87,6 @@ char	***lexer(t_str_cmd_inf *scmd, t_alloc *alloc)
 		ft_dprintf(2, "42sh: syntax error near '%c`\n", scmd->str[scmd->pos]);
 		return (NULL);
 	}
-
 	if ((lexer = ft_strsplit_shell((char*)scmd->str, ';')) == NULL)
 		return (NULL);
 	i = size_of_tab(lexer);
