@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 20:33:44 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 10:22:02 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static int		expand_buffer_capacity(t_cmdline *cmdline)
 
 void			add_char_to_input(t_cmdline *cmdline, wint_t c)
 {
-
 	if (cmdline->input.size == cmdline->input.capacity)
 	{
 		if (!expand_buffer_capacity(cmdline))
@@ -105,14 +104,18 @@ static wint_t	get_full_unichar(unsigned char input)
 void			read_input(t_cmdline *cmdline, const char *prompt)
 {
 	unsigned char	input;
-	const char		*seq;
+	const t_seq		*seq;
 	wint_t			unichar;
 
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
 	set_cursor_pos(&cmdline->cursor);
+	cmdline->saved_col = -1;
 	cmdline->prompt.str = prompt;
 	cmdline->prompt.offset = cmdline->cursor.x;
-	while (read(STDIN_FILENO, &input, sizeof(char)) && input != 4)
+	cmdline->input.offset = 0;
+	cmdline->input.reading = 1;
+	while (cmdline->input.reading
+			&& read(STDIN_FILENO, &input, sizeof(char)) == 1)
 	{
 		if ((seq = get_sequence(cmdline, input)) != NULL)
 			handle_sequence(cmdline, seq);

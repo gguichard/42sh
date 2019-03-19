@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 20:41:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 10:22:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static const t_seq	g_seqs[] = {
 	{"\177", MODE_INSERT, handle_backspace_key},
 	{"\014", MODE_INSERT, handle_clear},
 	{"\007", MODE_INSERT, handle_bell},
+	{"\004", MODE_INSERT, handle_eot_key},
 	{"\033[H", MODE_COMMON, handle_home_key},
 	{"\033[F", MODE_COMMON, handle_end_key},
 	{"\033[1;2A", MODE_COMMON, handle_cursor_up},
@@ -47,6 +48,7 @@ static const t_seq	g_seqs[] = {
 	{"$", MODE_VISUAL, handle_line_end},
 	{":q\012", MODE_VISUAL, handle_toggle_visual},
 	{"\033\033", MODE_VISUAL, handle_toggle_visual},
+	{"\004", MODE_VISUAL, handle_toggle_visual},
 	{NULL, MODE_COMMON, NULL}
 };
 
@@ -57,26 +59,15 @@ static void			reset_sequence(t_seq_keys *keys)
 	keys->offset = 0;
 }
 
-void				handle_sequence(t_cmdline *cmdline, const char *seq)
+void				handle_sequence(t_cmdline *cmdline, const t_seq *seq)
 {
-	int	idx;
-
-	if (seq[cmdline->seq_keys.offset] == '\0')
+	if (seq->str[cmdline->seq_keys.offset] == '\0')
 	{
 		reset_sequence(&cmdline->seq_keys);
-		idx = 0;
-		while (g_seqs[idx].fn != NULL)
-		{
-			if (ft_strequ(g_seqs[idx].str, seq))
-			{
-				if (!g_seqs[idx].fn(cmdline))
-					tputs(tgetstr("bl", NULL), 1, t_putchar);
-				else if (cmdline->visual.toggle)
-					update_visual_select(cmdline);
-				break ;
-			}
-			idx++;
-		}
+		if (!seq->fn(cmdline))
+			tputs(tgetstr("bl", NULL), 1, t_putchar);
+		else if (cmdline->visual.toggle)
+			update_visual_select(cmdline);
 	}
 }
 
@@ -87,7 +78,7 @@ static int			is_right_seq_mode(t_cmdline *cmdline, const t_seq *seq)
 			|| (seq->mode == MODE_INSERT && !cmdline->visual.toggle));
 }
 
-const char			*get_sequence(t_cmdline *cmdline, char c)
+const t_seq			*get_sequence(t_cmdline *cmdline, char c)
 {
 	int	idx;
 
@@ -101,7 +92,7 @@ const char			*get_sequence(t_cmdline *cmdline, char c)
 					, cmdline->seq_keys.size))
 		{
 			cmdline->seq_keys.offset += 1;
-			return (g_seqs[idx].str);
+			return (g_seqs + idx);
 		}
 		idx++;
 	}

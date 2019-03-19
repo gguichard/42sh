@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 09:56:27 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 10:21:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int			t_putchar(int c);
 ** ESCAPE SEQUENCES.
 */
 
-void		handle_sequence(t_cmdline *cmdline, const char *seq);
-const char	*get_sequence(t_cmdline *cmdline, char c);
+void		handle_sequence(t_cmdline *cmdline, const t_seq *seq);
+const t_seq	*get_sequence(t_cmdline *cmdline, char c);
 
 /*
 ** COMMON moves.
@@ -74,6 +74,7 @@ int			handle_line_end(t_cmdline *cmdline);
 */
 int			handle_backspace_key(t_cmdline *cmdline);
 int			handle_delete_key(t_cmdline *cmdline);
+int			handle_eot_key(t_cmdline *cmdline);
 int			handle_clear(t_cmdline *cmdline);
 int			handle_bell(t_cmdline *cmdline);
 

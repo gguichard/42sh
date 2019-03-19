@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 20:29:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 10:13:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int			main(int argc, char **argv)
 	tgetent(NULL, "xterm-256color");
 	ft_memset(&cmdline, 0, sizeof(t_cmdline));
 	g_cmdline = &cmdline;
-	cmdline.saved_col = -1;
 	setup_term();
 	signal(SIGWINCH, handle_sigwinch);
 	update_winsize(&cmdline);
