@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 10:22:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 11:52:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,11 @@ static int		expand_buffer_capacity(t_cmdline *cmdline)
 	if (new_buffer == NULL)
 		return (0);
 	if (cmdline->input.buffer != NULL)
+	{
 		ft_memcpy(new_buffer, cmdline->input.buffer
 				, cmdline->input.size * sizeof(wint_t));
+		free(cmdline->input.buffer);
+	}
 	new_buffer[cmdline->input.size] = L'\0';
 	cmdline->input.capacity = new_cap;
 	cmdline->input.buffer = new_buffer;
@@ -63,11 +66,10 @@ void			add_char_to_input(t_cmdline *cmdline, wint_t c)
 		if (!expand_buffer_capacity(cmdline))
 			return ;
 	}
-	if (cmdline->input.offset != cmdline->input.size)
-		ft_memmove(cmdline->input.buffer + cmdline->input.offset + 1
-				, cmdline->input.buffer + cmdline->input.offset
-				, (cmdline->input.size - cmdline->input.offset + 1)
-				* sizeof(wint_t));
+	ft_memmove(cmdline->input.buffer + cmdline->input.offset + 1
+			, cmdline->input.buffer + cmdline->input.offset
+			, (cmdline->input.size - cmdline->input.offset + 1)
+			* sizeof(wint_t));
 	cmdline->input.buffer[cmdline->input.offset] = c;
 	cmdline->input.offset += 1;
 	cmdline->input.size += 1;
