@@ -18,7 +18,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	i = 0;
 	sort_ast = NULL;
 	split_all_cmd = lexer(line, alloc);
-	while (split_all_cmd[i])
+	while (split_all_cmd && split_all_cmd[i])
 	{
 		sort_ast = parser(split_all_cmd[i], alloc);
 		analyzer(sort_ast, alloc, 0);

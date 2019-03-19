@@ -1,84 +1,73 @@
 #include "shell.h"
+#include "str_cmd_inf.h"
 #include "parser_lexer.h"
 
 static int			ft_word_counter(char *str, char c)
 {
-	int				i;
+	t_str_cmd_inf	scmd;
 	int				nb_word;
-	char			quote;
 
-	i = 0;
-	nb_word = (str[0] && str[0] != c) ? 1 : 0;
-	while (str[i])
+	scmd_init(&scmd, str);
+	nb_word = 1;
+	while (1)
 	{
-		if (ft_isquote(str[i]) == 1)
-		{
-			quote = str[i];
-			i += 1;
-			while (str[i] && str[i] != quote)
-				i += 1;
-			i += 1;
-		}
-		if (i > 0 && str[i] == c && str[i + 1] != c)
-			nb_word += 1;
-		else if (str[i] == c && str[i + 1] == c)
-			return (ft_error_splitshell());
-		(str[i]) ? i += 1 : 0;
+		if (!scmd_cur_char_is_escaped(&scmd) && scmd.str[scmd.pos] == c)
+			++nb_word;
+		if (!scmd_move_to_next_char(&scmd))
+			break ;
 	}
+	scmd_delete(scmd.sub_str_cmd);
 	return (nb_word);
 }
 
 static int			ft_position_word(char *str, char c, int word_n)
 {
-	int		i;
-	int		i_word;
-	char	quote;
+	int	i;
+	int	i_word;
+	t_str_cmd_inf	scmd;
 
 	i = 0;
 	i_word = 0;
-	(str[i] == c && str[i] != '\0') ? i += 1 : 0;
-	while (str[i])
+	scmd_init(&scmd, str);
+	while (1)
 	{
-		if (str[i] != c && i_word == word_n)
-			return (i);
-		if (ft_isquote(str[i]) == 1)
+		if (!scmd_cur_char_is_escaped(&scmd) && scmd.str[scmd.pos] == c)
 		{
-			quote = str[i];
-			i += 1;
-			while (str[i] && str[i] != quote)
-				i += 1;
-			i += 1;
-		}
-		if (i > 0 && str[i] == c && str[i + 1] != c)
 			i_word += 1;
-		(str[i]) ? i += 1 : 0;
+			i = scmd.pos + 1;
+		}
+		if (!scmd_move_to_next_char(&scmd) || i_word == word_n)
+			break ;
 	}
+	scmd_delete(scmd.sub_str_cmd);
 	return (i);
 }
 
 static int			ft_counter_letter(char *str, char c, int word_n)
 {
-	int		pos_word;
-	int		nb_letter;
-	char	quote;
+	int				i;
+	int				i_word;
+	int				len;
+	t_str_cmd_inf	scmd;
 
-	nb_letter = 0;
-	pos_word = ft_position_word(str, c, word_n);
-	while (str[pos_word + nb_letter] && str[pos_word + nb_letter] != c)
+	i = 0;
+	i_word = 0;
+	len = 0;
+	scmd_init(&scmd, str);
+	while (1)
 	{
-		if (ft_isquote(str[pos_word + nb_letter]) == 1)
+		if (!scmd_cur_char_is_escaped(&scmd) && scmd.str[scmd.pos] == c)
 		{
-			quote = str[pos_word + nb_letter];
-			nb_letter += 1;
-			while (str[pos_word + nb_letter] && str[pos_word + nb_letter]
-				!= quote)
-				nb_letter += 1;
-			nb_letter += 1;
+			if (i_word == word_n)
+				break ;
+			i_word += 1;
+			i = scmd.pos + 1;
 		}
-		else
-			nb_letter += 1;
+		if (!scmd_move_to_next_char(&scmd) || i_word == word_n + 1)
+			break ;
 	}
-	return (nb_letter);
+	scmd_delete(scmd.sub_str_cmd);
+	return (scmd.pos - i);
 }
 
 static void			ft_fill(char *str, char c, int word_n, char **split)

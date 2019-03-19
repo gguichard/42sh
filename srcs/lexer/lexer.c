@@ -10,7 +10,6 @@ char	**clean_input(char *str)
 	if ((split = ft_splitwhitespace_shell(str)) == NULL)
 		return (NULL);
 	return (split);
-	// parser(split, lst, alloc);
 }
 
 char	***read_lexer(char **lexer, char ***all_split_cmd)
@@ -42,7 +41,10 @@ char	***lexer(char *input, t_alloc *alloc)
 	i = 0;
 	lexer = NULL;
 	all_split_cmd = NULL;
+
+
 	// CLOSE CHECK QUOTE TO AVOID THE RECALL PROMPT TEST
+	// INTEGRATION CONVERTION ALIAS
 	// if (!check_opening_quote(&input, alloc) || !check_cmd_pipe(&input, alloc))
 	// {
 	// 	ft_memdel((void **)&input);
@@ -55,15 +57,15 @@ char	***lexer(char *input, t_alloc *alloc)
 	if ((lexer = ft_strsplit_shell(&input[i], ';')) == NULL)
 		return (NULL);
 
-	i = 0;
-	while (lexer[i])
-		i += 1;
+	// i = 0;
+	// while (lexer[i])
+	// {
+	// 	ft_printf("lexer[%d]: |%s|\n", i, lexer[i]);
+	// 	i += 1;
+	// }
 	if (!(all_split_cmd = (char***)malloc(sizeof(char**) * (i + 1))))
 		ft_exit_malloc();
-	// set_terminal(1);
-
 	all_split_cmd = read_lexer(lexer, all_split_cmd);
 	all_split_cmd[i] = NULL;
 	return (all_split_cmd);
-	// set_terminal(0);
 }
