@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 11:15:36 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 19:16:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 15:25:08 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 int	handle_move_left(t_cmdline *cmdline)
 {
 	cmdline->saved_col = -1;
-	if (cmdline->input.offset == 0)
+	if (cmdline->input.offset == 0 || (cmdline->cursor.y == 0
+				&& cmdline->cursor.x == INPUT_TOP_MARGIN))
 		return (0);
 	if (cmdline->cursor.x > 0)
 	{
@@ -26,8 +27,6 @@ int	handle_move_left(t_cmdline *cmdline)
 	}
 	else
 	{
-		if (cmdline->cursor.y == 0)
-			return (0);
 		cmdline->row -= 1;
 		cmdline->cursor.y -= 1;
 		cmdline->cursor.x = get_rightmost_column(cmdline

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 09:56:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 16:19:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,6 @@
 #include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
-
-void		print_mbstr(const wchar_t *buffer, size_t len)
-{
-	char	*str;
-	int		offset;
-	int		wlen;
-
-	str = (char *)malloc(len * sizeof(wint_t));
-	if (str == NULL)
-		write(STDOUT_FILENO, buffer, len * sizeof(wint_t));
-	else
-	{
-		offset = 0;
-		while (len > 0)
-		{
-			wlen = ft_wcharlen(*buffer);
-			ft_memcpy(str + offset, buffer, wlen);
-			offset += wlen;
-			buffer++;
-			len--;
-		}
-		write(STDOUT_FILENO, str, offset);
-		free(str);
-	}
-}
 
 static void	update_end_cursor_print(t_cmdline *cmdline, t_cursor *end_cursor
 		, const wchar_t *buffer, int offset)

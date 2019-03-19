@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 10:53:36 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 16:21:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define INPUT_SIZE_INCR 1024
 # define INPUT_MAX_CAPACITY 8192
+# define INPUT_TOP_MARGIN 5
 
 /*
 ** TERM INIT/MISC.
@@ -35,8 +36,9 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 ** INPUT/OUTPUT.
 */
 
-void		print_mbstr(const wchar_t *buffer, size_t len);
 void		print_go_next_line(void);
+void		print_mbstr(const wchar_t *buffer, size_t len);
+void		print_big_line_indicator(t_cmdline *cmdline);
 void		update_cmdline_after_offset(t_cmdline *cmdline);
 void		add_char_to_input(t_cmdline *cmdline, wint_t c);
 

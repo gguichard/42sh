@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 21:43:51 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/18 20:21:52 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 16:06:40 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,28 @@
 
 int	handle_home_key(t_cmdline *cmdline)
 {
-	if ((cmdline->cursor.y - cmdline->row) < 0)
-		return (0);
 	cmdline->saved_col = 0;
 	cmdline->input.offset = 0;
 	cmdline->cursor.x = cmdline->prompt.offset;
 	cmdline->cursor.y -= cmdline->row;
 	cmdline->row = 0;
+	if (cmdline->cursor.y < 0)
+	{
+		while ((cmdline->cursor.y < 0 || cmdline->cursor.x < INPUT_TOP_MARGIN)
+				&& cmdline->input.offset < cmdline->input.size)
+		{
+			if (cmdline->input.buffer[cmdline->input.offset] != '\n'
+					&& (cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
+				cmdline->cursor.x += 1;
+			else
+			{
+				cmdline->cursor.x = 0;
+				cmdline->cursor.y += 1;
+				cmdline->row += 1;
+			}
+			cmdline->input.offset += 1;
+		}
+	}
 	go_to_cursor_pos(cmdline->cursor);
 	return (1);
 }
