@@ -6,11 +6,11 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 11:19:18 by tcollard          #+#    #+#             */
-/*   Updated: 2019/02/21 20:12:29 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/15 15:08:10 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/shell.h"
+#include "shell.h"
 
 t_env	*find_elem_env(t_env **lst, char *key)
 {
@@ -18,16 +18,6 @@ t_env	*find_elem_env(t_env **lst, char *key)
 
 	tmp = *lst;
 	while (tmp && ft_strcmp(key, tmp->key) != 0)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-t_env	*get_last_elem_env(t_env **lst)
-{
-	t_env	*tmp;
-
-	tmp = *lst;
-	while (tmp && tmp->next)
 		tmp = tmp->next;
 	return (tmp);
 }
@@ -78,16 +68,4 @@ void	add_shlvl(t_env **lst)
 	}
 	else
 		add_elem_env(lst, "SHLVL", "1");
-}
-
-void	display_env(t_env *lst)
-{
-	t_env	*tmp;
-
-	tmp = lst;
-	while (tmp)
-	{
-		ft_printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
-	}
 }

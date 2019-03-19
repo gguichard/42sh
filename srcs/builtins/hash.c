@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "shell.h"
 #include "search_exec.h"
 #include "options.h"
@@ -93,21 +94,20 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_var *var_lst
 
 int			hash_builtins(t_ast *elem, t_alloc *alloc)
 {
-	t_opts	*opts;
+	t_opts	opts;
 
-	if ((opts = parse_opts(elem->input, "r")) == NULL)
-		return (1);
-	if (opts->error != 0)
+	parse_opts(&opts, elem->input, "r");
+	if (opts.error != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: hash: -%c: invalid option\n"
-				, opts->error);
+				, opts.error);
 		ft_dprintf(STDERR_FILENO, "42sh: hash: usage: hash [-r] [name ...]\n");
 		return (1);
 	}
-	if (opts->value == 0 && elem->input[opts->index] == NULL)
+	if (opts.value == 0 && elem->input[opts.index] == NULL)
 		return (!print_exectable(alloc->exectable));
-	if (has_opt(opts, 'r'))
+	if (has_opt(&opts, 'r'))
 		delete_hashentries(alloc->exectable);
-	return (!add_execs_to_hashtable(elem->input + opts->index
+	return (!add_execs_to_hashtable(elem->input + opts.index
 				, *(alloc->var), alloc->exectable));
 }

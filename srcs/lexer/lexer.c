@@ -2,17 +2,18 @@
 #include "parser_lexer.h"
 
 
-void		clean_input(char *str, t_ast *lst, t_alloc *alloc)
+char	**clean_input(char *str)
 {
 	char	**split;
 
 	split = NULL;
 	if ((split = ft_splitwhitespace_shell(str)) == NULL)
-		return ;
-	parser(split, lst, alloc);
+		return (NULL);
+	return (split);
+	// parser(split, lst, alloc);
 }
 
-void		read_lexer(char **lexer, t_ast *lst, t_alloc *alloc)
+char	***read_lexer(char **lexer, char ***all_split_cmd)
 {
 	int	i;
 	int	x;
@@ -23,22 +24,24 @@ void		read_lexer(char **lexer, t_ast *lst, t_alloc *alloc)
 		x = 0;
 		while (lexer[i][x] && ft_isspace(lexer[i][x]))
 			x += 1;
-		(lexer[i][x]) ? clean_input(lexer[i], lst, alloc) : 0;
+		all_split_cmd[i] = (lexer[i][x]) ? clean_input(lexer[i]) : 0;
 		ft_memdel((void **)&(lexer[i]));
 		i += 1;
 	}
 	(lexer != NULL) ? free(lexer) : 0;
+	return (all_split_cmd);
 }
 
-void		lexer(char *input, t_alloc *alloc)
+char	***lexer(char *input, t_alloc *alloc)
 {
 	int		i;
 	char	**lexer;
-	t_ast	*lst;
+	char	***all_split_cmd;
 
+	(void)alloc;
 	i = 0;
 	lexer = NULL;
-	lst = NULL;
+	all_split_cmd = NULL;
 	// CLOSE CHECK QUOTE TO AVOID THE RECALL PROMPT TEST
 	// if (!check_opening_quote(&input, alloc) || !check_cmd_pipe(&input, alloc))
 	// {
@@ -55,9 +58,15 @@ void		lexer(char *input, t_alloc *alloc)
 		return ;
 	}
 
+	i = 0;
+	while (lexer[i])
+		i += 1;
+	if (!(all_split_cmd = (char***)malloc(sizeof(char**) * (i + 1))))
+		ft_exit_malloc();
 	// set_terminal(1);
 
-	read_lexer(lexer, lst, alloc);
-
+	all_split_cmd = read_lexer(lexer, all_split_cmd);
+	all_split_cmd[i] = NULL;
+	return (all_split_cmd);
 	// set_terminal(0);
 }

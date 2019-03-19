@@ -52,17 +52,20 @@ static void		sort_ast(t_ast *lst, t_ast **sort)
 	}
 }
 
-static void		clean_tab_and_ast(char **input, t_ast *lst)
+static t_ast	*clean_tab_and_ast(char **input, t_ast **lst)
 {
 	delete_str_tab(input);
 	del_lst_ast(lst);
+	return (NULL);
 }
 
-void			parser(char **input, t_ast *lst, t_alloc *alloc)
+t_ast			*parser(char **input, t_alloc *alloc)
 {
 	int		i;
 	t_ast	*sort;
+	t_ast	*lst;
 
+	lst = NULL;
 	if (ft_error_parse_redir(input) == 1)
 	{
 		alloc->ret_val = 1;
@@ -94,5 +97,5 @@ void			parser(char **input, t_ast *lst, t_alloc *alloc)
 
 	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc, 0) : 0;
 
-	clean_tab_and_ast(input, lst);
+	// clean_tab_and_ast(input, lst);
 }

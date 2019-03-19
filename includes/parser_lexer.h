@@ -7,10 +7,11 @@
 ************************************ LEXER *************************************
 */
 
-void	lexer(char *input, t_alloc *alloc);
-void	clean_input(char *str, t_ast *lst, t_alloc *alloc);
+char	***lexer(char *input, t_alloc *alloc);
+char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
-void	read_lexer(char **lexer, t_ast *lst, t_alloc *alloc);
+char	***read_lexer(char **lexer, char ***all_split_cmd);
+int		replace_val_ret(char **str, int i, int x);
 void	expand_home_shortcut(char **s, t_var *lst_env);
 int		remove_quote(char **s, int *i, t_alloc *alloc);
 int		convert_quote(char **s, t_alloc *alloc);
@@ -47,7 +48,7 @@ char	*ft_back_quote(char *sub, t_alloc *alloc);
 ************************************ PARSER ************************************
 */
 
-void	parser(char **input, t_ast *lst, t_alloc *alloc);
+t_ast	*parser(char **input, t_alloc *alloc);
 void	fill_ast(char **s, t_ast **lst, int save, int i);
 int		analyzer(t_ast *sort, t_alloc *alloc, int no_fork);
 int		dispatch_agreg(t_ast *elem, t_alloc *alloc, int no_fork);

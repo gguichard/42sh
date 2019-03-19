@@ -24,33 +24,45 @@ static void	display_lst_var(t_var *lst)
 {
 	while (lst)
 	{
-		if (lst->is_env == 1)
+		if (lst->is_env == 1 && lst->value)
 			ft_printf("declare -x %s=\"%s\"\n", lst->key, lst->value);
+		else if (lst->is_env == 1)
+			ft_printf("declare -x %s\n", lst->key);
 		lst = lst->next;
 	}
 }
 
-// static void	add_new_var(t_var **lst, char *var)
-// {
-//
-// }
+static void	add_new_var(t_var **lst, char *var)
+{
+	int	i;
+
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i += 1;
+	add_var(lst, var, i, 1);
+}
 
 static void	export_var(t_var **lst, t_ast *elem, int i)
 {
 	t_var	*tmp;
+	char	*key;
 
-	(void)lst;
 	tmp = NULL;
+	key = NULL;
 	while (elem->input[i])
 	{
-		// if (!(tmp = find_elem_env(*lst, key)))
-		// 	add_new_var(lst, elem->input[i]);
-		// else
-		// {
-			// ft_memdel((void **)&(tmp->value));
-			// if (!(tmp->value = ft_strdup(value)))
-				// ft_exit_malloc();
-		// }
+		key = get_key(elem->input[i]);
+		if (!(tmp = find_elem_env(*lst, key)))
+			add_new_var(lst, elem->input[i]);
+		else
+		{
+			ft_memdel((void **)&key);
+			key = get_value(elem->input[i]);
+			ft_memdel((void **)&(tmp->value));
+			if (!(tmp->value = ft_strdup(key)))
+				ft_exit_malloc();
+		}
+		ft_memdel((void **)&key);
 		i += 1;
 	}
 }
@@ -65,7 +77,7 @@ int	export_builtins(t_ast *elem, t_alloc *alloc)
 	ret = 0;
 	if ((ret = check_options(elem, &i)) == 1)
 		return (ret);
-	if (i != 1)
+	if (i != 1 && !(elem->input[i]))
 		display_lst_var(*(alloc->var));
 	else
 		export_var(alloc->var, elem, i);

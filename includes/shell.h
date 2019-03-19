@@ -93,6 +93,7 @@ typedef struct			s_alloc
 	t_var				**var;
 	t_builtin			*builtins;
 	t_hashtable			*exectable;
+	t_hashtable			*aliastable;
 	int					fd[10];
 }						t_alloc;
 
@@ -122,7 +123,7 @@ void	redirect_term_controller(pid_t new_controler, int type);
 
 void	delete_str_tab(char **tab_str);
 void	del_lst_env(t_var **lst);
-void	del_lst_ast(t_ast *lst);
+void	del_lst_ast(t_ast **lst);
 void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
 void	set_alloc(t_alloc *al, t_var **lst);
