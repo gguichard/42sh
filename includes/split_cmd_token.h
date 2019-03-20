@@ -27,7 +27,8 @@ int				add_token_to_lst(t_list **token_lst, char *token_str
 		, t_token_type token_type);
 
 /*
-** Retourne la liste des tokens de la commande passee en parametre.
+** Retourne la liste des tokens de la commande passee en parametre. Retourne
+** NULL en cas d'erreur de malloc.
 */
 t_list			*split_cmd_token(t_str_cmd_inf *str_cmd_inf);
 
