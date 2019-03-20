@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 01:43:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 10:36:02 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static void	scroll_if_needed(t_cmdline *cmdline, t_cursor *sc, t_cursor *ec)
 		{
 			tputs(tgetstr("cr", NULL), 1, t_putchar);
 			tputs(tgetstr("sf", NULL), cmdline->winsize.ws_row, t_putchar);
-			sc->y -= 1;
+			if (sc != NULL)
+				sc->y -= 1;
 		}
 	}
 }
@@ -84,9 +85,10 @@ static void	print_line_by_line(t_cmdline *cmdline, int off_start
 }
 
 /*
- ** Met a jour l'affichage de la ligne de commande apres l'offset indique
- ** dans l'input de celle-ci.
- */
+** Met a jour l'affichage de la ligne de commande apres l'offset indique
+** dans l'input de celle-ci.
+*/
+
 void		update_cmdline_at_offset(t_cmdline *cmdline)
 {
 	t_cursor	end_cursor;
@@ -101,10 +103,11 @@ void		update_cmdline_at_offset(t_cmdline *cmdline)
 }
 
 /*
- ** Affiche la totalite de la ligne de commande.
- ** ATTENTION : le curseur dans la ligne de commande doit etre defini
- ** a la position ou celle-ci va commencee a etre ecrite.
- */
+** Affiche la totalite de la ligne de commande.
+** ATTENTION : le curseur dans la ligne de commande doit etre defini
+** a la position ou celle-ci va commencee a etre ecrite.
+*/
+
 void		print_cmdline(t_cmdline *cmdline)
 {
 	t_cursor	start_cursor;

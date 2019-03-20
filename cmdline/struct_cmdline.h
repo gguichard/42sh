@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 10:14:25 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 10:32:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ struct				s_prompt
 	enum e_prompt	type;
 	const char		*str;
 	int				offset;
+	int				big_offset;
 };
 
 struct				s_visual

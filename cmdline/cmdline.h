@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 01:16:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 10:13:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 # define INPUT_SIZE_INCR 1024
 # define INPUT_MAX_CAPACITY 8192
-# define INPUT_TOP_MARGIN 5
 
 /*
 ** TERM INIT/MISC.

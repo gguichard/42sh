@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 01:15:32 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 10:32:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,18 @@ void	print_mbstr(const wchar_t *buffer, size_t len)
 
 int		print_big_cmdline_prompt(t_cmdline *cmdline)
 {
-	int	is_at_position;
+	int			is_at_position;
+	int			offset;
 
 	is_at_position = 0;
 	if (cmdline->row > cmdline->cursor.y)
 	{
 		go_to_cursor_pos((t_cursor){0, 0});
-		write(STDOUT_FILENO, ">... ", 5);
+		offset = 0;
+		if (cmdline->visual.toggle)
+			offset += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
+		offset += ft_max(write(STDOUT_FILENO, ">... ", 5), 0);
+		cmdline->prompt.big_offset = offset;
 		while (cmdline->cursor.y < 0)
 		{
 			if (!handle_cursor_down(cmdline))

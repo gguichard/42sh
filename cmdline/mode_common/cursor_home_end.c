@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 21:43:51 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 16:06:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 10:32:55 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	handle_home_key(t_cmdline *cmdline)
 	cmdline->row = 0;
 	if (cmdline->cursor.y < 0)
 	{
-		while ((cmdline->cursor.y < 0 || cmdline->cursor.x < INPUT_TOP_MARGIN)
+		while ((cmdline->cursor.y < 0
+					|| cmdline->cursor.x < cmdline->prompt.big_offset)
 				&& cmdline->input.offset < cmdline->input.size)
 		{
 			if (cmdline->input.buffer[cmdline->input.offset] != '\n'
