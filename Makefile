@@ -51,6 +51,7 @@ SRC =	main.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)sort_ast.c \
 		$(PATH_PARSER)analyzer.c \
+		$(PATH_PARSER)token_analyzer.c \
 		$(PATH_PARSER)str_cmd_inf.c \
 		$(PATH_PARSER)str_cmd_inf_utils.c \
 		$(PATH_PARSER)str_cmd_inf_escape.c \

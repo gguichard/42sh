@@ -72,6 +72,8 @@ void	check_quote(char *s);
 void	replace_quote(char *s, int *i);
 void	ft_custom_memmove(char *dst, char *src, size_t len);
 
+int		token_analyser(t_list *lst_tk);
+
 /*
 *********************************** AST TOOLS **********************************
 */

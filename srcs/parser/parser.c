@@ -118,22 +118,6 @@ t_ast	*create_elem(t_list **lst_tk)
 	return (elem);
 }
 
-static int		check_syntax(t_list *lst)
-{
-	while (lst)
-	{
-		if (get_tk(lst)->type == 2 && lst->next && get_tk(lst->next)->type != 4)
-			get_tk(lst)->type = 4;
-		else if (get_tk(lst)->type == 2 && !(lst->next))
-		{
-			ft_dprintf(2, "42sh: syntax error near `\\n'\n");
-			return (0);
-		}
-		lst = lst->next;
-	}
-	return (1);
-}
-
 t_ast			*parser(t_list *lst_tk, t_alloc *alloc)
 {
 	t_ast	*sort;
@@ -148,7 +132,7 @@ t_ast			*parser(t_list *lst_tk, t_alloc *alloc)
 	j = 0;
 
 	//ADD FUNCTION TO SYNTAX ANALYSE HERE OR DURING TOKENISATION
-	if (!check_syntax(tmp))
+	if (!token_analyser(tmp))
 		return (NULL);
 
 
