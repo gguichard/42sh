@@ -102,7 +102,7 @@ int			hash_builtins(t_ast *elem, t_alloc *alloc)
 		ft_dprintf(STDERR_FILENO, "42sh: hash: -%c: invalid option\n"
 				, opts.error);
 		ft_dprintf(STDERR_FILENO, "42sh: hash: usage: hash [-r] [name ...]\n");
-		return (1);
+		return (2);
 	}
 	if (opts.value == 0 && elem->input[opts.index] == NULL)
 		return (!print_exectable(alloc->exectable));
