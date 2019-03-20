@@ -66,9 +66,10 @@ SRC =	main.c \
 		$(PATH_BUILT)alias.c \
 		$(PATH_BUILT)unalias.c \
 		$(PATH_BUILT)test.c \
+		$(PATH_BUILT)test/test_builtin_utils.c \
+		$(PATH_BUILT)test/file_tests_1.c \
 		$(PATH_BUILT)test/str_tests.c \
 		$(PATH_BUILT)test/int_tests.c \
-		$(PATH_BUILT)test/int_tests_utils.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 16:08:29 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 16:16:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 20:29:45 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 #include "printf.h"
 #include "error.h"
 
-int	error_test(char **input, int count)
+void	error_test(int argc, char **argv)
 {
-	if (count == 2)
+	if (argc == 2)
 		ft_dprintf(STDERR_FILENO, "42sh: test: %s: "
-				"unary operator expected\n", input[0]);
+				"unary operator expected\n", argv[0]);
 	else
 		ft_dprintf(STDERR_FILENO, "42sh: test: %s: "
-				"binary operator expected\n", input[1]);
-	return (2);
+				"binary operator expected\n", argv[1]);
 }
