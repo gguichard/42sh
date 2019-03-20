@@ -37,6 +37,7 @@ SRC =	main.c \
 		$(PATH_ERROR)error_setenv.c \
 		$(PATH_ERROR)error_unsetenv.c \
 		$(PATH_ERROR)error_export.c \
+		$(PATH_ERROR)error_test.c \
 		$(PATH_ERROR)exec_error.c \
 		$(PATH_ERROR)error_utils.c \
 		$(PATH_LEXER)check_closing_quote.c \
@@ -64,6 +65,10 @@ SRC =	main.c \
 		$(PATH_BUILT)hash.c \
 		$(PATH_BUILT)alias.c \
 		$(PATH_BUILT)unalias.c \
+		$(PATH_BUILT)test.c \
+		$(PATH_BUILT)test/str_tests.c \
+		$(PATH_BUILT)test/int_tests.c \
+		$(PATH_BUILT)test/int_tests_utils.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \
@@ -115,6 +120,7 @@ $(NAME): $(OBJS)
 $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_BUILT) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_BUILT)test 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_ERROR) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_EXEC) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_LEXER) 2> /dev/null || true
