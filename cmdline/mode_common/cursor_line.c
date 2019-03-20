@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:35:45 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/17 00:28:44 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 13:06:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 int	handle_line_start(t_cmdline *cmdline)
 {
+	int	offset;
+
 	cmdline->saved_col = 0;
-	if (cmdline->cursor.x > 0 && (cmdline->row != 0
-				|| cmdline->cursor.x > cmdline->prompt.offset))
+	if ((cmdline->row != 0 || cmdline->cursor.x > cmdline->prompt.offset)
+			&& cmdline->cursor.x > 0)
 	{
 		if (cmdline->row == 0)
 		{
@@ -26,8 +28,11 @@ int	handle_line_start(t_cmdline *cmdline)
 		}
 		else
 		{
-			cmdline->input.offset = cmdline->input.offset - cmdline->cursor.x;
-			cmdline->cursor.x = 0;
+			offset = cmdline->input.offset;
+			if (cmdline->cursor.y == 0)
+				offset += cmdline->prompt.big_offset;
+			cmdline->input.offset = offset - cmdline->cursor.x;
+			cmdline->cursor.x = offset;
 		}
 		go_to_cursor_pos(cmdline->cursor);
 	}
