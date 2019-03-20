@@ -20,8 +20,8 @@ int	fg_builtins(t_ast *elem, t_alloc *alloc)
 	{
 		job = tmp->content;
 		ft_printf("%s\n", job->cmd);
-		redirect_term_controller(job->pid, 0);
-		kill(job->pid, SIGCONT);
+		redirect_term_controller(job->gpid, 0);
+		killpg(job->gpid, SIGCONT);
 		waitpid(job->pid, &alloc->ret_val, WUNTRACED);
 		redirect_term_controller(0, 1);
 	}

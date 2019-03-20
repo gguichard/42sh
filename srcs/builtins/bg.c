@@ -31,7 +31,7 @@ int	bg_builtins(t_ast *elem, t_alloc *alloc)
 			index = ft_atoi(elem->input[1]);
 		ft_printf("[%d] %s &\n", index, job->cmd);
 		job->state = RUNNING;
-		kill(job->pid, SIGCONT);
+		killpg(job->gpid, SIGCONT);
 	}
 	return (0);
 }
