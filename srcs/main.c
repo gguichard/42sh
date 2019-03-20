@@ -25,14 +25,14 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 /*
 **	VERIF TOKEN AND PRINT BEFORE PARSE
 */
-	// (void)alloc;
-	// t_list	*tmp;
-	// tmp = lst_tk;
-	// while (tmp)
-	// {
-	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
-	// 	tmp = tmp->next;
-	// }
+	(void)alloc;
+	t_list	*tmp;
+	tmp = lst_tk;
+	while (tmp)
+	{
+		ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
+		tmp = tmp->next;
+	}
 
 	while (lst_tk)
 	{
@@ -55,11 +55,11 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 /*
 ** PRINT AST AND REINIT NODE
 */
-	// if (sort_ast)
-	// {
-	// 	read_sort_descent(sort_ast, 1);
-	// 	reinit_print(alloc->ast, 1);
-	// }
+	if (sort_ast)
+	{
+		read_sort_descent(sort_ast, 1);
+		reinit_print(alloc->ast, 1);
+	}
 
 //FUNCTION TO CLEAN AST
 	}

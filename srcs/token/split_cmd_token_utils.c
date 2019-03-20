@@ -8,14 +8,19 @@ int				is_a_spe_char(char c)
 {
 	if (c == '\0')
 		return (0);
-	else
-		return (ft_strchr(WORD_SEP_CHARS CMD_SEP_CHARS OPE_CHARS, c) != NULL);
+	else if (ft_strchr(WORD_SEP_CHARS, c) != NULL)
+		return (1);
+	else if (ft_strchr(CMD_SPE_CHARS, c) != NULL)
+		return (1);
+	return (0);
 }
 
-int				cur_token_is_number(t_str_cmd_inf *str_cmd_inf
-		, const char *token_start)
+int				cur_token_is_number(t_split_cmd_inf *sp_cmd)
 {
-	while (token_start != str_cmd_inf->str + str_cmd_inf->pos)
+	const char	*token_start;
+
+	token_start = sp_cmd->tk_start;
+	while (token_start != sp_cmd->scmd->str + sp_cmd->scmd->pos)
 	{
 		if (!ft_isdigit(*token_start))
 			return (0);
@@ -32,29 +37,35 @@ int				get_cur_token_len(const char *token_start)
 	if (is_a_spe_char(*token_start))
 	{
 		++len;
-		if ((*token_start == '>' || *token_start == '<')
+		if ((*token_start == '>' || *token_start == '<' || *token_start == '&'
+					|| *token_start == '|')
 				&& *token_start == token_start[1])
 			++len;
 	}
 	return (len);
 }
 
-t_token_type	get_token_for_opt_add(t_str_cmd_inf *str_cmd_inf
-		, const char *token_start, int *end_by_and)
+/*
+** Retourne le type du token avant le char actuel dans le cas ou le char actuel
+** est un spe char.
+*/
+
+t_token_type	get_tk_type_before_cur_char(t_split_cmd_inf *sp_cmd)
 {
-	if (str_cmd_inf->str[str_cmd_inf->pos] == '>'
-			|| str_cmd_inf->str[str_cmd_inf->pos] == '<')
+	sp_cmd->last_tk_end_by_and = 0;
+	if (sp_cmd->scmd->str[sp_cmd->scmd->pos] == '>'
+			|| sp_cmd->scmd->str[sp_cmd->scmd->pos] == '<')
 	{
-		if (cur_token_is_number(str_cmd_inf, token_start))
+		if (cur_token_is_number(sp_cmd))
 			return (TK_LRED_OPT);
-		else if (str_cmd_inf->pos > 0
-				&& get_cur_token_len(str_cmd_inf->str + str_cmd_inf->pos) == 1
-				&& str_cmd_inf->str[str_cmd_inf->pos] == '>'
-				&& str_cmd_inf->str[str_cmd_inf->pos - 1] == '&')
+		else if (sp_cmd->scmd->pos > 0
+				&& sp_cmd->scmd->str[sp_cmd->scmd->pos] == '>'
+				&& !scmd_char_at_is_escaped(sp_cmd->scmd, sp_cmd->scmd->pos - 1)
+				&& sp_cmd->scmd->str[sp_cmd->scmd->pos - 1] == '&')
 		{
-			*end_by_and = 1;
-			return (TK_PARAM);
+			sp_cmd->last_tk_end_by_and = 1;
+			return (TK_PARAM); //TK_WORD
 		}
 	}
-	return (TK_PARAM);
+	return (TK_PARAM); //TK_WORD
 }
