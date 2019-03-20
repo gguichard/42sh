@@ -59,8 +59,8 @@ t_token_type	get_tk_type_before_cur_char(t_split_cmd_inf *sp_cmd)
 		if (cur_token_is_number(sp_cmd))
 			return (TK_LRED_OPT);
 		else if (sp_cmd->scmd->pos > 0
-				&& get_cur_token_len(sp_cmd->scmd->str + sp_cmd->scmd->pos) == 1
 				&& sp_cmd->scmd->str[sp_cmd->scmd->pos] == '>'
+				&& !scmd_char_at_is_escaped(sp_cmd->scmd, sp_cmd->scmd->pos - 1)
 				&& sp_cmd->scmd->str[sp_cmd->scmd->pos - 1] == '&')
 		{
 			sp_cmd->last_tk_end_by_and = 1;

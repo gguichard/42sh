@@ -97,7 +97,9 @@ static int				split_at_pos(t_split_cmd_inf *sp_cmd)
 {
 	if (scmd_cur_char_is_in_nothing(sp_cmd->scmd)
 			&& is_a_spe_char(sp_cmd->scmd->str[sp_cmd->scmd->pos])
-			&& !scmd_cur_char_is_escaped(sp_cmd->scmd))
+			&& !scmd_cur_char_is_escaped(sp_cmd->scmd)
+			&& (sp_cmd->scmd->str[sp_cmd->scmd->pos] != '&'
+				|| sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] != '>'))
 	{
 		if (!split_spe_char(sp_cmd))
 			return (0);
