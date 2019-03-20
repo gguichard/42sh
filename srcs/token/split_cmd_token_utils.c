@@ -8,8 +8,11 @@ int				is_a_spe_char(char c)
 {
 	if (c == '\0')
 		return (0);
-	else
-		return (ft_strchr(WORD_SEP_CHARS CMD_SPE_CHARS, c) != NULL);
+	else if (ft_strchr(WORD_SEP_CHARS, c) != NULL)
+		return (1);
+	else if (ft_strchr(CMD_SPE_CHARS, c) != NULL)
+		return (1);
+	return (0);
 }
 
 int				cur_token_is_number(t_split_cmd_inf *sp_cmd)
