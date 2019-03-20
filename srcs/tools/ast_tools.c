@@ -1,104 +1,117 @@
 #include "shell.h"
 #include "parser_lexer.h"
+#include "token_inf.h"
 
-void		fill_last_elem(char **s, int i, int save, t_ast *new)
+t_ast	*fill_cmd(t_list **lst_tk)
 {
-	if (new->type == NO_TYPE)
-		fill_input(s, i, save, new);
-	else if (i != save)
-		add_input_prev_cmd(s, i, save, new);
-}
-
-void		link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
-{
-	t_ast	*h_node;
-
-	h_node = node;
-	if ((*sort)->type == LOGIC)
-	{
-		if (node->right)
-		{
-			tmp->left = node->right;
-			node->right->back = tmp;
-		}
-		node->right = tmp;
-		tmp->back = node;
-	}
-	else if (tmp->type != HEREDOC)
-	{
-		tmp->left = node;
-		node->back = tmp;
-		((*sort)->type != LOGIC) ? (*sort) = tmp : 0;
-	}
-	else
-	{
-		tmp->left = (*sort);
-		(*sort)->back = tmp;
-		*sort = tmp;
-	}
-}
-
-static void	fill_last_input(char **s, int end, int start, t_ast *elem)
-{
-	int		i;
-	t_ast	*tmp;
+	t_list	*tmp;
+	t_ast	*elem;
 	int		len;
-
-	i = 0;
-	tmp = NULL;
-	len = end - start + 1;
-	if (!(elem->input = (char**)malloc(sizeof(char*) * len)))
-		ft_exit_malloc();
-	while (start < end && i < len - 1)
-	{
-		if (!(elem->input[i] = ft_strdup(s[start])))
-			ft_exit_malloc();
-		start += 1;
-		i += 1;
-	}
-	elem->input[i] = NULL;
-	elem->type = CMD;
-}
-
-static void	fill_input_prev_cmd(t_ast *elem, int start, int end, char **s)
-{
 	int		i;
-	int		len;
-	char	**tmp;
 
-	i = 0;
-	len = 0;
-	while (elem->input[len])
-		len += 1;
-	len += end - start;
-	(!(tmp = (char**)malloc(sizeof(char*) * (len + 1)))) ? ft_exit_malloc() : 0;
-	while (elem->input[i])
+	tmp = (*lst_tk)->next;
+	elem = set_new_elem();
+	len = 1;
+	i = 1;
+	while (tmp && get_tk(tmp)->type != TK_CMD_SEP &&
+	get_tk(tmp)->type != TK_CMD)
 	{
-		tmp[i] = ft_strdup(elem->input[i]);
-		i += 1;
+		if (get_tk(tmp)->type == TK_PARAM)
+			len += 1;
+		tmp = tmp->next;
 	}
+	init_input(elem, len, *lst_tk);
+	*lst_tk = (*lst_tk)->next;
+	tmp = *lst_tk;
 	while (i < len)
 	{
-		tmp[i] = ft_strdup(s[start++]);
-		i += 1;
+		if (get_tk(tmp)->type == TK_PARAM)
+		{
+			if (!(elem->input[i] = ft_strdup(get_tk(tmp)->token)))
+				ft_exit_malloc();
+			i += 1;
+		}
+		tmp = tmp->next;
 	}
-	tmp[i] = NULL;
-	delete_str_tab(elem->input);
-	elem->input = tmp;
+	return (elem);
 }
 
-void		add_input_prev_cmd(char **s, int end, int start, t_ast *elem)
+t_ast	*fill_ope(t_list **lst_tk)
 {
-	if (end == start)
-		return ;
-	while (elem->back && elem->type != CMD && elem->type < OPERATOR)
-		elem = elem->back;
-	if (elem->type != CMD)
+	t_ast	*elem;
+	int		len;
+	int		i;
+
+	elem = set_new_elem();
+	i = 1;
+	if (get_tk(*lst_tk)->type == TK_RED_OPE)
+		len = 2;
+	else
+		len = 3;
+	init_input(elem, len, *lst_tk);
+	*lst_tk = (*lst_tk)->next;
+	while (i < len)
 	{
-		while (elem->next)
-			elem = elem->next;
-		elem = add_new_elem(&elem);
-		return (fill_last_input(s, end, start, elem));
+		if (!(elem->input[i] = ft_strdup(get_tk(*lst_tk)->token)))
+			ft_exit_malloc();
+		i += 1;
+		*lst_tk = (*lst_tk)->next;
 	}
-	fill_input_prev_cmd(elem, start, end, s);
+	return (elem);
+}
+
+t_ast	*fill_assign(t_list **lst_tk)
+{
+	t_list	*tmp;
+	t_ast	*elem;
+	int		len;
+	int		i;
+
+	tmp = (*lst_tk)->next;
+	elem = set_new_elem();
+	len = 1;
+	i = 1;
+	while (tmp && get_tk(tmp)->type == TK_ASSIGN)
+	{
+		len += 1;
+		tmp = tmp->next;
+	}
+	init_input(elem, len, *lst_tk);
+	*lst_tk = (*lst_tk)->next;
+	while (i < len)
+	{
+		if (!(elem->input[i] = ft_strdup(get_tk(*lst_tk)->token)))
+			ft_exit_malloc();
+		i += 1;
+		*lst_tk = (*lst_tk)->next;
+	}
+	return (elem);
+}
+
+t_ast	*fill_cmd_sep(t_list **lst_tk)
+{
+	t_ast	*elem;
+
+	elem = set_new_elem();
+	init_input(elem, 1, *lst_tk);
+	*lst_tk = (*lst_tk)->next;
+	return (elem);
+}
+
+t_ast	*create_elem(t_list **lst_tk)
+{
+	t_ast			*elem;
+	t_token_type	type;
+
+	elem = NULL;
+	type = get_tk(*lst_tk)->type;
+	if (type == TK_CMD)
+		elem = fill_cmd(lst_tk);
+	else if (type == TK_LRED_OPT || type == TK_RED_OPE)
+		elem = fill_ope(lst_tk);
+	else if (type == TK_CMD_SEP)
+		elem = fill_cmd_sep(lst_tk);
+	else if (type == TK_ASSIGN)
+		elem = fill_assign(lst_tk);
+	return (elem);
 }

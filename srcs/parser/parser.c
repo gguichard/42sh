@@ -39,125 +39,71 @@ t_ast	*set_new_elem(void)
 	return (new);
 }
 
-void		fill_elem(t_ast *elem, t_list *lst, int len)
-{
-	int i;
-
-	i = 0;
-	if (!(elem->input = (char **)malloc(sizeof(char *) * (len + 1))))
-		ft_exit_malloc();
-	while (i < len)
-	{
-		if (!(elem->input[i] = ft_strdup(get_tk(lst)->token)))
-			ft_exit_malloc();
-		i += 1;
-		lst = lst->next;
-	}
-	elem->input[len] = NULL;
-}
-
-static void	set_type_elem(t_ast *elem, t_list **lst_tk, int *len)
+void	set_type(t_ast *elem, t_list *lst_tk)
 {
 	static char	*ope[10] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
 	"&&", "||"};
-	int			i;
+	char	*str;
+	int		i;
 
 	i = 0;
-	while (i < 10)
-	{
-		if (ft_strcmp(get_tk(*lst_tk)->token, ope[i]) == 0)
-			break ;
+	str = get_tk(lst_tk)->token;
+	while(ft_strcmp(ope[i], str) != 0 && i < 10)
 		i += 1;
-	}
-	if (i < 6)
-	{
-		*len += 1;
+	if (i == 3)
+		elem->type = HEREDOC;
+	else if (i < 6)
 		elem->type = REDIR;
-		*lst_tk = (*lst_tk)->next;
-	}
-	else if (i == 10)
-	{
-		// PRINT ERROR
-		ft_dprintf(2, "ERROR IN PARSER.C SET_ELEM_TYPE\n");
-	}
+	else if (i < 8)
+		elem->type = OPERATOR;
+	else if (i < 10)
+		elem->type = LOGIC;
 }
 
-t_ast	*create_elem(t_list **lst_tk)
+void	init_input(t_ast *elem, int len, t_list *lst_tk)
 {
-	t_ast	*elem;
-	t_list	*start;
-	int		type;
-	int		len;
+	t_token_type	type;
 
-	start = *lst_tk;
-	len = 0;
-	elem = set_new_elem();
-	type = get_tk(*lst_tk)->type;
-	if (type == 1)
-	{
-		elem->type = 1;
-		while (*lst_tk && get_tk(*lst_tk)->type == type)
-		{
-			*lst_tk = (*lst_tk)->next;
-			len += 1;
-		}
-	}
-	else if (type > 1)
-	{
-		elem->type = 2;
-		while (*lst_tk && get_tk(*lst_tk)->type > 1)
-		{
-			//HAVE TO UPDATE POUR DIFFERENCIE L'OPE
-			if (get_tk(*lst_tk)->type == 4)
-				set_type_elem(elem, lst_tk, &len);
-				*lst_tk = (*lst_tk)->next;
-				len += 1;
-		}
-	}
-	fill_elem(elem, start, len);
-	return (elem);
+	type = get_tk(lst_tk)->type;
+	if (type == TK_LRED_OPT)
+		set_type(elem, lst_tk->next);
+	else if (type > 3)
+		set_type(elem, lst_tk);
+	else if (type == TK_ASSIGN)
+		elem->type = ASSIGN;
+	else if (type == TK_CMD)
+		elem->type = CMD;
+	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
+		ft_exit_malloc();
+	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
+		ft_exit_malloc();
+	elem->input[len] = NULL;
 }
 
-t_ast			*parser(t_list *lst_tk, t_alloc *alloc)
+t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 {
-	t_ast	*sort;
-	t_ast	*elem;
-	t_list	*tmp;
-	int		j;
+	t_ast			*sort;
+	t_ast			*elem;
+	t_token_type	type;
 
 	(void)alloc;
 	sort = NULL;
 	elem = NULL;
-	tmp = lst_tk;
-	j = 0;
-
-	//ADD FUNCTION TO SYNTAX ANALYSE HERE OR DURING TOKENISATION
-	if (!token_analyser(tmp))
+	if (token_analyser(*lst_tk) == PR_ERROR)
 		return (NULL);
-
-
-	while (tmp)
+	while (*lst_tk)
 	{
-		elem = create_elem(&tmp);
-		sort_ast(elem, &sort);
-
-		// ft_printf("last tmp: |%s|\n\n", get_tk(tmp)->token);
-
-
-		// j = 0;
-		// while (elem->input && elem->input[j])
-		// {
-		// 	ft_printf("input[%d]: |%s|\n", j, elem->input[j]);
-		// 	j += 1;
-		// }
-		// ft_printf("END\n");
+		type = get_tk(*lst_tk)->type;
+		if (type == TK_CMD_SEP && (ft_strcmp(get_tk(*lst_tk)->token, ";") == 0
+		|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
+			break ;
+		else if (type != TK_PARAM)
+		{
+			elem = create_elem(lst_tk);
+			sort_ast(elem, &sort);
+		}
+		else
+			*lst_tk = (*lst_tk)->next;
 	}
-
-	// while (lst_tk)
-	// {
-	// 	ft_printf("type[%d]: %d\nvalue[%d]: |%s|\n\n", j, get_tk(lst_tk)->type, j, get_tk(lst_tk)->token);
-	// 	lst_tk = lst_tk->next;
-	// 	j += 1;
-	// }
 	return (sort);
 }

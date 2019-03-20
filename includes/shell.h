@@ -18,9 +18,9 @@
 ************************************ DEFINE ************************************
 */
 
-# define LOGIC		4
-# define OPERATOR	3
-# define AGREG		2
+# define LOGIC		5
+# define OPERATOR	4
+# define ASSIGN		3
 # define REDIR		2
 # define HEREDOC	1
 # define CMD		0

@@ -1,8 +1,17 @@
 PARSER:
-	integrate Franck stuff in lexer ft_splitwhitespace_shell.
+	integrate Franck tokenisation
+	check token_analyser:
+	>
+	&
+	; ;
+	&&
+	||
+	ls | ;
+	ls & ;
+	...........
 
-
-function analyse token:
-	1 - OK for execution
-	2 - Missign end cmd
-	3 - syntax error near unexpected token `'
+TODO:
+	OK	- all fill_elem...
+	2	- before execution (anylzer_exec_dispatch):
+		a - do expand (var avec espace considerer comme diferent token)
+		b - do remove quote

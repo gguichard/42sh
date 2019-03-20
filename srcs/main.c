@@ -10,39 +10,60 @@
 #include "split_cmd_token.h"
 #include "token_inf.h"
 
-// #include "get_next_line.h"
-// #include "printf.h"
-
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
 	t_ast			*sort_ast;
 	t_list			*lst_tk;
 	t_str_cmd_inf	scmd;
-	// int				j;
+
 
 	sort_ast = NULL;
 	lst_tk = NULL;
-	split_cmd = NULL;
 	scmd_init(&scmd, line);
-	scmd_init(&scmd, split_cmd[i]);
 	lst_tk = split_cmd_token(&scmd);
-	if (!(sort_ast = parser(lst_tk, alloc)))
-		break ;
 
-		// j = 0;
-		// while (lst_tk)
-		// {
-		// 	ft_printf("type[%d]: %d\nvalue[%d]: |%s|\n\n", j, get_tk(lst_tk)->type, j, get_tk(lst_tk)->token);
-		// 	lst_tk = lst_tk->next;
-		// 	j += 1;
-		// }
+/*
+**	VERIF TOKEN AND PRINT BEFORE PARSE
+*/
+	// (void)alloc;
+	// t_list	*tmp;
+	// tmp = lst_tk;
+	// while (tmp)
+	// {
+	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
+	// 	tmp = tmp->next;
+	// }
 
-		// analyzer(sort_ast, alloc, 0);
-	read_sort_descent(sort_ast, 1);
-		// reinit_print(alloc->ast, 1);
-		// delete_str_tab(split_all_cmd[i]);
-		// del_lst_ast(&(alloc->ast));
+	while (lst_tk)
+	{
+		if (!(sort_ast = parser(&lst_tk, alloc)))
+		{
+			ft_printf("ERROR BREAK\n");
+			break ;
+		}
 
+
+/*
+** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
+*/
+	// if (get_tk(lst_tk)->type == TK_CMD_SEP
+	// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
+	// 	analyzer(sort_ast, alloc, TRUE);
+	// else
+	// 	analyzer(sort_ast, alloc, FALSE);
+
+/*
+** PRINT AST AND REINIT NODE
+*/
+	// if (sort_ast)
+	// {
+	// 	read_sort_descent(sort_ast, 1);
+	// 	reinit_print(alloc->ast, 1);
+	// }
+
+//FUNCTION TO CLEAN AST
+	}
+// FUNCTION TO CLEAN LST_TK
 }
 
 

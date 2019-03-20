@@ -27,7 +27,36 @@ static void		cmd_ast(t_ast *node, t_ast *tmp)
 	tmp->back = node;
 }
 
- void			sort_ast(t_ast *lst, t_ast **sort)
+void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
+{
+	t_ast	*h_node;
+
+	h_node = node;
+	if ((*sort)->type == LOGIC)
+	{
+		if (node->right)
+		{
+			tmp->left = node->right;
+			node->right->back = tmp;
+		}
+		node->right = tmp;
+		tmp->back = node;
+	}
+	else if (tmp->type != HEREDOC)
+	{
+		tmp->left = node;
+		node->back = tmp;
+		((*sort)->type != LOGIC) ? (*sort) = tmp : 0;
+	}
+	else
+	{
+		tmp->left = (*sort);
+		(*sort)->back = tmp;
+		*sort = tmp;
+	}
+}
+
+void			sort_ast(t_ast *lst, t_ast **sort)
 {
 	t_ast	*tmp;
 	t_ast	*node;
