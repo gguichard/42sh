@@ -11,6 +11,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <stdbool.h>
 # include "../libft/includes/get_next_line.h"
 # include "../libft/includes/libft.h"
 # include "../libft/includes/printf.h"
@@ -31,6 +32,12 @@
 /*
 ********************************** STRUCTURES **********************************
 */
+
+typedef struct			s_exec_opt
+{
+	bool				fork;
+	bool				wait_hang;
+}						t_exec_opt;
 
 typedef struct			s_cursor
 {
@@ -97,12 +104,13 @@ typedef struct			s_alloc
 	int					fd[10];
 }						t_alloc;
 
-typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
+typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 typedef enum			e_job_state
 {
 	RUNNING,
 	STOPPED,
+	STOPPED_PENDING,
 	DONE
 }						t_job_state;
 
@@ -123,6 +131,7 @@ void	signal_handle(int sig);
 void	redirect_term_controller(pid_t new_controler, int type);
 void	print_job(pid_t process);
 t_job	*get_job_pid(pid_t process);
+void	add_pid_lst(pid_t process, t_ast *elem);
 
 
 void	delete_str_tab(char **tab_str);
