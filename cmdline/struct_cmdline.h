@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 10:32:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 11:18:10 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef enum		e_seq_mode
 
 typedef struct		s_seq_keys
 {
-	char			buffer[8];
+	char			buffer[128];
 	int				size;
 	int				offset;
 }					t_seq_keys;
@@ -80,6 +80,7 @@ typedef struct		s_cmdline
 	int				row;
 	int				saved_col;
 	struct s_visual	visual;
+	int				konami_code;
 }					t_cmdline;
 
 typedef struct		s_seq

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 11:21:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 11:37:27 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static const t_seq	g_seqs[] = {
 	{":q\012", MODE_VISUAL, handle_toggle_visual},
 	{"\033\033", MODE_VISUAL, handle_toggle_visual},
 	{"\004", MODE_VISUAL, handle_toggle_visual},
+	{"\033\033[A\033[A\033[B\033[B\033[D\033[C\033[D\033[Cba", MODE_INSERT
+		, handle_konami_code},
 	{NULL, MODE_COMMON, NULL}
 };
 

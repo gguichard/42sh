@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 10:13:12 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 11:36:45 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 ** INPUT/OUTPUT.
 */
 
-void		print_mbstr(const wchar_t *buffer, size_t len);
+void		print_mbstr(t_cmdline *cmdline, const wchar_t *buffer, size_t len);
 void		print_next_line_tcaps(void);
 int			print_big_cmdline_prompt(t_cmdline *cmdline);
 
@@ -72,6 +72,8 @@ int			handle_cursor_down(t_cmdline *cmdline);
 
 int			handle_line_start(t_cmdline *cmdline);
 int			handle_line_end(t_cmdline *cmdline);
+
+int			handle_konami_code(t_cmdline *cmdline);
 
 /*
 ** INSERT MODE.

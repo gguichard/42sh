@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 10:36:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 11:37:00 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	print_one_line(t_cmdline *cmdline, t_cursor *end_cursor
 		end_cursor->x += offset;
 		end_cursor->y += end_cursor->x / ft_max(1, cmdline->winsize.ws_col);
 		end_cursor->x %= ft_max(1, cmdline->winsize.ws_col);
-		print_mbstr(buffer, offset);
+		print_mbstr(cmdline, buffer, offset);
 	}
 	tputs(ce_tcap, 1, t_putchar);
 }
