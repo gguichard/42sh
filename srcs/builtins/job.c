@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "options.h"
 #include "builtins.h"
 
 static char	*job_state_str(t_job_state state)
@@ -25,7 +26,7 @@ static char	*signal_stop_str(int status)
 	return ("undefined");
 }
 
-static void	display_job(t_list *tmp, int index, int def)
+static void	display_one_job(t_list *tmp, int index, t_opts *opts)
 {
 	char	current;
 	t_job	*job;
@@ -39,23 +40,25 @@ static void	display_job(t_list *tmp, int index, int def)
 	else
 		current = ' ';
 	state = job_state_str(job->state);
-	if (job->state == STOPPED)
+	if (opts && has_opt(opts, 'p'))
+		ft_printf("%d\n", job->gpid);
+	else if (job->state == STOPPED)
 	{
-		if (!def)
+		if (!opts || !has_opt(opts, 'l'))
 			ft_printf("[%d] %c %s(%s) %s\n", index, current, state, signal_stop_str(job->status), job->cmd);
 		else
 			ft_printf("[%d] %c %s(%s) %d %s\n", index, current, state, signal_stop_str(job->status), job->gpid, job->cmd);
 	}
 	else if (job->state == DONE && WIFEXITED(job->status))
 	{
-		if (!def)
+		if (!opts || !has_opt(opts, 'l'))
 			ft_printf("[%d] %c %s(%d) %s\n", index, current, state, WIFEXITED(job->status), job->cmd);
 		else
 			ft_printf("[%d] %c %s(%d) %d %s\n", index, current, state, WIFEXITED(job->status), job->gpid, job->cmd);
 	}
 	else
 	{
-		if (!def)
+		if (!opts || !has_opt(opts, 'l'))
 			ft_printf("[%d] %c %s %s\n", index, current, state, job->cmd);
 		else
 			ft_printf("[%d] %c %s %d %s\n", index, current, state, job->gpid, job->cmd);
@@ -90,20 +93,27 @@ void		print_job(pid_t process)
 			tmp = tmp->next;
 			index += 1;
 		}
-		display_job(tmp, index, 0);
+		display_one_job(tmp, index, 0);
 	}
 }
 
-static int	display_job_gpid(void)
+static int	display_jobs(t_opts *opts, int param)
 {
 	t_list	*tmp;
-	t_job	*job;
+	int		index;
 
+	index = 1;
 	tmp = g_jobs;
 	while (tmp)
 	{
-		job = tmp->content;
-		ft_printf("%d\n", job->gpid);
+		if (param == index)
+		{
+			display_one_job(tmp, index, opts);
+			break ;
+		}
+		else if (param == -1)
+			display_one_job(tmp, index, opts);
+		index += 1;
 		tmp = tmp->next;
 	}
 	return (0);
@@ -111,24 +121,24 @@ static int	display_job_gpid(void)
 
 int			job_builtins(t_ast *elem, t_alloc *alloc)
 {
-	int		gpid_display;
-	t_list	*tmp;
-	int		index;
+	int		param;
+	t_opts	opts;
 
 	(void)alloc;
-	if (!elem->input[1])
-		gpid_display = 0;
-	else if (ft_strchr(elem->input[1], 'p'))
-		return (display_job_gpid());
-	else if (ft_strchr(elem->input[1], 'l'))
-		gpid_display = 1;
-	index = 1;
-	tmp = g_jobs;
-	while (tmp)
+	param = -1;
+	parse_opts(&opts, elem->input, "lp");
+	if (opts.error)
 	{
-		display_job(tmp, index, gpid_display);
-		index += 1;
-		tmp = tmp->next;
+		ft_dprintf(STDERR_FILENO, "42sh: jobs: -%c: invalid option\n", opts.error);
+		ft_dprintf(STDERR_FILENO, "42sh: jobs: usage: jobs [-lp] [job_id ...]\n");
+		return (2);
 	}
-	return (0);
+	if (elem->input[opts.index])
+		param = ft_atoi(elem->input[opts.index]);
+	if (param > (int)ft_lstsize(g_jobs) || (param < 1 && elem->input[opts.index]))
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: jobs: %s: no such job\n", elem->input[opts.index]);
+		return (1);
+	}
+	return (display_jobs(&opts, param));
 }

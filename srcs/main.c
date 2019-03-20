@@ -8,14 +8,12 @@
 #include "hashtable.h"
 #include "parser_lexer.h"
 
-// #include "get_next_line.h"
-// #include "printf.h"
-
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
-	char	***split_all_cmd;
-	t_ast	*sort_ast;
-	int		i;
+	char		***split_all_cmd;
+	t_exec_opt	exec_option;
+	t_ast		*sort_ast;
+	int			i;
 
 	i = 0;
 	sort_ast = NULL;
@@ -23,7 +21,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	while (split_all_cmd[i])
 	{
 		sort_ast = parser(split_all_cmd[i], alloc);
-		analyzer(sort_ast, alloc, 0);
+		ft_bzero(&exec_option, sizeof(t_exec_opt));
+		analyzer(sort_ast, alloc, &exec_option);
 		delete_str_tab(split_all_cmd[i]);
 		del_lst_ast(&(alloc->ast));
 		i += 1;
@@ -58,6 +57,11 @@ void	check_jobs_finish(void)
 	{
 		job = tmp->content;
 		aft = tmp->next;
+		if (job->state == STOPPED_PENDING)
+		{
+			job->state = STOPPED;
+			print_job(job->pid);
+		}
 		if (job->state == RUNNING && waitpid(job->pid, &job->status, WNOHANG))
 		{
 			job->state = DONE;

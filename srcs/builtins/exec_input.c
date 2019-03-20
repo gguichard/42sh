@@ -55,18 +55,10 @@ static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
 	return (path_exec);
 }
 
-static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env, int no_fork)
+static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env)
 {
-	setpgid(0, 0);
-	redirect_term_controller(0, 1);
 	execve(path_exec, elem->input, tab_env);
 	ft_dprintf(2, "42sh: %s: not executable\n", elem->input[0]);
-	if (no_fork == 1)
-	{
-		delete_str_tab(tab_env);
-		if (ft_strcmp(path_exec, elem->input[0]))
-			ft_memdel((void **)&path_exec);
-	}
 	exit(126);
 }
 
@@ -82,7 +74,7 @@ void	redirect_term_controller(pid_t new_controler, int type)
 	}
 }
 
-int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
+int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	pid_t	child;
 	int		hashable;
@@ -94,13 +86,20 @@ int			exec_input(t_ast *elem, t_alloc *alloc, int no_fork)
 	if (!(path_exec = exec_path(elem, alloc, &hashable)))
 		return (127);
 	convert_lst_tab(*(alloc->var), &tab_env);
-	if (no_fork == 1 || !(child = fork()))
-		execute_cmd(path_exec, elem, tab_env, no_fork);
+	if (opt->fork == true || !(child = fork()))
+		execute_cmd(path_exec, elem, tab_env);
 	if (child == -1)
 		return (0);
+	setpgid(child, 0);
 	add_pid_lst(child, elem);
-	waitpid(child, &alloc->ret_val, WUNTRACED);
-	redirect_term_controller(0, 1);
+	if (opt->wait_hang == false)
+	{
+		redirect_term_controller(child, 0);
+		waitpid(child, &alloc->ret_val, WUNTRACED);
+		redirect_term_controller(0, 1);
+	}
+	else
+		waitpid(child, &alloc->ret_val, WNOHANG);
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);

@@ -21,7 +21,35 @@ char			*ft_tab_to_str(char **tab)
 	return (out);
 }
 
-static t_job	*create_job(pid_t process, char **cmd)
+static char		*create_cmd_job(t_ast *elem)
+{
+	char	*output;
+	char	*actual;
+	char	*prev;
+
+	output = 0;
+	if (elem && elem->back && elem->back->type < OPERATOR && elem->back->type > CMD)
+		elem = elem->back;
+	while (elem)
+	{
+		if (!(actual = ft_tab_to_str(elem->input)))
+			return (0);
+		prev = output;
+		output = ft_strjoin(actual, prev);
+		ft_memdel((void **)&prev);
+		ft_memdel((void **)&actual);
+		if (!output)
+			return (0);
+		else if (elem->type == CMD)
+			break ;
+		elem = elem->left;
+	}
+	if (!elem)
+		ft_memdel((void **)&output);
+	return (output);
+}
+
+static t_job	*create_job(pid_t process, t_ast *elem)
 {
 	t_job	*job;
 
@@ -29,7 +57,8 @@ static t_job	*create_job(pid_t process, char **cmd)
 		return (0);
 	job->pid = process;
 	job->gpid = getpgid(process);
-	job->cmd = ft_tab_to_str(cmd);
+	if (!(job->cmd = create_cmd_job(elem)))
+		return (0);
 	job->state = RUNNING;
 	return (job);
 }
@@ -39,8 +68,10 @@ void			add_pid_lst(pid_t process, t_ast *elem)
 	t_list		*tmp;
 	t_job		*job;
 
-	if (!(job = create_job(process, elem->input)) || !(tmp = ft_lstnew(job, sizeof(t_job))))
-		return ;
+	tmp = 0;
+	job = 0;
+	if (!(job = create_job(process, elem)) || !(tmp = ft_lstnew(job, sizeof(t_job))))
+		ft_exit_malloc();
 	ft_lstpush(&g_jobs, tmp);
 	ft_memdel((void **)&job);
 }
