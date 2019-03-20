@@ -43,7 +43,7 @@ static int				process_after_ope(t_list **token_lst
 			++(str_cmd_cpy.pos);
 		if (str_cmd_cpy.str[str_cmd_cpy.pos] == '-')
 			++(str_cmd_cpy.pos);
-		if (!is_a_sep_char(str_cmd_cpy.str[str_cmd_cpy.pos])
+		if (!is_a_spe_char(str_cmd_cpy.str[str_cmd_cpy.pos])
 				&& str_cmd_cpy.str[str_cmd_cpy.pos] != '\0'
 				&& token_start[1] != '-')
 			str_cmd_cpy.pos = token_start - str_cmd_cpy.str + 1;
@@ -55,7 +55,7 @@ static int				process_after_ope(t_list **token_lst
 	return (1);
 }
 
-static int				split_sep_char(t_list **token_lst
+static int				split_spe_char(t_list **token_lst
 		, t_str_cmd_inf *str_cmd_inf, const char *token_start
 		, int last_char_was_sep)
 {
@@ -64,7 +64,7 @@ static int				split_sep_char(t_list **token_lst
 	if (!last_char_was_sep)
 		if (!process_opt_add(token_lst, str_cmd_inf, token_start))
 			return (0);
-	token_type = TK_OPE;
+	token_type = TK_RED_OPE;
 	token_start = str_cmd_inf->str + str_cmd_inf->pos;
 	if (ft_strchr(WORD_SEP_CHARS, str_cmd_inf->str[str_cmd_inf->pos]) == NULL)
 	{
@@ -93,18 +93,18 @@ static t_token_type		split_at_pos(t_list **token_lst
 	t_token_type	token_type;
 
 	if (scmd_cur_char_is_in_nothing(str_cmd_inf)
-			&& is_a_sep_char(str_cmd_inf->str[str_cmd_inf->pos])
+			&& is_a_spe_char(str_cmd_inf->str[str_cmd_inf->pos])
 			&& !scmd_cur_char_is_escaped(str_cmd_inf))
 	{
-		if (!split_sep_char(token_lst, str_cmd_inf, *token_start
+		if (!split_spe_char(token_lst, str_cmd_inf, *token_start
 					, *last_char_was_sep))
 			return (TK_NOTHING);
-		token_type = TK_OPE;
+		token_type = TK_RED_OPE;
 		*last_char_was_sep = 1;
 	}
 	else
 	{
-		token_type = TK_WORD;
+		token_type = TK_PARAM;
 		if (*last_char_was_sep)
 			*token_start = str_cmd_inf->str + str_cmd_inf->pos;
 		*last_char_was_sep = 0;
@@ -130,7 +130,7 @@ t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf)
 			return (ft_lstdel(&token_lst, del_token));
 		scmd_move_to_next_char(str_cmd_inf);
 	}
-	if (token_type == TK_WORD && !add_cur_token_to_lst(&token_lst
+	if (token_type == TK_PARAM && !add_cur_token_to_lst(&token_lst
 				, str_cmd_inf, token_start, token_type))
 		return (ft_lstdel(&token_lst, del_token));
 	return (token_lst);

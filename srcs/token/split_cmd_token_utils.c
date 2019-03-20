@@ -4,7 +4,7 @@
 #include "token_inf.h"
 #include "split_cmd_token.h"
 
-int				is_a_sep_char(char c)
+int				is_a_spe_char(char c)
 {
 	if (c == '\0')
 		return (0);
@@ -29,7 +29,7 @@ int				get_cur_token_len(const char *token_start)
 	size_t	len;
 
 	len = 0;
-	if (is_a_sep_char(*token_start))
+	if (is_a_spe_char(*token_start))
 	{
 		++len;
 		if ((*token_start == '>' || *token_start == '<')
@@ -53,8 +53,8 @@ t_token_type	get_token_for_opt_add(t_str_cmd_inf *str_cmd_inf
 				&& str_cmd_inf->str[str_cmd_inf->pos - 1] == '&')
 		{
 			*end_by_and = 1;
-			return (TK_WORD);
+			return (TK_PARAM);
 		}
 	}
-	return (TK_WORD);
+	return (TK_PARAM);
 }
