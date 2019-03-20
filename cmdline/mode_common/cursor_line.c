@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:35:45 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 13:06:31 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 13:43:42 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int	handle_line_start(t_cmdline *cmdline)
 		}
 		else
 		{
-			offset = cmdline->input.offset;
+			offset = 0;
 			if (cmdline->cursor.y == 0)
-				offset += cmdline->prompt.big_offset;
-			cmdline->input.offset = offset - cmdline->cursor.x;
+				offset = cmdline->prompt.big_offset;
+			cmdline->input.offset += offset - cmdline->cursor.x;
 			cmdline->cursor.x = offset;
 		}
 		go_to_cursor_pos(cmdline->cursor);
