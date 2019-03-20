@@ -15,7 +15,7 @@ int		add_cur_token_to_lst(t_list **token_lst, t_str_cmd_inf *str_cmd_inf
 	if (token_type == TK_NOTHING)
 		return (1);
 	cur_token_size = (str_cmd_inf->str + str_cmd_inf->pos) - token_start
-		+ (token_type == TK_OPE || token_type == TK_CMD_SEP ? 1 : 0);
+		+ (token_type == TK_RED_OPE || token_type == TK_CMD_SEP ? 1 : 0);
 	new_token.token = ft_strndup(token_start, cur_token_size);
 	new_token.type = token_type;
 	if (new_token.token == NULL

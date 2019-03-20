@@ -17,7 +17,7 @@ int				get_cur_token_len(const char *token_start);
 int				cur_token_is_number(t_str_cmd_inf *str_cmd_inf
 		, const char *token_start);
 
-int				is_a_sep_char(char c);
+int				is_a_spe_char(char c);
 
 int				add_cur_token_to_lst(t_list **token_lst
 		, t_str_cmd_inf *str_cmd_inf, const char *token_start
