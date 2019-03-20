@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_input_utils.c                                :+:      :+:    :+:   */
+/*   print_cmdline_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 16:20:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 01:15:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <term.h>
 #include "cmdline.h"
 
-void	print_go_next_line(void)
+void	print_next_line_tcaps(void)
 {
 	static char	*cr_tcap = NULL;
 	static char	*do_tcap = NULL;
@@ -59,14 +59,26 @@ void	print_mbstr(const wchar_t *buffer, size_t len)
 	}
 }
 
-void	print_big_line_indicator(t_cmdline *cmdline)
+int		print_big_cmdline_prompt(t_cmdline *cmdline)
 {
-	go_to_cursor_pos((t_cursor){0, 0});
-	write(STDOUT_FILENO, ">... ", 5);
-	while (cmdline->cursor.y < 0)
+	int	is_at_position;
+
+	is_at_position = 0;
+	if (cmdline->row > cmdline->cursor.y)
 	{
-		if (!handle_cursor_down(cmdline))
-			break ;
+		go_to_cursor_pos((t_cursor){0, 0});
+		write(STDOUT_FILENO, ">... ", 5);
+		while (cmdline->cursor.y < 0)
+		{
+			if (!handle_cursor_down(cmdline))
+				break ;
+			is_at_position = 1;
+		}
+		if (!is_at_position)
+		{
+			is_at_position = 1;
+			go_to_cursor_pos(cmdline->cursor);
+		}
 	}
-	go_to_cursor_pos(cmdline->cursor);
+	return (is_at_position);
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 16:20:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:20:55 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ static void		write_char_in_cmdline(t_cmdline *cmdline, wint_t c)
 			cmdline->cursor.y += 1;
 		cmdline->row += 1;
 	}
-	if ((cmdline->cursor.y - cmdline->row) < 0)
-		print_big_line_indicator(cmdline);
-	update_cmdline_after_offset(cmdline);
+	update_cmdline_at_offset(cmdline);
 }
 
 static int		expand_buffer_capacity(t_cmdline *cmdline)

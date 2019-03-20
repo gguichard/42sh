@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 10:11:35 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 10:53:19 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 01:45:57 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,4 @@ t_cursor	go_to_offset(t_cmdline *cmdline, int offset)
 	}
 	go_to_cursor_pos(cursor);
 	return (cursor);
-}
-
-void		recompute_cursor(t_cmdline *cmdline)
-{
-	int	offset;
-
-	offset = 0;
-	while (offset < cmdline->input.offset)
-	{
-		if (cmdline->input.buffer[offset] != '\n'
-				&& (cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
-			cmdline->cursor.x += 1;
-		else
-		{
-			cmdline->cursor.x = 0;
-			cmdline->cursor.y += 1;
-			cmdline->row += 1;
-		}
-		offset++;
-	}
 }

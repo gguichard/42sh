@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 16:21:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/20 01:16:02 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,13 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 ** INPUT/OUTPUT.
 */
 
-void		print_go_next_line(void);
 void		print_mbstr(const wchar_t *buffer, size_t len);
-void		print_big_line_indicator(t_cmdline *cmdline);
-void		update_cmdline_after_offset(t_cmdline *cmdline);
+void		print_next_line_tcaps(void);
+int			print_big_cmdline_prompt(t_cmdline *cmdline);
+
+void		update_cmdline_at_offset(t_cmdline *cmdline);
+void		print_cmdline(t_cmdline *cmdline);
+
 void		add_char_to_input(t_cmdline *cmdline, wint_t c);
 
 const char	*get_prompt(t_cmdline *cmdline);

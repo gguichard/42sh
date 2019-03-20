@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 16:26:49 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 12:09:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/19 20:20:48 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	del_char_on_cursor(t_cmdline *cmdline)
 			* sizeof(wint_t));
 	cmdline->input.size -= 1;
 	clear_after_cursor(cmdline->cursor, cmdline->winsize);
-	update_cmdline_after_offset(cmdline);
+	update_cmdline_at_offset(cmdline);
 }
 
 int			handle_backspace_key(t_cmdline *cmdline)
