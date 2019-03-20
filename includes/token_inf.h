@@ -6,10 +6,13 @@
 typedef enum		e_token_type
 {
 	TK_NOTHING,
-	TK_WORD,
-	TK_OPE,
+	TK_ASSIGN,
+	TK_CMD,
+	TK_PARAM,
+	TK_RED_OPE,
 	TK_LRED_OPT,
 	TK_RRED_OPT,
+	TK_RED_FILENAME,
 	TK_CMD_SEP
 }					t_token_type;
 
