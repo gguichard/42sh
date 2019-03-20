@@ -15,25 +15,19 @@
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
-	char			**split_cmd;
 	t_ast			*sort_ast;
 	t_list			*lst_tk;
 	t_str_cmd_inf	scmd;
-	int				i;
 	// int				j;
 
-	i = 0;
 	sort_ast = NULL;
 	lst_tk = NULL;
 	split_cmd = NULL;
 	scmd_init(&scmd, line);
-	split_cmd = lexer(&scmd);
-	while (split_cmd && split_cmd[i])
-	{
-		scmd_init(&scmd, split_cmd[i]);
-		lst_tk = split_cmd_token(&scmd);
-		if (!(sort_ast = parser(lst_tk, alloc)))
-			break ;
+	scmd_init(&scmd, split_cmd[i]);
+	lst_tk = split_cmd_token(&scmd);
+	if (!(sort_ast = parser(lst_tk, alloc)))
+		break ;
 
 		// j = 0;
 		// while (lst_tk)
@@ -44,13 +38,11 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		// }
 
 		// analyzer(sort_ast, alloc, 0);
-		read_sort_descent(sort_ast, 1);
+	read_sort_descent(sort_ast, 1);
 		// reinit_print(alloc->ast, 1);
 		// delete_str_tab(split_all_cmd[i]);
 		// del_lst_ast(&(alloc->ast));
 
-		i += 1;
-	}
 }
 
 
