@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/19 10:15:14 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 17:12:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 19:35:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ int	handle_eot_key(t_cmdline *cmdline)
 {
 	if (cmdline->input.size != 0)
 		return (0);
-	reset_term(cmdline);
-	write(STDOUT_FILENO, "exit\n", 5);
-	exit(0); // todo: exit with ret code
+	cmdline->input.reading = -1;
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 17:07:54 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 19:45:42 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 t_cmdline	*g_cmdline;
 
 int			init_cmdline(t_cmdline *cmdline);
-char		*read_cmdline(t_cmdline *cmdline);
 
 /*
 ** TERM INIT/MISC.

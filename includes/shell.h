@@ -72,6 +72,8 @@ typedef struct			s_alloc
 
 typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
 
+char	*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+
 /*
 ************************************ TOOLS *************************************
 */

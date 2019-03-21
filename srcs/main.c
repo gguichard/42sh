@@ -83,7 +83,7 @@ int		main(int argc, char **argv, char **env)
 	while (1)
 	{
 		setup_term(&alloc.cmdline);
-		input = read_cmdline(&alloc.cmdline);
+		input = read_cmdline(&alloc, &alloc.cmdline);
 		reset_term(&alloc.cmdline);
 		if (input != NULL)
 		{
