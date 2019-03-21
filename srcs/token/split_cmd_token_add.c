@@ -32,8 +32,28 @@ static int	add_token_to_lst(t_split_cmd_inf *sp_cmd, const char *token_str
 	return (1);
 }
 
+static int	token_is_assign(const char *token, size_t token_size)
+{
+	size_t	idx;
+
+	idx = 0;
+	while (idx < token_size)
+	{
+		if (!ft_isalpha(token[idx])
+				&& (!ft_isdigit(token[idx]) || idx == 0)
+				&& token[idx] != '_')
+			break ;
+		++idx;
+	}
+	return (token[idx] == '=');
+}
+
 int			add_cur_token_to_lst(t_split_cmd_inf *sp_cmd)
 {
+	if (sp_cmd->cur_tk_type == TK_CMD
+			&& token_is_assign(sp_cmd->tk_start
+				, scmd_cur_str(sp_cmd->scmd) - sp_cmd->tk_start + 1))
+		sp_cmd->cur_tk_type = TK_ASSIGN;
 	return (add_token_to_lst(sp_cmd, sp_cmd->tk_start
 				, scmd_cur_str(sp_cmd->scmd) - sp_cmd->tk_start + 1
 				, sp_cmd->cur_tk_type));

@@ -68,6 +68,7 @@ static int				split_spe_char(t_split_cmd_inf *sp_cmd)
 	if (!sp_cmd->last_char_was_spe)
 		if (!process_token_before_cur_char(sp_cmd))
 			return (0);
+	sp_cmd->cur_tk_type = TK_NOTHING;
 	sp_cmd->tk_start = sp_cmd->scmd->str + sp_cmd->scmd->pos;
 	if (ft_strchr(WORD_SEP_CHARS, sp_cmd->scmd->str[sp_cmd->scmd->pos]) == NULL)
 	{
@@ -106,7 +107,7 @@ static int				split_at_pos(t_split_cmd_inf *sp_cmd)
 	}
 	else
 	{
-		sp_cmd->cur_tk_type = TK_PARAM; //TK_WORD
+		sp_cmd->cur_tk_type = get_next_word_tk_type(sp_cmd);
 		if (sp_cmd->last_char_was_spe)
 			sp_cmd->tk_start = sp_cmd->scmd->str + sp_cmd->scmd->pos;
 		sp_cmd->last_char_was_spe = 0;
@@ -133,7 +134,7 @@ t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf)
 		scmd_move_to_next_char(sp_cmd.scmd);
 	}
 	--sp_cmd.scmd;
-	if (sp_cmd.cur_tk_type == TK_PARAM && !add_cur_token_to_lst(&sp_cmd)) //TK_WORD
+	if (sp_cmd.cur_tk_type != TK_NOTHING && !add_cur_token_to_lst(&sp_cmd))
 		return (ft_lstdel(&sp_cmd.tk_lst, del_token));
 	return (sp_cmd.tk_lst);
 }
