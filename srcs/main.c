@@ -41,12 +41,6 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 			ft_printf("ERROR BREAK\n");
 			break ;
 		}
-
-/*
-** CONVERT INPUT (EXPAND + INHIBITEURS)
-*/
-
-
 /*
 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
 */
@@ -59,12 +53,13 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 /*
 ** PRINT AST AND REINIT NODE
 */
-	if (sort_ast)
-	{
-		read_sort_descent(sort_ast, 1);
-		reinit_print(alloc->ast, 1);
-	}
-
+		if (sort_ast)
+		{
+			read_sort_descent(sort_ast, 1);
+			reinit_print(alloc->ast, 1);
+		}
+		if (lst_tk)
+			lst_tk = lst_tk->next;
 //FUNCTION TO CLEAN AST
 	}
 // FUNCTION TO CLEAN LST_TK

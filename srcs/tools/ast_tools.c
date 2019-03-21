@@ -33,14 +33,21 @@ t_ast	*fill_cmd(t_list **lst_tk, t_ast *elem)
 
 t_ast	*fill_ope(t_list **lst_tk, t_ast *elem)
 {
-	int		len;
-	int		i;
+	int				len;
+	int				i;
+	t_list			*tmp;
+	t_token_type	type;
 
 	i = 1;
-	if (get_tk(*lst_tk)->type == TK_RED_OPE)
-		len = 2;
-	else
-		len = 3;
+	len = 1;
+	type = get_tk(*lst_tk)->type;
+	tmp = (*lst_tk)->next;
+	while (tmp && get_tk(tmp)->type > type && get_tk(tmp)->type < TK_CMD_SEP)
+	{
+		type = get_tk(tmp)->type;
+		len += 1;
+		tmp = tmp->next;
+	}
 	init_input(elem, len, *lst_tk);
 	*lst_tk = (*lst_tk)->next;
 	while (i < len)
