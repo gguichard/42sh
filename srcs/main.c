@@ -42,6 +42,10 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 			break ;
 		}
 
+/*
+** CONVERT INPUT (EXPAND + INHIBITEURS)
+*/
+
 
 /*
 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL

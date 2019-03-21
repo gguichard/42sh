@@ -13,6 +13,8 @@
 typedef struct	s_split_cmd_inf
 {
 	t_list			*tk_lst;
+	t_list			*last_start_cmd;
+	t_list			*last_tk_added;
 	t_str_cmd_inf	*scmd;
 	char			last_char_was_spe;
 	const char		*tk_start;
@@ -31,8 +33,8 @@ int				is_a_spe_char(char c);
 
 int				add_cur_token_to_lst(t_split_cmd_inf *sp_cmd);
 
-int				add_token_to_lst(t_list **token_lst, const char *token_str
-		, t_token_type token_type);
+int				add_whole_token_to_lst(t_split_cmd_inf *sp_cmd
+		, const char *token_str, t_token_type token_type);
 
 /*
 ** Retourne la liste des tokens de la commande passee en parametre. Retourne

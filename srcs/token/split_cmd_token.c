@@ -27,7 +27,7 @@ static int				process_token_before_cur_char(t_split_cmd_inf *sp_cmd)
 	sp_cmd->scmd->pos = old_pos;
 	if (sp_cmd->last_tk_end_by_and)
 	{
-		if (!add_token_to_lst(&sp_cmd->tk_lst, "&", TK_LRED_OPT))
+		if (!add_whole_token_to_lst(sp_cmd, "&", TK_LRED_OPT))
 			return (0);
 	}
 	return (1);
@@ -71,7 +71,8 @@ static int				split_spe_char(t_split_cmd_inf *sp_cmd)
 	sp_cmd->tk_start = sp_cmd->scmd->str + sp_cmd->scmd->pos;
 	if (ft_strchr(WORD_SEP_CHARS, sp_cmd->scmd->str[sp_cmd->scmd->pos]) == NULL)
 	{
-		sp_cmd->scmd->pos += get_cur_spe_char_token_len_and_set_type(sp_cmd);
+		sp_cmd->scmd->pos += get_cur_spe_char_token_len_and_set_type(sp_cmd)
+			- 1;
 		if (!add_cur_token_to_lst(sp_cmd))
 			return (0);
 	}
@@ -118,10 +119,13 @@ t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf)
 	t_split_cmd_inf		sp_cmd;
 
 	sp_cmd.tk_lst = NULL;
+	sp_cmd.last_start_cmd = NULL;
+	sp_cmd.last_tk_added = NULL;
 	sp_cmd.scmd = str_cmd_inf;
 	sp_cmd.last_char_was_spe = 1;
 	sp_cmd.tk_start = sp_cmd.scmd->str;
 	sp_cmd.cur_tk_type = TK_NOTHING;
+	sp_cmd.last_tk_end_by_and = 0;
 	while (sp_cmd.scmd->str[sp_cmd.scmd->pos] != '\0')
 	{
 		if (!split_at_pos(&sp_cmd))
