@@ -74,6 +74,7 @@ typedef struct			s_ast
 {
 	int					print;
 	int					type;
+	int					fd[2];
 	char				*heredoc;
 	char				**input;
 	struct s_ast		*next;
