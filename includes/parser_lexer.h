@@ -6,7 +6,7 @@
 # include "str_cmd_inf.h"
 
 /*
-************************************ LEXER *************************************
+************************************ ENUM **************************************
 */
 
 typedef enum	e_recall_prompt
@@ -78,14 +78,15 @@ int		dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork);
 ********************************* PARSER TOOLS *********************************
 */
 
-t_ast			*create_new_elem(t_ast **lst);
-t_ast			*get_last_elem(t_ast *lst);
-t_ast			*add_new_elem(t_ast **lst);
-void			check_quote(char *s);
-void			replace_quote(char *s, int *i);
-void			ft_custom_memmove(char *dst, char *src, size_t len);
+t_ast					*create_new_elem(t_ast **lst);
+t_ast					*get_last_elem(t_ast *lst);
+t_ast					*add_new_elem(t_ast **lst);
+void					check_quote(char *s);
+void					replace_quote(char *s, int *i);
+void					ft_custom_memmove(char *dst, char *src, size_t len);
 
-t_recall_prompt	token_analyser(t_list *lst_tk);
+t_recall_prompt			token_analyser(t_list *lst_tk);
+
 
 /*
 *********************************** AST TOOLS **********************************
