@@ -81,7 +81,7 @@ static int	add_or_print_aliases(char **params, t_hashtable *aliastable)
 	return (no_error);
 }
 
-int		alias_builtins(t_ast *elem, t_alloc *alloc)
+int			alias_builtins(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 
