@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 11:36:45 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 10:16:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 ** TERM INIT/MISC.
 */
 
-int			setup_term(void);
-int			reset_term(void);
+int			setup_term(t_cmdline *cmdline);
+int			reset_term(t_cmdline *cmdline);
 int			update_winsize(t_cmdline *cmdline);
 int			set_cursor_pos(t_cursor *cursor);
 void		go_to_cursor_pos(t_cursor cursor);

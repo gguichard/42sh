@@ -6,13 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 11:18:10 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 10:16:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_CMDLINE_H
 # define STRUCT_CMDLINE_H
 
+# include <termios.h>
 # include <sys/ioctl.h>
 # include <wchar.h>
 
@@ -72,6 +73,7 @@ struct				s_visual
 
 typedef struct		s_cmdline
 {
+	struct termios	default_term;
 	struct s_prompt	prompt;
 	struct s_input	input;
 	struct winsize	winsize;
