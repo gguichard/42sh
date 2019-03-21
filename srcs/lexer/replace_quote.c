@@ -1,22 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   replace_quote.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/01 11:26:07 by tcollard          #+#    #+#             */
-/*   Updated: 2019/03/07 11:43:20 by tcollard         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "shell.h"
+#include "parser_lexer.h"
+#include "builtins.h"
 
-#include "../../includes/shell.h"
-
-static void	short_cut(char **s, t_env *lst_env)
+void		expand_home_shortcut(char **s, t_var *lst_env)
 {
 	char	*dir;
 
 	dir = 0;
+
 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
 	{
 		dir = ft_strjoin(get_env_value(lst_env, "$HOME"),
@@ -64,7 +55,7 @@ void		replace_str(char **str, char *insert, int pos)
 	}
 }
 
-static int	replace_env_var(char **str, int i, t_env *lst_env)
+static int	replace_env_var(char **str, int i, t_var *lst_env)
 {
 	char	*key;
 	char	*value;
@@ -74,12 +65,7 @@ static int	replace_env_var(char **str, int i, t_env *lst_env)
 	value = NULL;
 	while ((*str)[i + x] && x < 80 && ft_isalnum((*str)[i + x]) == 1)
 		x += 1;
-	if (x >= 80)
-	{
-		write(2, "21sh: env: error too long arguments\n", 36);
-		return (-1);
-	}
-	else if ((*str)[x] == '?')
+	if ((*str)[x] == '?')
 		replace_val_ret(str, i, x + 1);
 	else
 	{
@@ -92,7 +78,7 @@ static int	replace_env_var(char **str, int i, t_env *lst_env)
 	return (0);
 }
 
-int			remove_quote(char **s, int *i, t_env *lst_env, t_alloc **alloc)
+int			remove_quote(char **s, int *i, t_alloc *alloc)
 {
 	char	*sub;
 	char	quote;
@@ -106,7 +92,7 @@ int			remove_quote(char **s, int *i, t_env *lst_env, t_alloc **alloc)
 		*i += 1;
 	sub = (ft_isquote(quote) == 1) ? ft_strsub(*s, save, *i - save) : NULL;
 	while (sub[x] && quote == '"')
-		x += (sub[x] == '$') ? replace_env_var(&sub, x, lst_env) : 1;
+		x += (sub[x] == '$') ? replace_env_var(&sub, x, *(alloc->var)) : 1;
 	if (quote == '`')
 	{
 		if (!sub[0])
@@ -114,29 +100,29 @@ int			remove_quote(char **s, int *i, t_env *lst_env, t_alloc **alloc)
 			ft_memdel((void **)&sub);
 			(!(sub = ft_strdup(""))) ? ft_exit_malloc() : 0;
 		}
-		else if (!(sub = ft_back_quote(sub, lst_env, alloc)))
+		else if (!(sub = ft_back_quote(sub, alloc)))
 			return (0);
 	}
 	(sub != NULL) ? ft_insert(s, sub, save - 1, *i) : 0;
 	return (1);
 }
 
-int			convert_quote(char **s, t_env **lst_env, t_alloc **alloc)
+int			convert_quote(char **s, t_alloc *alloc)
 {
 	int		i;
 
 	i = 0;
-	short_cut(s, *lst_env);
-	while (s && (*s)[i])
+	expand_home_shortcut(s, *(alloc->var));
+	while (s && (*s) && (*s)[i])
 	{
 		if ((*s)[i] == '$')
 		{
-			if (replace_env_var(s, i, *lst_env) == -1)
+			if (replace_env_var(s, i, *(alloc->var)) == -1)
 				return (-1);
 		}
 		else if (ft_isquote((*s)[i]) == 1)
 		{
-			if (!(remove_quote(s, &i, *lst_env, alloc)))
+			if (!(remove_quote(s, &i, alloc)))
 				return (-1);
 			i -= 1;
 		}

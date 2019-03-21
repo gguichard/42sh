@@ -1,0 +1,2 @@
+PARSER:
+	integrate Franck stuff in lexer ft_splitwhitespace_shell.
