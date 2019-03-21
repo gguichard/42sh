@@ -18,6 +18,7 @@ PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
 PATH_HASHTABLE = hashtable/
 PATH_PATH = path/
+PATH_TOKEN = token/
 
 INCLUDE = ./includes
 INCLUDE_LIBFT = ./libft/includes
@@ -46,12 +47,13 @@ SRC =	main.c \
 		$(PATH_LEXER)lexer.c \
 		$(PATH_LEXER)replace_quote.c \
 		$(PATH_LEXER)replace_val_ret.c \
+		$(PATH_LEXER)str_cmd_inf.c \
+		$(PATH_LEXER)str_cmd_inf_utils.c \
+		$(PATH_LEXER)str_cmd_inf_escape.c \
+		$(PATH_LEXER)str_cmd_inf_get.c \
 		$(PATH_PARSER)fill_ast.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)analyzer.c \
-		$(PATH_PARSER)str_cmd_inf.c \
-		$(PATH_PARSER)str_cmd_inf_utils.c \
-		$(PATH_PARSER)str_cmd_inf_escape.c \
 		$(PATH_OPERATOR)agregation.c \
 		$(PATH_OPERATOR)heredoc.c \
 		$(PATH_OPERATOR)redirection.c \
@@ -99,6 +101,10 @@ SRC =	main.c \
 		$(PATH_PATH)check_path.c \
 		$(PATH_PATH)convert_path_to_tab.c \
 		$(PATH_PATH)search_exec.c \
+		$(PATH_TOKEN)token_inf.c \
+		$(PATH_TOKEN)split_cmd_token.c \
+		$(PATH_TOKEN)split_cmd_token_add.c \
+		$(PATH_TOKEN)split_cmd_token_utils.c \
 
 OBJ = $(SRC:.c=.o)
 
@@ -123,6 +129,7 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_TOKEN) 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
@@ -137,6 +144,7 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_TOKEN) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 
 fclean: clean
