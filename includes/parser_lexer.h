@@ -22,7 +22,7 @@ typedef enum	e_recall_prompt
 ************************************ LEXER *************************************
 */
 
-char	***lexer(char *input, t_alloc *alloc);
+char	**lexer(t_str_cmd_inf *scmd);
 char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
 char	***read_lexer(char **lexer, char ***all_split_cmd);
@@ -65,7 +65,7 @@ char	*ft_back_quote(char *sub, t_alloc *alloc);
 ************************************ PARSER ************************************
 */
 
-t_ast	*parser(char **input, t_alloc *alloc);
+t_ast	*parser(t_list **lst_tk, t_alloc *alloc);
 void	fill_ast(char **s, t_ast **lst, int save, int i);
 int		analyzer(t_ast *sort, t_alloc *alloc, int no_fork);
 int		dispatch_agreg(t_ast *elem, t_alloc *alloc, int no_fork);
@@ -92,15 +92,24 @@ t_recall_prompt			token_analyser(t_list *lst_tk);
 *********************************** AST TOOLS **********************************
 */
 
-
-void	get_last_index_split(int *i, char *s, int *wd);
-int		get_last_index(int *i, char *s, int *save, char **input);
-int		get_last_operator(int *i, char *s, int *save, char **input);
-int		get_last_digit(int *i, char *s, int *save, char **input);
-void	fill_input(char **s, int end, int start, t_ast *elem);
-void	fill_last_elem(char **s, int i, int save, t_ast *new);
+void	sort_ast(t_ast *lst, t_ast **sort);
 void	link_new_node(t_ast **sort, t_ast *tmp, t_ast *node);
-void	add_input_prev_cmd(char **s, int end, int start, t_ast *elem);
+t_ast	*fill_cmd(t_list **lst_tk, t_ast *elem);
+t_ast	*fill_ope(t_list **lst_tk, t_ast *elem);
+t_ast	*fill_assign(t_list **lst_tk, t_ast *elem);
+t_ast	*fill_cmd_sep(t_list **lst_tk, t_ast *elem);
+t_ast	*create_elem(t_list **lst_tk);
+t_ast	*set_new_elem(void);
+void	init_input(t_ast *elem, int len, t_list *lst_tk);
+
+
+// void	get_last_index_split(int *i, char *s, int *wd);
+// int		get_last_index(int *i, char *s, int *save, char **input);
+// int		get_last_operator(int *i, char *s, int *save, char **input);
+// int		get_last_digit(int *i, char *s, int *save, char **input);
+// void	fill_input(char **s, int end, int start, t_ast *elem);
+// void	fill_last_elem(char **s, int i, int save, t_ast *new);
+// void	add_input_prev_cmd(char **s, int end, int start, t_ast *elem);
 
 /*
 ********************************* SPLIT TOOLS **********************************

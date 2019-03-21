@@ -92,12 +92,10 @@ void		convert_lst_tab(t_var *lst_env, char ***tab_str)
 char		*get_env_value(t_var *lst_env, char *str)
 {
 	int		i;
-	size_t	len;
 	t_var	*tmp;
 
 	i = 0;
 	tmp = lst_env;
-	len = ft_strlen(str) - 1;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, &str[1]) == 0)

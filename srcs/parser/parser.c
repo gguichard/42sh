@@ -1,101 +1,90 @@
 #include "shell.h"
 #include "parser_lexer.h"
 #include "error.h"
+#include "token_inf.h"
 
-static t_ast	*get_available_node(t_ast *sort)
+t_ast	*set_new_elem(void)
 {
-	t_ast	*tmp;
+	t_ast	*new;
 
-	tmp = sort;
-	if (tmp && tmp->type == LOGIC)
-	{
-		if (tmp->right)
-		{
-			while (tmp->right && tmp->right->type != CMD)
-				tmp = tmp->right;
-			return (tmp);
-		}
-	}
-	return (tmp);
+	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
+		ft_exit_malloc();
+	new->print = 0;
+	new->type = NO_TYPE;
+	new->input = NULL;
+	new->heredoc = NULL;
+	new->next = NULL;
+	new->back = NULL;
+	new->left = NULL;
+	new->right = NULL;
+	return (new);
 }
 
-static void		cmd_ast(t_ast *node, t_ast *tmp)
+void	set_type(t_ast *elem, t_list *lst_tk)
 {
-	if (!node->left)
-		node->left = tmp;
-	else if (!node->right)
-		node->right = tmp;
-	tmp->back = node;
+	static char	*ope[10] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
+	"&&", "||"};
+	char		*str;
+	int			i;
+
+	i = 0;
+	str = get_tk(lst_tk)->token;
+	while (ft_strcmp(ope[i], str) != 0 && i < 10)
+		i += 1;
+	if (i == 3)
+		elem->type = HEREDOC;
+	else if (i < 6)
+		elem->type = REDIR;
+	else if (i < 8)
+		elem->type = OPERATOR;
+	else if (i < 10)
+		elem->type = LOGIC;
 }
 
-static void		sort_ast(t_ast *lst, t_ast **sort)
+void	init_input(t_ast *elem, int len, t_list *lst_tk)
 {
-	t_ast	*tmp;
-	t_ast	*node;
+	t_token_type	type;
 
-	*sort = lst;
-	tmp = lst->next;
-	while (tmp)
-	{
-		node = get_available_node(*sort);
-		if (tmp->type == LOGIC)
-		{
-			tmp->left = *sort;
-			(*sort)->back = tmp;
-			*sort = tmp;
-		}
-		else if (tmp->type != CMD)
-			link_new_node(sort, tmp, node);
-		else if (tmp->type == CMD)
-			cmd_ast(node, tmp);
-		tmp = tmp->next;
-	}
+	type = get_tk(lst_tk)->type;
+	if (type == TK_LRED_OPT)
+		set_type(elem, lst_tk->next);
+	else if (type > 3)
+		set_type(elem, lst_tk);
+	else if (type == TK_ASSIGN)
+		elem->type = ASSIGN;
+	else if (type == TK_CMD)
+		elem->type = CMD;
+	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
+		ft_exit_malloc();
+	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
+		ft_exit_malloc();
+	elem->input[len] = NULL;
 }
 
-static t_ast	*clean_tab_and_ast(char **input, t_ast **lst)
+t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 {
-	delete_str_tab(input);
-	del_lst_ast(lst);
-	return (NULL);
-}
+	t_ast			*sort;
+	t_ast			*elem;
+	t_token_type	type;
 
-t_ast			*parser(char **input, t_alloc *alloc)
-{
-	int		i;
-	t_ast	*sort;
-	t_ast	*lst;
-
-	lst = NULL;
-	if (ft_error_parse_redir(input) == 1)
-	{
-		g_ret[0] = 1;
+	(void)alloc;
+	sort = NULL;
+	elem = NULL;
+	if (token_analyser(*lst_tk) == PR_ERROR)
 		return (NULL);
-	}
-	int x = 0;
-	ft_printf("TEST:\n");
-	while (input[x])
+	while (*lst_tk)
 	{
-		ft_printf("input[%d]: %s\n", x, input[x]);
-		x += 1;
+		type = get_tk(*lst_tk)->type;
+		if (type == TK_CMD_SEP && (ft_strcmp(get_tk(*lst_tk)->token, ";") == 0
+		|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
+			break ;
+		else if (type != TK_PARAM)
+		{
+			elem = create_elem(lst_tk);
+			sort_ast(elem, &sort);
+		}
+		else
+			*lst_tk = (*lst_tk)->next;
 	}
-	fill_ast(input, &lst, 0, -1);
-	if (check_error_lst(lst) == 1)
-		return (clean_tab_and_ast(input, &lst));
-	sort = lst;
-	while (sort)
-	{
-		i = -1;
-		while (sort->input[++i])
-			if (convert_quote(&(sort->input[i]), alloc) == -1)
-				return (clean_tab_and_ast(input, &lst));
-		sort = sort->next;
-	}
-	sort_ast(lst, &sort);
-	alloc->ast = lst;
 	return (sort);
-	// analyzer(sort, alloc, 0);
-
-	// (complete_heredoc(lst, alloc)) ? analyzer(sort, lst_env, alloc, 0) : 0;
-
-	// clean_tab_and_ast(input, lst);
 }

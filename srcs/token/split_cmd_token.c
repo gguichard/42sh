@@ -132,7 +132,7 @@ t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf)
 			return (ft_lstdel(&sp_cmd.tk_lst, del_token));
 		scmd_move_to_next_char(sp_cmd.scmd);
 	}
-	--sp_cmd.scmd;
+	--sp_cmd.scmd->pos;
 	if (sp_cmd.cur_tk_type != TK_NOTHING && !add_cur_token_to_lst(&sp_cmd))
 		return (ft_lstdel(&sp_cmd.tk_lst, del_token));
 	return (sp_cmd.tk_lst);

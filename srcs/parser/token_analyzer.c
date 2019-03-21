@@ -22,7 +22,8 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 static int				check_red_ope(t_list **lst_tk)
 {
 	*lst_tk = (*lst_tk)->next;
-	if (!(*lst_tk) || get_tk(*lst_tk)->type != TK_RRED_OPT)
+	if (!(*lst_tk) || (get_tk(*lst_tk)->type != TK_RRED_OPT
+			&& get_tk(*lst_tk)->type != TK_RED_FILENAME))
 		return (0);
 	if (ft_strcmp((get_tk(*lst_tk)->token), "&") == 0 && (*lst_tk)->next
 			&& get_tk((*lst_tk)->next)->type != TK_RED_FILENAME)
@@ -40,30 +41,23 @@ static int				check_lred_opt(t_list **lst_tk)
 
 t_recall_prompt			token_analyser(t_list *lst_tk)
 {
-	if (!lst_tk)
-		return (PR_SUCCESS);
-	if (get_tk(lst_tk)->type == TK_CMD_SEP)
+	t_token_type	type;
+
+	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP)
 		return (syntax_error(get_tk(lst_tk)->token));
 	while (lst_tk && get_tk(lst_tk)->type == TK_ASSIGN)
 		lst_tk = lst_tk->next;
 	while (lst_tk && lst_tk->next)
 	{
-		if (get_tk(lst_tk)->type != TK_CMD_SEP
-				&& ft_strcmp(get_tk(lst_tk)->token, ";") == 0)
+		type = get_tk(lst_tk)->type;
+		if (type != TK_CMD_SEP && ft_strcmp(get_tk(lst_tk)->token, ";") == 0)
 			break ;
-		else if (get_tk(lst_tk)->type == TK_CMD_SEP
-				&& get_tk(lst_tk->next)->type == TK_CMD_SEP)
+		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
 			return (syntax_error(get_tk(lst_tk->next)->token));
-		else if (get_tk(lst_tk)->type == TK_LRED_OPT)
-		{
-			if (!check_lred_opt(&lst_tk))
-				return (syntax_error(get_tk(lst_tk)->token));
-		}
-		else if (get_tk(lst_tk)->type == TK_RED_OPE)
-		{
-			if (!check_red_ope(&lst_tk))
-				return (syntax_error(get_tk(lst_tk)->token));
-		}
+		else if (type == TK_LRED_OPT && !check_lred_opt(&lst_tk))
+			return (syntax_error(get_tk(lst_tk)->token));
+		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk))
+			return (syntax_error(get_tk(lst_tk)->token));
 		lst_tk = lst_tk->next;
 	}
 	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP
@@ -71,5 +65,5 @@ t_recall_prompt			token_analyser(t_list *lst_tk)
 		return (recall_prompt_type(lst_tk));
 	else if (lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
 		return (syntax_error("newline"));
-	return (token_analyser(lst_tk->next));
+	return ((!lst_tk) ? PR_SUCCESS : token_analyser(lst_tk->next));
 }

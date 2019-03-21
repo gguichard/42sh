@@ -41,19 +41,14 @@ SRC =	main.c \
 		$(PATH_ERROR)error_export.c \
 		$(PATH_ERROR)exec_error.c \
 		$(PATH_ERROR)error_utils.c \
-		$(PATH_LEXER)check_closing_quote.c \
-		$(PATH_LEXER)check_cmd_pipe.c \
-		$(PATH_LEXER)ft_splitwhitespace_shell.c \
-		$(PATH_LEXER)ft_strsplit_shell.c \
-		$(PATH_LEXER)lexer.c \
 		$(PATH_LEXER)replace_quote.c \
 		$(PATH_LEXER)replace_val_ret.c \
 		$(PATH_LEXER)str_cmd_inf.c \
 		$(PATH_LEXER)str_cmd_inf_utils.c \
 		$(PATH_LEXER)str_cmd_inf_escape.c \
 		$(PATH_LEXER)str_cmd_inf_get.c \
-		$(PATH_PARSER)fill_ast.c \
 		$(PATH_PARSER)parser.c \
+		$(PATH_PARSER)sort_ast.c \
 		$(PATH_PARSER)analyzer.c \
 		$(PATH_PARSER)token_analyzer.c \
 		$(PATH_OPERATOR)agregation.c \
@@ -70,13 +65,8 @@ SRC =	main.c \
 		$(PATH_BUILT)unalias.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
-		$(PATH_TOOLS)back_quote_tools.c \
 		$(PATH_TOOLS)lexer_tools.c \
-		$(PATH_TOOLS)split_tools.c \
-		$(PATH_TOOLS)split_tools_2.c \
-		$(PATH_TOOLS)fill_ast_tools.c \
 		$(PATH_TOOLS)ast_tools.c \
-		$(PATH_TOOLS)parser_tools.c \
 		$(PATH_TOOLS)env_tools.c \
 		$(PATH_TOOLS)env_tools_2.c \
 		$(PATH_TOOLS)builtins_tools.c \
