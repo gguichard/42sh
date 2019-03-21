@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:36:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 20:56:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 13:50:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,17 @@ static const t_test_ope	g_test_operators[] = {
 	{"-b", test_builtin_file_block, 0},
 	{"-c", test_builtin_file_character, 0},
 	{"-d", test_builtin_file_directory, 0},
+	{"-e", test_builtin_file_exists, 0},
 	{"-f", test_builtin_file_regular, 0},
+	{"-g", test_builtin_file_setgidflag, 0},
+	{"-L", test_builtin_file_link, 0},
 	{"-p", test_builtin_file_fifo, 0},
+	{"-r", test_builtin_file_r_rights, 0},
+	{"-S", test_builtin_file_socket, 0},
+	{"-s", test_builtin_file_zero, 0},
+	{"-u", test_builtin_file_setuidflag, 0},
+	{"-w", test_builtin_file_w_rights, 0},
+	{"-x", test_builtin_file_x_rights, 0},
 	{"-z", test_builtin_str_empty, 0},
 	{"=", test_builtin_str_eq, 1},
 	{"!=", test_builtin_str_ne, 1},

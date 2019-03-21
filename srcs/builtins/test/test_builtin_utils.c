@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 20:50:37 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 21:01:12 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 14:02:22 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,27 @@ static int	test_builtin_check_int(int *ptr, const char *operand)
 	return (0);
 }
 
-int			test_builtin_check_ints(int *tab, const char *op_left
-		, const char *op_right)
+int			test_builtin_check_ints(int *tab, const char *left
+		, const char *right)
 {
-	return (test_builtin_check_int(tab, op_left)
-			&& test_builtin_check_int(tab + 1, op_right));
+	return (test_builtin_check_int(tab, left)
+			&& test_builtin_check_int(tab + 1, right));
 }
 
 int			test_builtin_file_type(const char *file, int mode)
 {
 	struct stat	info;
 
-	if (lstat(file, &info) == -1)
+	if (stat(file, &info) == -1)
 		return (0);
 	return ((info.st_mode & S_IFMT) == mode);
+}
+
+int			test_builtin_file_mode(const char *file, int mode)
+{
+	struct stat	info;
+
+	if (stat(file, &info) == -1)
+		return (0);
+	return (info.st_mode & mode);
 }
