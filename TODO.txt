@@ -1,0 +1,23 @@
+PARSER:
+	integrate Franck tokenisation
+	check token_analyser:
+	>
+	&
+	; ;
+	&&
+	||
+	ls | ;
+	ls & ;
+	...........
+
+TODO:
+	OK	- all fill_elem...
+	2	- before execution (anylzer_exec_dispatch):
+		a - do expand (var avec espace considerer comme diferent token)
+		b - do remove quote
+	3 	- Update analyzer en fonction des news ast_type
+
+ASSIGNATION:
+	- Placement avant cmd
+		if cmd after assign -> var_tmp
+		else set var

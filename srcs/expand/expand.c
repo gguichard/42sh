@@ -48,22 +48,47 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 	*i += len_new;
 }
 
+// HAVE TO QUIT EXECUTION CMD ON ERROR
+
 void	expand(t_ast *elem, t_alloc *alloc)
 {
 	char		**new;
 	const char	*str;
+	const char	*exp;
 	int			i;
 
 	new = NULL;
+	exp = NULL;
 	i = 0;
 	while (elem->input[i])
 	{
-		if (ft_strncmp(elem->input[i], "${", 2) == 0)
+		if ((exp = ft_strchr(elem->input[i], '$')))
 		{
-			str = get_env_value(*(alloc->var), &(elem->input[i][2]));
-			if (ft_strcmp(str, "") == 0)
-			new = ft_strsplit(str, " ");
-			create_new_input(elem, &i, new);
+			if (ft_strncmp(exp, "${", 2) == 0
+			{
+				if (check_expand_bracket(&(exp[2])) == 0)
+					error_expand(elem->input[i]);
+				else
+				{
+					str = get_expand_value(*(alloc->var), &(exp[2]), 1);
+					if (ft_strcmp(str, "") != 0)
+					{
+						new = ft_strsplit(str, " ");
+						create_new_input(elem, &i, new);
+					}
+				}
+			}
+			else if (check_expand_simple(&(exp[1])) == 0)
+				error_expand(elem->input[i]);
+			else
+			{
+				str = get_expand_value(*(alloc->var), &(exp[1]), 0);
+				if (ft_strcmp(str, "") != 0)
+				{
+					new = ft_strsplit(str, " ");
+					create_new_input(elem, &i, new);
+				}
+			}
 		}
 		i += 1;
 	}

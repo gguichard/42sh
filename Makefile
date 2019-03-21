@@ -20,8 +20,8 @@ PATH_HASHTABLE = hashtable/
 PATH_PATH = path/
 PATH_TOKEN = token/
 
-INCLUDE = ./includes
-INCLUDE_LIBFT = ./libft/includes
+INCLUDE = ./includes/
+INCLUDE_LIBFT = ./libft/includes/
 PATH_LIB = ./libft/
 PATH_SRC = ./srcs/
 PATH_OBJ = ./obj/
@@ -109,7 +109,7 @@ $(NAME): $(OBJS)
 	@gcc $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $(OBJS)
 	@echo "\n$(NAME):\t\t\t$(GREEN)[READY]\n\t\t¯\_(ツ)_/¯$(END)"
 
-$(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
+$(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE) Makefile
 	@mkdir $(PATH_OBJ) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_BUILT) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_ERROR) 2> /dev/null || true
