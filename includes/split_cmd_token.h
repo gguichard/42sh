@@ -7,6 +7,8 @@
 
 # define WORD_SEP_CHARS " \t\n"
 # define CMD_SPE_CHARS "|<>&;"
+# define DOUBLED_SPE_CHARS "|<>&"
+# define RED_TYPE_SPE_CHARS "<>"
 
 typedef struct	s_split_cmd_inf
 {
@@ -20,7 +22,8 @@ typedef struct	s_split_cmd_inf
 
 t_token_type	get_tk_type_before_cur_char(t_split_cmd_inf *sp_cmd);
 
-int				get_cur_token_len(const char *token_start);
+int				get_cur_spe_char_token_len_and_set_type(
+		t_split_cmd_inf *sp_cmd);
 
 int				cur_token_is_number(t_split_cmd_inf *sp_cmd);
 

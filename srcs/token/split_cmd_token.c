@@ -71,9 +71,7 @@ static int				split_spe_char(t_split_cmd_inf *sp_cmd)
 	sp_cmd->tk_start = sp_cmd->scmd->str + sp_cmd->scmd->pos;
 	if (ft_strchr(WORD_SEP_CHARS, sp_cmd->scmd->str[sp_cmd->scmd->pos]) == NULL)
 	{
-		//TODO get spe char token type
-		sp_cmd->cur_tk_type = TK_RED_OPE;
-		sp_cmd->scmd->pos += get_cur_token_len(sp_cmd->tk_start) - 1;
+		sp_cmd->scmd->pos += get_cur_spe_char_token_len_and_set_type(sp_cmd);
 		if (!add_cur_token_to_lst(sp_cmd))
 			return (0);
 	}

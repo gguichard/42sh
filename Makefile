@@ -42,13 +42,14 @@ SRC =	main.c \
 		$(PATH_ERROR)error_utils.c \
 		$(PATH_LEXER)replace_quote.c \
 		$(PATH_LEXER)replace_val_ret.c \
+		$(PATH_LEXER)str_cmd_inf.c \
+		$(PATH_LEXER)str_cmd_inf_utils.c \
+		$(PATH_LEXER)str_cmd_inf_escape.c \
+		$(PATH_LEXER)str_cmd_inf_get.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)sort_ast.c \
 		$(PATH_PARSER)analyzer.c \
 		$(PATH_PARSER)token_analyzer.c \
-		$(PATH_PARSER)str_cmd_inf.c \
-		$(PATH_PARSER)str_cmd_inf_utils.c \
-		$(PATH_PARSER)str_cmd_inf_escape.c \
 		$(PATH_OPERATOR)agregation.c \
 		$(PATH_OPERATOR)heredoc.c \
 		$(PATH_OPERATOR)redirection.c \
