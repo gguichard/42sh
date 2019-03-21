@@ -54,6 +54,7 @@ SRC =	main.c \
 		$(PATH_PARSER)fill_ast.c \
 		$(PATH_PARSER)parser.c \
 		$(PATH_PARSER)analyzer.c \
+		$(PATH_PARSER)token_analyzer.c \
 		$(PATH_OPERATOR)agregation.c \
 		$(PATH_OPERATOR)heredoc.c \
 		$(PATH_OPERATOR)redirection.c \
