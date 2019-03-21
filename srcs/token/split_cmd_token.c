@@ -68,7 +68,6 @@ static int				split_spe_char(t_split_cmd_inf *sp_cmd)
 	if (!sp_cmd->last_char_was_spe)
 		if (!process_token_before_cur_char(sp_cmd))
 			return (0);
-	sp_cmd->cur_tk_type = TK_NOTHING;
 	sp_cmd->tk_start = sp_cmd->scmd->str + sp_cmd->scmd->pos;
 	if (ft_strchr(WORD_SEP_CHARS, sp_cmd->scmd->str[sp_cmd->scmd->pos]) == NULL)
 	{
