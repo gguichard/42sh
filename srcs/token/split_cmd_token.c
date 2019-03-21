@@ -114,26 +114,44 @@ static int				split_at_pos(t_split_cmd_inf *sp_cmd)
 	return (1);
 }
 
+/*
+** Retourne toujours NULL.
+*/
+
+static void				*reset_str_cmd_inf(t_split_cmd_inf *sp_cmd
+		, const char *old_str, char because_of_error)
+{
+	free(sp_cmd->cur_str);
+	sp_cmd->scmd->str = old_str;
+	sp_cmd->scmd->pos = ft_strlen(old_str);
+	if (because_of_error)
+		ft_lstdel(&sp_cmd->tk_lst, del_token);
+	return (NULL);
+}
+
 t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf)
 {
 	t_split_cmd_inf		sp_cmd;
+	const char			*old_str;
 
-	sp_cmd.tk_lst = NULL;
-	sp_cmd.last_start_cmd = NULL;
-	sp_cmd.last_tk_added = NULL;
+	ft_bzero(&sp_cmd, sizeof(t_split_cmd_inf));
+	old_str = str_cmd_inf->str;
+	if ((sp_cmd.cur_str = ft_strdup(old_str)) == NULL)
+		return (0);
+	str_cmd_inf->str = sp_cmd.cur_str;
 	sp_cmd.scmd = str_cmd_inf;
 	sp_cmd.last_char_was_spe = 1;
-	sp_cmd.tk_start = sp_cmd.scmd->str;
+	sp_cmd.tk_start = str_cmd_inf->str;
 	sp_cmd.cur_tk_type = TK_NOTHING;
-	sp_cmd.last_tk_end_by_and = 0;
 	while (sp_cmd.scmd->str[sp_cmd.scmd->pos] != '\0')
 	{
 		if (!split_at_pos(&sp_cmd))
-			return (ft_lstdel(&sp_cmd.tk_lst, del_token));
+			return (reset_str_cmd_inf(&sp_cmd, old_str, 1));
 		scmd_move_to_next_char(sp_cmd.scmd);
 	}
 	--sp_cmd.scmd->pos;
 	if (sp_cmd.cur_tk_type != TK_NOTHING && !add_cur_token_to_lst(&sp_cmd))
-		return (ft_lstdel(&sp_cmd.tk_lst, del_token));
+		return (reset_str_cmd_inf(&sp_cmd, old_str, 1));
+	reset_str_cmd_inf(&sp_cmd, old_str, 0);
 	return (sp_cmd.tk_lst);
 }
