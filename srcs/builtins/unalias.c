@@ -4,7 +4,7 @@
 #include "aliastable.h"
 #include "builtins.h"
 
-int		remove_these_aliases(char **params, t_hashtable *aliastable)
+static int	remove_these_aliases(char **params, t_hashtable *aliastable)
 {
 	int		no_error;
 
@@ -22,7 +22,7 @@ int		remove_these_aliases(char **params, t_hashtable *aliastable)
 	return (no_error);
 }
 
-int		unalias_builtins(t_ast *elem, t_alloc *alloc)
+int			unalias_builtins(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 
@@ -35,7 +35,7 @@ int		unalias_builtins(t_ast *elem, t_alloc *alloc)
 					, opts.error);
 		ft_dprintf(STDERR_FILENO
 				, "42sh: unalias: usage: unalias [-a] name [name ...]\n");
-		return (1);
+		return (2);
 	}
 	if (has_opt(&opts, 'a'))
 		return (delete_hashentries(alloc->aliastable));
