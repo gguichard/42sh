@@ -3,25 +3,6 @@
 #include "error.h"
 #include "token_inf.h"
 
-
-/*
-** TODO:
-**	 - Check coherence token
-**	 - create ast:
-**			- get length input
-**			- fill INPUT
-**			- Add type
-**			- insertion sort new elem
-**	type:
-**	TK_NOTHING,	0
-**	TK_WORD,	1
-**	TK_OPE,		2
-**	TK_LRED_OPT,3
-**	TK_RRED_OPT,4
-**	TK_CMD_SEP	5
-*/
-
-
 t_ast	*set_new_elem(void)
 {
 	t_ast	*new;
@@ -43,12 +24,12 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 {
 	static char	*ope[10] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
 	"&&", "||"};
-	char	*str;
-	int		i;
+	char		*str;
+	int			i;
 
 	i = 0;
 	str = get_tk(lst_tk)->token;
-	while(ft_strcmp(ope[i], str) != 0 && i < 10)
+	while (ft_strcmp(ope[i], str) != 0 && i < 10)
 		i += 1;
 	if (i == 3)
 		elem->type = HEREDOC;

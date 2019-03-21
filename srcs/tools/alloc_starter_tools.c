@@ -12,7 +12,7 @@ static t_builtin	*set_tab_builtins(void)
 		&exit_builtins, &type_builtins, &hash_builtins, &alias_builtins,
 		&unalias_builtins, &set_builtins, &unset_builtins, &export_builtins,
 		&job_builtins, &fg_builtins, &bg_builtins };
-	int			i;
+	int					i;
 
 	i = 0;
 	if (!(builtins = (t_builtin *)malloc(sizeof(t_builtin) * 14)))
