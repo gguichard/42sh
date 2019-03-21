@@ -64,7 +64,7 @@ int		remove_hashentry(t_hashtable *hashtable, const char *key)
 			else
 				old_elem->next = cur_elem->next;
 			free(cur_elem);
-			break;
+			break ;
 		}
 		old_elem = cur_elem;
 		cur_elem = cur_elem->next;
