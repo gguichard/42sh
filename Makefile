@@ -19,6 +19,7 @@ PATH_TOOLS = tools/
 PATH_HASHTABLE = hashtable/
 PATH_PATH = path/
 PATH_TOKEN = token/
+PATH_CMDLINE = cmdline/
 
 INCLUDE = ./includes
 INCLUDE_LIBFT = ./libft/includes
@@ -106,6 +107,33 @@ SRC =	main.c \
 		$(PATH_TOKEN)split_cmd_token.c \
 		$(PATH_TOKEN)split_cmd_token_add.c \
 		$(PATH_TOKEN)split_cmd_token_utils.c \
+		$(PATH_CMDLINE)cmdline.c \
+		$(PATH_CMDLINE)cursor_utils.c \
+		$(PATH_CMDLINE)history.c \
+		$(PATH_CMDLINE)input.c \
+		$(PATH_CMDLINE)mbstr.c \
+		$(PATH_CMDLINE)print_cmdline.c \
+		$(PATH_CMDLINE)print_cmdline_utils.c \
+		$(PATH_CMDLINE)prompt.c \
+		$(PATH_CMDLINE)resize.c \
+		$(PATH_CMDLINE)seq_keys.c \
+		$(PATH_CMDLINE)setup_term.c \
+		$(PATH_CMDLINE)tcaps_utils.c \
+		$(PATH_CMDLINE)mode_common/cursor_home_end.c \
+		$(PATH_CMDLINE)mode_common/cursor_line.c \
+		$(PATH_CMDLINE)mode_common/cursor_moves.c \
+		$(PATH_CMDLINE)mode_common/cursor_updown.c \
+		$(PATH_CMDLINE)mode_common/cursor_words.c \
+		$(PATH_CMDLINE)mode_common/enter_exit_visual.c \
+		$(PATH_CMDLINE)mode_common/mode_utils.c \
+		$(PATH_CMDLINE)mode_insert/del_hooks.c \
+		$(PATH_CMDLINE)mode_insert/history_hooks.c \
+		$(PATH_CMDLINE)mode_insert/konami_code.c \
+		$(PATH_CMDLINE)mode_insert/misc_hooks.c \
+		$(PATH_CMDLINE)mode_insert/stop_reading.c \
+		$(PATH_CMDLINE)mode_visual/copy_paste_clipboard.c \
+		$(PATH_CMDLINE)mode_visual/select_utils.c \
+		$(PATH_CMDLINE)mode_visual/visual_utils.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -131,22 +159,16 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_TOKEN) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_CMDLINE) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_CMDLINE)mode_common 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_CMDLINE)mode_visual 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_CMDLINE)mode_insert 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
 	@/bin/rm -f $(OBJS)
 	@make clean -C $(PATH_LIB)
-	@rmdir $(PATH_OBJ)$(PATH_BUILT) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_ERROR) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_EXEC) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_LEXER) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_PARSER) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_OPERATOR) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
-	@rmdir $(PATH_OBJ)$(PATH_TOKEN) 2> /dev/null || true
-	@rmdir $(PATH_OBJ) 2> /dev/null || true
+	@/bin/rm -rf $(PATH_OBJ) 2> /dev/null || true
 
 fclean: clean
 	@make fclean -C $(PATH_LIB)

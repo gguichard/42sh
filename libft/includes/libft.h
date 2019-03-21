@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 15:05:10 by gguichar          #+#    #+#             */
-/*   Updated: 2018/12/19 17:14:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 17:02:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char			*ft_strncat(char *dest, const char *src, size_t n);
 size_t			ft_strlcat(char *dest, const char *src, size_t size);
 
 char			*ft_strchr(const char *s, int c);
+
+wchar_t			*ft_wstrchr(const wchar_t *str, wint_t c);
 
 char			*ft_strrchr(const char *s, int c);
 
