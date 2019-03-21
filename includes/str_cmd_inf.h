@@ -30,6 +30,22 @@ void			scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str);
 void			scmd_delete(t_str_cmd_inf *str_cmd_inf);
 
 /*
+** Retourne le char actuel du str_cmd_inf.
+*/
+char			scmd_cur_char(t_str_cmd_inf *str_cmd_inf);
+
+/*
+** Retourne la string dont le 1er char est le char actuel de str_cmd_inf.
+*/
+const char		*scmd_cur_str(t_str_cmd_inf *str_cmd_inf);
+
+/*
+** Retourne 1 si le char actuel du str_cmd_inf fait parti de la liste passe
+** en parametre, 0 sinon. Retourne toujours 0 si le char actuel est '\0'.
+*/
+int				scmd_cur_is_of(t_str_cmd_inf *str_cmd_inf, const char *these);
+
+/*
 ** Retourne 1 si le curseur a la position actuelle n'est dans aucun enclosing
 ** char (",',${,$(), 0 sinon.
 */
