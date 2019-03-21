@@ -54,7 +54,7 @@ static int	print_aliastable(t_hashtable *aliastable)
 	return (1);
 }
 
-int		add_or_print_aliases(char **params, t_hashtable *aliastable)
+static int	add_or_print_aliases(char **params, t_hashtable *aliastable)
 {
 	const char	*error_msg;
 	char		*equ_pos;
@@ -92,7 +92,7 @@ int		alias_builtins(t_ast *elem, t_alloc *alloc)
 				, opts.error);
 		ft_dprintf(STDERR_FILENO
 				, "42sh: alias: usage: alias [name[=value] ...]\n");
-		return (1);
+		return (2);
 	}
 	if (elem->input[opts.index] == NULL)
 		return (!print_aliastable(alloc->aliastable));
