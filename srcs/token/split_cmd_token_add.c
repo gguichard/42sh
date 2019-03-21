@@ -4,37 +4,15 @@
 #include "token_inf.h"
 #include "split_cmd_token.h"
 
-int		add_cur_token_to_lst(t_split_cmd_inf *sp_cmd)
-{
-	t_token_inf		new_token;
-	t_list			*new_elem;
-	size_t			cur_token_size;
-
-	if (sp_cmd->cur_tk_type == TK_NOTHING)
-		return (1);
-	cur_token_size = (sp_cmd->scmd->str + sp_cmd->scmd->pos)
-		- sp_cmd->tk_start + 1;
-	new_token.token = ft_strndup(sp_cmd->tk_start, cur_token_size);
-	new_token.type = sp_cmd->cur_tk_type;
-	if (new_token.token == NULL
-			|| (new_elem = ft_lstnew(&new_token, sizeof(t_token_inf))) == NULL)
-	{
-		free(new_token.token);
-		return (0);
-	}
-	ft_lstpush(&sp_cmd->tk_lst, new_elem);
-	return (1);
-}
-
-int		add_token_to_lst(t_list **token_lst, const char *token_str
-		, t_token_type token_type)
+static int	add_token_to_lst(t_split_cmd_inf *sp_cmd, const char *token_str
+		, size_t token_size, t_token_type token_type)
 {
 	t_token_inf		new_token;
 	t_list			*new_elem;
 
 	if (token_type == TK_NOTHING)
 		return (1);
-	new_token.token = ft_strdup(token_str);
+	new_token.token = ft_strndup(token_str, token_size);
 	new_token.type = token_type;
 	if (new_token.token == NULL
 			|| (new_elem = ft_lstnew(&new_token, sizeof(t_token_inf))) == NULL)
@@ -42,6 +20,28 @@ int		add_token_to_lst(t_list **token_lst, const char *token_str
 		free(new_token.token);
 		return (0);
 	}
-	ft_lstpush(token_lst, new_elem);
+	if (sp_cmd->last_tk_added == NULL)
+		ft_lstpush(&sp_cmd->tk_lst, new_elem);
+	else
+		ft_lstpush(&sp_cmd->last_tk_added, new_elem);
+	sp_cmd->last_tk_added = new_elem;
+	if (token_type == TK_CMD_SEP)
+		sp_cmd->last_start_cmd = NULL;
+	else if (sp_cmd->last_start_cmd == NULL)
+		sp_cmd->last_start_cmd = new_elem;
 	return (1);
+}
+
+int			add_cur_token_to_lst(t_split_cmd_inf *sp_cmd)
+{
+	return (add_token_to_lst(sp_cmd, sp_cmd->tk_start
+				, scmd_cur_str(sp_cmd->scmd) - sp_cmd->tk_start + 1
+				, sp_cmd->cur_tk_type));
+}
+
+int			add_whole_token_to_lst(t_split_cmd_inf *sp_cmd
+		, const char *token_str, t_token_type token_type)
+{
+	return (add_token_to_lst(sp_cmd, token_str, ft_strlen(token_str)
+				, token_type));
 }
