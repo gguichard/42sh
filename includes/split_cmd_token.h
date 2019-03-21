@@ -24,6 +24,8 @@ typedef struct	s_split_cmd_inf
 
 t_token_type	get_tk_type_before_cur_char(t_split_cmd_inf *sp_cmd);
 
+t_token_type	get_next_word_tk_type(t_split_cmd_inf *sp_cmd);
+
 int				get_cur_spe_char_token_len_and_set_type(
 		t_split_cmd_inf *sp_cmd);
 

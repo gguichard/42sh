@@ -68,8 +68,30 @@ t_token_type	get_tk_type_before_cur_char(t_split_cmd_inf *sp_cmd)
 				&& sp_cmd->scmd->str[sp_cmd->scmd->pos - 1] == '&')
 		{
 			sp_cmd->last_tk_end_by_and = 1;
-			return (TK_PARAM); //TK_WORD
 		}
 	}
-	return (TK_PARAM); //TK_WORD
+	return (get_next_word_tk_type(sp_cmd));
+}
+
+t_token_type	get_next_word_tk_type(t_split_cmd_inf *sp_cmd)
+{
+	t_list			*cur_lst_elem;
+
+	if (sp_cmd->last_start_cmd != NULL)
+	{
+		if (get_tk(sp_cmd->last_tk_added)->type == TK_RED_OPE
+				|| (get_tk(sp_cmd->last_tk_added)->type == TK_RRED_OPT
+					&& ft_strequ(get_tk(sp_cmd->last_tk_added)->token, "&")))
+		{
+			return (TK_RED_FILENAME);
+		}
+	}
+	cur_lst_elem = sp_cmd->last_start_cmd;
+	while (cur_lst_elem != NULL)
+	{
+		if (get_tk(cur_lst_elem)->type == TK_CMD)
+			return (TK_PARAM);
+		cur_lst_elem = cur_lst_elem->next;
+	}
+	return (TK_CMD);
 }
