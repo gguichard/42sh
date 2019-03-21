@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 10:16:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 11:32:14 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ int			handle_delete_key(t_cmdline *cmdline);
 int			handle_eot_key(t_cmdline *cmdline);
 int			handle_clear(t_cmdline *cmdline);
 int			handle_bell(t_cmdline *cmdline);
+int			handle_history_prev(t_cmdline *cmdline);
+int			handle_history_next(t_cmdline *cmdline);
+
 
 /*
 ** VISUAL MODE.
@@ -96,6 +99,8 @@ int			handle_paste_before_key(t_cmdline *cmdline);
 /*
 ** UTILS.
 */
+char		*wstr_to_mbstr(const wchar_t *wstr, size_t len);
+
 int			get_rightmost_column(t_cmdline *cmdline, int offset);
 t_cursor	go_to_offset(t_cmdline *cmdline, int offset);
 void		recompute_cursor(t_cmdline *cmdline);

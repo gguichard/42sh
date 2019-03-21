@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:39:44 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 10:15:50 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 11:42:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <term.h>
 #include <signal.h>
 #include "cmdline.h"
+#include "history.h"
 
 t_cmdline	*g_cmdline = NULL;
 

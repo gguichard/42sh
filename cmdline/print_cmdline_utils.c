@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 11:39:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 11:34:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void		print_next_line_tcaps(void)
 	tputs(ce_tcap, 1, t_putchar);
 }
 
-static void	write_with_colors(const char *str, size_t len)
+static void	write_with_colors(const char *str)
 {
 	static int	color = 1;
 	char		*color_str;
 
-	while (len > 0)
+	while (*str != '\0')
 	{
 		ft_asprintf(&color_str, "\033[38;5;%dm", color);
 		if (color_str != NULL)
@@ -50,7 +50,6 @@ static void	write_with_colors(const char *str, size_t len)
 		write(STDOUT_FILENO, str, 1);
 		write(STDOUT_FILENO, "\033[0m", 4);
 		color = (color % 232) + 1;
-		len--;
 		str++;
 	}
 }
@@ -58,27 +57,16 @@ static void	write_with_colors(const char *str, size_t len)
 void		print_mbstr(t_cmdline *cmdline, const wchar_t *buffer, size_t len)
 {
 	char	*str;
-	int		offset;
-	int		wlen;
 
-	str = (char *)malloc(len * sizeof(wint_t));
+	str = wstr_to_mbstr(buffer, len);
 	if (str == NULL)
 		write(STDOUT_FILENO, buffer, len * sizeof(wint_t));
 	else
 	{
-		offset = 0;
-		while (len > 0)
-		{
-			wlen = ft_wcharlen(*buffer);
-			ft_memcpy(str + offset, buffer, wlen);
-			offset += wlen;
-			buffer++;
-			len--;
-		}
 		if (cmdline->konami_code)
-			write_with_colors(str, offset);
+			write_with_colors(str);
 		else
-			write(STDOUT_FILENO, str, offset);
+			write(STDOUT_FILENO, str, ft_strlen(str));
 		free(str);
 	}
 }

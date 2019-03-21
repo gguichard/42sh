@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 10:16:44 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 10:32:42 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <termios.h>
 # include <sys/ioctl.h>
 # include <wchar.h>
+# include "history.h"
 
 enum				e_prompt
 {
@@ -77,12 +78,13 @@ typedef struct		s_cmdline
 	struct s_prompt	prompt;
 	struct s_input	input;
 	struct winsize	winsize;
+	struct s_visual	visual;
 	t_cursor		cursor;
 	t_seq_keys		seq_keys;
 	int				row;
 	int				saved_col;
-	struct s_visual	visual;
 	int				konami_code;
+	t_history		history;
 }					t_cmdline;
 
 typedef struct		s_seq

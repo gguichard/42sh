@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 11:37:27 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/21 10:48:08 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static const t_seq	g_seqs[] = {
 	{"\014", MODE_INSERT, handle_clear},
 	{"\007", MODE_INSERT, handle_bell},
 	{"\004", MODE_INSERT, handle_eot_key},
+	{"\033[A", MODE_INSERT, handle_history_prev},
+	{"\033[B", MODE_INSERT, handle_history_next},
 	{"\033[H", MODE_COMMON, handle_home_key},
 	{"\033[F", MODE_COMMON, handle_end_key},
 	{"\033[1;2A", MODE_COMMON, handle_cursor_up},
