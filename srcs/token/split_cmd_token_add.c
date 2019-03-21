@@ -18,6 +18,7 @@ static int	add_token_to_lst(t_split_cmd_inf *sp_cmd, const char *token_str
 			|| (new_elem = ft_lstnew(&new_token, sizeof(t_token_inf))) == NULL)
 	{
 		free(new_token.token);
+		sp_cmd->cur_tk_type = TK_NOTHING;
 		return (0);
 	}
 	if (sp_cmd->last_tk_added == NULL)
@@ -29,6 +30,7 @@ static int	add_token_to_lst(t_split_cmd_inf *sp_cmd, const char *token_str
 		sp_cmd->last_start_cmd = NULL;
 	else if (sp_cmd->last_start_cmd == NULL)
 		sp_cmd->last_start_cmd = new_elem;
+	sp_cmd->cur_tk_type = TK_NOTHING;
 	return (1);
 }
 
