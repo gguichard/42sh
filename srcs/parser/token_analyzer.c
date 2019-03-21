@@ -22,7 +22,8 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 static int				check_red_ope(t_list **lst_tk)
 {
 	*lst_tk = (*lst_tk)->next;
-	if (!(*lst_tk) || get_tk(*lst_tk)->type != TK_RRED_OPT)
+	if (!(*lst_tk) || (get_tk(*lst_tk)->type != TK_RRED_OPT
+			&& get_tk(*lst_tk)->type != TK_RED_FILENAME))
 		return (0);
 	if (ft_strcmp((get_tk(*lst_tk)->token), "&") == 0 && (*lst_tk)->next
 			&& get_tk((*lst_tk)->next)->type != TK_RED_FILENAME)
@@ -71,5 +72,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk)
 		return (recall_prompt_type(lst_tk));
 	else if (lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
 		return (syntax_error("newline"));
+	if (!lst_tk)
+		return (PR_SUCCESS);
 	return (token_analyser(lst_tk->next));
 }
