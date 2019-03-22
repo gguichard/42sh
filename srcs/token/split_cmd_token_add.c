@@ -63,24 +63,39 @@ static int	token_is_assign(const char *token, size_t token_size)
 	return (token[idx] == '=');
 }
 
-static int	str_good_replace(char **str, size_t pos, size_t len
-		, const char *replacement)
+static int	init_alias_scmd(t_str_cmd_inf *alias_scmd, t_split_cmd_inf *sp_cmd)
 {
-	size_t	str_len;
-	size_t	replacement_len;
-	char	*new_str;
+	char	old_char;
+	t_list	*tmp_tk_lst;
 
-	str_len = ft_strlen(*str);
-	replacement_len = ft_strlen(replacement);
-	if ((new_str = (char*)malloc(str_len - len + replacement_len + 1)) == NULL)
+	old_char = sp_cmd->scmd->str[sp_cmd->scmd->pos + 1];
+	sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = '\0';
+	if (!scmd_init(alias_scmd, get_alias(sp_cmd->aliastable, sp_cmd->tk_start))
+			|| alias_scmd->str == NULL)
+	{
+		sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = old_char;
 		return (0);
-	ft_memcpy(new_str, *str, pos);
-	ft_memcpy(new_str + pos, replacement, replacement_len);
-	ft_memcpy(new_str + pos + replacement_len, *str + pos + len
-			, str_len - pos - len);
-	new_str[str_len - len + replacement_len] = '\0';
-	free(*str);
-	*str = new_str;
+	}
+	sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = old_char;
+	if ((tmp_tk_lst = split_cmd_token(alias_scmd, sp_cmd->aliastable)) != NULL)
+		ft_lstdel(&tmp_tk_lst, del_token);
+	return (1);
+}
+
+static int	replace_token_with_alias_res_and_clean(t_split_cmd_inf *sp_cmd
+		, size_t tk_start_pos, t_str_cmd_inf *alias_scmd
+		, size_t alias_name_size)
+{
+	if (!ft_strreplace_inside(&sp_cmd->scmd->str, tk_start_pos, alias_name_size
+				, alias_scmd->str))
+	{
+		scmd_clean(alias_scmd);
+		return (0);
+	}
+	scmd_clean(alias_scmd);
+	sp_cmd->scmd->pos = tk_start_pos;
+	sp_cmd->tk_start = sp_cmd->scmd->str + tk_start_pos;
+	sp_cmd->alias_has_expanded = 1;
 	return (1);
 }
 
@@ -91,41 +106,24 @@ static int	str_good_replace(char **str, size_t pos, size_t len
 static int	expand_alias(t_split_cmd_inf *sp_cmd)
 {
 	t_str_cmd_inf	alias_scmd;
-	char			old_char;
 	size_t			alias_name_size;
 	size_t			alias_result_size;
-	t_list			*tmp_tk_lst;
 	size_t			tk_start_pos;
 
+	if (!init_alias_scmd(&alias_scmd, sp_cmd))
+		return (0);
 	alias_name_size = sp_cmd->scmd->str + sp_cmd->scmd->pos
 		- sp_cmd->tk_start + 1;
-	old_char = sp_cmd->scmd->str[sp_cmd->scmd->pos + 1];
-	sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = '\0';
-	if (!scmd_init(&alias_scmd
-				, get_alias(sp_cmd->aliastable, sp_cmd->tk_start))
-			|| alias_scmd.str == NULL)
-	{
-		sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = old_char;
-		return (0);
-	}
-	sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = old_char;
-	if ((tmp_tk_lst = split_cmd_token(&alias_scmd, sp_cmd->aliastable)) != NULL)
-		ft_lstdel(&tmp_tk_lst, del_token);
-	tk_start_pos = sp_cmd->tk_start - sp_cmd->scmd->str;
 	alias_result_size = ft_strlen(alias_scmd.str);
+	tk_start_pos = sp_cmd->tk_start - sp_cmd->scmd->str;
 	if (alias_result_size > 0
 			&& (alias_scmd.str[alias_result_size - 1] == ' '
 				|| alias_scmd.str[alias_result_size - 1] == '\t'))
 		sp_cmd->pos_alias_can_start = tk_start_pos + alias_result_size;
 	else
 		sp_cmd->pos_alias_can_start = -1;
-	if (!str_good_replace(&sp_cmd->scmd->str, tk_start_pos, alias_name_size
-				, alias_scmd.str))
-		return (0);
-	sp_cmd->scmd->pos = tk_start_pos;
-	sp_cmd->tk_start = sp_cmd->scmd->str + tk_start_pos;
-	sp_cmd->alias_has_expanded = 1;
-	return (1);
+	return (replace_token_with_alias_res_and_clean(sp_cmd, tk_start_pos
+				, &alias_scmd, alias_name_size));
 }
 
 int			add_cur_token_to_lst(t_split_cmd_inf *sp_cmd)

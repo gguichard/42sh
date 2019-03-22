@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 15:05:10 by gguichar          #+#    #+#             */
-/*   Updated: 2018/12/19 17:14:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:22:48 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,9 @@ char			*ft_strstrim(char const *s, char const *spaces);
 char			*ft_strreplace(const char *s, const char *from, const char *to);
 
 char			*ft_strreplace_free(char *s, const char *from, const char *to);
+
+int				ft_strreplace_inside(char **str, size_t pos, size_t len
+		, const char *replacement);
 
 char			**ft_strsplit(char const *s, char c);
 

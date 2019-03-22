@@ -6,7 +6,7 @@
 #    By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/29 17:35:18 by gguichar          #+#    #+#              #
-#    Updated: 2018/12/20 21:33:25 by gguichar         ###   ########.fr        #
+#    Updated: 2019/03/22 16:28:10 by fwerner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,14 +25,15 @@ SRC		=	ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c \
 			ft_strdel.c ft_strclr.c ft_striter.c ft_striteri.c \
 			ft_strmap.c ft_strmapi.c ft_strequ.c ft_strnequ.c \
 			ft_strsub.c ft_strjoin.c ft_strjoin_free.c ft_strtrim.c \
-			ft_strstrim.c ft_strreplace.c ft_strreplace_free.c ft_strsplit.c \
-			ft_join.c ft_itoa.c ft_itoa_base.c ft_lltoa.c ft_lltoa_base.c \
-			ft_ulltoa.c ft_ulltoa_base.c ft_putchar.c ft_putchar_fd.c \
-			ft_putstr.c ft_putstr_fd.c ft_putendl.c ft_putendl_fd.c \
-			ft_putnbr.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c \
-			ft_lstdel.c ft_lstfree.c ft_lstadd.c ft_lstpush.c ft_lstpop.c \
-			ft_lstpeek.c ft_lstsize.c ft_lstempty.c ft_lstiter.c ft_lstmap.c \
-			ft_min.c ft_max.c ft_abs.c ft_pow.c ft_llsize.c ft_strtab_free.c \
+			ft_strstrim.c ft_strreplace.c ft_strreplace_free.c \
+			ft_strreplace_inside.c ft_strsplit.c ft_join.c \
+			ft_itoa.c ft_itoa_base.c ft_lltoa.c ft_lltoa_base.c ft_ulltoa.c \
+			ft_ulltoa_base.c ft_putchar.c ft_putchar_fd.c ft_putstr.c \
+			ft_putstr_fd.c ft_putendl.c ft_putendl_fd.c ft_putnbr.c \
+			ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c \
+			ft_lstfree.c ft_lstadd.c ft_lstpush.c ft_lstpop.c ft_lstpeek.c \
+			ft_lstsize.c ft_lstempty.c ft_lstiter.c ft_lstmap.c ft_min.c \
+			ft_max.c ft_abs.c ft_pow.c ft_llsize.c ft_strtab_free.c \
 			ft_levenshtein.c ft_wcharlen.c ft_wstrlen.c get_next_line.c
 SRC_DIR	=	src
 
