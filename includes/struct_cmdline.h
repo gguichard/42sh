@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 16:41:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:24:15 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <termios.h>
 # include <sys/ioctl.h>
-# include <wchar.h>
 # include "history.h"
 
 typedef enum		e_prompt
@@ -38,7 +37,7 @@ typedef struct		s_cursor
 
 struct				s_input
 {
-	wchar_t			*buffer;
+	char			*buffer;
 	int				capacity;
 	int				size;
 	int				offset;
@@ -70,7 +69,7 @@ struct				s_visual
 {
 	int				toggle;
 	int				start_offset;
-	wchar_t			*clipboard;
+	char			*clipboard;
 };
 
 typedef struct		s_cmdline

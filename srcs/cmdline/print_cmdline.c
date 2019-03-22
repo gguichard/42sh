@@ -6,19 +6,18 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:13:01 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:34:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
 
 static void	print_one_line(t_cmdline *cmdline, t_cursor *end_cursor
-		, const wchar_t *buffer, int offset)
+		, const char *buffer, int offset)
 {
 	static const char	*ce_tcap = NULL;
 
@@ -29,7 +28,7 @@ static void	print_one_line(t_cmdline *cmdline, t_cursor *end_cursor
 		end_cursor->x += offset;
 		end_cursor->y += end_cursor->x / ft_max(1, cmdline->winsize.ws_col);
 		end_cursor->x %= ft_max(1, cmdline->winsize.ws_col);
-		print_cmdline_wstr(cmdline, buffer, offset);
+		print_cmdline_str(cmdline, buffer, offset);
 	}
 	tputs(ce_tcap, 1, t_putchar);
 }
@@ -57,16 +56,16 @@ static void	scroll_if_needed(t_cmdline *cmdline, t_cursor *sc, t_cursor *ec)
 static void	print_line_by_line(t_cmdline *cmdline, int off_start
 		, t_cursor *sc, t_cursor *ec)
 {
-	const wchar_t	*buffer;
-	const wchar_t	*eol;
-	int				buff_len;
-	int				offset;
+	const char	*buffer;
+	const char	*eol;
+	int			buff_len;
+	int			offset;
 
 	buffer = cmdline->input.buffer + off_start;
 	buff_len = cmdline->input.size - off_start;
 	while (buff_len > 0)
 	{
-		eol = ft_wstrchr(buffer, L'\n');
+		eol = ft_strchr(buffer, '\n');
 		offset = (eol == NULL) ? buff_len : (eol - buffer);
 		print_one_line(cmdline, ec, buffer, offset);
 		if (eol != NULL)

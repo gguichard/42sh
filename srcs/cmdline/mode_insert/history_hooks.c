@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:15:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:38:11 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,18 @@
 
 static void	fill_input_buffer(t_cmdline *cmdline, const char *entry)
 {
-	size_t	idx;
-	size_t	offset;
+	int	len;
 
-	idx = 0;
-	offset = 0;
-	if (entry != NULL)
+	if (entry == NULL)
+		len = 0;
+	else
 	{
-		while (entry[offset] != '\0')
-		{
-			//todo: utf8 historique
-			cmdline->input.buffer[idx] = (wint_t)entry[offset];
-			idx++;
-			offset++;
-		}
+		len = ft_min(ft_strlen(entry), cmdline->input.capacity);
+		ft_memcpy(cmdline->input.buffer, entry, len);
 	}
-	cmdline->input.buffer[idx] = L'\0';
-	cmdline->input.size = idx;
-	cmdline->input.offset = idx;
+	cmdline->input.buffer[len] = '\0';
+	cmdline->input.size = len;
+	cmdline->input.offset = len;
 }
 
 static void	load_entry_in_cmdline(t_cmdline *cmdline, const char *entry)

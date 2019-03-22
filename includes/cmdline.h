@@ -6,16 +6,15 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:12:49 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:39:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CMDLINE_H
 # define CMDLINE_H
 
+# include <string.h>
 # include <sys/ioctl.h>
-# include <inttypes.h>
-# include <wchar.h>
 # include "struct_cmdline.h"
 
 # define INPUT_SIZE_INCR 1024
@@ -40,11 +39,7 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 ** INPUT/OUTPUT.
 */
 
-int			utf8_size(unsigned char first_byte);
-int			utf8_encode(char *dest, wint_t c);
-wint_t		utf8_decode(uint32_t c, int len);
-
-void		print_cmdline_wstr(t_cmdline *cmdline, const wchar_t *buffer
+void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
 void		print_next_line_tcaps(void);
 int			print_big_cmdline_prompt(t_cmdline *cmdline);
@@ -52,7 +47,7 @@ int			print_big_cmdline_prompt(t_cmdline *cmdline);
 void		update_cmdline_at_offset(t_cmdline *cmdline);
 void		print_cmdline(t_cmdline *cmdline);
 
-void		add_char_to_input(t_cmdline *cmdline, wint_t c);
+void		add_char_to_input(t_cmdline *cmdline, char c);
 
 const char	*get_prompt(t_cmdline *cmdline, t_prompt type);
 int			read_input(t_cmdline *cmdline, const char *prompt);
@@ -109,7 +104,6 @@ int			handle_paste_before_key(t_cmdline *cmdline);
 /*
 ** UTILS.
 */
-char		*wstr_to_mbstr(const wchar_t *wstr, size_t len);
 
 int			get_rightmost_column(t_cmdline *cmdline, int offset);
 t_cursor	go_to_offset(t_cmdline *cmdline, int offset);

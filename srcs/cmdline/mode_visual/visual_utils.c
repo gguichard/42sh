@@ -6,14 +6,13 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 14:50:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/19 21:47:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:44:57 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include "cmdline.h"
 
 static void	vm_cut_hook(t_cmdline *cmdline, int off_s, int off_e, int off)
@@ -21,7 +20,7 @@ static void	vm_cut_hook(t_cmdline *cmdline, int off_s, int off_e, int off)
 	t_cursor	new_cursor;
 
 	ft_memcpy(cmdline->input.buffer + off_s, cmdline->input.buffer + off_e
-			, (cmdline->input.size - off_e + 1) * sizeof(wint_t));
+			, (cmdline->input.size - off_e + 1));
 	cmdline->input.offset = off_s;
 	cmdline->input.size -= off;
 	new_cursor = go_to_offset(cmdline, off_s);
@@ -41,16 +40,10 @@ int			vm_copy(t_cmdline *cmdline, int cut_hook)
 	off = off_e - off_s;
 	if (off > 0)
 	{
-		cmdline->visual.clipboard = (wchar_t *)malloc((off + 1)
-				* sizeof(wint_t));
-		if (cmdline->visual.clipboard != NULL)
-		{
-			ft_memcpy(cmdline->visual.clipboard, cmdline->input.buffer + off_s
-					, off * sizeof(wint_t));
-			cmdline->visual.clipboard[off] = L'\0';
-			if (cut_hook)
-				vm_cut_hook(cmdline, off_s, off_e, off);
-		}
+		cmdline->visual.clipboard = ft_strsub(cmdline->input.buffer, off_s
+				, off);
+		if (cmdline->visual.clipboard != NULL && cut_hook)
+			vm_cut_hook(cmdline, off_s, off_e, off);
 	}
 	handle_toggle_visual(cmdline);
 	return (1);
@@ -58,7 +51,7 @@ int			vm_copy(t_cmdline *cmdline, int cut_hook)
 
 int			vm_paste(t_cmdline *cmdline, int paste_after_cursor)
 {
-	const wchar_t	*clipboard;
+	const char	*clipboard;
 
 	clipboard = cmdline->visual.clipboard;
 	if (clipboard == NULL || clipboard[0] == L'\0')

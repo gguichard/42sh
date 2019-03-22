@@ -6,14 +6,13 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:12:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:39:28 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
 
@@ -54,20 +53,13 @@ static void	write_with_colors(const char *str)
 	}
 }
 
-void		print_cmdline_wstr(t_cmdline *cmdline, const wchar_t *buffer
+void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len)
 {
-	char	*str;
-
-	str = wstr_to_mbstr(buffer, len);
-	if (str != NULL)
-	{
-		if (cmdline->konami_code)
-			write_with_colors(str);
-		else
-			write(STDOUT_FILENO, str, ft_strlen(str));
-		free(str);
-	}
+	if (cmdline->konami_code)
+		write_with_colors(buffer);
+	else
+		write(STDOUT_FILENO, buffer, len);
 }
 
 int			print_big_cmdline_prompt(t_cmdline *cmdline)

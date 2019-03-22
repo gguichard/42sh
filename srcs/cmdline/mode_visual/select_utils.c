@@ -6,14 +6,13 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 22:06:22 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:12:28 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:38:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
 
@@ -22,7 +21,7 @@ static void	print_visual_select(t_cmdline *cmdline, int off_s, int off_e)
 	go_to_offset(cmdline, off_s);
 	if (cmdline->visual.toggle)
 		tputs(tgetstr("mr", NULL), 1, t_putchar);
-	print_cmdline_wstr(cmdline, cmdline->input.buffer + off_s, off_e - off_s);
+	print_cmdline_str(cmdline, cmdline->input.buffer + off_s, off_e - off_s);
 	if (cmdline->visual.toggle)
 		tputs(tgetstr("me", NULL), 1, t_putchar);
 }
@@ -35,7 +34,7 @@ static void	print_visual_unselect(t_cmdline *cmdline, int old_off, int off)
 	min_off = ft_min(old_off, off);
 	max_off = ft_max(old_off, off);
 	go_to_offset(cmdline, min_off);
-	print_cmdline_wstr(cmdline, cmdline->input.buffer + min_off
+	print_cmdline_str(cmdline, cmdline->input.buffer + min_off
 			, max_off - min_off);
 }
 
