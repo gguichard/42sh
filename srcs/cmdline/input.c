@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 21:17:59 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 21:47:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
 	set_cursor_pos(&cmdline->cursor);
 	cmdline->saved_col = -1;
+	cmdline->row = 0;
+	cmdline->konami_code = 0;
 	cmdline->prompt.str = prompt;
 	cmdline->prompt.offset = cmdline->cursor.x;
 	ft_memset(cmdline->input.buffer, 0, cmdline->input.capacity);
