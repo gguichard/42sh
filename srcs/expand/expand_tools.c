@@ -1,13 +1,14 @@
-lst_var#include "shell.h"
+#include "shell.h"
 #include "parser_lexer.h"
+#include "expand.h"
 
-int	error_expand(char *exp)
+int		error_expand(char *exp)
 {
-	ft_dprintf(2, "42sh: %s: bad substitution\n", err);
+	ft_dprintf(2, "42sh: %s: bad substitution\n", exp);
 	return (0);
 }
 
-int	check_expand_simple(char *str)
+int		check_expand_simple(const char *str)
 {
 	if (ft_isalpha(str[0]) == 0 && str[0] != '_')
 		return (0);
@@ -15,7 +16,7 @@ int	check_expand_simple(char *str)
 }
 
 
-int	check_expand_bracket(char *str)
+int		check_expand_bracket(const char *str)
 {
 	int	i;
 
@@ -33,7 +34,27 @@ int	check_expand_bracket(char *str)
 	return (1);
 }
 
-char		*get_expand_value(t_var *lst_var, char *exp, int type)
+void	insert_var_input(char *str, char **input, int type)
+{
+	int		start;
+	int		end;
+
+	start = 0;
+	end = 0;
+	while ((*input)[start] != '$')
+		start += 1;
+	end = start + 1;
+	if (type == 1)
+		while ((*input)[end] != '}')
+			end += 1;
+	else
+		while ((*input)[end] && (ft_isalnum((*input)[end]) == 1
+				|| (*input)[end] == '_'))
+			end += 1;
+	ft_insert(input, str, start, end);
+}
+
+char	*get_expand_value(t_var *lst_var, const char *exp, int type)
 {
 	int		i;
 	char	*str;
@@ -42,9 +63,9 @@ char		*get_expand_value(t_var *lst_var, char *exp, int type)
 	str = NULL;
 	if (type == 1)
 		while (exp[i] && exp[i] != '}')
-			i += 1
+			i += 1;
 	else
-		while (exp[i] && ft_isspace(str[i]) == 0)
+		while (exp[i] && (ft_isalnum(exp[i]) == 1 || exp[i] == '_'))
 			i += 1;
 	if (!(str = ft_strndup(exp, i)))
 		ft_exit_malloc();

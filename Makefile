@@ -19,6 +19,7 @@ PATH_TOOLS = tools/
 PATH_HASHTABLE = hashtable/
 PATH_PATH = path/
 PATH_TOKEN = token/
+PATH_EXPAND = expand/
 
 INCLUDE = ./includes/
 INCLUDE_LIBFT = ./libft/includes/
@@ -97,6 +98,8 @@ SRC =	main.c \
 		$(PATH_TOKEN)split_cmd_token.c \
 		$(PATH_TOKEN)split_cmd_token_add.c \
 		$(PATH_TOKEN)split_cmd_token_utils.c \
+		$(PATH_EXPAND)expand.c \
+		$(PATH_EXPAND)expand_tools.c \
 
 OBJ = $(SRC:.c=.o)
 
@@ -122,6 +125,7 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE) Makefile
 	@mkdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_TOKEN) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_EXPAND) 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
@@ -137,6 +141,7 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_TOKEN) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_EXPAND) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 
 fclean: clean

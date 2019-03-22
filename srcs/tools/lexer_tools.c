@@ -31,7 +31,7 @@ void	ft_insert(char **source, char *insert, int pos1, int pos2)
 	ft_memdel((void **)&begin);
 	ft_memdel((void **)&tmp);
 	ft_memdel((void **)&end);
-	ft_memdel((void **)&insert);
+	// ft_memdel((void **)&insert);
 }
 
 void	ft_delete_inside(char **source, int start, int len)

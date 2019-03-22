@@ -43,15 +43,11 @@ void	del_lst_ast(t_ast **lst)
 	tmp = *lst;
 	if (!lst || !tmp)
 		return ;
-	while (tmp)
-	{
-		*lst = tmp->next;
-		ft_memdel((void **)(tmp->heredoc));
-		delete_str_tab(tmp->input);
-		free(tmp);
-		tmp = *lst;
-	}
-	*lst = NULL;
+	*lst = (*lst)->back;
+	ft_memdel((void **)(tmp->heredoc));
+	delete_str_tab(tmp->input);
+	free(tmp);
+	tmp = NULL;
 }
 
 void	del_double_tab(char **tab1, char **tab2)

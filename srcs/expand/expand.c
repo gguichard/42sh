@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "parser_lexer.h"
+#include "expand.h"
 
 // ADD GESTION ERROR EXPAND
 
@@ -19,7 +20,7 @@ char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
 	while (new[y])
 		if (!(modify[x++] = ft_strdup(new[y++])))
 			ft_exit_malloc();
-	y = *i + 1
+	y = *i + 1;
 	while (elem->input[y])
 		if (!(modify[x++] = ft_strdup(elem->input[y++])))
 			ft_exit_malloc();
@@ -53,7 +54,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 void	expand(t_ast *elem, t_alloc *alloc)
 {
 	char		**new;
-	const char	*str;
+	char	*str;
 	const char	*exp;
 	int			i;
 
@@ -64,7 +65,7 @@ void	expand(t_ast *elem, t_alloc *alloc)
 	{
 		if ((exp = ft_strchr(elem->input[i], '$')))
 		{
-			if (ft_strncmp(exp, "${", 2) == 0
+			if (ft_strncmp(exp, "${", 2) == 0)
 			{
 				if (check_expand_bracket(&(exp[2])) == 0)
 					error_expand(elem->input[i]);
@@ -73,7 +74,8 @@ void	expand(t_ast *elem, t_alloc *alloc)
 					str = get_expand_value(*(alloc->var), &(exp[2]), 1);
 					if (ft_strcmp(str, "") != 0)
 					{
-						new = ft_strsplit(str, " ");
+						insert_var_input(str, &(elem->input[i]), 1);
+						new = ft_strsplit(elem->input[i], ' ');
 						create_new_input(elem, &i, new);
 					}
 				}
@@ -85,11 +87,18 @@ void	expand(t_ast *elem, t_alloc *alloc)
 				str = get_expand_value(*(alloc->var), &(exp[1]), 0);
 				if (ft_strcmp(str, "") != 0)
 				{
-					new = ft_strsplit(str, " ");
+					insert_var_input(str, &(elem->input[i]), 0);
+					new = ft_strsplit(elem->input[i], ' ');
 					create_new_input(elem, &i, new);
+				}
+				else
+				{
+					// REMOVE INPUT[i] FROM INPUT_TAB
+					i += 1;
 				}
 			}
 		}
-		i += 1;
+		else
+			i += 1;
 	}
 }

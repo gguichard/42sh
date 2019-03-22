@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "parser_lexer.h"
+#include "expand.h"
 
 int	analyzer(t_ast *sort, t_alloc *alloc, int no_fork)
 {
@@ -14,6 +15,7 @@ int	analyzer(t_ast *sort, t_alloc *alloc, int no_fork)
 	if (tmp && tmp->print == 0)
 	{
 		tmp->print = 1;
+		expand(tmp, alloc);
 		return (dispatch[tmp->type](tmp, alloc, no_fork));
 	}
 	if (tmp && tmp->left && tmp->left->print == 0)
