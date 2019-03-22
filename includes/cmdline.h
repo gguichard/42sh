@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:39:44 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 17:47:41 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			init_cmdline(t_cmdline *cmdline);
 int			setup_term(t_cmdline *cmdline);
 int			reset_term(t_cmdline *cmdline);
 int			update_winsize(t_cmdline *cmdline);
-int			set_cursor_pos(t_cursor *cursor);
+int			set_cursor_pos(t_cmdline *cmdline);
 void		go_to_cursor_pos(t_cursor cursor);
 void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 

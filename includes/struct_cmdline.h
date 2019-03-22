@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:24:15 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 17:46:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct		s_cursor
 
 struct				s_input
 {
+	char			stdin_buffer[4097];
 	char			*buffer;
 	int				capacity;
 	int				size;

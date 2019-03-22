@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:38:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:51:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	load_entry_in_cmdline(t_cmdline *cmdline, const char *entry)
 	cmdline->cursor = (t_cursor){cmdline->prompt.offset
 		, ft_max(0, cmdline->cursor.y - cmdline->row)};
 	go_to_cursor_pos(cmdline->cursor);
-	tputs(tgetstr("cd", NULL), 1, t_putchar);
+	clear_after_cursor(cmdline->cursor, cmdline->winsize);
 	print_cmdline(cmdline);
 }
 
