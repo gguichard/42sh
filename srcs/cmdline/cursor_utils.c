@@ -6,59 +6,33 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:00:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 18:08:59 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 21:41:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
 #include <term.h>
+#include <termios.h>
 #include "cmdline.h"
 
-static int	stdin_buffer(t_cmdline *cmdline)
+int			set_cursor_pos(t_cursor *cursor)
 {
-	size_t	idx;
-
-	idx = 0;
-	while (idx < sizeof(cmdline->input.stdin_buffer) - 1)
-	{
-		if (read(STDIN_FILENO, cmdline->input.stdin_buffer + idx, 1) != 1)
-			break ;
-		if (idx > 0
-				&& cmdline->input.stdin_buffer[idx - 1] == '\033'
-				&& cmdline->input.stdin_buffer[idx] == '[')
-		{
-			cmdline->input.stdin_buffer[--idx] = '\0';
-			return (1);
-		}
-		idx++;
-	}
-	cmdline->input.stdin_buffer[0] = '\0';
-	return (0);
-}
-
-int			set_cursor_pos(t_cmdline *cmdline)
-{
-	size_t	idx;
+	ssize_t	ret;
 	char	buffer[32];
 	char	*endptr;
 
-	if (write(STDIN_FILENO, "\033[6n", 4) == -1 || !stdin_buffer(cmdline))
+	tcflush(STDIN_FILENO, TCIFLUSH);
+	if (write(STDOUT_FILENO, "\033[6n", 4) == -1)
 		return (0);
-	idx = 0;
-	while (idx < sizeof(buffer))
-	{
-		if (read(STDIN_FILENO, buffer + idx, 1) != 1)
-			return (0);
-		if (buffer[idx] == 'R')
-			break ;
-		idx++;
-	}
-	if (buffer[idx] != 'R')
+	ft_memset(buffer, 0, sizeof(buffer));
+	if ((ret = read(STDIN_FILENO, buffer, sizeof(buffer))) <= 0)
 		return (0);
-	cmdline->cursor.y = ft_strtol(buffer, &endptr, 10) - 1;
-	if (*endptr == ';')
-		cmdline->cursor.x = ft_strtol(endptr + 1, &endptr, 10) - 1;
+	if (buffer[0] != '\033' || buffer[1] != '[' || buffer[ret - 1] != 'R')
+		return (0);
+	endptr = buffer;
+	cursor->y = ft_strtol(endptr + 2, &endptr, 10) - 1;
+	cursor->x = ft_strtol(endptr + 1, &endptr, 10) - 1;
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 15:20:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 17:48:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 21:14:07 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void				handle_sigwinch(int sig)
 	tputs(tgetstr("cd", NULL), 1, t_putchar);
 	write(STDOUT_FILENO, cmdline->prompt.str, ft_strlen(cmdline->prompt.str));
 	update_winsize(cmdline);
-	set_cursor_pos(cmdline);
+	set_cursor_pos(&cmdline->cursor);
 	cmdline->prompt.offset = cmdline->cursor.x;
 	print_cmdline(cmdline);
 }

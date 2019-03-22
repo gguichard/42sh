@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 18:23:37 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 21:17:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ static void		process_input(t_cmdline *cmdline, char input)
 {
 	const t_seq	*seq;
 
-	if ((seq = get_sequence(cmdline, input)) != NULL)
+	seq = get_sequence(cmdline, input);
+	if (seq != NULL)
 		handle_sequence(cmdline, seq);
 	else if (!cmdline->visual.toggle)
 	{
@@ -92,7 +93,7 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 	char	input;
 
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
-	set_cursor_pos(cmdline);
+	set_cursor_pos(&cmdline->cursor);
 	cmdline->saved_col = -1;
 	cmdline->prompt.str = prompt;
 	cmdline->prompt.offset = cmdline->cursor.x;
@@ -100,8 +101,7 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 	cmdline->input.offset = 0;
 	cmdline->input.size = 0;
 	cmdline->input.reading = 1;
-	while (cmdline->input.reading == 1
-			&& read(STDIN_FILENO, &input, 1) == 1)
+	while (cmdline->input.reading == 1 && read(STDIN_FILENO, &input, 1) == 1)
 		process_input(cmdline, input);
 	return (cmdline->input.reading != -1);
 }

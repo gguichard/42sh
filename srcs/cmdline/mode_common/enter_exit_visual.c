@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 10:57:56 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 17:48:06 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 21:14:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	handle_toggle_visual(t_cmdline *cmdline)
 		write(STDOUT_FILENO, "(visual) ", 9);
 	}
 	write(STDOUT_FILENO, cmdline->prompt.str, ft_strlen(cmdline->prompt.str));
-	set_cursor_pos(cmdline);
+	set_cursor_pos(&cmdline->cursor);
 	cmdline->prompt.offset = cmdline->cursor.x;
 	print_cmdline(cmdline);
 	return (1);
