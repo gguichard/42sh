@@ -84,6 +84,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)redirection_tools.c \
 		$(PATH_TOOLS)cd_slash_tools.c \
 		$(PATH_TOOLS)cd_tools.c \
+		$(PATH_TOOLS)clean_ast.c \
 		$(PATH_HASHTABLE)exectable.c \
 		$(PATH_HASHTABLE)aliastable.c \
 		$(PATH_HASHTABLE)hashtable.c \
