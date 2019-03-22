@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 14:50:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:44:57 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 18:24:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int			vm_paste(t_cmdline *cmdline, int paste_after_cursor)
 	const char	*clipboard;
 
 	clipboard = cmdline->visual.clipboard;
-	if (clipboard == NULL || clipboard[0] == L'\0')
+	if (clipboard == NULL || clipboard[0] == '\0')
 		return (0);
 	if (paste_after_cursor)
 		handle_move_right(cmdline);
-	while (*clipboard != L'\0')
+	while (*clipboard != '\0')
 	{
 		add_char_to_input(cmdline, *clipboard);
 		clipboard++;

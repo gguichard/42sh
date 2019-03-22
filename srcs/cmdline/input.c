@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 18:18:21 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 18:23:37 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int		expand_buffer_capacity(t_cmdline *cmdline)
 		ft_memcpy(new_buffer, cmdline->input.buffer, cmdline->input.size);
 		free(cmdline->input.buffer);
 	}
-	new_buffer[cmdline->input.size] = L'\0';
+	new_buffer[cmdline->input.size] = '\0';
 	cmdline->input.capacity = new_cap;
 	cmdline->input.buffer = new_buffer;
 	return (1);
