@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 19:45:19 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 10:24:20 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,46 +70,52 @@ int			init_cmdline(t_cmdline *cmdline)
 	return (1);
 }
 
-char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
+static char	*read_full_input(t_cmdline *cmdline, int *ret)
 {
 	char			*full_input;
+	t_prompt		type;
+	t_recall_prompt	analyser_ret;
 	t_str_cmd_inf	scmd_inf;
 	t_list			*tokens;
-	t_prompt		type;
-	t_recall_prompt	ret;
-	int				input_ret;
 
-	(void)alloc;
 	full_input = NULL;
 	type = PROMPT_DEFAULT;
-	ret = PR_SUCCESS;
 	while ((full_input == NULL || type != PROMPT_DEFAULT)
-			&& (input_ret = read_input(cmdline, get_prompt(cmdline, type))))
+			&& (*ret = read_input(cmdline, get_prompt(cmdline, type))) == 1)
 	{
-		full_input = join_command(cmdline, full_input, type);
-		if (full_input == NULL)
+		if ((full_input = join_command(cmdline, full_input, type)) == NULL)
 			break ;
 		scmd_init(&scmd_inf, full_input);
-		tokens = split_cmd_token(&scmd_inf);
-		if (tokens != NULL)
-		{
-			ret = token_analyser(tokens);
-			type = change_prompt_type(&scmd_inf, ret);
-		}
-		scmd_delete(scmd_inf.sub_str_cmd);
-		if (tokens == NULL || ret == PR_ERROR)
+		if ((tokens = split_cmd_token(&scmd_inf)) == NULL)
 			ft_strdel(&full_input);
+		else if ((analyser_ret = token_analyser(tokens)) == PR_ERROR)
+			ft_strdel(&full_input);
+		else
+			type = change_prompt_type(&scmd_inf, analyser_ret);
+		ft_lstdel(&tokens, del_token);
+		scmd_delete(scmd_inf.sub_str_cmd);
 	}
-	if (input_ret == 0 && full_input == NULL)
+	return (full_input);
+}
+
+char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
+{
+	int		ret;
+	char	*full_input;
+
+	(void)alloc;
+	ret = 1;
+	full_input = read_full_input(cmdline, &ret);
+	if (ret == 0)
 	{
-		reset_term(cmdline);
-		ft_printf("exit\n");
-		exit(0); // TODO: exit with alloc ret value
-	}
-	else if (input_ret == 0)
-	{
+		if (full_input == NULL)
+		{
+			reset_term(cmdline);
+			ft_printf("exit\n");
+			exit(0); // TODO: exit with alloc ret value
+		}
 		ft_dprintf(STDERR_FILENO
-			, "42sh: syntax error: unexpected end of file\n");
+				, "42sh: syntax error: unexpected end of file\n");
 		ft_strdel(&full_input);
 	}
 	return (full_input);
