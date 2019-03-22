@@ -2,6 +2,7 @@
 # define SPLIT_CMD_TOKEN_H
 
 # include "libft.h"
+# include "hashtable.h"
 # include "token_inf.h"
 # include "str_cmd_inf.h"
 
@@ -12,10 +13,12 @@
 
 typedef struct	s_split_cmd_inf
 {
+	t_hashtable		*aliastable;
 	t_list			*tk_lst;
 	t_list			*last_start_cmd;
 	t_list			*last_tk_added;
-	int				alias_offset;
+	int				pos_alias_can_start;
+	char			alias_has_expanded;
 	t_str_cmd_inf	*scmd;
 	char			last_char_was_spe;
 	const char		*tk_start;
@@ -43,6 +46,7 @@ int				add_whole_token_to_lst(t_split_cmd_inf *sp_cmd
 ** Retourne la liste des tokens de la commande passee en parametre. Retourne
 ** NULL en cas d'erreur de malloc.
 */
-t_list			*split_cmd_token(t_str_cmd_inf *str_cmd_inf);
+t_list			*split_cmd_token(t_str_cmd_inf *str_cmd_inf
+		, t_hashtable *aliastable);
 
 #endif
