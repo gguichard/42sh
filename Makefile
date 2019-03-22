@@ -164,6 +164,8 @@ fclean: clean
 	/bin/rm -f $(NAME)
 	@echo "$(NAME):\t\t\t$(GREEN)[CLEAN]$(END)"
 
-re: fclean all
+re:
+	$(MAKE) fclean
+	$(MAKE) all
 
 .PHONY: all clean fclean
