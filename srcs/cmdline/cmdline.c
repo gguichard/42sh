@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 10:29:01 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 10:53:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret)
 	{
 		if ((full_input = join_command(cmdline, full_input, type)) == NULL)
 			break ;
-		scmd_init(&scmd_inf, full_input);
+		if (!scmd_init(&scmd_inf, full_input))
+			return (ft_memdel((void **)&full_input));
 		if ((tokens = split_cmd_token(&scmd_inf)) == NULL)
 			ft_strdel(&full_input);
 		else if ((analyser_ret = token_analyser(tokens)) == PR_ERROR)
@@ -93,7 +94,7 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret)
 		else
 			type = change_prompt_type(&scmd_inf, analyser_ret);
 		ft_lstdel(&tokens, del_token);
-		scmd_delete(scmd_inf.sub_str_cmd);
+		scmd_clean(&scmd_inf);
 	}
 	return (full_input);
 }
