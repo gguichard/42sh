@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 11:28:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 11:33:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 11:01:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*wstr_to_mbstr(const wchar_t *wstr, size_t len)
 	size_t	offset;
 	int		wlen;
 
-	str = (char *)malloc(len * sizeof(wint_t));
+	str = (char *)malloc(len * sizeof(wint_t) + 1);
 	if (str == NULL)
 		return (NULL);
 	offset = 0;
