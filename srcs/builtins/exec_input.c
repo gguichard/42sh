@@ -89,9 +89,9 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	if (opt->fork == true || !(child = fork()))
 		execute_cmd(path_exec, elem, tab_env);
 	if (child == -1)
-		return (0);
+		return (1);
 	setpgid(child, 0);
-	add_pid_lst(child, elem);
+	add_pid_lst(child, elem, false);
 	if (opt->wait_hang == false)
 	{
 		redirect_term_controller(child, 0);
@@ -105,5 +105,5 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	delete_str_tab(tab_env);
 	if (!ft_strchr(elem->input[0], '/'))
 		ft_memdel((void **)&path_exec);
-	return (ret_status(alloc->ret_val, child));
+	return (ret_status(alloc->ret_val, child, 0));
 }

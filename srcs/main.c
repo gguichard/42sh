@@ -22,7 +22,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	{
 		sort_ast = parser(split_all_cmd[i], alloc);
 		ft_bzero(&exec_option, sizeof(t_exec_opt));
-		analyzer(sort_ast, alloc, &exec_option);
+		alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
 		delete_str_tab(split_all_cmd[i]);
 		del_lst_ast(&(alloc->ast));
 		i += 1;
@@ -41,48 +41,6 @@ void	signal_handle(int sig)
 		if (sig == SIGTSTP)
 			tmp->state = STOPPED;
 		kill(tmp->pid, sig);
-	}
-}
-
-void	check_jobs_finish(void)
-{
-	t_list	*prev;
-	t_list	*tmp;
-	t_list	*aft;
-	t_job	*job;
-
-	tmp = g_jobs;
-	prev = 0;
-	while (tmp)
-	{
-		job = tmp->content;
-		aft = tmp->next;
-		if (job->state == STOPPED_PENDING)
-		{
-			job->state = STOPPED;
-			print_job(job->pid);
-		}
-		if (job->state == RUNNING && waitpid(job->pid, &job->status, WNOHANG))
-		{
-			job->state = DONE;
-			print_job(job->pid);
-		}
-		if (job->state == DONE)
-		{
-			if (prev)
-				prev->next = aft;
-			else
-				g_jobs = aft;
-			ft_memdel((void **)&(job->cmd));
-			ft_memdel((void **)&(tmp->content));
-			ft_memdel((void **)&tmp);
-			tmp = aft;
-		}
-		else
-		{
-			prev = tmp;
-			tmp = tmp->next;
-		}
 	}
 }
 
@@ -110,7 +68,7 @@ int		main(int argc, char **argv, char **env)
 	{
 		//parse line etc;
 		lexer_parser(line, &alloc);
-		check_jobs_finish();
+		refresh_jobs_finish();
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}

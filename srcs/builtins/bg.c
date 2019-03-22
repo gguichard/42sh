@@ -18,7 +18,7 @@ int	bg_builtins(t_ast *elem, t_alloc *alloc)
 	}
 	else
 	{
-		while (tmp->next)
+		while (tmp && tmp->next)
 		{
 			index += 1;
 			tmp = tmp->next;
@@ -30,8 +30,28 @@ int	bg_builtins(t_ast *elem, t_alloc *alloc)
 		if (index < 1 && elem->input[1])
 			index = ft_atoi(elem->input[1]);
 		ft_printf("[%d] %s &\n", index, job->cmd);
-		job->state = RUNNING;
+		if (job->state == STOPPED)
+			job->state = RUNNING_BG;
 		killpg(job->gpid, SIGCONT);
+		if (job->pipe)
+		{
+			tmp = job->pipe;
+			while (tmp)
+			{
+				job = tmp->content;
+				if (job->state == STOPPED)
+					job->state = RUNNING_BG;
+
+			}
+		}
+	}
+	else
+	{
+		if (!elem->input[1])
+			ft_dprintf(STDERR_FILENO, "42sh: bg: no current job\n");
+		else
+			ft_dprintf(STDERR_FILENO, "42sh: bg: job not found: %s\n", elem->input[1]);
+		return (1);
 	}
 	return (0);
 }

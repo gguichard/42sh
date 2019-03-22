@@ -55,6 +55,7 @@ SRC =	main.c \
 		$(PATH_OPERATOR)redirection.c \
 		$(PATH_OPERATOR)job_control.c \
 		$(PATH_OPERATOR)pipe.c \
+		$(PATH_OPERATOR)refresh_jobs.c \
 		$(PATH_BUILT)cd.c \
 		$(PATH_BUILT)echo.c \
 		$(PATH_BUILT)exec_input.c \

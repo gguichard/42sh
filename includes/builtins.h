@@ -41,7 +41,5 @@ char	*get_value(char *str);
 
 int		env_cp(char **env, t_var **lst_env);
 int		is_builtins(t_alloc *alloc, const char *built_name);
-void	add_pid_lst(pid_t process, t_ast *elem);
-
 
 #endif
