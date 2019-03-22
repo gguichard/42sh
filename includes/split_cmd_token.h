@@ -14,6 +14,8 @@
 typedef struct	s_split_cmd_inf
 {
 	t_hashtable		*aliastable;
+	t_list			*forbidden_aliases;
+	size_t			alias_recur_lvl;
 	t_list			*tk_lst;
 	t_list			*last_start_cmd;
 	t_list			*last_tk_added;
@@ -41,6 +43,10 @@ int				add_cur_token_to_lst(t_split_cmd_inf *sp_cmd);
 
 int				add_whole_token_to_lst(t_split_cmd_inf *sp_cmd
 		, const char *token_str, t_token_type token_type);
+
+t_list			*split_cmd_token_with_lst(t_str_cmd_inf *str_cmd_inf
+		, t_hashtable *aliastable, t_list *cur_forbidden_aliases,
+		size_t cur_alias_recur_lvl);
 
 /*
 ** Retourne la liste des tokens de la commande passee en parametre. Retourne

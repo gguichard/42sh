@@ -133,17 +133,32 @@ static void				*end_sp_cmd_inf(t_split_cmd_inf *sp_cmd
 	return (NULL);
 }
 
-t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf
-		, t_hashtable *aliastable)
+/*
+** Init tout ce qui n'est pas lie aux alias.
+*/
+
+static void				init_base_split_cmd(t_split_cmd_inf *sp_cmd
+		, t_str_cmd_inf *str_cmd_inf)
+{
+	ft_bzero(sp_cmd, sizeof(t_split_cmd_inf));
+	sp_cmd->scmd = str_cmd_inf;
+	sp_cmd->last_char_was_spe = 1;
+	sp_cmd->tk_start = str_cmd_inf->str;
+	sp_cmd->cur_tk_type = TK_NOTHING;
+}
+
+t_list					*split_cmd_token_with_lst(t_str_cmd_inf *str_cmd_inf
+		, t_hashtable *aliastable, t_list *cur_forbidden_aliases
+		, size_t cur_alias_recur_lvl)
 {
 	t_split_cmd_inf		sp_cmd;
 
-	ft_bzero(&sp_cmd, sizeof(t_split_cmd_inf));
+	if (cur_alias_recur_lvl > 500)
+		return (NULL);
+	init_base_split_cmd(&sp_cmd, str_cmd_inf);
 	sp_cmd.aliastable = aliastable;
-	sp_cmd.scmd = str_cmd_inf;
-	sp_cmd.last_char_was_spe = 1;
-	sp_cmd.tk_start = str_cmd_inf->str;
-	sp_cmd.cur_tk_type = TK_NOTHING;
+	sp_cmd.forbidden_aliases = cur_forbidden_aliases;
+	sp_cmd.alias_recur_lvl = cur_alias_recur_lvl;
 	while (1)
 	{
 		while (sp_cmd.scmd->str[sp_cmd.scmd->pos] != '\0')
@@ -161,4 +176,10 @@ t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf
 	}
 	end_sp_cmd_inf(&sp_cmd, 0);
 	return (sp_cmd.tk_lst);
+}
+
+t_list					*split_cmd_token(t_str_cmd_inf *str_cmd_inf
+		, t_hashtable *aliastable)
+{
+	return (split_cmd_token_with_lst(str_cmd_inf, aliastable, NULL, 0));
 }

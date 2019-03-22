@@ -63,21 +63,32 @@ static int	token_is_assign(const char *token, size_t token_size)
 	return (token[idx] == '=');
 }
 
-static int	init_alias_scmd(t_str_cmd_inf *alias_scmd, t_split_cmd_inf *sp_cmd)
+static int	init_alias_scmd_and_elem(t_str_cmd_inf *alias_scmd
+		, t_split_cmd_inf *sp_cmd, t_list *cur_alias_elem)
 {
-	char	old_char;
 	t_list	*tmp_tk_lst;
+	t_list	*cur_fordbidden_alias;
 
-	old_char = sp_cmd->scmd->str[sp_cmd->scmd->pos + 1];
-	sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = '\0';
-	if (!scmd_init(alias_scmd, get_alias(sp_cmd->aliastable, sp_cmd->tk_start))
-			|| alias_scmd->str == NULL)
-	{
-		sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = old_char;
+	cur_alias_elem->next = sp_cmd->forbidden_aliases;
+	if ((cur_alias_elem->content = ft_strndup(sp_cmd->tk_start
+					, sp_cmd->scmd->str + sp_cmd->scmd->pos
+					- sp_cmd->tk_start + 1)) == NULL)
 		return (0);
+	cur_fordbidden_alias = sp_cmd->forbidden_aliases;
+	while (cur_fordbidden_alias != NULL)
+	{
+		if (ft_strequ(cur_fordbidden_alias->content, cur_alias_elem->content))
+			return (!!ft_memdel(&cur_alias_elem->content));
+		cur_fordbidden_alias = cur_fordbidden_alias->next;
 	}
-	sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] = old_char;
-	if ((tmp_tk_lst = split_cmd_token(alias_scmd, sp_cmd->aliastable)) != NULL)
+	if (!scmd_init(alias_scmd, get_alias(sp_cmd->aliastable
+					, cur_alias_elem->content)) || alias_scmd->str == NULL)
+	{
+		return (!!ft_memdel(&cur_alias_elem->content));
+	}
+	if ((tmp_tk_lst = split_cmd_token_with_lst(alias_scmd
+					, sp_cmd->aliastable, cur_alias_elem
+					, sp_cmd->alias_recur_lvl + 1)) != NULL)
 		ft_lstdel(&tmp_tk_lst, del_token);
 	return (1);
 }
@@ -109,8 +120,10 @@ static int	expand_alias(t_split_cmd_inf *sp_cmd)
 	size_t			alias_name_size;
 	size_t			alias_result_size;
 	size_t			tk_start_pos;
+	t_list			cur_alias_elem;
 
-	if (!init_alias_scmd(&alias_scmd, sp_cmd))
+	ft_bzero(&cur_alias_elem, sizeof(t_list));
+	if (!init_alias_scmd_and_elem(&alias_scmd, sp_cmd, &cur_alias_elem))
 		return (0);
 	alias_name_size = sp_cmd->scmd->str + sp_cmd->scmd->pos
 		- sp_cmd->tk_start + 1;
@@ -122,6 +135,7 @@ static int	expand_alias(t_split_cmd_inf *sp_cmd)
 		sp_cmd->pos_alias_can_start = tk_start_pos + alias_result_size;
 	else
 		sp_cmd->pos_alias_can_start = -1;
+	free(cur_alias_elem.content);
 	return (replace_token_with_alias_res_and_clean(sp_cmd, tk_start_pos
 				, &alias_scmd, alias_name_size));
 }
