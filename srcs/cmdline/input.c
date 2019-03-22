@@ -6,22 +6,25 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 19:38:14 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:13:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <inttypes.h>
 #include <wchar.h>
 #include <term.h>
 #include "cmdline.h"
 
 static void		write_char_in_cmdline(t_cmdline *cmdline, wint_t c)
 {
+	char	dest[4];
+
 	if (c == '\n')
 		tputs(tgetstr("ce", NULL), 1, t_putchar);
-	write(STDOUT_FILENO, &c, sizeof(wint_t));
+	write(STDOUT_FILENO, dest, utf8_encode(dest, c));
 	if (c != '\n' && (cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
 		cmdline->cursor.x += 1;
 	else
@@ -76,38 +79,38 @@ void			add_char_to_input(t_cmdline *cmdline, wint_t c)
 	write_char_in_cmdline(cmdline, c);
 }
 
-static wint_t	get_full_unichar(unsigned char input)
+static wint_t	read_n_decode_utf8(unsigned char input)
 {
-	wint_t	unichar;
-	int		additional_len;
+	uint32_t		utf8;
+	unsigned char	*buffer;
+	int				idx;
+	int				len;
 
-	unichar = (wint_t)input;
-	if (!(input & (1 << 7)))
+	utf8 = 0;
+	len = utf8_size(input);
+	if (len == 1 && !ft_isprint(input))
+		return (0);
+	buffer = (unsigned char *)&utf8;
+	buffer += len - 1;
+	*buffer = input;
+	if (len > 0)
 	{
-		if (!ft_isprint(input))
-			return (0);
-	}
-	else
-	{
-		additional_len = 1;
-		if (input & (1 << 5))
+		idx = 0;
+		while (idx < (len - 1))
 		{
-			additional_len++;
-			if (input & (1 << 4))
-				additional_len++;
+			if (read(STDIN_FILENO, --buffer, 1) != 1)
+				return (0);
+			idx++;
 		}
-		if (read(STDIN_FILENO, ((unsigned char *)&unichar) + 1
-					, additional_len) != additional_len)
-			return (0);
 	}
-	return (unichar);
+	return (utf8_decode(utf8, len));
 }
 
 int				read_input(t_cmdline *cmdline, const char *prompt)
 {
 	unsigned char	input;
 	const t_seq		*seq;
-	wint_t			unichar;
+	wint_t			point;
 
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
 	set_cursor_pos(&cmdline->cursor);
@@ -126,9 +129,9 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 		else if (!cmdline->visual.toggle)
 		{
 			cmdline->saved_col = -1;
-			unichar = get_full_unichar(input);
-			if (unichar != 0)
-				add_char_to_input(cmdline, unichar);
+			point = read_n_decode_utf8(input);
+			if (point != 0)
+				add_char_to_input(cmdline, point);
 		}
 	}
 	return (cmdline->input.reading != -1);

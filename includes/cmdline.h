@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 19:45:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:12:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CMDLINE_H
 
 # include <sys/ioctl.h>
+# include <inttypes.h>
 # include <wchar.h>
 # include "struct_cmdline.h"
 
@@ -39,7 +40,12 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
 ** INPUT/OUTPUT.
 */
 
-void		print_mbstr(t_cmdline *cmdline, const wchar_t *buffer, size_t len);
+int			utf8_size(unsigned char first_byte);
+int			utf8_encode(char *dest, wint_t c);
+wint_t		utf8_decode(uint32_t c, int len);
+
+void		print_cmdline_wstr(t_cmdline *cmdline, const wchar_t *buffer
+		, size_t len);
 void		print_next_line_tcaps(void);
 int			print_big_cmdline_prompt(t_cmdline *cmdline);
 

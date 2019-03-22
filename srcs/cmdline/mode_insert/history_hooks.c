@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 10:45:18 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 16:15:39 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	fill_input_buffer(t_cmdline *cmdline, const char *entry)
 	{
 		while (entry[offset] != '\0')
 		{
+			//todo: utf8 historique
 			cmdline->input.buffer[idx] = (wint_t)entry[offset];
 			idx++;
 			offset++;
