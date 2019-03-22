@@ -20,7 +20,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 
 	sort_ast = NULL;
 	lst_tk = NULL;
-	scmd_init(&scmd, line);
+	if (!scmd_init(&scmd, line))
+		ft_exit_malloc();
 	lst_tk = split_cmd_token(&scmd);
 
 /*
@@ -63,6 +64,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 			lst_tk = lst_tk->next;
 //FUNCTION TO CLEAN AST
 	}
+	scmd_clean(&scmd);
 // FUNCTION TO CLEAN LST_TK
 }
 

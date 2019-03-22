@@ -8,7 +8,8 @@ static int			ft_word_counter(char *str, char c)
 	int				nb_word;
 	int				i;
 
-	scmd_init(&scmd, str);
+	if (!scmd_init(&scmd, str))
+		return (-1);
 	nb_word = 1;
 	i = 1;
 	while (1)
@@ -28,7 +29,7 @@ static int			ft_word_counter(char *str, char c)
 		if (!scmd_move_to_next_char(&scmd))
 			break ;
 	}
-	scmd_delete(scmd.sub_str_cmd);
+	scmd_clean(&scmd);
 	return (nb_word);
 }
 
@@ -40,7 +41,8 @@ static int			ft_position_word(char *str, char c, int word_n)
 
 	i = 0;
 	i_word = 0;
-	scmd_init(&scmd, str);
+	if (!scmd_init(&scmd, str))
+		return (0); //gerer erreur
 	while (1)
 	{
 		if (!scmd_cur_char_is_escaped(&scmd) && scmd.str[scmd.pos] == c)
@@ -51,7 +53,7 @@ static int			ft_position_word(char *str, char c, int word_n)
 		if (!scmd_move_to_next_char(&scmd) || i_word == word_n)
 			break ;
 	}
-	scmd_delete(scmd.sub_str_cmd);
+	scmd_clean(&scmd);
 	return (i);
 }
 
@@ -65,7 +67,8 @@ static int			ft_counter_letter(char *str, char c, int word_n)
 	i = 0;
 	i_word = 0;
 	len = 0;
-	scmd_init(&scmd, str);
+	if (!scmd_init(&scmd, str))
+		return (0); //gerer erreur
 	while (1)
 	{
 		if (!scmd_cur_char_is_escaped(&scmd) && scmd.str[scmd.pos] == c)
@@ -78,7 +81,7 @@ static int			ft_counter_letter(char *str, char c, int word_n)
 		if (!scmd_move_to_next_char(&scmd) || i_word == word_n + 1)
 			break ;
 	}
-	scmd_delete(scmd.sub_str_cmd);
+	scmd_clean(&scmd);
 	return (scmd.pos - i);
 }
 
