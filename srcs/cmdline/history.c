@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:18:39 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 11:18:36 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 10:43:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,23 @@ void		add_history_entry(t_history *history, const char *cmdline)
 
 const char	*peek_history_prev(t_history *history)
 {
-	if (history->offset != NULL)
-		history->offset = history->offset->prev;
-	else
-		history->offset = history->back;
 	if (history->offset == NULL)
+		history->offset = history->back;
+	else
+		history->offset = history->offset->prev;
+	if (history->offset == NULL)
+	{
+		history->offset = history->front;
 		return (NULL);
+	}
 	return (history->offset->content);
 }
 
 const char	*peek_history_next(t_history *history)
 {
-	if (history->offset != NULL)
-		history->offset = history->offset->next;
+	if (history->offset == NULL)
+		return (NULL);
+	history->offset = history->offset->next;
 	if (history->offset == NULL)
 		return (NULL);
 	return (history->offset->content);

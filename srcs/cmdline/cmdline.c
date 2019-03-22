@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 10:24:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 10:29:01 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,9 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	(void)alloc;
 	ret = 1;
 	full_input = read_full_input(cmdline, &ret);
-	if (ret == 0)
+	if (ret)
+		add_history_entry(&cmdline->history, full_input);
+	else
 	{
 		if (full_input == NULL)
 		{

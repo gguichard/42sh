@@ -6,11 +6,12 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 11:09:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/22 10:45:18 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 #include <term.h>
 #include "cmdline.h"
 #include "history.h"
@@ -22,11 +23,14 @@ static void	fill_input_buffer(t_cmdline *cmdline, const char *entry)
 
 	idx = 0;
 	offset = 0;
-	while (entry[offset] != '\0')
+	if (entry != NULL)
 	{
-		cmdline->input.buffer[idx] = (wint_t)entry[offset];
-		idx++;
-		offset++;
+		while (entry[offset] != '\0')
+		{
+			cmdline->input.buffer[idx] = (wint_t)entry[offset];
+			idx++;
+			offset++;
+		}
 	}
 	cmdline->input.buffer[idx] = L'\0';
 	cmdline->input.size = idx;
@@ -43,7 +47,7 @@ static void	load_entry_in_cmdline(t_cmdline *cmdline, const char *entry)
 	print_cmdline(cmdline);
 }
 
-int	handle_history_prev(t_cmdline *cmdline)
+int			handle_history_prev(t_cmdline *cmdline)
 {
 	const char	*entry;
 
@@ -54,13 +58,11 @@ int	handle_history_prev(t_cmdline *cmdline)
 	return (1);
 }
 
-int	handle_history_next(t_cmdline *cmdline)
+int			handle_history_next(t_cmdline *cmdline)
 {
 	const char	*entry;
 
 	entry = peek_history_next(&cmdline->history);
-	if (entry == NULL)
-		return (0);
 	load_entry_in_cmdline(cmdline, entry);
 	return (1);
 }
