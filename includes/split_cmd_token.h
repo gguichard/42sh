@@ -16,7 +16,6 @@ typedef struct	s_split_cmd_inf
 	t_list			*last_start_cmd;
 	t_list			*last_tk_added;
 	int				alias_offset;
-	char			*cur_str;
 	t_str_cmd_inf	*scmd;
 	char			last_char_was_spe;
 	const char		*tk_start;
