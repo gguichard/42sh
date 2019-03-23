@@ -14,20 +14,22 @@ typedef struct	s_str_cmd_inf
 	int						is_in_quote;
 	int						is_in_dbquote;
 	size_t					pos;
-	const char				*str;
+	char					*str;
 	struct s_str_cmd_inf	*sub_str_cmd;
 	int						cur_str_cmd_type;
 }				t_str_cmd_inf;
 
 /*
-** Initialise le str_cmd_inf en mettant les valeurs a 0.
+** Initialise le str_cmd_inf en mettant les valeurs a 0 et en faisant une
+** copie de str, fonctionne toujours si str vaut NULL. Retourne 0 en cas
+** d'erreur et 1 en cas de succes.
 */
-void			scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str);
+int				scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str);
 
 /*
-** Free le str_cmd_inf passe en parametre et toutes ses sub_str.
+** Free le contenu du str_cmd_inf passe en parametre et toutes ses sub_str.
 */
-void			scmd_delete(t_str_cmd_inf *str_cmd_inf);
+void			scmd_clean(t_str_cmd_inf *str_cmd_inf);
 
 /*
 ** Retourne le char actuel du str_cmd_inf.

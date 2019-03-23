@@ -6,25 +6,29 @@
 static t_builtin	*set_tab_builtins(void)
 {
 	t_builtin			*builtins;
-	static char			*lst_built[] = {"echo", "cd", "exit", "type", "hash",
-		"alias", "unalias", "set", "unset", "export", "jobs", "fg", "bg"};
-	static t_built_fun	lst_function[] = { &echo_builtins, &cd_builtins,
-		&exit_builtins, &type_builtins, &hash_builtins, &alias_builtins,
-		&unalias_builtins, &set_builtins, &unset_builtins, &export_builtins,
-		&job_builtins, &fg_builtins, &bg_builtins };
-	int					i;
+	static char			*lst_built[] = {
+		"echo", "cd", "exit", "type", "hash"
+			, "alias", "unalias", "set", "unset", "export", "jobs", "fg", "bg"
+			, "test"
+	};
+	static t_built_fun	lst_function[] = {
+		&echo_builtins, &cd_builtins, &exit_builtins, &type_builtins
+			, &hash_builtins, &alias_builtins, &unalias_builtins, &set_builtins
+			, &unset_builtins, &export_builtins, &job_builtins, &fg_builtins
+			, &bg_builtins, &test_builtins };
+	int					idx;
 
-	i = 0;
-	if (!(builtins = (t_builtin *)malloc(sizeof(t_builtin) * 14)))
+	idx = 0;
+	if (!(builtins = (t_builtin *)malloc(sizeof(t_builtin) * 15)))
 		ft_exit_malloc();
-	while (i < 13)
+	while (idx < 14)
 	{
-		builtins[i].name = lst_built[i];
-		builtins[i].built_fun = lst_function[i];
-		i += 1;
+		builtins[idx].name = lst_built[idx];
+		builtins[idx].built_fun = lst_function[idx];
+		idx += 1;
 	}
-	builtins[i].name = NULL;
-	builtins[i].built_fun = NULL;
+	builtins[idx].name = NULL;
+	builtins[idx].built_fun = NULL;
 	return (builtins);
 }
 
