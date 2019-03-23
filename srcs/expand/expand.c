@@ -54,7 +54,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 void	expand(t_ast *elem, t_alloc *alloc)
 {
 	char		**new;
-	char	*str;
+	char		*str;
 	const char	*exp;
 	int			i;
 	int			x;
@@ -67,7 +67,6 @@ void	expand(t_ast *elem, t_alloc *alloc)
 	{
 		while ((exp = ft_strchr(&(elem->input[i][x]), '$')))
 		{
-			ft_printf("OK1\n");
 			x = ft_strlen(elem->input[i]) - ft_strlen(exp);
 			if (ft_strncmp(exp, "${", 2) == 0)
 			{
@@ -77,21 +76,14 @@ void	expand(t_ast *elem, t_alloc *alloc)
 				{
 					str = get_expand_value(*(alloc->var), &(exp[2]), 1);
 					if (ft_strcmp(str, "") != 0)
-					{
 						insert_var_input(str, &(elem->input[i]), 1);
-						// new = ft_strsplit(elem->input[i], ' ');
-						// create_new_input(elem, &i, new);
-					}
 					else if (ft_strcmp(str, "") == 0)
 					{
-						// REMOVE INPUT[i] FROM INPUT_TAB
 						x = 0;
-						ft_printf("DE LA MERDE\n");
 						while (elem->input[i + x])
-						{
-							free((elem->input[i + x]));
-							x += 1;
-						}
+							ft_memdel((void**)&(elem->input[i + x++]));
+						str = NULL;
+						break ;
 					}
 				}
 			}
@@ -101,21 +93,14 @@ void	expand(t_ast *elem, t_alloc *alloc)
 			{
 				str = get_expand_value(*(alloc->var), &(exp[1]), 0);
 				if (ft_strcmp(str, "") != 0)
-				{
 					insert_var_input(str, &(elem->input[i]), 0);
-					// new = ft_strsplit(elem->input[i], ' ');
-					// create_new_input(elem, &i, new);
-				}
 				else if (ft_strcmp(str, "") == 0)
 				{
-					// REMOVE INPUT[i] FROM INPUT_TAB
 					x = 0;
-					ft_printf("DE LA MERDE\n");
 					while (elem->input[i + x])
-					{
-						free((elem->input[i + x]));
-						x += 1;
-					}
+						ft_memdel((void**)&(elem->input[i + x++]));
+					str = NULL;
+					break ;
 				}
 			}
 		}
@@ -126,6 +111,5 @@ void	expand(t_ast *elem, t_alloc *alloc)
 		}
 			str = NULL;
 			x = 0;
-			i += 1;
 	}
 }
