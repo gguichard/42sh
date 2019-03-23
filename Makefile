@@ -71,8 +71,8 @@ SRC =	main.c \
 		$(PATH_BUILT)test/file_tests_2.c \
 		$(PATH_BUILT)test/file_tests_flags.c \
 		$(PATH_BUILT)test/file_tests_rights.c \
-		$(PATH_BUILT)test/str_tests.c \
-		$(PATH_BUILT)test/int_tests.c \
+		$(PATH_BUILT)test/string_tests.c \
+		$(PATH_BUILT)test/integer_tests.c \
 		$(PATH_TOOLS)clean_tools.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \

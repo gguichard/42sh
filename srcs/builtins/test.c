@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:36:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 13:50:59 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/23 11:48:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,8 @@ int						test_builtins(t_ast *elem, t_alloc *alloc)
 	}
 	result = exec_test(argc, elem->input + start_idx);
 	if (result >= 0)
-	{
-		ft_printf("debug result from test %d\n", !(not_result ? !result : result));
 		return (!(not_result ? !result : result));
-	}
-	else
-	{
-		if (result != -1)
-			error_test(argc, elem->input + start_idx);
-		return (2);
-	}
+	else if (result != -1)
+		error_test(argc, elem->input + start_idx);
+	return (2);
 }
