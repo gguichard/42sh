@@ -6,7 +6,7 @@
 #    By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/29 17:35:18 by gguichar          #+#    #+#              #
-#    Updated: 2019/03/20 20:20:02 by gguichar         ###   ########.fr        #
+#    Updated: 2019/03/23 11:53:47 by gguichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,6 +107,7 @@ ft_toupper.c			\
 ft_ulltoa.c				\
 ft_ulltoa_base.c		\
 ft_wcharlen.c			\
+ft_wstrchr.c			\
 ft_wstrlen.c			\
 get_next_line.c
 SRC_DIR	=	src

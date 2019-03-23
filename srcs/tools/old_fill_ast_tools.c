@@ -70,7 +70,7 @@ void	fill_input(char **s, int end, int start, t_ast *elem)
 	tmp = NULL;
 	if (end == start)
 		return ;
-	if (elem->back && elem->back->type <= AGREG)
+	if (elem->back && elem->back->type <= REDIR)
 		len = 2;
 	else
 		len = end - start + 1;

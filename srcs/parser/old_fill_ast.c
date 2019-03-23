@@ -49,7 +49,7 @@ static void	split_redir(char **s, t_ast *elem, int *pos)
 		}
 		else
 			get_last_index_split(&i, s[*pos], &wd);
-	(elem->type <= AGREG) ? wd += 1 : 0;
+	(elem->type <= REDIR) ? wd += 1 : 0;
 	if (!(elem->input = (char**)malloc(sizeof(char*) * (wd + 1))))
 		ft_exit_malloc();
 	elem->input[wd] = NULL;
@@ -76,7 +76,7 @@ static int	fill_operator(char **s, int x, t_ast *elem, int *i)
 	else if (z == 3)
 		elem->type = HEREDOC;
 	else if (z < 7)
-		elem->type = AGREG;
+		elem->type = REDIR;
 	else if (z < 9)
 		elem->type = OPERATOR;
 	else
@@ -114,7 +114,7 @@ void		fill_ast(char **s, t_ast **lst, int save, int i)
 				(tmp->type > CMD) ? add_input_prev_cmd(s, i, save, tmp) :
 				fill_input(s, i, save, tmp);
 				(tmp->type != NO_TYPE) ? tmp = add_new_elem(lst) : 0;
-				save = i + fill_operator(s, x, tmp, &i) + ((tmp->type > AGREG)
+				save = i + fill_operator(s, x, tmp, &i) + ((tmp->type > REDIR)
 				? 0 : 1);
 				break ;
 			}
