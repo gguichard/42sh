@@ -48,12 +48,12 @@ void	insert_var_input(char *str, char **input, int type)
 		while ((*input)[end] != '}')
 			end += 1;
 	else
+	{
 		while ((*input)[end] && (ft_isalnum((*input)[end]) == 1
 				|| (*input)[end] == '_'))
-			if ((*input)[end + 1] && (*input)[end + 1] == '/')
-				break ;
-			else
 				end += 1;
+		end -= 1;
+	}
 	ft_insert(input, str, start, end);
 }
 

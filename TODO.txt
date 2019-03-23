@@ -21,3 +21,8 @@ ASSIGNATION:
 	- Placement avant cmd
 		if cmd after assign -> var_tmp
 		else set var
+
+
+
+EXPAND:
+	

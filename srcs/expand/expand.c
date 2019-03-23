@@ -57,14 +57,18 @@ void	expand(t_ast *elem, t_alloc *alloc)
 	char	*str;
 	const char	*exp;
 	int			i;
+	int			x;
 
 	new = NULL;
 	exp = NULL;
 	i = 0;
+	x = 0;
 	while (elem->input[i])
 	{
-		if ((exp = ft_strchr(elem->input[i], '$')))
+		while ((exp = ft_strchr(&(elem->input[i][x]), '$')))
 		{
+			ft_printf("OK1\n");
+			x = ft_strlen(elem->input[i]) - ft_strlen(exp);
 			if (ft_strncmp(exp, "${", 2) == 0)
 			{
 				if (check_expand_bracket(&(exp[2])) == 0)
@@ -75,8 +79,19 @@ void	expand(t_ast *elem, t_alloc *alloc)
 					if (ft_strcmp(str, "") != 0)
 					{
 						insert_var_input(str, &(elem->input[i]), 1);
-						new = ft_strsplit(elem->input[i], ' ');
-						create_new_input(elem, &i, new);
+						// new = ft_strsplit(elem->input[i], ' ');
+						// create_new_input(elem, &i, new);
+					}
+					else if (ft_strcmp(str, "") == 0)
+					{
+						// REMOVE INPUT[i] FROM INPUT_TAB
+						x = 0;
+						ft_printf("DE LA MERDE\n");
+						while (elem->input[i + x])
+						{
+							free((elem->input[i + x]));
+							x += 1;
+						}
 					}
 				}
 			}
@@ -88,17 +103,29 @@ void	expand(t_ast *elem, t_alloc *alloc)
 				if (ft_strcmp(str, "") != 0)
 				{
 					insert_var_input(str, &(elem->input[i]), 0);
-					new = ft_strsplit(elem->input[i], ' ');
-					create_new_input(elem, &i, new);
+					// new = ft_strsplit(elem->input[i], ' ');
+					// create_new_input(elem, &i, new);
 				}
-				else
+				else if (ft_strcmp(str, "") == 0)
 				{
 					// REMOVE INPUT[i] FROM INPUT_TAB
-					i += 1;
+					x = 0;
+					ft_printf("DE LA MERDE\n");
+					while (elem->input[i + x])
+					{
+						free((elem->input[i + x]));
+						x += 1;
+					}
 				}
 			}
 		}
-		else
+		if (str)
+		{
+			new = ft_strsplit(elem->input[i], ' ');
+			create_new_input(elem, &i, new);
+		}
+			str = NULL;
+			x = 0;
 			i += 1;
 	}
 }
