@@ -82,6 +82,7 @@ int		main(int argc, char **argv, char **env)
 	env_cp(env, &lst);
 	set_alloc(&alloc, &lst);
 	init_cmdline(&alloc.cmdline);
+	load_history_file_entries(&alloc, &alloc.cmdline.history);
 	while (1)
 	{
 		setup_term(&alloc.cmdline);

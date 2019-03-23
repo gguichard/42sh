@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 17:04:19 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/23 22:02:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 	char	*new_line;
 	char	*tmp[3];
 
-	if (cmdline->input.buffer == NULL)
+	if (cmdline->input.buffer[0] == '\0')
 		return (full_input);
 	new_line = ft_strdup(cmdline->input.buffer);
 	if (new_line != NULL && full_input != NULL)
@@ -67,6 +67,8 @@ int			init_cmdline(t_cmdline *cmdline)
 	g_cmdline = cmdline;
 	if (tgetent(NULL, "xterm-256color") == -1) // TODO: utiliser la variable TERM
 		return (0);
+	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
+	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
 	update_winsize(cmdline);
 	signal(SIGWINCH, handle_sigwinch);
 	return (1);
@@ -110,12 +112,16 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	ret = 1;
 	full_input = read_full_input(cmdline, &ret);
 	if (ret)
-		add_history_entry(&cmdline->history, full_input);
+	{
+		if (full_input != NULL && full_input[0] != '\0')
+			add_history_entry(&cmdline->history, full_input);
+	}
 	else
 	{
 		if (full_input == NULL)
 		{
 			reset_term(cmdline);
+			save_history_entries(alloc, &cmdline->history);
 			ft_printf("exit\n");
 			exit(0); // TODO: exit with alloc ret value
 		}

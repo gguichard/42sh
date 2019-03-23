@@ -98,6 +98,7 @@ $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/history.c \
+$(PATH_CMDLINE)/history_utils.c \
 $(PATH_CMDLINE)/input.c \
 $(PATH_CMDLINE)/print_cmdline.c \
 $(PATH_CMDLINE)/print_cmdline_utils.c \
