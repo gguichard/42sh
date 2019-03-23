@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:51:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/23 14:00:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	fill_input_buffer(t_cmdline *cmdline, const char *entry)
 {
 	int	len;
 
+	if (cmdline->input.buffer == NULL)
+		return ;
 	if (entry == NULL)
 		len = 0;
 	else
