@@ -2,8 +2,6 @@
 #include "parser_lexer.h"
 #include "expand.h"
 
-// ADD GESTION ERROR EXPAND
-
 char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
 {
 	int	x;
@@ -49,9 +47,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 	*i += len_new;
 }
 
-// HAVE TO QUIT EXECUTION CMD ON ERROR
-
-void	expand(t_ast *elem, t_alloc *alloc)
+int	expand(t_ast *elem, t_alloc *alloc)
 {
 	char		**new;
 	char		*str;
@@ -61,6 +57,7 @@ void	expand(t_ast *elem, t_alloc *alloc)
 
 	new = NULL;
 	exp = NULL;
+	str = NULL;
 	i = 0;
 	x = 0;
 	while (elem->input[i])
@@ -70,38 +67,20 @@ void	expand(t_ast *elem, t_alloc *alloc)
 			x = ft_strlen(elem->input[i]) - ft_strlen(exp);
 			if (ft_strncmp(exp, "${", 2) == 0)
 			{
-				if (check_expand_bracket(&(exp[2])) == 0)
-					error_expand(elem->input[i]);
+				if (check_expand_syntax(&(exp[2])) == 0)
+					return (error_expand(elem->input[i]));
 				else
 				{
 					str = get_expand_value(*(alloc->var), &(exp[2]), 1);
-					if (ft_strcmp(str, "") != 0)
-						insert_var_input(str, &(elem->input[i]), 1);
-					else if (ft_strcmp(str, "") == 0)
-					{
-						x = 0;
-						while (elem->input[i + x])
-							ft_memdel((void**)&(elem->input[i + x++]));
-						str = NULL;
-						break ;
-					}
+					insert_var_input(str, &(elem->input[i]), 1);
 				}
 			}
-			else if (check_expand_simple(&(exp[1])) == 0)
-				error_expand(elem->input[i]);
+			else if (check_expand_syntax(&(exp[1])) == 0)
+				return (error_expand(elem->input[i]));
 			else
 			{
 				str = get_expand_value(*(alloc->var), &(exp[1]), 0);
-				if (ft_strcmp(str, "") != 0)
-					insert_var_input(str, &(elem->input[i]), 0);
-				else if (ft_strcmp(str, "") == 0)
-				{
-					x = 0;
-					while (elem->input[i + x])
-						ft_memdel((void**)&(elem->input[i + x++]));
-					str = NULL;
-					break ;
-				}
+				insert_var_input(str, &(elem->input[i]), 0);
 			}
 		}
 		if (str)
@@ -109,7 +88,10 @@ void	expand(t_ast *elem, t_alloc *alloc)
 			new = ft_strsplit(elem->input[i], ' ');
 			create_new_input(elem, &i, new);
 		}
-			str = NULL;
-			x = 0;
+		else
+		  i += 1;
+		str = NULL;
+		x = 0;
 	}
+	return (1);
 }

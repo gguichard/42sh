@@ -8,29 +8,10 @@ int		error_expand(char *exp)
 	return (0);
 }
 
-int		check_expand_simple(const char *str)
+int		check_expand_syntax(const char *str)
 {
 	if (ft_isalpha(str[0]) == 0 && str[0] != '_')
 		return (0);
-	return (1);
-}
-
-
-int		check_expand_bracket(const char *str)
-{
-	int	i;
-
-	i = 1;
-	if (ft_isalpha(str[i]) == 0 && str[i] != '_')
-		return (0);
-	while (str[i])
-	{
-		if (ft_isalnum(str[i]) == 0 && str[i] != '-' && str[i] != '}')
-			return (0);
-		else if (str[i] == '}')
-			break ;
-		i += 1;
-	}
 	return (1);
 }
 
