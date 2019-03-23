@@ -5,7 +5,7 @@
 int	analyzer(t_ast *sort, t_alloc *alloc, int no_fork)
 {
 	static t_dispatch	dispatch[] = { &dispatch_cmd, &dispatch_redir,
-						&dispatch_redir, &dispatch_agreg, &dispatch_operator,
+						&dispatch_redir, &dispatch_assign, &dispatch_operator,
 						&dispatch_logic };
 	t_ast				*tmp;
 	int					ret;

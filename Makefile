@@ -72,6 +72,7 @@ $(PATH_TOOLS)/env_tools_2.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
 $(PATH_TOOLS)/sort_tools.c \
+$(PATH_TOOLS)/assign_tools.c \
 $(PATH_BUILT)/bg.c \
 $(PATH_BUILT)/export.c \
 $(PATH_BUILT)/fg.c \

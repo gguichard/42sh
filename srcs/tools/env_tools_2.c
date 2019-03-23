@@ -4,19 +4,27 @@
 
 void		add_var(t_var **lst_env, char *var, int x, int env)
 {
-	t_var	*tmp;
 	t_var	*new;
+	char	*key;
+	char	*value;
 	size_t	len;
 
-	tmp = NULL;
+	len = ft_strlen(var);
+	key = ft_strsub(var, 0, x);
+	if ((size_t)x != len)
+		value = ft_strsub(var, x + 1, len - x - 1);
+	else
+		value = NULL;
+	if ((new =find_elem_env(*lst_env, key)))
+	{
+		ft_memdel((void**)&(new->value));
+		new->value = value;
+		return ;
+	}
 	if (!(new = (t_var*)malloc(sizeof(t_var))))
 		ft_exit_malloc();
-	len = ft_strlen(var);
-	new->key = ft_strsub(var, 0, x);
-	if ((size_t)x != len)
-		new->value = ft_strsub(var, x + 1, len - x - 1);
-	else
-		new->value = NULL;
+	new->key = key;
+	new->value = value;
 	new->is_env = env;
 	new->next = NULL;
 	insert_new_elem(lst_env, new);

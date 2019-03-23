@@ -3,7 +3,6 @@
 #include "builtins.h"
 #include "parser_lexer.h"
 
-
 int	dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork)
 {
 	int					i;
