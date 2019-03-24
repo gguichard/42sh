@@ -37,6 +37,7 @@ $(PATH_ERROR)/error_unset.c \
 $(PATH_ERROR)/error_setenv.c \
 $(PATH_ERROR)/error_unsetenv.c \
 $(PATH_ERROR)/error_export.c \
+$(PATH_ERROR)/error_test.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
 $(PATH_LEXER)/replace_quote.c \
@@ -77,6 +78,14 @@ $(PATH_BUILT)/job.c \
 $(PATH_BUILT)/set.c \
 $(PATH_BUILT)/type.c \
 $(PATH_BUILT)/unset.c \
+$(PATH_BUILT)/test.c \
+$(PATH_BUILT)/test/test_builtin_utils.c \
+$(PATH_BUILT)/test/file_tests_1.c \
+$(PATH_BUILT)/test/file_tests_2.c \
+$(PATH_BUILT)/test/file_tests_flags.c \
+$(PATH_BUILT)/test/file_tests_rights.c \
+$(PATH_BUILT)/test/string_tests.c \
+$(PATH_BUILT)/test/integer_tests.c \
 $(PATH_TOOLS)/analyzer_tools.c \
 $(PATH_TOOLS)/agreg_tools.c \
 $(PATH_TOOLS)/heredoc_tools.c \
@@ -142,6 +151,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_BUILT) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_BUILT)/test 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_ERROR) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_EXEC) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_LEXER) 2> /dev/null || true
@@ -165,6 +175,8 @@ fclean: clean
 	/bin/rm -f $(NAME)
 	@echo "$(NAME):\t\t\t$(GREEN)[CLEAN]$(END)"
 
-re: fclean all
+re:
+	$(MAKE) fclean
+	$(MAKE) all
 
 .PHONY: all clean fclean
