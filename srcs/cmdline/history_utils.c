@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 20:08:47 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 12:46:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 12:58:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char		*get_history_file_path(t_alloc *alloc)
 	if (home_dir == NULL || home_dir[0] == '\0')
 		return (NULL);
 	tab[0] = home_dir;
-	tab[1] = ".21sh_history";
+	tab[1] = ".42sh_history";
 	tab[2] = NULL;
 	return (ft_join(tab, home_dir[ft_strlen(home_dir) - 1] == '/' ? "" : "/"));
 }
