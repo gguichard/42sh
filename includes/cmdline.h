@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/23 21:56:10 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 11:37:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # define INPUT_SIZE_INCR 1024
 
 t_cmdline	*g_cmdline;
-
-int			init_cmdline(t_cmdline *cmdline);
 
 /*
 ** TERM INIT/MISC.

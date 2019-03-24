@@ -6,90 +6,69 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:18:39 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/23 21:49:01 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 12:43:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include "libft.h"
-#include "shell.h"
 #include "history.h"
 
-int			load_history_file_entries(t_alloc *alloc, t_history *history)
-{
-	char	*file_path;
-	int		fd;
-	char	*line;
-
-	file_path = get_history_file_path(alloc);
-	if (file_path == NULL)
-		return (0);
-	fd = open(file_path, O_RDONLY);
-	if (fd != -1)
-	{
-		// TODO: replace GNL
-		while (get_next_line(fd, &line) == 1)
-		{
-			add_history_entry(history, line);
-			free(line);
-		}
-		close(fd);
-	}
-	free(file_path);
-	return (1);
-}
-
-int			save_history_entries(t_alloc *alloc, t_history *history)
-{
-	char			*file_path;
-	int				fd;
-	t_history_entry	*entry;
-
-	file_path = get_history_file_path(alloc);
-	if (file_path == NULL)
-		return (0);
-	fd = open(file_path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (fd != -1)
-	{
-		entry = history->front;
-		while (entry != NULL)
-		{
-			write(fd, entry->content, ft_strlen(entry->content));
-			write(fd, "\n", 1);
-			entry = entry->next;
-		}
-		close(fd);
-	}
-	free(file_path);
-	return (fd != -1);
-}
-
-void		add_history_entry(t_history *history, const char *cmdline)
+static t_history_entry	*create_history_entry(const char *content)
 {
 	t_history_entry	*entry;
 
+	if (content == NULL || content[0] == '\0')
+		return (NULL);
 	entry = (t_history_entry *)malloc(sizeof(t_history_entry));
 	if (entry == NULL)
-		return ;
-	entry->content = ft_strdup(cmdline);
+		return (NULL);
+	entry->content = ft_strdup(content);
 	if (entry->content == NULL)
 	{
 		free(entry);
-		return ;
+		return (NULL);
 	}
-	entry->next = NULL;
-	entry->prev = history->back;
-	if (entry->prev != NULL)
-		entry->prev->next = entry;
-	if (history->front == NULL)
-		history->front = entry;
-	history->back = entry;
-	history->offset = NULL;
+	return (entry);
 }
 
-const char	*peek_history_prev(t_history *history)
+void					add_history_entry(t_history *history
+		, const char *content)
+{
+	t_history_entry	*entry;
+
+	entry = create_history_entry(content);
+	if (entry != NULL)
+	{
+		entry->next = history->front;
+		entry->prev = NULL;
+		if (entry->next != NULL)
+			entry->next->prev = entry;
+		if (history->back == NULL)
+			history->back = entry;
+		history->front = entry;
+	}
+}
+
+void					push_history_entry(t_history *history
+		, const char *content)
+{
+	t_history_entry	*entry;
+
+	entry = create_history_entry(content);
+	if (entry != NULL)
+	{
+		entry->next = NULL;
+		entry->prev = history->back;
+		if (entry->prev != NULL)
+			entry->prev->next = entry;
+		if (history->front == NULL)
+			history->front = entry;
+		history->back = entry;
+	}
+}
+
+const char				*peek_history_prev(t_history *history)
 {
 	if (history->offset == NULL)
 		history->offset = history->back;
@@ -103,7 +82,7 @@ const char	*peek_history_prev(t_history *history)
 	return (history->offset->content);
 }
 
-const char	*peek_history_next(t_history *history)
+const char				*peek_history_next(t_history *history)
 {
 	if (history->offset == NULL)
 		return (NULL);
