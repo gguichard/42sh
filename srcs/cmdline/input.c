@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/23 21:55:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 16:14:08 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,8 @@ void			add_char_to_input(t_cmdline *cmdline, char c)
 	write_char_in_cmdline(cmdline, c);
 }
 
-static void		process_input(t_cmdline *cmdline, char input)
+void			reset_cmdline(t_cmdline *cmdline, const char *prompt)
 {
-	const t_seq	*seq;
-
-	seq = get_sequence(cmdline, input);
-	if (seq != NULL)
-		handle_sequence(cmdline, seq);
-	else if (!cmdline->visual.toggle)
-	{
-		cmdline->saved_col = -1;
-		if (ft_isprint(input))
-			add_char_to_input(cmdline, input);
-	}
-}
-
-int				read_input(t_cmdline *cmdline, const char *prompt)
-{
-	char	input;
-
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
 	set_cursor_pos(&cmdline->cursor);
 	cmdline->saved_col = -1;
@@ -78,7 +61,25 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 	cmdline->input.offset = 0;
 	cmdline->input.size = 0;
 	cmdline->input.reading = 1;
+}
+
+int				read_input(t_cmdline *cmdline, const char *prompt)
+{
+	char		input;
+	const t_seq	*seq;
+
+	reset_cmdline(cmdline, prompt);
 	while (cmdline->input.reading == 1 && read(STDIN_FILENO, &input, 1) == 1)
-		process_input(cmdline, input);
+	{
+		seq = get_sequence(cmdline, input);
+		if (seq != NULL)
+			handle_sequence(cmdline, seq);
+		else if (!cmdline->visual.toggle)
+		{
+			cmdline->saved_col = -1;
+			if (ft_isprint(input))
+				add_char_to_input(cmdline, input);
+		}
+	}
 	return (cmdline->input.reading != -1);
 }
