@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:18:39 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 10:43:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 12:43:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,61 @@
 #include "libft.h"
 #include "history.h"
 
-void		add_history_entry(t_history *history, const char *cmdline)
+static t_history_entry	*create_history_entry(const char *content)
 {
 	t_history_entry	*entry;
 
+	if (content == NULL || content[0] == '\0')
+		return (NULL);
 	entry = (t_history_entry *)malloc(sizeof(t_history_entry));
 	if (entry == NULL)
-		return ;
-	entry->content = ft_strdup(cmdline);
+		return (NULL);
+	entry->content = ft_strdup(content);
 	if (entry->content == NULL)
 	{
 		free(entry);
-		return ;
+		return (NULL);
 	}
-	entry->next = NULL;
-	entry->prev = history->back;
-	if (entry->prev != NULL)
-		entry->prev->next = entry;
-	if (history->front == NULL)
-		history->front = entry;
-	history->back = entry;
-	history->offset = NULL;
+	return (entry);
 }
 
-const char	*peek_history_prev(t_history *history)
+void					add_history_entry(t_history *history
+		, const char *content)
+{
+	t_history_entry	*entry;
+
+	entry = create_history_entry(content);
+	if (entry != NULL)
+	{
+		entry->next = history->front;
+		entry->prev = NULL;
+		if (entry->next != NULL)
+			entry->next->prev = entry;
+		if (history->back == NULL)
+			history->back = entry;
+		history->front = entry;
+	}
+}
+
+void					push_history_entry(t_history *history
+		, const char *content)
+{
+	t_history_entry	*entry;
+
+	entry = create_history_entry(content);
+	if (entry != NULL)
+	{
+		entry->next = NULL;
+		entry->prev = history->back;
+		if (entry->prev != NULL)
+			entry->prev->next = entry;
+		if (history->front == NULL)
+			history->front = entry;
+		history->back = entry;
+	}
+}
+
+const char				*peek_history_prev(t_history *history)
 {
 	if (history->offset == NULL)
 		history->offset = history->back;
@@ -51,7 +82,7 @@ const char	*peek_history_prev(t_history *history)
 	return (history->offset->content);
 }
 
-const char	*peek_history_next(t_history *history)
+const char				*peek_history_next(t_history *history)
 {
 	if (history->offset == NULL)
 		return (NULL);

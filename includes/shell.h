@@ -72,7 +72,15 @@ typedef struct			s_alloc
 
 typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
 
+/*
+*********************************** CMDLINE ************************************
+*/
+
+int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
 char	*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char	*get_history_file_path(t_alloc *alloc);
+int		load_history_file_entries(t_alloc *alloc, t_history *history);
+int		save_history_entries(t_alloc *alloc, t_history *history);
 
 /*
 ************************************ TOOLS *************************************

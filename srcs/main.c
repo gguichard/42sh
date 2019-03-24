@@ -81,7 +81,12 @@ int		main(int argc, char **argv, char **env)
 	ft_bzero(&alloc, sizeof(t_alloc));
 	env_cp(env, &lst);
 	set_alloc(&alloc, &lst);
-	init_cmdline(&alloc.cmdline);
+	if (!init_cmdline(&alloc, &alloc.cmdline))
+	{
+		ft_dprintf(STDERR_FILENO, "Unable to init term\n");
+		return (1);
+	}
+	load_history_file_entries(&alloc, &alloc.cmdline.history);
 	while (1)
 	{
 		setup_term(&alloc.cmdline);
