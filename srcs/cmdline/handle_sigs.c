@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 15:58:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 16:23:58 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 19:37:01 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void				handle_sig(int sig)
 	}
 	else
 	{
+		if (cmdline->visual.toggle)
+			handle_toggle_visual(cmdline);
 		write(STDOUT_FILENO, "^C", 2);
 		handle_end_key(cmdline);
 		write(STDOUT_FILENO, "\n", 1);

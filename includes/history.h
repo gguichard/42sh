@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:08:33 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 12:46:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 23:22:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct		s_history
 	t_history_entry	*front;
 	t_history_entry	*back;
 	t_history_entry	*offset;
+	char			*buffer;
 }					t_history;
 
 struct				s_history_entry
@@ -31,6 +32,7 @@ struct				s_history_entry
 	t_history_entry	*next;
 };
 
+t_history_entry		*create_history_entry(const char *content);
 void				add_history_entry(t_history *history, const char *content);
 void				push_history_entry(t_history *history, const char *content);
 const char			*peek_history_prev(t_history *history);
