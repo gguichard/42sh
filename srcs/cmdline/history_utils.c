@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 20:08:47 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 12:39:08 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 12:46:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	read_history_last_entries(t_history *history, int fd
 		return (0);
 	buffer_pos = buffer + file_size;
 	count = 0;
-	while (--buffer_pos >= buffer && count < 500)
+	while (--buffer_pos >= buffer && count < MAX_HISTORY_LINES)
 	{
 		if (*buffer_pos != '\n')
 			continue;
@@ -68,7 +68,7 @@ static int	read_history_last_entries(t_history *history, int fd
 			count++;
 		}
 	}
-	if (count < 500)
+	if (count < MAX_HISTORY_LINES)
 		add_history_entry(history, buffer);
 	munmap(buffer, file_size);
 	return (1);
