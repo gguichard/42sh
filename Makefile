@@ -32,12 +32,7 @@ $(PATH_ERROR)/parser_error.c \
 $(PATH_ERROR)/error_redirection.c \
 $(PATH_ERROR)/error_cd.c \
 $(PATH_ERROR)/error_fd.c \
-$(PATH_ERROR)/error_set.c \
-$(PATH_ERROR)/error_unset.c \
-$(PATH_ERROR)/error_setenv.c \
-$(PATH_ERROR)/error_unsetenv.c \
 $(PATH_ERROR)/error_export.c \
-$(PATH_ERROR)/error_test.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
 $(PATH_LEXER)/replace_quote.c \
@@ -74,7 +69,7 @@ $(PATH_TOOLS)/sort_tools.c \
 $(PATH_BUILT)/bg.c \
 $(PATH_BUILT)/export.c \
 $(PATH_BUILT)/fg.c \
-$(PATH_BUILT)/job.c \
+$(PATH_BUILT)/jobs.c \
 $(PATH_BUILT)/set.c \
 $(PATH_BUILT)/type.c \
 $(PATH_BUILT)/unset.c \

@@ -50,7 +50,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
 	// 	analyzer(sort_ast, alloc, TRUE);
 	// else
-	// 	analyzer(sort_ast, alloc, FALSE);
+	analyzer(sort_ast, alloc, 0);
 
 /*
 ** PRINT AST AND REINIT NODE

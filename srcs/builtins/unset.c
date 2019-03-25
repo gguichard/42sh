@@ -1,61 +1,72 @@
+#include <stdlib.h>
+#include "libft.h"
 #include "shell.h"
 #include "builtins.h"
-#include "error.h"
 
 // BUILTINS UNSET POSIX NORME NO OPTIONS
 // JUST UNSET ALL THE VARIABLES
 // IF THERE IS AN '=' IN THE NAME VARIABLE
 // RETURN ERROR
 
-static void	del_elem_env(t_var *elem)
+static int	is_valid_identifier(const char *key)
 {
-	ft_strdel(&(elem->key));
-	ft_strdel(&(elem->value));
-	ft_memdel((void **)&elem);
-}
+	size_t	offset;
 
-static int	del_elem_env_by_key(t_var **lst, const char *key)
-{
-	t_var	*tmp;
-	t_var	*tmp_next;
-
-	tmp = *lst;
-	if (ft_strcmp(tmp->key, key) == 0)
-	{
-		*lst = tmp->next;
-		del_elem_env(tmp);
+	if (ft_isdigit(key[0]))
 		return (0);
-	}
-	tmp_next = tmp->next;
-	while (tmp_next)
+	offset = 0;
+	while (key[offset] != '\0')
 	{
-		if (ft_strcmp(tmp_next->key, key) == 0)
-		{
-			tmp->next = tmp_next->next;
-			del_elem_env(tmp_next);
+		if (!ft_isalnum(key[offset]) && key[offset] != '_')
 			return (0);
-		}
-		tmp = tmp->next;
-		tmp_next = tmp->next;
+		offset++;
 	}
-	return (0);
+	return (1);
 }
 
-int			unset_builtins(t_ast *elem, t_alloc *alloc)
+static void	del_var_by_key(t_var **lst, const char *key)
 {
-	int	i;
+	t_var	*prev;
+	t_var	*tmp;
+
+	prev = NULL;
+	tmp = *lst;
+	while (tmp != NULL)
+	{
+		if (ft_strequ(tmp->key, key))
+		{
+			if (prev == NULL)
+				*lst = tmp->next;
+			else
+				prev = tmp->next;
+			free(tmp->key);
+			free(tmp->value);
+			free(tmp);
+			break ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+}
+
+int			builtin_unset(t_ast *elem, t_alloc *alloc)
+{
+	int	idx;
 	int	ret;
 
-	(void)alloc;
-	i = 1;
+	idx = 1;
 	ret = 0;
-	while (elem->input[i])
+	while (elem->input[idx] != NULL)
 	{
-		if (!ft_strchr(elem->input[i], '='))
-			del_elem_env_by_key(alloc->var, elem->input[i]);
+		if (is_valid_identifier(elem->input[idx]))
+			del_var_by_key(alloc->var, elem->input[idx]);
 		else
-			ret = error_unset(elem->input[i]);
-		i += 1;
+		{
+			ft_dprintf(2, "42sh: unset: %s: not a valid identifier"
+					, elem->input[idx]);
+			ret = 1;
+		}
+		idx++;
 	}
 	return (ret);
 }

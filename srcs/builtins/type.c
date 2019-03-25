@@ -1,40 +1,51 @@
+#include <unistd.h>
 #include "shell.h"
 #include "builtins.h"
 #include "exectable.h"
-#include "hashtable.h"
 #include "aliastable.h"
 #include "search_exec.h"
 
-int			type_builtins(t_ast *elem, t_alloc *alloc)
+static int	search_type(t_alloc *alloc, const char *elem)
 {
-	int		i;
-	int		ret;
-	char	*path;
-	t_error	error;
+	int			ret;
+	const char	*path;
+	char		*freed_path;
+	t_error		error;
 
-	i = 0;
+	if ((path = get_alias(alloc->aliastable, elem)) != NULL)
+		ret = ft_printf("%s is aliased to `%s`\n", elem, path);
+	else if ((path = get_exec_path(alloc->exectable, elem, 0)) != NULL)
+		ret = ft_printf("%s is hashed (%s)\n", elem, path);
+	else if (is_builtins(alloc, elem) == 1)
+		ret = ft_printf("%s is a shell builtin\n", elem);
+	else if (ft_strchr(elem, '/') != NULL && access(elem, F_OK | X_OK) == 0)
+		ret = ft_printf("%s is %s\n", elem, elem);
+	else if (ft_strchr(elem, '/') == NULL
+			&& (freed_path = search_exec(*(alloc->var), elem, &error)) != NULL)
+	{
+		ret = ft_printf("%s is %s\n", elem, freed_path);
+		free(freed_path);
+	}
+	else
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: type: %s: not found\n", elem);
+		ret = 1;
+	}
+	return (ret < 0 ? 0 : 1);
+}
+
+int			builtin_type(t_ast *elem, t_alloc *alloc)
+{
+	int		idx;
+	int		ret;
+
+	idx = 1;
 	ret = 0;
-	while (elem->input[++i])
-		if ((path = (char *)get_alias(alloc->aliastable, elem->input[i])))
-			ret = ft_printf("%s is aliased to `%s`\n", elem->input[i], path);
-		else if ((path = (char *)get_exec_path(alloc->exectable,
-			elem->input[i], 0)))
-			ret = ft_printf("%s is hashed (%s)\n", elem->input[i], path);
-		else if (is_builtins(alloc, elem->input[i]) == 1)
-			ret = ft_printf("%s is a shell builtin\n", elem->input[i]);
-		else if (ft_strchr(elem->input[i], '/') && access(elem->input[i], F_OK)
-		== 0 && access(elem->input[i], X_OK) == 0)
-				ret = ft_printf("%s is %s\n", elem->input[i], elem->input[i]);
-		else if (!(ft_strchr(elem->input[i], '/')) && (path =
-			search_exec(*(alloc->var), elem->input[i], &error)))
-		{
-			ret = ft_printf("%s is %s\n", elem->input[i], path);
-			ft_strdel(&path);
-		}
-		else
-		{
-			ft_dprintf(2, "42sh: type: %s: not found\n", elem->input[i]);
+	while (elem->input[idx] != NULL)
+	{
+		if (!search_type(alloc, elem->input[idx]))
 			ret = 1;
-		}
-	return ((ret != 1 && ret != -1) ? 0 : 1);
+		idx++;
+	}
+	return (ret);
 }

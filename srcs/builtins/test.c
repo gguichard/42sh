@@ -6,15 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 14:36:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/23 11:48:29 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/25 11:08:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "libft.h"
 #include "shell.h"
 #include "builtins.h"
 #include "builtins_test.h"
-#include "error.h"
 
 static const t_test_ope	g_test_operators[] = {
 	{"-b", test_builtin_file_block, 0},
@@ -84,7 +83,17 @@ static int				exec_test(int argc, char **argv)
 		return (exec_binary_primary(argv));
 }
 
-int						test_builtins(t_ast *elem, t_alloc *alloc)
+void					error_test(int argc, char **argv)
+{
+	if (argc == 2)
+		ft_dprintf(STDERR_FILENO, "42sh: test: %s: "
+				"unary operator expected\n", argv[0]);
+	else
+		ft_dprintf(STDERR_FILENO, "42sh: test: %s: "
+				"binary operator expected\n", argv[1]);
+}
+
+int						builtin_test(t_ast *elem, t_alloc *alloc)
 {
 	size_t	argc;
 	size_t	start_idx;

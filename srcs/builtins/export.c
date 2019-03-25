@@ -25,9 +25,9 @@ static void	display_lst_var(t_var *lst)
 	while (lst)
 	{
 		if (lst->is_env == 1 && lst->value)
-			ft_printf("declare -x %s=\"%s\"\n", lst->key, lst->value);
+			ft_printf("export %s=\"%s\"\n", lst->key, lst->value);
 		else if (lst->is_env == 1)
-			ft_printf("declare -x %s\n", lst->key);
+			ft_printf("export %s\n", lst->key);
 		lst = lst->next;
 	}
 }
@@ -72,7 +72,6 @@ int	export_builtins(t_ast *elem, t_alloc *alloc)
 	int	i;
 	int	ret;
 
-	(void)alloc;
 	i = 1;
 	ret = 0;
 	if ((ret = check_options(elem, &i)) == 1)
