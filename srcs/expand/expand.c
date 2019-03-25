@@ -70,31 +70,29 @@ static int	expand_var(char **str, t_alloc *alloc, const char *exp,
 	return (1);
 }
 
-int			expand(t_ast *elem, t_alloc *alloc)
+int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t pos)
 {
 	char		**new;
 	char		*str;
 	const char	*exp;
-	int			i;
 	int			x;
 
 	new = NULL;
 	exp = NULL;
-	i = 0;
-	while (elem->input[i])
+	// while (elem->input[i])
+	// {
+	str = NULL;
+	x = 0;
+	while ((exp = ft_strchr(&(elem->input[*i][pos]), '$')))
 	{
-		str = NULL;
-		x = 0;
-		while ((exp = ft_strchr(&(elem->input[i][x]), '$')))
-		{
-			x = ft_strlen(elem->input[i]) - ft_strlen(exp);
-			if (expand_var(&str, alloc, exp, &(elem->input[i])) == 0)
-				return (0);
-		}
-		if (str)
-			create_new_input(elem, &i, ft_strsplit(elem->input[i], ' '));
-		else
-			i += 1;
+		x = ft_strlen(elem->input[*i]) - ft_strlen(exp);
+		if (expand_var(&str, alloc, exp, &(elem->input[*i])) == 0)
+			return (0);
 	}
+	if (str)
+		create_new_input(elem, i, ft_strsplit(elem->input[*i], ' '));
+	// else
+	// 	i += 1;
+	// }
 	return (1);
 }

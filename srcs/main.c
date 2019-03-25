@@ -58,12 +58,12 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 /*
 ** PRINT AST AND REINIT NODE
 */
-		ft_printf("\n\nPRINT AST:\n\n");
-		if (sort_ast)
-		{
-			read_sort_descent(sort_ast, 1);
-			reinit_print(alloc->ast, 1);
-		}
+		// ft_printf("\n\nPRINT AST:\n\n");
+		// if (sort_ast)
+		// {
+		// 	read_sort_descent(sort_ast, 1);
+		// 	reinit_print(alloc->ast, 1);
+		// }
 
 		if (lst_tk)
 			lst_tk = lst_tk->next;
