@@ -27,6 +27,30 @@ static void		cmd_ast(t_ast *node, t_ast *tmp)
 	tmp->back = node;
 }
 
+static void		insert_node(t_ast **sort, t_ast *tmp, t_ast *node)
+{
+	while (node->type > tmp->type && node->left)
+		node = node->left;
+	if (node->back && node->back->right)
+	{
+		tmp->left = node->back->right;
+		node->back->right = tmp;
+		tmp->back = node->back;
+	}
+	else if (node->back && !node->back->right)
+	{
+		tmp->left = node->back->left;
+		node->back->left = tmp;
+		tmp->back = node->back;
+	}
+	else
+	{
+		tmp->left = node;
+		node->back = tmp;
+	}
+	((*sort)->type <= tmp->type) ? (*sort) = tmp : 0;
+}
+
 void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 {
 	if ((*sort)->type == LOGIC)
@@ -39,12 +63,8 @@ void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 		node->right = tmp;
 		tmp->back = node;
 	}
-	else if (tmp->type != HEREDOC)
-	{
-		tmp->left = node;
-		node->back = tmp;
-		((*sort)->type != LOGIC) ? (*sort) = tmp : 0;
-	}
+	else if (tmp->type > HEREDOC)
+		insert_node(sort, tmp, node);
 	else
 	{
 		tmp->left = (*sort);
