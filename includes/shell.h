@@ -30,14 +30,6 @@
 ********************************** STRUCTURES **********************************
 */
 
-typedef	struct			s_var
-{
-	char				*key;
-	char				*value;
-	int					is_env;
-	struct s_var		*next;
-}						t_var;
-
 typedef struct			s_ast
 {
 	int					print;
@@ -61,9 +53,12 @@ typedef struct			s_builtin
 
 typedef struct			s_alloc
 {
+	int					argc;
+	char				**argv;
+	int					ret_val;
 	t_cmdline			cmdline;
 	t_ast				*ast;
-	t_var				**var;
+	t_list				*vars;
 	const t_builtin		*builtins;
 	t_hashtable			*exectable;
 	t_hashtable			*aliastable;
@@ -86,21 +81,17 @@ int		save_history_entries(t_alloc *alloc, t_history *history);
 ************************************ TOOLS *************************************
 */
 
-void	delete_str_tab(char **tab_str);
-void	del_lst_env(t_var **lst);
+int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
+
 void	del_lst_ast(t_ast **lst);
-void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
-void	set_alloc(t_alloc *al, t_var **lst);
 int		ret_status(void);
 int		replace_val_ret(char **str, int i, int x);
-void	insert_new_elem(t_var **lst, t_var *new);
 
 //TOOLS TO PRINT LST AST
 void	read_lst(t_ast *lst, int active);
 void	read_sort_descent(t_ast *sort, int active);
 void	reinit_print(t_ast *lst, int active);
-
 
 /*
 *********************************** GLOBALS ***********************************

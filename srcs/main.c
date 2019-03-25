@@ -24,9 +24,9 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		ft_exit_malloc();
 	lst_tk = split_cmd_token(&scmd);
 
-/*
-**	VERIF TOKEN AND PRINT BEFORE PARSE
-*/
+	/*
+	 **	VERIF TOKEN AND PRINT BEFORE PARSE
+	 */
 	(void)alloc;
 	t_list	*tmp;
 	tmp = lst_tk;
@@ -43,18 +43,18 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 			ft_printf("ERROR BREAK\n");
 			break ;
 		}
-/*
-** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
-*/
-	// if (get_tk(lst_tk)->type == TK_CMD_SEP
-	// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
-	// 	analyzer(sort_ast, alloc, TRUE);
-	// else
-	analyzer(sort_ast, alloc, 0);
+		/*
+		 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
+		 */
+		// if (get_tk(lst_tk)->type == TK_CMD_SEP
+		// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
+		// 	analyzer(sort_ast, alloc, TRUE);
+		// else
+		analyzer(sort_ast, alloc, 0);
 
-/*
-** PRINT AST AND REINIT NODE
-*/
+		/*
+		 ** PRINT AST AND REINIT NODE
+		 */
 		if (sort_ast)
 		{
 			read_sort_descent(sort_ast, 1);
@@ -62,42 +62,39 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		}
 		if (lst_tk)
 			lst_tk = lst_tk->next;
-//FUNCTION TO CLEAN AST
+		//FUNCTION TO CLEAN AST
 	}
 	scmd_clean(&scmd);
-// FUNCTION TO CLEAN LST_TK
+	// FUNCTION TO CLEAN LST_TK
 }
 
-//TODO faire un vrai main
-int		main(int argc, char **argv, char **env)
+int		main(int argc, char **argv, char **environ)
 {
-	t_var	*lst;
 	t_alloc	alloc;
 	char	*input;
 
-	(void)argc;
-	(void)argv;
-	lst = 0;
-	ft_bzero(&alloc, sizeof(t_alloc));
-	env_cp(env, &lst);
-	set_alloc(&alloc, &lst);
-	if (!init_cmdline(&alloc, &alloc.cmdline))
+	if (!setup_alloc(&alloc, argc, argv, environ))
+		ft_dprintf(STDERR_FILENO, "Unable to setup environment\n");
+	else
 	{
-		ft_dprintf(STDERR_FILENO, "Unable to init term\n");
-		return (1);
-	}
-	load_history_file_entries(&alloc, &alloc.cmdline.history);
-	while (1)
-	{
-		setup_term(&alloc.cmdline);
-		input = read_cmdline(&alloc, &alloc.cmdline);
-		reset_term(&alloc.cmdline);
-		if (input != NULL)
+		if (!init_cmdline(&alloc, &alloc.cmdline))
+			ft_dprintf(STDERR_FILENO, "Unable to init term\n");
+		else
 		{
-			lexer_parser(input, &alloc);
-			free(input);
+			load_history_file_entries(&alloc, &alloc.cmdline.history);
+			while (1)
+			{
+				setup_term(&alloc.cmdline);
+				input = read_cmdline(&alloc, &alloc.cmdline);
+				reset_term(&alloc.cmdline);
+				if (input != NULL)
+				{
+					lexer_parser(input, &alloc);
+					free(input);
+				}
+			}
 		}
 	}
 	del_alloc(&alloc);
-	return (0);
+	return (1);
 }

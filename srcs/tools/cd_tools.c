@@ -1,7 +1,7 @@
 #include "shell.h"
+#include "vars.h"
 #include "builtins.h"
 #include "error.h"
-
 
 char	*delete_last_folder(char *dir)
 {
@@ -56,7 +56,7 @@ char	*get_dir(char *pwd, char **tab_path, int options, char *buf_pwd)
 	while (tab_path && tab_path[i])
 	{
 		if (ft_strcmp(tab_path[i], "..") == 0
-			&& ft_strcmp(tab_path[i], ".") == 0 && options == 2)
+				&& ft_strcmp(tab_path[i], ".") == 0 && options == 2)
 			ft_memdel((void **)&dir);
 		else if (ft_strcmp(tab_path[i], "..") == 0)
 		{
@@ -71,22 +71,22 @@ char	*get_dir(char *pwd, char **tab_path, int options, char *buf_pwd)
 			ft_exit_malloc();
 		i += 1;
 	}
-	delete_str_tab(tab_path);
+	ft_strtab_free(tab_path);
 	return (dir);
 }
 
-char	*cd_predef(char *elem, t_var *lst_env, int options, char *buf)
+char	*cd_predef(char *elem, t_list *vars, int options, char *buf)
 {
 	char	*dir;
 
 	dir = 0;
 	clean_slash_path(elem);
 	if (elem && ft_strcmp(elem, "-") == 0)
-		(ft_strcmp((dir = ft_strdup(get_env_value(lst_env, "$OLDPWD"))),
-		"") != 0) ? 0 : error_cd("OLDPWD", 2);
+		(ft_strcmp((dir = ft_strdup(get_var_value(vars, "OLDPWD"))), "") != 0)
+			? 0 : error_cd("OLDPWD", 2);
 	else if (!elem)
-		(ft_strcmp((dir = ft_strdup(get_env_value(lst_env, "$HOME"))),
-		"") != 0) ? 0 : error_cd("HOME", 2);
+		(ft_strcmp((dir = ft_strdup(get_var_value(vars, "HOME"))), "") != 0)
+			? 0 : error_cd("HOME", 2);
 	else if (elem[0] == '/')
 		dir = cd_slash(elem, options, buf);
 	else

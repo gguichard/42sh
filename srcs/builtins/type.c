@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <unistd.h>
 #include "printf.h"
 #include "shell.h"
@@ -17,12 +18,12 @@ static int	search_type(t_alloc *alloc, const char *elem)
 		ret = ft_printf("%s is aliased to `%s`\n", elem, path);
 	else if ((path = get_exec_path(alloc->exectable, elem, 0)) != NULL)
 		ret = ft_printf("%s is hashed (%s)\n", elem, path);
-	else if (is_builtins(alloc, elem) == 1)
+	else if (is_builtin(alloc, elem) == 1)
 		ret = ft_printf("%s is a shell builtin\n", elem);
 	else if (ft_strchr(elem, '/') != NULL && access(elem, F_OK | X_OK) == 0)
 		ret = ft_printf("%s is %s\n", elem, elem);
 	else if (ft_strchr(elem, '/') == NULL
-			&& (freed_path = search_exec(*(alloc->var), elem, &error)) != NULL)
+			&& (freed_path = search_exec(alloc->vars, elem, &error)) != NULL)
 	{
 		ret = ft_printf("%s is %s\n", elem, freed_path);
 		free(freed_path);

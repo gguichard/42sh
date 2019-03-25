@@ -1,5 +1,8 @@
+#include <unistd.h>
 #include "libft.h"
+#include <unistd.h>
 #include "shell.h"
+#include "vars.h"
 #include "builtins.h"
 
 // BUILTINS SET POSIX NORME BUT NO OPTIONS
@@ -8,20 +11,22 @@
 
 int	builtin_set(t_ast *elem, t_alloc *alloc)
 {
-	t_var	*tmp;
+	t_list	*cur;
+	t_var	*var;
 
-	tmp = *(alloc->var);
-	if (elem->input[1])
+	if (elem->input[1] != NULL)
 	{
-		ft_dprintf(2, "42sh: set: %s: invalid usage\nset: usage: set"
-				, elem->input[1]);
+		ft_dprintf(STDERR_FILENO, "42sh: set: %s: invalid usage\n"
+				"set: usage: set", elem->input[1]);
 		return (1);
 	}
-	while (tmp)
+	cur = alloc->vars;
+	while (cur != NULL)
 	{
-		if (tmp->value)
-			ft_printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
+		var = (t_var *)cur->content;
+		if (var->value != NULL)
+			ft_printf("%s=%s\n", var->key, var->value);
+		cur = cur->next;
 	}
 	return (0);
 }

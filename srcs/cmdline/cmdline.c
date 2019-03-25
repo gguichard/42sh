@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 16:03:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/25 15:54:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 #include <signal.h>
 #include <term.h>
 #include "shell.h"
+#include "vars.h"
 #include "parser_lexer.h"
 #include "split_cmd_token.h"
 #include "str_cmd_inf.h"
 #include "cmdline.h"
-#include "builtins.h"
 
 static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 {
@@ -66,10 +66,10 @@ static int	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret)
 
 int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	char	*term;
+	const char	*term;
 
 	g_cmdline = cmdline;
-	term = get_env_value(*alloc->var, "$TERM");
+	term = get_var_value(alloc->vars, "TERM");
 	if (term == NULL || term[0] == '\0')
 		term = "xterm-256color";
 	if (tgetent(NULL, term) == -1)

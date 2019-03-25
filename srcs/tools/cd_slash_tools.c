@@ -27,6 +27,6 @@ char		*cd_slash(char *dir, int options, char *buf_pwd)
 			add_new_folder(&path, tmp[x]);
 		(!dir) ? ft_exit_malloc() : 0;
 	}
-	delete_str_tab(tmp);
+	ft_strtab_free(tmp);
 	return (path);
 }

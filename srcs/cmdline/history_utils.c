@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 20:08:47 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 12:58:35 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/25 15:55:15 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <sys/mman.h>
 #include "libft.h"
 #include "shell.h"
-#include "builtins.h"
+#include "vars.h"
 
 char		*get_history_file_path(t_alloc *alloc)
 {
@@ -27,7 +27,7 @@ char		*get_history_file_path(t_alloc *alloc)
 	struct passwd	*user;
 	char			*tab[3];
 
-	home_dir = get_env_value(*alloc->var, "$HOME");
+	home_dir = get_var_value(alloc->vars, "HOME");
 	if (home_dir == NULL || home_dir[0] == '\0')
 	{
 		login = getlogin();

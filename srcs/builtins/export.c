@@ -1,84 +1,74 @@
+#include <unistd.h>
+#include "libft.h"
+#include "options.h"
 #include "shell.h"
+#include "vars.h"
 #include "builtins.h"
 #include "error.h"
 
-static int	check_options(t_ast *elem, int *i)
+static void	display_env_vars(t_list *vars)
 {
-	int	x;
+	t_var	*var;
 
-	x = 0;
-	while (elem->input[*i] && elem->input[*i][x] == '-')
+	while (vars)
 	{
-		x = 1;
-		while (elem->input[*i][x] == 'p')
-			x += 1;
-		if (elem->input[*i][x])
-			return (error_export(elem->input[*i][x]));
-		x = 1;
-		*i += 1;
-	}
-	return (0);
-}
-
-static void	display_lst_var(t_var *lst)
-{
-	while (lst)
-	{
-		if (lst->is_env == 1 && lst->value)
-			ft_printf("export %s=\"%s\"\n", lst->key, lst->value);
-		else if (lst->is_env == 1)
-			ft_printf("export %s\n", lst->key);
-		lst = lst->next;
+		var = (t_var *)vars->content;
+		if (var->is_env)
+		{
+			if (var->value != NULL)
+				ft_printf("export %s=\"%s\"\n", var->key, var->value);
+			else
+				ft_printf("export %s\n", var->key);
+		}
+		vars = vars->next;
 	}
 }
 
-static void	add_new_var(t_var **lst, char *var)
+static int	export_vars(t_list **vars, char **argv, int idx)
 {
-	int	i;
+	int		ret;
+	char	*tmp;
+	t_var	*var;
 
-	i = 0;
-	while (var[i] && var[i] != '=')
-		i += 1;
-	add_var(lst, var, i, 1);
-}
-
-static void	export_var(t_var **lst, t_ast *elem, int i)
-{
-	t_var	*tmp;
-	char	*key;
-
-	tmp = NULL;
-	key = NULL;
-	while (elem->input[i])
+	ret = 0;
+	while (argv[idx] != NULL)
 	{
-		key = get_key(elem->input[i]);
-		if (!(tmp = find_elem_env(*lst, key)))
-			add_new_var(lst, elem->input[i]);
+		if ((tmp = ft_strchr(argv[idx], '=')) != NULL)
+			*tmp = '\0';
+		if (is_var_valid_identifier(argv[idx]))
+		{
+			if ((var = get_var(*vars, argv[idx])) != NULL)
+				var->is_env = 1;
+			update_var(vars, argv[idx], (tmp == NULL) ? NULL : tmp + 1);
+		}
 		else
 		{
-			ft_memdel((void **)&key);
-			key = get_value(elem->input[i]);
-			ft_memdel((void **)&(tmp->value));
-			if (!(tmp->value = ft_strdup(key)))
-				ft_exit_malloc();
+			ret = 1;
+			ft_dprintf(STDERR_FILENO
+					, "42sh: export: '%s': not a valid identifier\n"
+					, argv[idx]);
 		}
-		ft_memdel((void **)&key);
-		i += 1;
+		idx++;
 	}
+	return (ret);
 }
 
-int	export_builtins(t_ast *elem, t_alloc *alloc)
+int			export_builtins(t_ast *elem, t_alloc *alloc)
 {
-	int	i;
-	int	ret;
+	t_opts	opts;
 
-	i = 1;
-	ret = 0;
-	if ((ret = check_options(elem, &i)) == 1)
-		return (ret);
-	if (i != 1 && !(elem->input[i]))
-		display_lst_var(*(alloc->var));
-	else
-		export_var(alloc->var, elem, i);
-	return (0);
+	parse_opts(&opts, elem->input, "p");
+	if (opts.error != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: export: -%c: invalid option\n"
+				"export: usage: [name[=value] ...] or export -p\n"
+				, opts.error);
+		return (1);
+	}
+	if (has_opt(&opts, 'p') && elem->input[opts.index] == NULL)
+	{
+		display_env_vars(alloc->vars);
+		return (0);
+	}
+	return (export_vars(&alloc->vars, elem->input, opts.index));
 }
