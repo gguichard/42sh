@@ -66,16 +66,6 @@ void	del_alloc(t_alloc *alloc)
 {
 	if (!alloc)
 		return ;
-	// if (alloc->history)
-	// {
-	// 	ft_del_hist(alloc->history);
-	// 	alloc->history = NULL;
-	// }
-	if (alloc->input)
-	{
-		(alloc->input->s) ? free(alloc->input->s) : 0;
-		alloc->input = NULL;
-	}
 	if (alloc->var)
 	{
 		del_lst_env(alloc->var);

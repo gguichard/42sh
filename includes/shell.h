@@ -9,9 +9,9 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <fcntl.h>
-# include "../libft/includes/get_next_line.h"
-# include "../libft/includes/libft.h"
-# include "../libft/includes/printf.h"
+# include "libft.h"
+# include "get_next_line.h"
+# include "cmdline.h"
 # include "hashtable.h"
 
 /*
@@ -24,34 +24,11 @@
 # define REDIR		2
 # define HEREDOC	1
 # define CMD		0
-# define NO_TYPE 	-1
+# define NO_TYPE	-1
 
 /*
 ********************************** STRUCTURES **********************************
 */
-
-typedef struct			s_cursor
-{
-	size_t				l;
-	size_t				c;
-}						t_cursor;
-
-typedef struct			s_buf
-{
-	char				*s;
-	size_t				x;
-	t_cursor			pos;
-	size_t				buf_size;
-}						t_buf;
-
-typedef struct			s_historic
-{
-	char				*origin;
-	char				*modif;
-	struct s_historic	*next;
-	struct s_historic	*prev;
-}						t_historic;
-
 
 typedef	struct			s_var
 {
@@ -84,8 +61,7 @@ typedef struct			s_builtin
 
 typedef struct			s_alloc
 {
-	t_historic			*history;
-	t_buf				*input;
+	t_cmdline			cmdline;
 	t_ast				*ast;
 	t_var				**var;
 	t_builtin			*builtins;
@@ -95,6 +71,16 @@ typedef struct			s_alloc
 }						t_alloc;
 
 typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
+
+/*
+*********************************** CMDLINE ************************************
+*/
+
+int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char	*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char	*get_history_file_path(t_alloc *alloc);
+int		load_history_file_entries(t_alloc *alloc, t_history *history);
+int		save_history_entries(t_alloc *alloc, t_history *history);
 
 /*
 ************************************ TOOLS *************************************
@@ -123,7 +109,5 @@ void	reinit_print(t_ast *lst, int active);
 int						g_in_exec;
 int						g_pid;
 int						g_ret[2];
-int						g_resize;
-char					*g_clip;
 
 #endif
