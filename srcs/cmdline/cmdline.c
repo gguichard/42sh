@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 15:54:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/25 16:13:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 			reset_term(cmdline);
 			save_history_entries(alloc, &cmdline->history);
 			ft_printf("exit\n");
-			exit(0); // TODO: exit with alloc ret value
+			exit(alloc->ret_val);
 		}
 		ft_dprintf(STDERR_FILENO
 				, "42sh: syntax error: unexpected end of file\n");

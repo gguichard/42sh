@@ -53,7 +53,7 @@ static int	export_vars(t_list **vars, char **argv, int idx)
 	return (ret);
 }
 
-int			export_builtins(t_ast *elem, t_alloc *alloc)
+int			builtin_export(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 

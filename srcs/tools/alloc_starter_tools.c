@@ -14,7 +14,7 @@ static const t_builtin	g_builtins[] = {
 	{"unalias", builtin_unalias},
 	{"set", builtin_set},
 	{"unset", builtin_unset},
-	{"export", export_builtins},
+	{"export", builtin_export},
 	{"jobs", builtin_jobs},
 	{"fg", builtin_fg},
 	{"bg", builtin_bg},
@@ -81,9 +81,11 @@ int						setup_alloc(t_alloc *alloc, int argc, char **argv
 		idx++;
 	}
 	alloc->builtins = g_builtins;
-	if ((alloc->exectable = make_exectable()) == NULL)
+	alloc->exectable = make_exectable();
+	if (alloc->exectable == NULL)
 		return (0);
-	if ((alloc->aliastable = make_def_hashtable()) == NULL)
+	alloc->aliastable = make_def_hashtable();
+	if (alloc->aliastable == NULL)
 		return (0);
 	return (1);
 }

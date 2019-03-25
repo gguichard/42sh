@@ -1,3 +1,5 @@
+#include "libft.h"
+#include "options.h"
 #include "shell.h"
 #include "vars.h"
 #include "builtins.h"
@@ -32,21 +34,21 @@ void	add_new_folder(char **dir, char *folder)
 	ft_memdel((void **)&new_dir);
 }
 
-void	clean_slash_path(char *s)
+static void	clean_slash_path(char *str)
 {
-	int		x;
+	int	idx;
 
-	x = 0;
-	while (s && s[x])
+	idx = 0;
+	while (str[idx] != '\0')
 	{
-		if (s[x] == '/' && s[x + 1] == '/')
-			ft_memmove(s + x, s + x + 1, ft_strlen(s + x));
+		if (str[idx] == '/' && str[idx + 1] == '/')
+			ft_memcpy(str + idx, str + idx + 1, ft_strlen(str + idx));
 		else
-			x += 1;
+			idx += 1;
 	}
 }
 
-char	*get_dir(char *pwd, char **tab_path, int options, char *buf_pwd)
+char	*get_dir(char *pwd, char **tab_path, t_opts *opts, char *buf_pwd)
 {
 	char	*dir;
 	int		i;
@@ -56,15 +58,15 @@ char	*get_dir(char *pwd, char **tab_path, int options, char *buf_pwd)
 	while (tab_path && tab_path[i])
 	{
 		if (ft_strcmp(tab_path[i], "..") == 0
-				&& ft_strcmp(tab_path[i], ".") == 0 && options == 2)
+				&& ft_strcmp(tab_path[i], ".") == 0 && has_opt(opts, 'P'))
 			ft_memdel((void **)&dir);
 		else if (ft_strcmp(tab_path[i], "..") == 0)
 		{
-			(options == 2) ? dir = ft_strdup(buf_pwd) : 0;
+			has_opt(opts, 'P') ? dir = ft_strdup(buf_pwd) : 0;
 			delete_last_folder(dir);
 		}
 		else if (ft_strcmp(tab_path[i], ".") == 0)
-			(options == 2) ? dir = ft_strdup(buf_pwd) : 0;
+			has_opt(opts, 'P') ? dir = ft_strdup(buf_pwd) : 0;
 		else
 			add_new_folder(&dir, tab_path[i]);
 		if (!dir)
@@ -75,23 +77,28 @@ char	*get_dir(char *pwd, char **tab_path, int options, char *buf_pwd)
 	return (dir);
 }
 
-char	*cd_predef(char *elem, t_list *vars, int options, char *buf)
+char	*cd_predef(char *elem, t_list *vars, t_opts *opts, char *buf)
 {
 	char	*dir;
 
-	dir = 0;
-	clean_slash_path(elem);
-	if (elem && ft_strcmp(elem, "-") == 0)
-		(ft_strcmp((dir = ft_strdup(get_var_value(vars, "OLDPWD"))), "") != 0)
-			? 0 : error_cd("OLDPWD", 2);
-	else if (!elem)
-		(ft_strcmp((dir = ft_strdup(get_var_value(vars, "HOME"))), "") != 0)
-			? 0 : error_cd("HOME", 2);
+	if (elem != NULL)
+		clean_slash_path(elem);
+	dir = NULL;
+	if (elem != NULL && ft_strequ(elem, "-"))
+	{
+		dir = ft_strdup(get_var_value(vars, "OLDPWD"));
+		if (dir == NULL || dir[0] == '\0')
+			error_cd("OLDPWD", 2);
+	}
+	else if (elem == NULL)
+	{
+		dir = ft_strdup(get_var_value(vars, "HOME"));
+		if (dir == NULL || dir[0] == '\0')
+			error_cd("HOME", 2);
+	}
 	else if (elem[0] == '/')
-		dir = cd_slash(elem, options, buf);
+		dir = cd_slash(elem, opts, buf);
 	else
-		return (0);
-	if (!dir)
-		ft_exit_malloc();
+		return (NULL);
 	return (dir);
 }

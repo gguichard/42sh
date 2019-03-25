@@ -9,7 +9,7 @@ int	builtin_exit(t_ast *elem, t_alloc *alloc)
 	int		status;
 	char	*endptr;
 
-	status = 0; // TODO: last exit status
+	status = alloc->ret_val;
 	if (elem->input[1] != NULL)
 	{
 		status = ft_strtol(elem->input[1], &endptr, 10);
