@@ -29,9 +29,6 @@ static void		cmd_ast(t_ast *node, t_ast *tmp)
 
 void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 {
-	t_ast	*h_node;
-
-	h_node = node;
 	if ((*sort)->type == LOGIC)
 	{
 		if (node->right)
