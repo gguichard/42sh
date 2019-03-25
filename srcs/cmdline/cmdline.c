@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 16:13:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 00:23:53 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	return (1);
 }
 
-static char	*read_full_input(t_cmdline *cmdline, int *ret)
+static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
 {
 	char			*full_input;
 	t_prompt		type;
@@ -99,7 +99,7 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret)
 			break ;
 		if (!scmd_init(&scmd_inf, full_input))
 			return (ft_memdel((void **)&full_input));
-		if ((tokens = split_cmd_token(&scmd_inf)) == NULL)
+		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL)
 			ft_strdel(&full_input);
 		else if ((analyser_ret = token_analyser(tokens)) == PR_ERROR)
 			ft_strdel(&full_input);
@@ -116,9 +116,8 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	int		ret;
 	char	*full_input;
 
-	(void)alloc;
 	ret = 1;
-	full_input = read_full_input(cmdline, &ret);
+	full_input = read_full_input(cmdline, &ret, alloc);
 	if (ret)
 	{
 		push_history_entry(&cmdline->history, full_input);
