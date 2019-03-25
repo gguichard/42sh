@@ -1,10 +1,6 @@
 #ifndef EXPAND_H
 # define EXPAND_H
 
-/*
-*********************************** INCLUDES ***********************************
-*/
-
 int		error_expand(char *exp);
 int		check_expand_syntax(const char *str);
 char	*get_expand_value(t_var *lst_var, const char *exp, int type);

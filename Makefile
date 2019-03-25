@@ -23,6 +23,7 @@ PATH_PATH		=	path
 PATH_TOKEN		=	token
 PATH_CMDLINE	=	cmdline
 PATH_EXPAND		=	expand
+PATH_INHIB		=	inhib
 
 SRC_DIR	=	srcs
 SRC 	=	\
@@ -135,7 +136,8 @@ $(PATH_CMDLINE)/mode_visual/copy_paste_clipboard.c \
 $(PATH_CMDLINE)/mode_visual/select_utils.c \
 $(PATH_CMDLINE)/mode_visual/visual_utils.c \
 $(PATH_EXPAND)/expand.c \
-$(PATH_EXPAND)/expand_tools.c
+$(PATH_EXPAND)/expand_tools.c \
+$(PATH_INHIB)/inhibitor.c
 
 OBJ_DIR	=	.obj
 OBJ		=	$(SRC:.c=.o)
@@ -171,6 +173,7 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_insert 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_visual 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_EXPAND) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_INHIB) 2> /dev/null || true
 
 clean:
 	$(MAKE) -C libft clean
