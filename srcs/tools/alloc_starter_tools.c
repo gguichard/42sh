@@ -6,7 +6,7 @@
 
 static const t_builtin	g_builtins[] = {
 	{"echo", builtin_echo},
-	{"cd", cd_builtins},
+	{"cd", builtin_cd},
 	{"exit", builtin_exit},
 	{"type", builtin_type},
 	{"hash", builtin_hash},

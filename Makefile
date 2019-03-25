@@ -31,7 +31,6 @@ $(PATH_ERROR)/error_malloc.c \
 $(PATH_ERROR)/lexer_error.c \
 $(PATH_ERROR)/parser_error.c \
 $(PATH_ERROR)/error_redirection.c \
-$(PATH_ERROR)/error_cd.c \
 $(PATH_ERROR)/error_fd.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
@@ -51,6 +50,7 @@ $(PATH_OPERATOR)/redirection.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_BUILT)/cd.c \
+$(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \
 $(PATH_BUILT)/exec_input.c \
 $(PATH_BUILT)/exit.c \
@@ -82,8 +82,6 @@ $(PATH_TOOLS)/analyzer_tools.c \
 $(PATH_TOOLS)/agreg_tools.c \
 $(PATH_TOOLS)/heredoc_tools.c \
 $(PATH_TOOLS)/redirection_tools.c \
-$(PATH_TOOLS)/cd_slash_tools.c \
-$(PATH_TOOLS)/cd_tools.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \
