@@ -13,6 +13,7 @@ static int	update_sp_cmd_with_inf(t_split_cmd_inf *sp_cmd
 		sp_cmd->pos_alias_can_start = -1;
 		if (sp_cmd->cur_tk_type == TK_CMD_SEP)
 			sp_cmd->pos_alias_can_start = 0;
+		sp_cmd->last_alias_ended_with_blank = 0;
 	}
 	sp_cmd->last_tk_added = new_elem;
 	if (get_tk(new_elem)->type == TK_CMD_SEP)
@@ -129,12 +130,10 @@ static int	expand_alias(t_split_cmd_inf *sp_cmd)
 		- sp_cmd->tk_start + 1;
 	alias_result_size = ft_strlen(alias_scmd.str);
 	tk_start_pos = sp_cmd->tk_start - sp_cmd->scmd->str;
-	if (alias_result_size > 0
+	sp_cmd->last_alias_ended_with_blank = (alias_result_size > 0
 			&& (alias_scmd.str[alias_result_size - 1] == ' '
-				|| alias_scmd.str[alias_result_size - 1] == '\t'))
-		sp_cmd->pos_alias_can_start = tk_start_pos + alias_result_size;
-	else
-		sp_cmd->pos_alias_can_start = -1;
+				|| alias_scmd.str[alias_result_size - 1] == '\t'));
+	sp_cmd->pos_alias_can_start = tk_start_pos + alias_result_size;
 	free(cur_alias_elem.content);
 	return (replace_token_with_alias_res_and_clean(sp_cmd, tk_start_pos
 				, &alias_scmd, alias_name_size));
@@ -146,10 +145,12 @@ int			add_cur_token_to_lst(t_split_cmd_inf *sp_cmd)
 			&& token_is_assign(sp_cmd->tk_start
 				, scmd_cur_str(sp_cmd->scmd) - sp_cmd->tk_start + 1))
 		sp_cmd->cur_tk_type = TK_ASSIGN;
-	if ((sp_cmd->cur_tk_type == TK_CMD || sp_cmd->cur_tk_type == TK_PARAM)
-			&& sp_cmd->pos_alias_can_start != -1
+	if (sp_cmd->pos_alias_can_start != -1
 			&& sp_cmd->pos_alias_can_start
 			<= sp_cmd->tk_start - sp_cmd->scmd->str
+			&& (sp_cmd->cur_tk_type == TK_CMD
+				|| (sp_cmd->cur_tk_type == TK_PARAM
+					&& sp_cmd->last_alias_ended_with_blank))
 			&& expand_alias(sp_cmd))
 		return (1);
 	return (add_token_to_lst(sp_cmd, sp_cmd->tk_start

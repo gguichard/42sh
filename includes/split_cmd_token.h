@@ -20,6 +20,7 @@ typedef struct	s_split_cmd_inf
 	t_list			*last_start_cmd;
 	t_list			*last_tk_added;
 	int				pos_alias_can_start;
+	char			last_alias_ended_with_blank;
 	char			alias_has_expanded;
 	t_str_cmd_inf	*scmd;
 	char			last_char_was_spe;
