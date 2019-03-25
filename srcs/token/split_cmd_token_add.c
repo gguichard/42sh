@@ -61,7 +61,7 @@ static int	token_is_assign(const char *token, size_t token_size)
 			break ;
 		++idx;
 	}
-	return (token[idx] == '=');
+	return (idx > 0 && token[idx] == '=');
 }
 
 static int	init_alias_scmd_and_elem(t_str_cmd_inf *alias_scmd
