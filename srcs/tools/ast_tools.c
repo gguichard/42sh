@@ -42,7 +42,8 @@ t_ast	*fill_ope(t_list **lst_tk, t_ast *elem)
 	len = 1;
 	type = get_tk(*lst_tk)->type;
 	tmp = (*lst_tk)->next;
-	while (tmp && get_tk(tmp)->type > type && get_tk(tmp)->type < TK_CMD_SEP)
+	while (tmp && get_tk(tmp)->type >= TK_RED_OPE
+			&& get_tk(tmp)->type < TK_CMD_SEP)
 	{
 		type = get_tk(tmp)->type;
 		len += 1;
