@@ -22,7 +22,7 @@ int	builtin_unset(t_ast *elem, t_alloc *alloc)
 			unset_var(&alloc->vars, elem->input[idx]);
 		else
 		{
-			ft_dprintf(2, "42sh: unset: %s: not a valid identifier"
+			ft_dprintf(2, "42sh: unset: '%s': not a valid identifier"
 					, elem->input[idx]);
 			ret = 1;
 		}
