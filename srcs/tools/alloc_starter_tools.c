@@ -21,14 +21,17 @@ static const t_builtin	g_builtins[] = {
 	{NULL, NULL}
 };
 
-void				set_alloc(t_alloc *al, t_var **lst)
+int						set_alloc(t_alloc *al, t_var **lst)
 {
 	int	idx;
 
 	al->var = lst;
 	idx = 0;
 	while (idx < 10)
-		al->fd[idx++] = -1;
+	{
+		al->fd[idx] = -1;
+		idx++;
+	}
 	al->builtins = g_builtins;
 	if ((al->exectable = make_exectable()) == NULL)
 		ft_exit_malloc();
