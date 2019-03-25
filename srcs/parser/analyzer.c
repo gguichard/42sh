@@ -16,7 +16,7 @@ int	analyzer(t_ast *sort, t_alloc *alloc, int no_fork)
 	if (tmp && tmp->print == 0)
 	{
 		tmp->print = 1;
-		// if (inhibitor(tmp) == 1)
+		if (inhibitor(tmp) == 1)
 		// if (expand(tmp, alloc) == 1)
 			return (dispatch[tmp->type](tmp, alloc, no_fork));
 	}
