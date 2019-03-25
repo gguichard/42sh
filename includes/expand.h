@@ -8,5 +8,6 @@ char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);
 void	create_new_input(t_ast *elem, int *i, char **new);
 int		expand(t_ast *elem, t_alloc *alloc, int *i, size_t pos);
 void	insert_var_input(char *str, char **input, int type);
+int		expand_var(char **str, t_alloc *alloc, const char *exp, char **input);
 
 #endif

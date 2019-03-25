@@ -190,7 +190,7 @@ re:
 
 debug: $(addprefix $(OBJ_DIR)/,$(OBJ))
 	$(MAKE) -C libft
-	$(CC) $(CFLAGS) -fsanitize=address -g3 $(LDFLAGS) $(LDLIBS) -o $@ $^
+	$(CC) $(CFLAGS) -fsanitize=address -g $(LDFLAGS) $(LDLIBS) -o $@ $^
 
 
 .PHONY: all clean fclean

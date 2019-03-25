@@ -47,7 +47,7 @@ void		create_new_input(t_ast *elem, int *i, char **new)
 	*i += len_new;
 }
 
-static int	expand_var(char **str, t_alloc *alloc, const char *exp,
+int			expand_var(char **str, t_alloc *alloc, const char *exp,
 			char **input)
 {
 	if (ft_strncmp(exp, "${", 2) == 0)
@@ -79,20 +79,18 @@ int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t pos)
 
 	new = NULL;
 	exp = NULL;
-	// while (elem->input[i])
-	// {
 	str = NULL;
 	x = 0;
-	while ((exp = ft_strchr(&(elem->input[*i][pos]), '$')))
-	{
-		x = ft_strlen(elem->input[*i]) - ft_strlen(exp);
-		if (expand_var(&str, alloc, exp, &(elem->input[*i])) == 0)
-			return (0);
-	}
+	// while ((exp = ft_strchr(&(elem->input[*i][pos]), '$')))
+	// {
+	exp = ft_strchr(&(elem->input[*i][pos]), '$');
+	if (!exp)
+		ft_printf("OUPS\n");
+	x = ft_strlen(elem->input[*i]) - ft_strlen(exp);
+	if (expand_var(&str, alloc, exp, &(elem->input[*i])) == 0)
+		return (0);
+	// }
 	if (str)
 		create_new_input(elem, i, ft_strsplit(elem->input[*i], ' '));
-	// else
-	// 	i += 1;
-	// }
 	return (1);
 }
