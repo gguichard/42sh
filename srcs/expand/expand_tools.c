@@ -10,6 +10,7 @@ int		error_expand(char *exp)
 
 int		check_expand_syntax(const char *str)
 {
+	ft_printf("EXP = |%s|\n", str);
 	if (ft_isalpha(str[0]) == 0 && str[0] != '_')
 		return (0);
 	return (1);
@@ -32,7 +33,7 @@ void	insert_var_input(char *str, char **input, int type)
 	{
 		while ((*input)[end] && (ft_isalnum((*input)[end]) == 1
 				|| (*input)[end] == '_'))
-				end += 1;
+			end += 1;
 		end -= 1;
 	}
 	ft_insert(input, str, start, end);

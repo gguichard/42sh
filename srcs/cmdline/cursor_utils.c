@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:00:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 21:41:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 15:43:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		clear_after_cursor(t_cursor cursor, struct winsize winsize)
 	{
 		tputs(tgetstr("cr", NULL), 1, t_putchar);
 		tputs(tgetstr("do", NULL), 1, t_putchar);
-		tputs(tgetstr("cd", NULL), 1, t_putchar);
+		tputs(tgetstr("cd", NULL), winsize.ws_row - cursor.y, t_putchar);
 		go_to_cursor_pos(cursor);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:51:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 23:21:17 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,37 @@ static void	load_entry_in_cmdline(t_cmdline *cmdline, const char *entry)
 
 int			handle_history_prev(t_cmdline *cmdline)
 {
+	t_history	*history;
 	const char	*entry;
 
-	entry = peek_history_prev(&cmdline->history);
+	history = &cmdline->history;
+	entry = peek_history_prev(history);
 	if (entry == NULL)
 		return (0);
+	else if (history->back == history->offset)
+	{
+		free(history->buffer);
+		history->buffer = ft_strdup(cmdline->input.buffer);
+	}
 	load_entry_in_cmdline(cmdline, entry);
 	return (1);
 }
 
 int			handle_history_next(t_cmdline *cmdline)
 {
+	t_history	*history;
 	const char	*entry;
 
-	entry = peek_history_next(&cmdline->history);
-	load_entry_in_cmdline(cmdline, entry);
+	history = &cmdline->history;
+	entry = peek_history_next(history);
+	if (entry == NULL && history->buffer == NULL)
+		return (0);
+	if (entry != NULL)
+		load_entry_in_cmdline(cmdline, entry);
+	else
+	{
+		load_entry_in_cmdline(cmdline, history->buffer);
+		ft_strdel(&history->buffer);
+	}
 	return (1);
 }

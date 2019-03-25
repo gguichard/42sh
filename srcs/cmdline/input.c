@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 21:47:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/24 16:14:08 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,35 +35,10 @@ static void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 	update_cmdline_at_offset(cmdline);
 }
 
-static int		expand_buffer_capacity(t_cmdline *cmdline)
-{
-	int		new_cap;
-	char	*new_buffer;
-
-	if (cmdline->input.capacity >= INPUT_MAX_CAPACITY)
-		return (0);
-	new_cap = cmdline->input.capacity + INPUT_SIZE_INCR;
-	new_buffer = (char *)malloc((new_cap + 1) * sizeof(char));
-	if (new_buffer == NULL)
-		return (0);
-	if (cmdline->input.buffer != NULL)
-	{
-		ft_memcpy(new_buffer, cmdline->input.buffer, cmdline->input.size);
-		free(cmdline->input.buffer);
-	}
-	new_buffer[cmdline->input.size] = '\0';
-	cmdline->input.capacity = new_cap;
-	cmdline->input.buffer = new_buffer;
-	return (1);
-}
-
 void			add_char_to_input(t_cmdline *cmdline, char c)
 {
 	if (cmdline->input.size == cmdline->input.capacity)
-	{
-		if (!expand_buffer_capacity(cmdline))
-			return ;
-	}
+		return ;
 	ft_memmove(cmdline->input.buffer + cmdline->input.offset + 1
 			, cmdline->input.buffer + cmdline->input.offset
 			, (cmdline->input.size - cmdline->input.offset + 1));
@@ -73,25 +48,8 @@ void			add_char_to_input(t_cmdline *cmdline, char c)
 	write_char_in_cmdline(cmdline, c);
 }
 
-static void		process_input(t_cmdline *cmdline, char input)
+void			reset_cmdline(t_cmdline *cmdline, const char *prompt)
 {
-	const t_seq	*seq;
-
-	seq = get_sequence(cmdline, input);
-	if (seq != NULL)
-		handle_sequence(cmdline, seq);
-	else if (!cmdline->visual.toggle)
-	{
-		cmdline->saved_col = -1;
-		if (ft_isprint(input))
-			add_char_to_input(cmdline, input);
-	}
-}
-
-int				read_input(t_cmdline *cmdline, const char *prompt)
-{
-	char	input;
-
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
 	set_cursor_pos(&cmdline->cursor);
 	cmdline->saved_col = -1;
@@ -103,7 +61,25 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 	cmdline->input.offset = 0;
 	cmdline->input.size = 0;
 	cmdline->input.reading = 1;
+}
+
+int				read_input(t_cmdline *cmdline, const char *prompt)
+{
+	char		input;
+	const t_seq	*seq;
+
+	reset_cmdline(cmdline, prompt);
 	while (cmdline->input.reading == 1 && read(STDIN_FILENO, &input, 1) == 1)
-		process_input(cmdline, input);
+	{
+		seq = get_sequence(cmdline, input);
+		if (seq != NULL)
+			handle_sequence(cmdline, seq);
+		else if (!cmdline->visual.toggle)
+		{
+			cmdline->saved_col = -1;
+			if (ft_isprint(input))
+				add_char_to_input(cmdline, input);
+		}
+	}
 	return (cmdline->input.reading != -1);
 }

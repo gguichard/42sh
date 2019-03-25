@@ -22,18 +22,18 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	lst_tk = NULL;
 	if (!scmd_init(&scmd, line))
 		ft_exit_malloc();
-	lst_tk = split_cmd_token(&scmd);
+	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 
 /*
 **	VERIF TOKEN AND PRINT BEFORE PARSE
 */
-	// t_list	*tmp;
-	// tmp = lst_tk;
-	// while (tmp)
-	// {
-	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
-	// 	tmp = tmp->next;
-	// }
+	t_list	*tmp;
+	tmp = lst_tk;
+	while (tmp)
+	{
+		ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
+		tmp = tmp->next;
+	}
 
 	while (lst_tk)
 	{
@@ -87,7 +87,12 @@ int		main(int argc, char **argv, char **env)
 	ft_bzero(&alloc, sizeof(t_alloc));
 	env_cp(env, &lst);
 	set_alloc(&alloc, &lst);
-	init_cmdline(&alloc.cmdline);
+	if (!init_cmdline(&alloc, &alloc.cmdline))
+	{
+		ft_dprintf(STDERR_FILENO, "Unable to init term\n");
+		return (1);
+	}
+	load_history_file_entries(&alloc, &alloc.cmdline.history);
 	while (1)
 	{
 		setup_term(&alloc.cmdline);
