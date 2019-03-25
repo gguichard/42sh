@@ -6,10 +6,11 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 20:50:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/25 21:14:45 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pwd.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -30,7 +31,7 @@ static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
 	if (var == NULL)
 	{
 		if (ft_strequ(name, "HOME") && (login = getlogin()) != NULL)
-			return (ft_strdup(pwnam(login)->pwd_dir));
+			return (ft_strdup(getpwnam(login)->pw_dir));
 		return (getcwd(NULL, PATH_MAX));
 	}
 	return (ft_strdup(var->value));
@@ -95,6 +96,7 @@ static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 	t_error		error;
 	const char	*def_path;
 	char		*freed_path;
+	const char	*new_pwd_path;
 
 	if (chdir(cur_path) == -1)
 	{
@@ -107,14 +109,13 @@ static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 		return (1);
 	}
 	pwd = get_path_or_cwd(alloc, "PWD");
-	update_var(&alloc->vars, "OLDPWD", pwd == NULL ? "" : pwd);
-	freed_path = NULL;
-	if (has_opt(opts, 'P'))
-		freed_path = getcwd(0, PATH_MAX);
-	update_var(&alloc->vars, "PWD", freed_path != NULL ? freed_path : cur_path);
-	if (freed_path != NULL)
-		free(freed_path);
+	if (pwd != NULL)
+		update_var(&alloc->vars, "OLDPWD", pwd);
 	free(pwd);
+	freed_path = has_opt(opts, 'P') ? getcwd(0, PATH_MAX) : NULL;
+	if ((new_pwd_path = has_opt(opts, 'P') ? freed_path : cur_path) != NULL)
+		update_var(&alloc->vars, "PWD", new_pwd_path);
+	free(freed_path);
 	return (0);
 }
 
