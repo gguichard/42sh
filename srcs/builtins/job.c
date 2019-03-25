@@ -2,18 +2,7 @@
 #include "options.h"
 #include "builtins.h"
 
-static char	*job_state_str(t_job_state state)
-{
-	if (state == STOPPED)
-		return ("Stopped");
-	else if (state == DONE)
-		return ("Done");
-	else if (state == RUNNING_BG)
-		return ("Running");
-	return ("undefined");
-}
-
-static char	*signal_stop_str(int status)
+static char	*status_stop_str(int status)
 {
 	if (WSTOPSIG(status) == SIGTSTP)
 		return ("SIGTSTP");
@@ -26,6 +15,60 @@ static char	*signal_stop_str(int status)
 	return ("undefined");
 }
 
+static char	*signal_stop_str(t_list *tmp)
+{
+	t_job	*job;
+	int		stopped;
+
+	stopped = 0;
+	job = tmp->content;
+	if (job->state == STOPPED && WSTOPSIG(job->status) != SIGTSTP)
+			return (status_stop_str(job->status));
+	else if (job->state == STOPPED && WSTOPSIG(job->status) == SIGTSTP)
+		stopped = 1;
+	tmp = job->pipe;
+	while (tmp)
+	{
+		job = tmp->content;
+		if (job->state == STOPPED && WSTOPSIG(job->status) != SIGTSTP)
+				return (status_stop_str(job->status));
+		else if (job->state == STOPPED && WSTOPSIG(job->status) == SIGTSTP)
+			stopped = 1;
+		tmp = tmp->next;
+	}
+	if (stopped)
+		return ("SIGTSTP");
+	return (0);
+}
+
+static char	*job_state_str(t_list *tmp)
+{
+	t_job	*job;
+
+	if (check_job_state(tmp, STOPPED))
+		return ("Stopped");
+	else if ((job = check_job_state(tmp, SIG)))
+		return (last_sig_process(tmp));
+	else if (check_job_state(tmp, RUNNING_BG))
+		return ("Running");
+	else if (check_job_state(tmp, DONE))
+		return ("Done");
+	return ("undefined");
+}
+
+static char	*single_job_state_str(t_job *job)
+{
+	if (job->state == STOPPED)
+		return ("Stopped");
+	else if (job->state == DONE)
+		return ("Done");
+	else if (job->state == RUNNING_BG)
+		return ("Running");
+	else if (job->state == SIG)
+		return (sig_str(job->status));
+	return ("undefined");
+}
+
 static void	print_job_pipe(t_list *tmp)
 {
 	t_job	*job;
@@ -34,11 +77,11 @@ static void	print_job_pipe(t_list *tmp)
 	while (tmp)
 	{
 		job = tmp->content;
-		state = job_state_str(job->state);
+		state = single_job_state_str(job);
 		if (job->state == STOPPED)
-			ft_printf("      %s(%s) %d %s\n", state, signal_stop_str(job->status), job->pid, job->cmd);
-		else if (job->state == DONE && WIFEXITED(job->status))
-			ft_printf("      %s(%d) %d %s\n", state, WIFEXITED(job->status), job->pid, job->cmd);
+			ft_printf("      %s(%s) %d %s\n", state, status_stop_str(job->status), job->pid, job->cmd);
+		else if (job->state == DONE && WEXITSTATUS(job->status))
+			ft_printf("      %s(%d) %d %s\n", state, WEXITSTATUS(job->status), job->pid, job->cmd);
 		else
 			ft_printf("      %s %d %s\n", state, job->pid, job->cmd);
 		tmp = tmp->next;
@@ -58,18 +101,18 @@ static void	display_job_full(t_list *tmp, int index)
 		current = '-';
 	else
 		current = ' ';
-	state = job_state_str(job->state);
+	state = single_job_state_str(job);
 	if (job->state == STOPPED)
-		ft_printf("[%d] %c %s(%s) %d %s\n", index, current, state, signal_stop_str(job->status), job->gpid, job->cmd);
-	else if (job->state == DONE && WIFEXITED(job->status))
-		ft_printf("[%d] %c %s(%d) %d %s\n", index, current, state, WIFEXITED(job->status), job->gpid, job->cmd);
+		ft_printf("[%d] %c %s(%s) %d %s\n", index, current, state, status_stop_str(job->status), job->gpid, job->cmd);
+	else if (job->state == DONE && WEXITSTATUS(job->status))
+		ft_printf("[%d] %c %s(%d) %d %s\n", index, current, state, WEXITSTATUS(job->status), job->gpid, job->cmd);
 	else
 		ft_printf("[%d] %c %s %d %s\n", index, current, state, job->gpid, job->cmd);
 	if (job->pipe)
 		print_job_pipe(job->pipe);
 }
 
-static char	*job_cmd(t_job *job)
+char	*job_cmd(t_job *job)
 {
 	char	*pipe_cmd;
 	char	*prev;
@@ -96,6 +139,21 @@ static char	*job_cmd(t_job *job)
 	return (pipe_cmd);
 }
 
+static int	last_pid_exit_status(t_job *job)
+{
+	t_list	*tmp;
+
+	tmp = job->pipe;
+	if (tmp && !tmp->next)
+		job = tmp->content;
+	while (tmp && tmp->next)
+	{
+		tmp = tmp->next;
+		job = tmp->content;
+	}
+	return (WEXITSTATUS(job->status));
+}
+
 static void	display_simple_job(t_list *tmp, int index, t_opts *opts)
 {
 	char	current;
@@ -104,20 +162,21 @@ static void	display_simple_job(t_list *tmp, int index, t_opts *opts)
 	char	*cmd;
 
 	job = tmp->content;
+	current = ' ';
 	if (!tmp->next)
 		current = '+';
 	else if (!tmp->next->next)
 		current = '-';
-	else
-		current = ' ';
-	state = job_state_str(job->state);
+	state = job_state_str(tmp);
 	cmd = job_cmd(job);
 	if (opts && has_opt(opts, 'p'))
 		ft_printf("%d\n", job->gpid);
+	else if (job->pipe && !ft_strcmp("SIGTSTP", signal_stop_str(tmp)))
+		ft_printf("[%d] %c %s %s\n", index, current, state, cmd);
 	else if (job->state == STOPPED)
-		ft_printf("[%d] %c %s(%s) %s\n", index, current, state, signal_stop_str(job->status), cmd);
-	else if (job->state == DONE && WIFEXITED(job->status))
-		ft_printf("[%d] %c %s(%d) %s\n", index, current, state, WIFEXITED(job->status), cmd);
+		ft_printf("[%d] %c %s(%s) %s\n", index, current, state, signal_stop_str(tmp), cmd);
+	else if (job->state == DONE && last_pid_exit_status(job))
+		ft_printf("[%d] %c %s(%d) %s\n", index, current, state, last_pid_exit_status(job), cmd);
 	else
 		ft_printf("[%d] %c %s %s\n", index, current, state, cmd);
 	ft_memdel((void **)&cmd);
@@ -137,7 +196,7 @@ t_job		*get_job_pid(pid_t process)
 	return (0);
 }
 
-void		print_job(pid_t process)
+void		print_job(pid_t process, int after_signal)
 {
 	t_list	*tmp;
 	int		index;
@@ -151,6 +210,8 @@ void		print_job(pid_t process)
 			tmp = tmp->next;
 			index += 1;
 		}
+		if (after_signal)
+			write(STDOUT_FILENO, "\n", 1);
 		display_simple_job(tmp, index, 0);
 	}
 }
@@ -188,8 +249,6 @@ static int	display_jobs(t_opts *opts, char *option_s, int param)
 	}
 	return (0);
 }
-
-//FIX LE FAIT D'+.AVOIR AFFICHER RUNNING ALORS QUE LE JOB EST DONE
 
 int			job_builtins(t_ast *elem, t_alloc *alloc)
 {

@@ -113,6 +113,7 @@ typedef enum			e_job_state
 	RUNNING_BG,
 	STOPPED,
 	STOPPED_PENDING,
+	SIG,
 	DONE
 }						t_job_state;
 
@@ -120,8 +121,8 @@ typedef struct			s_job
 {
 	char				*cmd;
 	t_list				*pipe;
-	int					pid;
-	int					gpid;
+	pid_t				pid;
+	pid_t				gpid;
 	int					status;
 	t_job_state			state;
 }						t_job;
@@ -132,12 +133,16 @@ typedef struct			s_job
 
 void	signal_handle(int sig);
 void	redirect_term_controller(pid_t new_controler, int type);
-void	print_job(pid_t process);
+void	print_job(pid_t process, int after_signal);
 t_job	*get_job_pid(pid_t process);
 t_list	*add_pid_lst(pid_t process, t_ast *elem, bool addpipe);
 int		add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, bool addpipe);
-void	refresh_jobs_finish(void);
+void	refresh_jobs(void);
 int		waiting_line(bool wait_hang, t_list *tmp);
+char	*job_cmd(t_job *job);
+t_job	*check_job_state(t_list *tmp, t_job_state state);
+char	*sig_str(int status);
+char	*last_sig_process(t_list *tmp);
 
 
 void	delete_str_tab(char **tab_str);
