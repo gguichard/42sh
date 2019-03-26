@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:00:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 15:43:44 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 10:08:43 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			set_cursor_pos(t_cursor *cursor)
 	char	*endptr;
 
 	tcflush(STDIN_FILENO, TCIFLUSH);
-	if (write(STDOUT_FILENO, "\033[6n", 4) == -1)
+	if (write(STDIN_FILENO, "\033[6n", 4) == -1)
 		return (0);
 	ft_memset(buffer, 0, sizeof(buffer));
 	if ((ret = read(STDIN_FILENO, buffer, sizeof(buffer))) <= 0)
