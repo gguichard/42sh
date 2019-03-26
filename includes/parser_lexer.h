@@ -71,6 +71,7 @@ int		dispatch_operator(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int		dispatch_redir(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int		dispatch_logic(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int		dispatch_cmd(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_assign(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 ********************************* PARSER TOOLS *********************************

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 15:42:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 15:26:07 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int			create_var(t_list **lst, const char *key, const char *value
 		elem = ft_lstnew(&var, sizeof(t_var));
 		if (elem != NULL)
 		{
-			ft_lstpush(lst, elem);
+			insert_new_elem(lst, elem);
 			return (1);
 		}
 	}

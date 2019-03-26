@@ -60,7 +60,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		// }
 		if (lst_tk)
 			lst_tk = lst_tk->next;
-		//FUNCTION TO CLEAN AST
+//FUNCTION TO CLEAN AST
+		del_ast(&sort_ast);
 	}
 	scmd_clean(&scmd);
 	// FUNCTION TO CLEAN LST_TK
