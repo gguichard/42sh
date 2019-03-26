@@ -1,11 +1,27 @@
-#include "../../includes/shell.h"
-#include "../../includes/builtins.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include "libft.h"
+#include "shell.h"
+#include "builtins.h"
 
-int	exit_builtins(t_ast *elem, t_alloc *alloc)
+int	builtin_exit(t_ast *elem, t_alloc *alloc)
 {
-	(void)alloc;
-	if (!elem->input[1])
-		exit(0);
-	exit(ft_atoi(elem->input[1]));
-	return (0);
+	int		status;
+	char	*endptr;
+
+	status = alloc->ret_val;
+	if (elem->input[1] != NULL)
+	{
+		status = ft_strtol(elem->input[1], &endptr, 10);
+		if (*endptr != '\0')
+		{
+			status = 2;
+			ft_dprintf(STDERR_FILENO, "42sh: exit: %s: "
+					"numeric argument required\n", elem->input[1]);
+		}
+	}
+	del_alloc(alloc);
+	ft_putstr("exit\n");
+	exit(status);
+	return (1);
 }

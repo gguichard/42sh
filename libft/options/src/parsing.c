@@ -6,13 +6,36 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 20:41:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 14:48:47 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/25 17:04:54 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
 #include "options.h"
+
+static void	disable_bracket_opts(t_opts *opts, char opt_c)
+{
+	size_t	idx;
+	int		offset;
+
+	idx = 0;
+	while (opts->optstring[idx] != opt_c && opts->optstring[idx] != '\0')
+		++idx;
+	if (opts->optstring[idx] == '\0')
+		return ;
+	while (opts->optstring[idx] != '}' && opts->optstring[idx] != '\0')
+		++idx;
+	if (opts->optstring[idx] == '\0')
+		return ;
+	--idx;
+	while (opts->optstring[idx] != '{')
+	{
+		offset = find_opt_offset(opts->optstring, opts->optstring[idx]);
+		opts->value &= ~(1 << offset);
+		++idx;
+	}
+}
 
 static int	parse_cur_arg(t_opts *opts, char **argv)
 {
@@ -28,6 +51,7 @@ static int	parse_cur_arg(t_opts *opts, char **argv)
 			opts->error = argv[opts->index][index];
 			return (0);
 		}
+		disable_bracket_opts(opts, argv[opts->index][index]);
 		opts->value |= (1 << offset);
 		if (*(ft_strchr(opts->optstring
 						, argv[opts->index][index++]) + 1) == ':')

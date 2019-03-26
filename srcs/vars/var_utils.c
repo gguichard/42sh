@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_test.c                                       :+:      :+:    :+:   */
+/*   var_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/20 16:08:29 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 20:29:45 by gguichar         ###   ########.fr       */
+/*   Created: 2019/03/25 15:29:37 by gguichar          #+#    #+#             */
+/*   Updated: 2019/03/25 15:55:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "printf.h"
-#include "error.h"
+#include "libft.h"
 
-void	error_test(int argc, char **argv)
+int	is_var_valid_identifier(const char *key)
 {
-	if (argc == 2)
-		ft_dprintf(STDERR_FILENO, "42sh: test: %s: "
-				"unary operator expected\n", argv[0]);
-	else
-		ft_dprintf(STDERR_FILENO, "42sh: test: %s: "
-				"binary operator expected\n", argv[1]);
+	size_t	offset;
+
+	if (ft_isdigit(key[0]))
+		return (0);
+	offset = 0;
+	while (key[offset] != '\0')
+	{
+		if (!ft_isalnum(key[offset]) && key[offset] != '_')
+			return (0);
+		offset++;
+	}
+	return (1);
 }
