@@ -1,12 +1,9 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <signal.h>
-#include "libft.h"
 #include "shell.h"
 #include "builtins.h"
 #include "exectable.h"
 #include "hashtable.h"
 #include "parser_lexer.h"
+#include "job.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
@@ -29,21 +26,6 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	}
 }
 
-
-//TODO faire un vrai main
-void	signal_handle(int sig)
-{
-	t_job	*tmp;
-
-	if (g_jobs)
-	{
-		tmp = g_jobs->content;
-		if (sig == SIGTSTP)
-			tmp->state = STOPPED;
-		kill(tmp->pid, sig);
-	}
-}
-
 int		main(int argc, char **argv, char **env)
 {
 	int		gnl_ret;
@@ -53,8 +35,6 @@ int		main(int argc, char **argv, char **env)
 
 	p_debug = 0;
 	g_jobs = 0;
-	signal(SIGTSTP, signal_handle);
-	signal(SIGINT, signal_handle);
 	if (argc > 1 && !ft_strcmp(argv[1], "-d"))
 		p_debug = 1;
 	else if (argc > 1)
@@ -68,10 +48,11 @@ int		main(int argc, char **argv, char **env)
 	{
 		//parse line etc;
 		lexer_parser(line, &alloc);
-		refresh_jobs(true);
+		refresh_jobs();
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}
+	terminate_all_jobs();
 	del_alloc(&alloc);
 	ft_printf("GNL ret : %d\n", gnl_ret);
 	return (0);

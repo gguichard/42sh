@@ -17,6 +17,7 @@ int		job_builtins(t_ast *elem, t_alloc *alloc);
 int		fg_builtins(t_ast *elem, t_alloc *alloc);
 int		bg_builtins(t_ast *elem, t_alloc *alloc);
 int		exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+void	wait_pid(pid_t child, t_ast *elem, t_exec_opt *opt, t_alloc *alloc);
 
 /*
 ************************************ TOOLS *************************************

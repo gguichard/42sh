@@ -1,5 +1,5 @@
-#ifndef OPEARTOR_H
-# define OPEARTOR_H
+#ifndef OPERATOR_H
+# define OPERATOR_H
 
 # include "shell.h"
 # include "error.h"
@@ -9,7 +9,9 @@
 */
 
 int						do_pipe(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
-int						do_not_fork(t_ast *elem, t_alloc *alloc);
+pid_t					process_fork(t_ast *elem, t_alloc *alloc,
+						int already_piped, bool wait_hand);
+int						waiting_line(bool wait_hang, t_list *tmp);
 int						job_control(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int						redirection(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int						heredoc(t_ast *elem, t_alloc *alloc);

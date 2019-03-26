@@ -1,26 +1,12 @@
 #include "shell.h"
-#include "builtins.h"
+#include "operator.h"
+#include "job.h"
 
-int	fg_builtins(t_ast *elem, t_alloc *alloc)
+static int	bring_back_pid(t_list *tmp, int index)
 {
-	int		index;
-	char	*cmd;
-	t_list	*tmp;
 	t_job	*job;
+	char	*cmd;
 
-	(void)alloc;
-	index = -1;
-	tmp = g_jobs;
-	if (elem->input[1])
-		index = ft_atoi(elem->input[1]);
-	if (!tmp || (index > (int)ft_lstsize(tmp)) || (index < 1 && elem->input[1]))
-	{
-		if (!elem->input[1])
-			ft_dprintf(STDERR_FILENO, "42sh: fg: no current job\n");
-		else
-			ft_dprintf(STDERR_FILENO, "42sh: fg: job not found: %s\n", elem->input[1]);
-		return (1);
-	}
 	if (index == -1)
 	{
 		while (tmp && tmp->next)
@@ -42,4 +28,25 @@ int	fg_builtins(t_ast *elem, t_alloc *alloc)
 	waitpid(job->pid, &job->status, WUNTRACED);
 	redirect_term_controller(0, 1);
 	return (ret_status(job->status, job->pid, job));
+}
+
+int	fg_builtins(t_ast *elem, t_alloc *alloc)
+{
+	int		index;
+	t_list	*tmp;
+
+	(void)alloc;
+	index = -1;
+	tmp = g_jobs;
+	if (elem->input[1])
+		index = ft_atoi(elem->input[1]);
+	if (!tmp || (index > (int)ft_lstsize(tmp)) || (index < 1 && elem->input[1]))
+	{
+		if (!elem->input[1])
+			ft_dprintf(STDERR_FILENO, "42sh: fg: no current job\n");
+		else
+			ft_dprintf(STDERR_FILENO, "42sh: fg: job not found: %s\n", elem->input[1]);
+		return (1);
+	}
+	return (bring_back_pid(tmp, index));
 }

@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "builtins.h"
+#include "job.h"
 #include "error.h"
 #include "exectable.h"
 #include "search_exec.h"
@@ -62,18 +63,6 @@ static void	execute_cmd(char *path_exec, t_ast *elem, char **tab_env)
 	exit(126);
 }
 
-void	redirect_term_controller(pid_t new_controler, int type)
-{
-	if (type == 0)
-		tcsetpgrp(STDIN_FILENO, getpgid(new_controler));
-	else if (type == 1)
-	{
-		signal(SIGTTOU, SIG_IGN);
-		tcsetpgrp(STDIN_FILENO, getpgid(0));
-		signal(SIGTTOU, SIG_DFL);
-	}
-}
-
 int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	pid_t	child;
@@ -90,16 +79,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 		execute_cmd(path_exec, elem, tab_env);
 	if (child == -1)
 		return (1);
-	setpgid(child, 0);
-	add_pid_lst(child, elem, false);
-	if (opt->wait_hang == false)
-	{
-		redirect_term_controller(child, 0);
-		waitpid(child, &alloc->ret_val, WUNTRACED);
-		redirect_term_controller(0, 1);
-	}
-	else
-		waitpid(child, &alloc->ret_val, WNOHANG);
+	wait_pid(child, elem, opt, alloc);
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
 	delete_str_tab(tab_env);

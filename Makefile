@@ -18,6 +18,7 @@ PATH_OPERATOR = operator/
 PATH_TOOLS = tools/
 PATH_HASHTABLE = hashtable/
 PATH_PATH = path/
+PATH_JOB = job/
 
 INCLUDE = ./includes
 INCLUDE_LIBFT = ./libft/includes
@@ -55,7 +56,7 @@ SRC =	main.c \
 		$(PATH_OPERATOR)redirection.c \
 		$(PATH_OPERATOR)job_control.c \
 		$(PATH_OPERATOR)pipe.c \
-		$(PATH_OPERATOR)refresh_jobs.c \
+		$(PATH_OPERATOR)pipe_fork.c \
 		$(PATH_BUILT)cd.c \
 		$(PATH_BUILT)echo.c \
 		$(PATH_BUILT)exec_input.c \
@@ -64,6 +65,7 @@ SRC =	main.c \
 		$(PATH_BUILT)alias.c \
 		$(PATH_BUILT)unalias.c \
 		$(PATH_TOOLS)clean_tools.c \
+		$(PATH_TOOLS)waitline_pipes.c \
 		$(PATH_TOOLS)printer_ast.c \
 		$(PATH_TOOLS)back_quote_tools.c \
 		$(PATH_TOOLS)lexer_tools.c \
@@ -77,7 +79,7 @@ SRC =	main.c \
 		$(PATH_TOOLS)builtins_tools.c \
 		$(PATH_TOOLS)alloc_starter_tools.c \
 		$(PATH_TOOLS)sort_tools.c \
-		$(PATH_TOOLS)pid_lst.c \
+		$(PATH_TOOLS)job_utils.c \
 		$(PATH_BUILT)bg.c\
 		$(PATH_BUILT)export.c\
 		$(PATH_BUILT)fg.c\
@@ -99,6 +101,15 @@ SRC =	main.c \
 		$(PATH_PATH)check_path.c \
 		$(PATH_PATH)convert_path_to_tab.c \
 		$(PATH_PATH)search_exec.c \
+		$(PATH_JOB)delete_jobs.c \
+		$(PATH_JOB)init_job_state.c \
+		$(PATH_JOB)pid_lst.c \
+		$(PATH_JOB)print_jobs_tools.c \
+		$(PATH_JOB)print_state_tools.c \
+		$(PATH_JOB)redirect_terminal_control.c \
+		$(PATH_JOB)refresh_jobs.c \
+		$(PATH_JOB)simple_display_job.c \
+		$(PATH_JOB)state_jobs_tools.c \
 
 OBJ = $(SRC:.c=.o)
 
@@ -123,6 +134,7 @@ $(PATH_OBJ)%.o : $(PATH_SRC)%.c $(INCLUDE)/shell.h Makefile
 	@mkdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@mkdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
+	@mkdir $(PATH_OBJ)$(PATH_JOB) 2> /dev/null || true
 	@gcc $(CFLAGS) -g3 -I $(INCLUDE) -I $(INCLUDE_LIBFT) -o $@ -c $<
 
 clean:
@@ -137,6 +149,7 @@ clean:
 	@rmdir $(PATH_OBJ)$(PATH_TOOLS) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_HASHTABLE) 2> /dev/null || true
 	@rmdir $(PATH_OBJ)$(PATH_PATH) 2> /dev/null || true
+	@rmdir $(PATH_OBJ)$(PATH_JOB) 2> /dev/null || true
 	@rmdir $(PATH_OBJ) 2> /dev/null || true
 
 fclean: clean

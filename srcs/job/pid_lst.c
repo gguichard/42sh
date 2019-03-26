@@ -1,7 +1,8 @@
 #include "shell.h"
 #include "error.h"
+#include "job.h"
 
-char			*ft_tab_to_str(char **tab)
+static char		*ft_tab_to_str(char **tab)
 {
 	size_t	x;
 	size_t	y;

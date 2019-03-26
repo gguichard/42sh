@@ -70,7 +70,11 @@ int	dispatch_redir(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 int	dispatch_operator(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	if (ft_strcmp(elem->input[0], "|") == 0)
+	{
+		while (elem->left->type == OPERATOR)
+			elem = elem->left;
 		return (do_pipe(elem, alloc, opt));
+	}
 	else if (ft_strcmp(elem->input[0], "&") == 0)
 		return (job_control(elem, alloc, opt));
 	return (1);
