@@ -73,6 +73,7 @@ int		dispatch_operator(t_ast *elem, t_alloc *alloc, int no_fork);
 int		dispatch_redir(t_ast *elem, t_alloc *alloc, int no_fork);
 int		dispatch_logic(t_ast *elem, t_alloc *alloc, int no_fork);
 int		dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork);
+int		dispatch_assign(t_ast *elem, t_alloc *alloc, int no_fork);
 
 /*
 ********************************* PARSER TOOLS *********************************

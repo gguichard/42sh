@@ -22,6 +22,8 @@ PATH_HASHTABLE	=	hashtable
 PATH_PATH		=	path
 PATH_TOKEN		=	token
 PATH_CMDLINE	=	cmdline
+PATH_EXPAND		=	expand
+PATH_INHIB		=	inhib
 PATH_VARS		=	vars
 
 SRC_DIR	=	srcs
@@ -82,6 +84,7 @@ $(PATH_TOOLS)/analyzer_tools.c \
 $(PATH_TOOLS)/agreg_tools.c \
 $(PATH_TOOLS)/heredoc_tools.c \
 $(PATH_TOOLS)/redirection_tools.c \
+$(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \
@@ -126,7 +129,12 @@ $(PATH_CMDLINE)/mode_visual/visual_utils.c \
 $(PATH_VARS)/env.c \
 $(PATH_VARS)/shell_vars.c \
 $(PATH_VARS)/var_utils.c \
-$(PATH_VARS)/vars.c
+$(PATH_VARS)/vars.c \
+$(PATH_TOOLS)/assign_tools.c \
+$(PATH_EXPAND)/expand.c \
+$(PATH_EXPAND)/expand_tools.c \
+$(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_tools.c
 
 OBJ_DIR	=	.obj
 OBJ		=	$(SRC:.c=.o)
@@ -161,6 +169,8 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_common 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_insert 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_visual 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_EXPAND) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_INHIB) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_VARS) 2> /dev/null || true
 
 clean:
@@ -175,5 +185,10 @@ fclean: clean
 re:
 	$(MAKE) fclean
 	$(MAKE) all
+
+debug: $(addprefix $(OBJ_DIR)/,$(OBJ))
+	$(MAKE) -C libft
+	$(CC) $(CFLAGS) -fsanitize=address -g $(LDFLAGS) $(LDLIBS) -o $@ $^
+
 
 .PHONY: all clean fclean

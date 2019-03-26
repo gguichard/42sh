@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 17:53:02 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 15:31:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 14:12:12 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int				unset_var(t_list **lst, const char *key);
 char			*get_var_value(t_list *vars, const char *key);
 char			*get_var_for_expand(t_alloc *alloc, const char *key);
 int				is_var_valid_identifier(const char *key);
+void			insert_new_elem(t_list **lst, t_list *new);
 
 t_list			*parse_env(char **environ);
 char			**get_environ_from_list(t_list *env);

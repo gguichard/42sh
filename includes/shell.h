@@ -93,6 +93,12 @@ void	read_lst(t_ast *lst, int active);
 void	read_sort_descent(t_ast *sort, int active);
 void	reinit_print(t_ast *lst, int active);
 
+// CLEN AST
+void	del_ast(t_ast **lst);
+void	del_elem_ast(t_ast **lst);
+void	delete_str_tab(char **tab_str);
+
+
 /*
 *********************************** GLOBALS ***********************************
 */
