@@ -137,7 +137,8 @@ $(PATH_CMDLINE)/mode_visual/select_utils.c \
 $(PATH_CMDLINE)/mode_visual/visual_utils.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
-$(PATH_INHIB)/inhibitor.c
+$(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_tools.c
 
 OBJ_DIR	=	.obj
 OBJ		=	$(SRC:.c=.o)

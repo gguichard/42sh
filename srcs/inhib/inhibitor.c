@@ -4,42 +4,6 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-
-void	remove_escaped_char(t_str_cmd_inf *str_cmd, t_ast *elem, int i,
-		size_t *count_escape)
-{
-	size_t	len;
-	size_t	pos;
-
-	pos = str_cmd->pos - *count_escape;
-	len = ft_strlen(&(elem->input[i][pos]));
-	ft_memmove((void*)&(elem->input[i][pos - 1]),
-		(const void*)&(elem->input[i][pos]), len);
-	elem->input[i][pos + len - 1] = '\0';
-	*count_escape += 1;
-}
-
-void	go_to_end_quote(t_str_cmd_inf *str_cmd, t_ast *elem, int i,
-		size_t *count_escape)
-{
-	remove_escaped_char(str_cmd, elem, i, count_escape);
-	while (str_cmd->is_in_quote == 1)
-		scmd_move_to_next_char(str_cmd);
-	remove_escaped_char(str_cmd, elem, i, count_escape);
-}
-
-void	remove_escaped_char_db(t_ast *elem, int i, size_t *pos)
-{
-	size_t	len;
-
-	len = ft_strlen(&(elem->input[i][*pos]));
-	ft_memmove((void*)&(elem->input[i][*pos - 1]),
-		(const void*)&(elem->input[i][*pos]), len);
-	elem->input[i][*pos + len - 1] = '\0';
-	// *pos += 1;
-}
-
-
 int			expand_db(t_ast *elem, t_alloc *alloc, int *i, size_t *pos)
 {
 	char		**new;
@@ -121,33 +85,35 @@ int	inhibitor(t_ast *elem, t_alloc *alloc)
 	t_str_cmd_inf	*str_cmd;
 	int				i;
 	int				save;
-	size_t			count_escape;
+	size_t			pos_elem;
 
 	i = 0;
-	count_escape = 0;
+	pos_elem = 0;
 	str_cmd = NULL;
 	if (!(str_cmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))))
 		ft_exit_malloc();
 	while (elem->input[i])
 	{
 		save = 0;
-		count_escape = 0;
+		pos_elem = 0;
 		if (!scmd_init(str_cmd, elem->input[i]))
 			return (0);
-		while (elem->input[i][str_cmd->pos - count_escape] && scmd_cur_char(str_cmd))
+		while (scmd_cur_char(str_cmd))
 		{
 			if (str_cmd->is_in_quote == 1)
-				go_to_end_quote(str_cmd, elem, i, &count_escape);
+				go_to_end_quote(str_cmd, elem, i, &pos_elem);
 			else if (str_cmd->is_in_dbquote)
-				inhib_in_dbquote(elem, i, &str_cmd, &count_escape, alloc);
+				inhib_in_dbquote(elem, i, &str_cmd, &pos_elem, alloc);
 			else if (scmd_cur_char_is_escaped(str_cmd) == 1)
-				remove_escaped_char(str_cmd, elem, i, &count_escape);
+				remove_escaped_char(str_cmd, elem, i, &pos_elem);
 			else if (scmd_cur_char(str_cmd) == '$')
 			{
 				save = i;
-				expand(elem, alloc, &save, str_cmd->pos - count_escape);
+				expand(elem, alloc, &save, str_cmd->pos - pos_elem);
 			}
 			scmd_move_to_next_char(str_cmd);
+			pos_elem += 1;
+			// ft_printf("\n\nstrcmd: %s\ninput: %s\n", scmd_cur_str(str_cmd), elem->input[i]);
 		}
 		scmd_clean(str_cmd);
 		if (save != 0)
