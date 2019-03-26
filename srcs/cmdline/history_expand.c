@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 11:13:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 17:12:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 22:02:52 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,26 @@ static int	is_char_escaped(const char *str, size_t offset)
 
 static int	expand_event(t_history *history, char **input, size_t *offset)
 {
-	int		ret;
 	size_t	len;
+	int		ret;
 	char	*event;
 
-	ret = 1;
 	len = 1;
 	while ((*input)[*offset + len] != '\0'
 			&& !ft_strchr(WORD_SEP_CHARS, (*input)[*offset + len]))
 		len++;
+	ret = 0;
 	if (len > 1)
 	{
+		ret = 1;
 		event = ft_strsub(*input, *offset, len);
-		if (event == NULL)
-			return (0);
-		if (!replace_event(history, input, offset, event))
+		if (event == NULL || !replace_event(history, input, offset, event))
 		{
-			ret = 0;
-			ft_dprintf(STDERR_FILENO, "42sh: %s: event not found\n", event);
+			ret = -1;
+			if (event == NULL)
+				ft_dprintf(STDERR_FILENO, "42sh: event: unexpected error\n");
+			else
+				ft_dprintf(STDERR_FILENO, "42sh: %s: event not found\n", event);
 		}
 		free(event);
 	}
@@ -62,6 +64,7 @@ int			expand_history_events(t_history *history, char **input)
 {
 	size_t	offset;
 	int		is_in_quote;
+	int		last_expand_ret;
 	int		has_been_expanded;
 
 	offset = 0;
@@ -74,9 +77,10 @@ int			expand_history_events(t_history *history, char **input)
 		if ((*input)[offset] == '!' && !is_in_quote
 				&& !is_char_escaped(*input, offset))
 		{
-			if (!expand_event(history, input, &offset))
+			if ((last_expand_ret = expand_event(history, input, &offset)) == -1)
 				return (0);
-			has_been_expanded = 1;
+			if (last_expand_ret == 1)
+				has_been_expanded = 1;
 		}
 		offset++;
 	}
