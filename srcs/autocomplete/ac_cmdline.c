@@ -9,21 +9,38 @@
 static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
-	(void)cur_tk;
-	(void)scmd;
-	(void)alloc;
-	//creer du texte a la fin de scmd->str puis retokeniser pour avoir le dernier token
-	//retourner un token avec le meme type mais un str vide
-	return ;
+	char			*new_str;
+	t_str_cmd_inf	new_scmd;
+	t_list			*tk_list;
+	t_list			*last_tk;;
+
+	cur_tk->type = TK_NOTHING;
+	cur_tk->token = NULL;
+	new_str = ft_strjoin(scmd->str, " H");
+	if (!scmd_init(&new_scmd, new_str) || new_str == NULL)
+	{
+		free(new_str);
+		scmd_clean(&new_scmd);
+		return ;
+	}
+	free(new_str);
+	tk_list = split_cmd_token_without_last_alias(&new_scmd, alloc->aliastable);
+	last_tk = tk_list;
+	while (last_tk != NULL && last_tk->next != NULL)
+		last_tk = last_tk->next;
+	if (last_tk != NULL)
+		cur_tk->type = get_tk(last_tk)->type;
+	ft_lstdel(&tk_list, del_token);
+	scmd_clean(&new_scmd);
 }
 
 static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 		, t_token_inf *last_tk, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
-	(void)cur_tk;
-	(void)last_tk;
 	(void)scmd;
 	(void)alloc;
+	cur_tk->type = last_tk->type;
+	cur_tk->token = ft_strdup(last_tk->token);
 	//analyser le dernier token pour completer en consequence
 	//aller jusqu'au bout des sub_str_cmd et retokeniser si besoin (SUB_CMD)
 	//gerer correctement le cas du LRED_OPT (si contient "& text" ou "&-" etc
@@ -67,8 +84,13 @@ static t_token_inf	*get_cur_token_cmd(const char *str, t_alloc *alloc)
 t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 {
 	t_token_inf		*cur_tk;
+	t_ac_suff_inf	*acs_inf;
 
 	cur_tk = get_cur_token_cmd(str, alloc);
+	//gerer vars ETC ETC ETC ETC ETC ETC ETC ETC ETC ETC
+	acs_inf = autocomplete_word(*alloc->var
+			, (cur_tk->token == NULL ? "" : cur_tk->token)
+			, cur_tk->type == TK_CMD, alloc->builtins);
 	del_token(cur_tk, 0);
-	return (NULL);
+	return (acs_inf);
 }
