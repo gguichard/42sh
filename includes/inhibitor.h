@@ -16,7 +16,6 @@ void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input,
 		size_t *pos_elem);
 void	go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem);
 void	update_pos_index(t_str_cmd_inf *str_cmd, size_t *pos_elem);
-
-
+void	update_pos_index_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem);
 
 #endif

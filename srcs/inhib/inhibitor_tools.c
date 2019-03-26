@@ -30,7 +30,18 @@ void	go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
 
 void	update_pos_index(t_str_cmd_inf *str_cmd, size_t *pos_elem)
 {
-	while (scmd_cur_is_of(str_cmd, SUBCMD_SPE_CHAR) == 0
+	while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
+			&& scmd_cur_char(str_cmd) && scmd_cur_char(str_cmd) != '\'')
+		scmd_move_to_next_char(str_cmd);
+	if (str_cmd->pos > 0)
+		str_cmd->pos -= 1;
+	if (*pos_elem > 0)
+		*pos_elem -= 1;
+}
+
+void	update_pos_index_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem)
+{
+	while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
 			&& scmd_cur_char(str_cmd))
 		scmd_move_to_next_char(str_cmd);
 	if (str_cmd->pos > 0)

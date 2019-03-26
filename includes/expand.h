@@ -7,8 +7,7 @@ char		**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);
 void		create_new_input(t_ast *elem, int *i, char **new);
 int			expand_var(char **str, t_alloc *alloc, const char *exp,
 			char **input);
-int			expand_in_db(char **input, t_alloc *alloc, size_t *pos);
-int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t *pos);
+int			expand(char **input, t_alloc *alloc, size_t *pos);
 
 /*
 ************************************ TOOLS *************************************
