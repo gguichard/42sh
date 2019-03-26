@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 16:40:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 21:52:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,18 +103,18 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
 	while ((full_input == NULL || type != PROMPT_DEFAULT)
 			&& (*ret = read_input(cmdline, get_prompt(cmdline, type))) == 1)
 	{
-		if ((full_input = join_command(cmdline, full_input, type)) == NULL)
-			break ;
-		if (!scmd_init(&scmd_inf, full_input))
+		if ((full_input = join_command(cmdline, full_input, type)) == NULL
+				|| !scmd_init(&scmd_inf, full_input))
 			return (ft_memdel((void **)&full_input));
-		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL)
+		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
+				|| (analyser_ret = token_analyser(tokens)) == PR_ERROR)
 			ft_strdel(&full_input);
-		else if ((analyser_ret = token_analyser(tokens)) == PR_ERROR)
-			ft_strdel(&full_input);
-		else
+		if (full_input != NULL)
 			type = change_prompt_type(&scmd_inf, analyser_ret);
 		ft_lstdel(&tokens, del_token);
 		scmd_clean(&scmd_inf);
+		if (full_input == NULL)
+			break ;
 	}
 	return (full_input);
 }
@@ -134,11 +134,7 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	else
 	{
 		if (full_input == NULL)
-		{
-			reset_term(cmdline);
-			save_history_entries(alloc, &cmdline->history);
 			builtin_exit(0, alloc);
-		}
 		else
 		{
 			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");

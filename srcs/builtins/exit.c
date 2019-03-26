@@ -38,7 +38,7 @@ static void	parkour_ast_for_exit(t_ast *elem, int *del)
 	if (elem->right)
 		check_exit_cmd(elem->right);
 	if (!ft_strcmp(elem->input[0], "exit"))
-		del = 0;
+		*del = 0;
 }
 
 void		check_exit_cmd(t_ast *elem)
@@ -53,8 +53,8 @@ void		check_exit_cmd(t_ast *elem)
 
 int			builtin_exit(t_ast *elem, t_alloc *alloc)
 {
-	int			status;
-	char		*endptr;
+	int		status;
+	char	*endptr;
 
 	status = alloc->ret_val;
 	if (check_stopped_job() && !retry_exit_job(-1))
@@ -63,19 +63,21 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 		retry_exit_job(1);
 		return (1);
 	}
-	if (elem && elem->input[1] != NULL)
+	if (elem != NULL && elem->input[1] != NULL)
 	{
 		status = ft_strtol(elem->input[1], &endptr, 10);
 		if (*endptr != '\0')
 		{
 			status = 2;
 			ft_dprintf(STDERR_FILENO, "42sh: exit: %s: "
-			"numeric argument required\n", elem->input[1]);
+					"numeric argument required\n", elem->input[1]);
 		}
 	}
-	del_alloc(alloc);
-	terminate_all_jobs();
 	ft_putstr("exit\n");
+	terminate_all_jobs();
+	save_history_entries(alloc, &alloc->cmdline.history);
+	reset_term(&alloc->cmdline);
+	del_alloc(alloc);
 	exit(status);
 	return (1);
 }
