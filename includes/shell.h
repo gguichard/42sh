@@ -5,6 +5,11 @@
 *********************************** INCLUDES ***********************************
 */
 
+//for atom completion
+# include "../libft/includes/get_next_line.h"
+# include "../libft/includes/libft.h"
+# include "../libft/includes/printf.h"
+
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
