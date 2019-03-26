@@ -98,6 +98,8 @@ $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/handle_sigs.c \
 $(PATH_CMDLINE)/history.c \
+$(PATH_CMDLINE)/history_events.c \
+$(PATH_CMDLINE)/history_expand.c \
 $(PATH_CMDLINE)/history_utils.c \
 $(PATH_CMDLINE)/input.c \
 $(PATH_CMDLINE)/print_cmdline.c \

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 00:23:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 13:20:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 	if (cmdline->input.buffer[0] == '\0')
 		return (full_input);
 	new_line = ft_strdup(cmdline->input.buffer);
-	if (new_line != NULL && full_input != NULL)
+	if (new_line == NULL)
+		return (NULL);
+	if (!expand_history_events(&cmdline->history, &new_line))
+	{
+		free(new_line);
+		return (NULL);
+	}
+	if (full_input != NULL)
 	{
 		tmp[0] = full_input;
 		tmp[1] = new_line;
