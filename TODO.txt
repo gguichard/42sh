@@ -24,6 +24,5 @@ job display signaux need juste quand cest un process normal
 need refresh state before job builtin
 quand ring back avec fg need display sig normal
 
-display done = print job si tout le job est done
-display stop = print job
-display running = print bg que si tout le job run ou est done
+
+find a way pour check si un process a repris

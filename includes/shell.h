@@ -137,7 +137,7 @@ void	print_job(pid_t process, int after_signal);
 t_job	*get_job_pid(pid_t process);
 t_list	*add_pid_lst(pid_t process, t_ast *elem, bool addpipe);
 int		add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, bool addpipe);
-void	refresh_jobs(void);
+void	refresh_jobs(bool print_job);
 int		waiting_line(bool wait_hang, t_list *tmp);
 char	*job_cmd(t_job *job);
 t_job	*check_job_state(t_list *tmp, t_job_state state);

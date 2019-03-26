@@ -60,7 +60,10 @@ int				ret_status(int ret, pid_t process, t_job *job)
 	if (WIFEXITED(ret))
 		err = WEXITSTATUS(ret);
 	if (!job)
+	{
 		job = get_job_pid(process);
+		job->status = ret;
+	}
 	job->state = DONE;
 	if (WIFSTOPPED(ret))
 	{

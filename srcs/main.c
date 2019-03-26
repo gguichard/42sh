@@ -68,7 +68,7 @@ int		main(int argc, char **argv, char **env)
 	{
 		//parse line etc;
 		lexer_parser(line, &alloc);
-		refresh_jobs();
+		refresh_jobs(true);
 		write(1, "> ", 2);
 		ft_memdel((void **)&line);
 	}

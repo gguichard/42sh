@@ -1,12 +1,12 @@
-struct po
+#include <signal.h>
+
+void	test(int sig)
 {
-	char		*s;
-	struct po *n;
-};
+	sig = 1;
+}
 
 int main()
 {
-	struct po *pl;
-
-	pl->n->s = 0;
+	signal(SIGTSTP, test);
+	sleep(2);
 }

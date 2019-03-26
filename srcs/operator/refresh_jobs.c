@@ -57,12 +57,7 @@ void	actualize_pipe_job_status(t_list **main, t_list *prev)
 void	refresh_state_job(t_job *job, int *print, int *stop_print)
 {
 	int		ret;
-	// if (job->state < SIG && !waitpid(job->pid, &job->status, WNOHANG))
-	// {
-	// 	if (job->state != RUNNING_BG)
-	// 		*print = 1;
-	// 	job->state = RUNNING_BG;
-	// }
+
 	if (job->state < SIG)
 		ret = waitpid(job->pid, &job->status, WNOHANG);
 	if (job->state == RUNNING_BG && ret > 0)
@@ -113,7 +108,7 @@ static int	job_state_done(t_list *tmp)
 	return (0);
 }
 
-static int	job_state_run_or_done(t_list *tmp)
+int	job_state_run_or_done(t_list *tmp)
 {
 	t_job	*job;
 
@@ -161,23 +156,24 @@ char	*last_sig_process(t_list *tmp)
 
 void	print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index)
 {
-	char	*cmd;
+	// char	*cmd;
 
+	(void)index;
 	if (stop_print)
 		print_job(((t_job *)tmp->content)->pid, 1);
+	else if (!print && check_job_state(tmp, SIG) && !job_state_done(tmp))
+		ft_dprintf(2, "%s\n", last_sig_process(tmp));
 	else if (print && !job_state_done(tmp))
 		print_job(((t_job *)tmp->content)->pid, 0);
-	else if (check_job_state(tmp, SIG) && !job_state_done(tmp))
-		ft_dprintf(2, "%s\n", last_sig_process(tmp));
-	else if (print && !job_state_run_or_done(tmp))
-	{
-		cmd = job_cmd(tmp->content);
-		ft_printf("[%d] %s : now running in background\n", index, cmd);
-		ft_memdel((void **)&cmd);
-	}
+	// else if (print && !job_state_run_or_done(tmp))
+	// {
+	// 	cmd = job_cmd(tmp->content);
+	// 	ft_printf("[%d] %s : now running in background\n", index, cmd);
+	// 	ft_memdel((void **)&cmd);
+	// }
 }
 
-void	refresh_state(t_list *tmp)
+void	refresh_state(t_list *tmp, bool print_job)
 {
 	t_job	*job;
 	int		print;
@@ -199,7 +195,8 @@ void	refresh_state(t_list *tmp)
 			refresh_state_job(job, &print, &stop_print);
 			pipe = pipe->next;
 		}
-		print_refreshed_jobs(tmp, print, stop_print, index);
+		if (print_job == true)
+			print_refreshed_jobs(tmp, print, stop_print, index);
 		tmp = tmp->next;
 		index += 1;
 	}
@@ -220,13 +217,13 @@ void	delete_jobs_terminated(t_list *tmp)
 	}
 }
 
-void	refresh_jobs(void)
+void	refresh_jobs(bool print_job)
 {
 	t_list	*tmp;
 
 	tmp = g_jobs;
 	if (!tmp)
 		return ;
-	refresh_state(tmp);
+	refresh_state(tmp, print_job);
 	delete_jobs_terminated(tmp);
 }

@@ -271,5 +271,6 @@ int			job_builtins(t_ast *elem, t_alloc *alloc)
 		ft_dprintf(STDERR_FILENO, "42sh: jobs: %s: no such job\n", elem->input[opts.index]);
 		return (1);
 	}
+	refresh_jobs(true);
 	return (display_jobs(&opts, elem->input[opts.index - 1], param));
 }
