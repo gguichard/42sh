@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:35:05 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 16:13:58 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 16:46:58 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ static t_history_entry	*replace_misc_event(t_history *history, char *event)
 	}
 	else if (!ft_strchr("-+", event[1]) && !ft_isdigit(event[1]))
 	{
+		endptr = event + 1;
 		entry = search_history_entry(history, endptr);
-		endptr = event + ft_strlen(event);
+		endptr += ft_strlen(endptr);
 	}
 	else
 	{
