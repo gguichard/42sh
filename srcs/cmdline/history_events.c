@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:35:05 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 14:59:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 15:37:39 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,27 @@ static t_history_entry	*search_history_entry(t_history *history
 
 static t_history_entry	*get_history_entry(t_history *history, long number)
 {
+	int				backward;
 	t_history_entry	*cur;
 
-	cur = history->back;
+	backward = 0;
+	if (number < 0)
+	{
+		number = -number;
+		cur = history->back;
+	}
+	else
+	{
+		cur = history->front;
+		backward = 1;
+	}
 	while (cur != NULL && --number > 0)
-		cur = cur->prev;
+	{
+		if (backward)
+			cur = cur->next;
+		else
+			cur = cur->prev;
+	}
 	return (cur);
 }
 
@@ -49,21 +65,23 @@ static t_history_entry	*replace_misc_event(t_history *history, char *event)
 
 	if (event[1] == '!')
 	{
-		if ((entry = history->back) != NULL)
-			event[2] = '\0';
+		entry = history->back;
+		endptr = event + 2;
 	}
-	else if (event[1] == '-')
+	else if (!ft_strchr("-+", event[1]) && !ft_isdigit(event[1]))
 	{
-		if ((number = ft_strtol(event + 2, &endptr, 10)) == 0)
-			return (0);
-		if ((entry = get_history_entry(history, number)) != NULL)
-			*endptr = '\0';
+		entry = search_history_entry(history, endptr);
+		endptr = event + ft_strlen(event);
 	}
 	else
 	{
-		if ((entry = search_history_entry(history, event + 1)) != NULL)
-			event[ft_strlen(event)] = '\0';
+		number = ft_strtol(event + 1, &endptr, 10);
+		if (number == 0)
+			return (NULL);
+		entry = get_history_entry(history, number);
 	}
+	if (entry != NULL)
+		*endptr = '\0';
 	return (entry);
 }
 
