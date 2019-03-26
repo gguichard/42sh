@@ -45,81 +45,66 @@ void	inhib_in_dbquote(t_ast *elem, int i, t_str_cmd_inf **str_cmd,
 
 	*count_escape = 0;
 	pos = 0;
+}
 
-	while (elem->input[i][pos] && scmd_cur_char(*str_cmd))
+void	update_pos_index(t_str_cmd_inf *str_cmd, size_t *pos_elem)
+{
+	while (scmd_cur_is_of(str_cmd, SUBCMD_SPE_CHAR) == 0
+			&& scmd_cur_char(str_cmd))
+		scmd_move_to_next_char(str_cmd);
+	if (str_cmd->pos > 0)
+		str_cmd->pos -= 1;
+	if (*pos_elem > 0)
+		*pos_elem -= 1;
+}
+
+int		inhib_all(t_str_cmd_inf *str_cmd, t_ast *elem, int i, t_alloc *alloc)
+{
+	size_t	pos_elem;
+	int		save;
+
+	pos_elem = 0;
+	save = 0;
+	while (scmd_cur_char(str_cmd))
 	{
-		ft_printf("\n\ninput: |%s|\nstr_cmd: |%s|\n\n", &(elem->input[i][pos]), &((*str_cmd)->str[(*str_cmd)->pos]));
-		if (scmd_cur_char_is_escaped(*str_cmd) == 1)
-		{
-			remove_escaped_char_db(elem, i, &pos);
-			scmd_move_to_next_char(*str_cmd);
-		}
-		else if (scmd_cur_char(*str_cmd) == '$')
+		if (str_cmd->is_in_quote == 1)
+			go_to_end_quote(str_cmd, elem, i, &pos_elem);
+		else if (str_cmd->is_in_dbquote)
+			inhib_in_dbquote(elem, i, &str_cmd, &pos_elem, alloc);
+		else if (scmd_cur_char_is_escaped(str_cmd) == 1)
+			remove_escaped_char(str_cmd, elem, i, &pos_elem);
+		else if (scmd_cur_char(str_cmd) == '$')
 		{
 			save = i;
-			if (pos == 0)
-				pos = (*str_cmd)->pos;
-			len = expand_db(elem, alloc, &save, &pos);
-			pos += len;
-			while (scmd_cur_char(*str_cmd) != '\\'
-					&& scmd_cur_char(*str_cmd) != ' '
-					&& scmd_cur_char(*str_cmd))
-			{
-				scmd_move_to_next_char(*str_cmd);
-				if (scmd_cur_char(*str_cmd) == '$')
-					break ;
-				ft_printf("strcmd: %s\n", scmd_cur_str(*str_cmd));
-			}
+			expand(elem, alloc, &save, &pos_elem);
+			scmd_move_to_next_char(str_cmd);
+			update_pos_index(str_cmd, &pos_elem);
 		}
-		else
-		{
-			scmd_move_to_next_char(*str_cmd);
-			pos += 1;
-		}
+		scmd_move_to_next_char(str_cmd);
+		pos_elem += 1;
 	}
+	return (save);
 }
 
 
-int	inhibitor(t_ast *elem, t_alloc *alloc)
+int		inhibitor(t_ast *elem, t_alloc *alloc)
 {
 	t_str_cmd_inf	*str_cmd;
 	int				i;
 	int				save;
-	size_t			pos_elem;
 
 	i = 0;
-	pos_elem = 0;
 	str_cmd = NULL;
 	if (!(str_cmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))))
 		ft_exit_malloc();
 	while (elem->input[i])
 	{
 		save = 0;
-		pos_elem = 0;
 		if (!scmd_init(str_cmd, elem->input[i]))
 			return (0);
-		while (scmd_cur_char(str_cmd))
-		{
-			if (str_cmd->is_in_quote == 1)
-				go_to_end_quote(str_cmd, elem, i, &pos_elem);
-			else if (str_cmd->is_in_dbquote)
-				inhib_in_dbquote(elem, i, &str_cmd, &pos_elem, alloc);
-			else if (scmd_cur_char_is_escaped(str_cmd) == 1)
-				remove_escaped_char(str_cmd, elem, i, &pos_elem);
-			else if (scmd_cur_char(str_cmd) == '$')
-			{
-				save = i;
-				expand(elem, alloc, &save, str_cmd->pos - pos_elem);
-			}
-			scmd_move_to_next_char(str_cmd);
-			pos_elem += 1;
-			// ft_printf("\n\nstrcmd: %s\ninput: %s\n", scmd_cur_str(str_cmd), elem->input[i]);
-		}
+		save = inhib_all(str_cmd, elem, i, alloc);
 		scmd_clean(str_cmd);
-		if (save != 0)
-			i = save;
-		else
-			i += 1;
+		i = (save != 0) ? save : i + 1;
 	}
 	return (1);
 }

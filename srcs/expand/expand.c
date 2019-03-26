@@ -64,26 +64,26 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp,
 	return (1);
 }
 
-int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t pos)
+int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t *pos)
 {
 	char		**new;
 	char		*str;
 	const char	*exp;
-	int			x;
 
 	new = NULL;
 	exp = NULL;
 	str = NULL;
-	x = 0;
-	exp = ft_strchr(&(elem->input[*i][pos]), '$');
-	x = ft_strlen(elem->input[*i]) - ft_strlen(exp);
+	exp = ft_strchr(&(elem->input[*i][*pos]), '$');
 	if (expand_var(&str, alloc, exp, &(elem->input[*i])) == 0)
 		return (0);
-	if (elem->input[*i][pos + 1] == '{')
-		insert_var_input(str, &(elem->input[*i]), 1, pos);
+	if (elem->input[*i][*pos + 1] == '{')
+		insert_var_input(str, &(elem->input[*i]), 1, *pos);
 	else
-		insert_var_input(str, &(elem->input[*i]), 0, pos);
+		insert_var_input(str, &(elem->input[*i]), 0, *pos);
 	if (str)
+	{
 		create_new_input(elem, i, ft_strsplit(elem->input[*i], ' '));
+		*pos += ft_strlen(str);
+	}
 	return (1);
 }
