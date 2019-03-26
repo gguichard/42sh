@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:35:05 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 15:37:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 16:13:58 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int						replace_event(t_history *history, char **input
 		if (ft_strreplace_inside(input, *offset, ft_strlen(event)
 					, entry->content))
 		{
-			*offset += ft_strlen(entry->content);
+			*offset += (ft_strlen(entry->content) - 1);
 			return (1);
 		}
 	}
