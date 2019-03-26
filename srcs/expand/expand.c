@@ -64,13 +64,11 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp,
 	return (1);
 }
 
-int			expand_in_db(char **input, t_alloc *alloc, size_t *pos)
+int			expand(char **input, t_alloc *alloc, size_t *pos)
 {
-	char		**new;
 	char		*str;
 	const char	*exp;
 
-	new = NULL;
 	exp = NULL;
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
@@ -82,31 +80,6 @@ int			expand_in_db(char **input, t_alloc *alloc, size_t *pos)
 		insert_var_input(str, input, 0, *pos);
 	if (str)
 	{
-		*pos += ft_strlen(str);
-		ft_memdel((void **)&str);
-	}
-	return (1);
-}
-
-int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t *pos)
-{
-	char		**new;
-	char		*str;
-	const char	*exp;
-
-	new = NULL;
-	exp = NULL;
-	str = NULL;
-	exp = ft_strchr(&(elem->input[*i][*pos]), '$');
-	if (expand_var(&str, alloc, exp, &(elem->input[*i])) == 0)
-		return (0);
-	if (elem->input[*i][*pos + 1] == '{')
-		insert_var_input(str, &(elem->input[*i]), 1, *pos);
-	else
-		insert_var_input(str, &(elem->input[*i]), 0, *pos);
-	if (str)
-	{
-		create_new_input(elem, i, ft_strsplit(elem->input[*i], ' '));
 		*pos += ft_strlen(str);
 		ft_memdel((void **)&str);
 	}
