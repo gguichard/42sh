@@ -33,7 +33,7 @@ static int	error_redir_type_3(char **ope, int x, int y)
 {
 	if (x == 0 && y == 0 && !ope[1])
 	{
-		write(2, "cat: stdin: Bad file descriptor\n", 32);
+		write(2, "42sh: stdin: Bad file descriptor\n", 32);
 		return (1);
 	}
 	return (0);
@@ -84,7 +84,7 @@ int			ft_error_parse_redir(char **input)
 			if (ft_isoperator(input[x][y]) == 1
 			&& check_operator_error(input, x, y) == 1)
 			{
-				delete_str_tab(input);
+				ft_strtab_free(input);
 				return (1);
 			}
 			y += 1;

@@ -32,8 +32,7 @@ int		ft_fd_exist(char *str_fd);
 int		error_set(char *str);
 int		error_unset(char *str);
 int		error_export(char c);
-
-
+void	error_test(int argc, char **argv);
 
 /*
 ** Free la variable var et retourne err.

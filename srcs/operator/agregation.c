@@ -14,7 +14,7 @@ int	agreg_1(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	while ((ft_is_agreg(elem, fd, alloc) == 1
 		|| ft_is_redir(elem, fd, alloc) == 1) && elem->left)
 		elem = elem->left;
-	(elem->type != AGREG) ? elem = elem->back : 0;
+	(elem->type != REDIR) ? elem = elem->back : 0;
 	dup2(fd[1], 1);
 	dup2(fd[2], 2);
 	i = (elem) ? analyzer(elem->left, alloc, opt) : 1;
@@ -34,7 +34,7 @@ int	agreg_2(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	while ((ft_is_agreg(elem, fd, alloc) == 1
 		|| ft_is_redir(elem, fd, alloc) == 1) && elem->left)
 		elem = elem->left;
-	(elem->type != AGREG) ? elem = elem->back : 0;
+	(elem->type != REDIR) ? elem = elem->back : 0;
 	dup2(fd[1], 1);
 	dup2(fd[2], 2);
 	i = (elem) ? analyzer(elem->left, alloc, opt) : 1;
@@ -61,7 +61,7 @@ int	agreg_3(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	while (((ret1 = ft_is_agreg(elem, fd, alloc)) == 1
 		|| ft_is_redir(elem, fd, alloc) == 1) && elem->left)
 		elem = elem->left;
-	(elem->type != AGREG) ? elem = elem->back : 0;
+	(elem->type != REDIR) ? elem = elem->back : 0;
 	if (ret1 == -1)
 		return (1);
 	ret1 = (elem) ? analyzer(elem->left, alloc, opt) : 1;

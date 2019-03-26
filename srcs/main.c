@@ -1,59 +1,101 @@
 #include "shell.h"
+#include "cmdline.h"
 #include "builtins.h"
 #include "exectable.h"
 #include "hashtable.h"
 #include "parser_lexer.h"
+#include "str_cmd_inf.h"
+#include "split_cmd_token.h"
+#include "token_inf.h"
 #include "job.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
-	char		***split_all_cmd;
-	t_exec_opt	exec_option;
-	t_ast		*sort_ast;
-	int			i;
+	t_ast			*sort_ast;
+	t_list			*lst_tk;
+	t_exec_opt		exec_option;
+	t_str_cmd_inf	scmd;
 
-	i = 0;
 	sort_ast = NULL;
-	split_all_cmd = lexer(line, alloc);
-	while (split_all_cmd[i])
+	lst_tk = NULL;
+	ft_bzero(&exec_option, sizeof(t_exec_opt));
+	if (!scmd_init(&scmd, line))
+		ft_exit_malloc();
+	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
+	/*
+	 **	VERIF TOKEN AND PRINT BEFORE PARSE
+	 */
+	// (void)alloc;
+	// t_list	*tmp;
+	// tmp = lst_tk;
+	// while (tmp)
+	// {
+	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
+	// 	tmp = tmp->next;
+	// }
+	//
+	while (lst_tk)
 	{
-		sort_ast = parser(split_all_cmd[i], alloc);
-		ft_bzero(&exec_option, sizeof(t_exec_opt));
+		if (!(sort_ast = parser(&lst_tk, alloc)))
+		{
+			ft_printf("ERROR BREAK\n");
+			break ;
+		}
+		/*
+		 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
+		 */
+		// if (get_tk(lst_tk)->type == TK_CMD_SEP
+		// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
+		// 	analyzer(sort_ast, alloc, TRUE);
+		// else
+		check_exit_cmd(sort_ast);
 		alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-		delete_str_tab(split_all_cmd[i]);
-		del_lst_ast(&(alloc->ast));
-		i += 1;
+		/*
+		 ** PRINT AST AND REINIT NODE
+		 */
+		// if (sort_ast)
+		// {
+		// 	read_sort_descent(sort_ast, 1);
+		// 	reinit_print(alloc->ast, 1);
+		// }
+		if (lst_tk)
+			lst_tk = lst_tk->next;
+		//FUNCTION TO CLEAN AST
 	}
+	scmd_clean(&scmd);
+	// FUNCTION TO CLEAN LST_TK
 }
 
-int		main(int argc, char **argv, char **env)
+int		main(int argc, char **argv, char **environ)
 {
-	int		gnl_ret;
-	char	*line;
-	t_var	*lst;
 	t_alloc	alloc;
+	char	*input;
 
-	p_debug = 0;
 	g_jobs = 0;
-	if (argc > 1 && !ft_strcmp(argv[1], "-d"))
-		p_debug = 1;
-	else if (argc > 1)
-		ft_printf("usage : pour print l'ast -d\n");
-	lst = 0;
-	ft_bzero(&alloc, sizeof(t_alloc));
-	env_cp(env, &lst);
-	set_alloc(&alloc, &lst);
-	write(1, "> ", 2);
-	while ((gnl_ret = get_next_line(STDIN_FILENO, &line)) > 0)
+	if (!setup_alloc(&alloc, argc, argv, environ))
+		ft_dprintf(STDERR_FILENO, "Unable to setup environment\n");
+	else
 	{
-		//parse line etc;
-		lexer_parser(line, &alloc);
-		refresh_jobs();
-		write(1, "> ", 2);
-		ft_memdel((void **)&line);
+		if (!init_cmdline(&alloc, &alloc.cmdline))
+			ft_dprintf(STDERR_FILENO, "Unable to init term\n");
+		else
+		{
+			load_history_file_entries(&alloc, &alloc.cmdline.history);
+			while (1)
+			{
+				refresh_jobs();
+				setup_term(&alloc.cmdline);
+				input = read_cmdline(&alloc, &alloc.cmdline);
+				reset_term(&alloc.cmdline);
+				if (input != NULL)
+				{
+					lexer_parser(input, &alloc);
+					free(input);
+				}
+			}
+		}
 	}
 	terminate_all_jobs();
 	del_alloc(&alloc);
-	ft_printf("GNL ret : %d\n", gnl_ret);
-	return (0);
+	return (1);
 }

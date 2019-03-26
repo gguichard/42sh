@@ -10,11 +10,10 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <signal.h>
-# include <sys/wait.h>
 # include <stdbool.h>
-# include "../libft/includes/get_next_line.h"
-# include "../libft/includes/libft.h"
-# include "../libft/includes/printf.h"
+# include "libft.h"
+# include "get_next_line.h"
+# include "cmdline.h"
 # include "hashtable.h"
 
 /*
@@ -23,11 +22,11 @@
 
 # define LOGIC		5
 # define OPERATOR	4
-# define AGREG		2
+# define ASSIGN		3
 # define REDIR		2
 # define HEREDOC	1
 # define CMD		0
-# define NO_TYPE 	-1
+# define NO_TYPE	-1
 
 /*
 ********************************** STRUCTURES **********************************
@@ -38,37 +37,6 @@ typedef struct			s_exec_opt
 	bool				fork;
 	bool				wait_hang;
 }						t_exec_opt;
-
-typedef struct			s_cursor
-{
-	size_t				l;
-	size_t				c;
-}						t_cursor;
-
-typedef struct			s_buf
-{
-	char				*s;
-	size_t				x;
-	t_cursor			pos;
-	size_t				buf_size;
-}						t_buf;
-
-typedef struct			s_historic
-{
-	char				*origin;
-	char				*modif;
-	struct s_historic	*next;
-	struct s_historic	*prev;
-}						t_historic;
-
-
-typedef	struct			s_var
-{
-	char				*key;
-	char				*value;
-	int					is_env;
-	struct s_var		*next;
-}						t_var;
 
 typedef struct			s_ast
 {
@@ -94,12 +62,13 @@ typedef struct			s_builtin
 
 typedef struct			s_alloc
 {
+	int					argc;
+	char				**argv;
 	int					ret_val;
-	t_historic			*history;
-	t_buf				*input;
+	t_cmdline			cmdline;
 	t_ast				*ast;
-	t_var				**var;
-	t_builtin			*builtins;
+	t_list				*vars;
+	const t_builtin		*builtins;
 	t_hashtable			*exectable;
 	t_hashtable			*aliastable;
 	int					fd[10];
@@ -108,17 +77,23 @@ typedef struct			s_alloc
 typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
+*********************************** CMDLINE ************************************
+*/
+
+int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char	*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char	*get_history_file_path(t_alloc *alloc);
+int		load_history_file_entries(t_alloc *alloc, t_history *history);
+int		save_history_entries(t_alloc *alloc, t_history *history);
+
+/*
 ************************************ TOOLS *************************************
 */
 
-void	delete_str_tab(char **tab_str);
-void	del_lst_env(t_var **lst);
+int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
+
 void	del_lst_ast(t_ast **lst);
-void	del_double_tab(char **tab1, char **tab2);
 void	del_alloc(t_alloc *alloc);
-void	set_alloc(t_alloc *al, t_var **lst);
-int		replace_val_ret(char **str, int i, int x, int err);
-void	insert_new_elem(t_var **lst, t_var *new);
 
 //TOOLS TO PRINT LST AST
 void	read_lst(t_ast *lst, int active);
@@ -129,8 +104,6 @@ void	reinit_print(t_ast *lst, int active);
 *********************************** GLOBALS ***********************************
 */
 
-int						p_debug;
 t_list					*g_jobs;
-
 
 #endif

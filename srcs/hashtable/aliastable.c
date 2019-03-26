@@ -31,7 +31,8 @@ int			set_alias_if_valid(t_hashtable *aliastable, const char *name
 		}
 		++idx;
 	}
-	if (!replace_hashentry(aliastable, name, alias_val, sizeof(const char*)))
+	if (!replace_hashentry(aliastable, name, alias_val
+				, ft_strlen(alias_val) + 1))
 	{
 		if (error_msg != NULL)
 			*error_msg = "unknown error";

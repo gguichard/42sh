@@ -1,115 +1,149 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
+/*   Updated: 2019/03/26 14:05:26 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <pwd.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <limits.h>
+#include "libft.h"
+#include "options.h"
 #include "shell.h"
-#include "builtins.h"
+#include "vars.h"
 #include "error.h"
+#include "check_path.h"
+#include "builtins.h"
 
-static int	check_access(char *dir, char *folder)
+static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
 {
-	int		err;
+	t_var			*var;
+	const char		*login;
 
-	err = -1;
-	if (access(dir, F_OK) == -1)
-		err = 0;
-	else if (access(dir, X_OK) == -1)
-		err = 1;
-	else if (chdir(dir) == -1)
-		err = 3;
-	else
-		return (0);
-	if (folder && folder[0] != '-')
-		error_cd(folder, err);
-	else
-		error_cd(dir, err);
-	ft_memdel((void **)&dir);
-	return (-1);
+	var = get_var(alloc->vars, name);
+	if (var == NULL)
+	{
+		if (ft_strequ(name, "HOME") && (login = getlogin()) != NULL)
+			return (ft_strdup(getpwnam(login)->pw_dir));
+		return (getcwd(NULL, PATH_MAX));
+	}
+	return (ft_strdup(var->value));
 }
 
-static int	check_options(t_ast *elem, int *options, t_alloc *alloc)
+static char		*get_new_cur_path(t_alloc *alloc, const char *cur_path)
 {
-	int	i;
-	int	x;
+	char	*pwd;
+	size_t	pwd_len;
+	size_t	cur_len;
+	char	*new_path;
 
-	(void)alloc;
-	i = 1;
-	while (elem->input[i] && elem->input[i][0] == '-')
+	if (cur_path[0] == '/')
+		new_path = ft_strdup(cur_path);
+	else
 	{
-		x = 1;
-		while (elem->input[i][x] && (elem->input[i][x] == 'P'
-		|| elem->input[i][x] == 'L'))
+		pwd = get_path_or_cwd(alloc, "PWD");
+		pwd_len = (pwd == NULL) ? 0 : ft_strlen(pwd);
+		if (pwd_len > 0 && pwd[pwd_len - 1] == '/')
+			pwd_len -= 1;
+		cur_len = ft_strlen(cur_path);
+		new_path = (char *)malloc((pwd_len + cur_len + 2) * sizeof(char));
+		if (new_path != NULL)
 		{
-			if (elem->input[i][x] == 'P')
-				*options = 2;
-			else if (elem->input[i][x] == 'L')
-				*options = (*options == 2) ? 2 : 1;
-			x += 1;
+			if (pwd != NULL)
+				ft_memcpy(new_path, pwd, pwd_len);
+			new_path[pwd_len] = '/';
+			ft_memcpy(new_path + pwd_len + 1, cur_path, cur_len + 1);
 		}
-		if (ft_strcmp(elem->input[i], "-") == 0)
-			return (i);
-		else if (elem->input[i][x] != '\0')
-			return (check_arg_cd(elem, i));
-		i += 1;
+		free(pwd);
 	}
-	return (check_arg_cd(elem, i));
+	return (new_path);
 }
 
-static int	modif_oldpwd(t_var **lst_env, char *buf)
+static char		*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
 {
-	t_var	*tmp;
+	char	*cur_path;
+	char	*tmp;
 
-	tmp = NULL;
-	if ((tmp = find_elem_env(*lst_env, "OLDPWD"))
-		&& (find_elem_env(*lst_env, "PWD")))
-	{
-		free(tmp->value);
-		if (!(tmp->value = ft_strdup(find_elem_env(*lst_env, "PWD")->value)))
-			ft_exit_malloc();
-	}
+	cur_path = NULL;
+	if (operand == NULL)
+		cur_path = get_path_or_cwd(alloc, "HOME");
+	else if (ft_strequ(operand, "-"))
+		cur_path = get_path_or_cwd(alloc, "OLDPWD");
 	else
+		cur_path = ft_strdup(operand);
+	if (cur_path != NULL)
 	{
-		if (!(tmp = find_elem_env(*lst_env, "PWD")))
-			add_elem_env(lst_env, "OLDPWD", buf);
-		else
-			add_elem_env(lst_env, "OLDPWD", tmp->value);
+		tmp = get_new_cur_path(alloc, cur_path);
+		free(cur_path);
+		cur_path = tmp;
+		if (cur_path != NULL && !has_opt(opts, 'P'))
+			set_dir_to_canonical_form(cur_path);
 	}
-	return (0);
+	return (cur_path);
 }
 
-static int	modif_env(char *dir, t_var **lst_env, int options, char *buf)
+static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
+		, const char *operand)
 {
-	t_var	*tmp;
+	char		*pwd;
+	t_error		error;
+	const char	*def_path;
+	char		*freed_path;
+	const char	*new_pwd_path;
 
-	modif_oldpwd(lst_env, buf);
-	tmp = find_elem_env(*lst_env, "PWD");
-	ft_memdel((void **)&(tmp->value));
-	tmp->value = ft_strdup((options == 2) ? buf : dir);
-	ft_memdel((void **)&dir);
-	ft_memdel((void **)&buf);
-	return (0);
-}
-
-int			cd_builtins(t_ast *elem, t_alloc *alloc)
-{
-	int			i;
-	int			options;
-	char		*buf_pwd;
-	char		*dir;
-
-	options = 0;
-	if ((i = check_options(elem, &options, alloc)) == -1)
-		return (2);
-	buf_pwd = getcwd(0, PATH_MAX);
-	if (!find_elem_env(*(alloc->var), "PWD"))
-		add_elem_env(alloc->var, "PWD", buf_pwd);
-	dir = cd_predef(elem->input[i], *(alloc->var), options, buf_pwd);
-	if (!dir)
-		dir = get_dir(get_env_value(*(alloc->var), "$PWD"),
-		ft_strsplit(elem->input[i], '/'), options, buf_pwd);
-	ft_memdel((void **)&buf_pwd);
-	if ((ft_strcmp(dir, "") != 0 && check_access(dir, elem->input[i]) == -1)
-		|| !ft_strcmp(dir, ""))
+	if (chdir(cur_path) == -1)
 	{
-		(!ft_strcmp(dir, "")) ? ft_memdel((void **)&dir) : 0;
+		error = check_dir_rights(cur_path, X_OK);
+		def_path = operand;
+		if (def_path == NULL || ft_strequ(def_path, "-"))
+			def_path = cur_path;
+		ft_dprintf(STDERR_FILENO, "cd: %s: %s\n", def_path
+				, error_to_str(error));
 		return (1);
 	}
-	(ft_strcmp(elem->input[i], "-") == 0) ? ft_printf("%s\n", dir) : 0;
-	return (modif_env(dir, alloc->var, options, getcwd(0, PATH_MAX)));
+	pwd = get_path_or_cwd(alloc, "PWD");
+	if (pwd != NULL)
+		update_var(&alloc->vars, "OLDPWD", pwd);
+	free(pwd);
+	freed_path = has_opt(opts, 'P') ? getcwd(0, PATH_MAX) : NULL;
+	if ((new_pwd_path = has_opt(opts, 'P') ? freed_path : cur_path) != NULL)
+		update_var(&alloc->vars, "PWD", new_pwd_path);
+	free(freed_path);
+	return (0);
+}
+
+int				builtin_cd(t_ast *elem, t_alloc *alloc)
+{
+	t_opts	opts;
+	int		ret;
+	char	*cur_path;
+
+	parse_opts(&opts, elem->input, "{LP}");
+	if (opts.error != 0)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: cd: -%c: invalid option\n"
+				"cd: usage: cd [-L|-P] [dir]", opts.error);
+		return (2);
+	}
+	cur_path = get_cur_path(alloc, &opts, elem->input[opts.index]);
+	if (cur_path == NULL)
+	{
+		ret = 1;
+		ft_dprintf(STDERR_FILENO, "42sh: cd: unexpected error\n");
+	}
+	else
+	{
+		ret = change_dir(alloc, &opts, cur_path, elem->input[opts.index]);
+		if (ret == 0 && ft_strequ(elem->input[opts.index], "-"))
+			ft_printf("%s\n", cur_path);
+		free(cur_path);
+	}
+	return (ret);
 }

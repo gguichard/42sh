@@ -30,7 +30,7 @@ static int	bring_back_pid(t_list *tmp, int index)
 	return (ret_status(job->status, job->pid, job));
 }
 
-int	fg_builtins(t_ast *elem, t_alloc *alloc)
+int	builtin_fg(t_ast *elem, t_alloc *alloc)
 {
 	int		index;
 	t_list	*tmp;

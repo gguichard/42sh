@@ -62,7 +62,7 @@ static int	print_exectable(t_hashtable *exectable)
 	return (1);
 }
 
-static int	add_execs_to_hashtable(char **exec_name_tab, t_var *var_lst
+static int	add_execs_to_hashtable(char **exec_name_tab, t_list *vars
 		, t_hashtable *exectable)
 {
 	t_error		error;
@@ -72,7 +72,7 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_var *var_lst
 	has_error = 0;
 	while (*exec_name_tab != NULL)
 	{
-		if ((exec_path = search_exec(var_lst, *exec_name_tab, &error)) != NULL)
+		if ((exec_path = search_exec(vars, *exec_name_tab, &error)) != NULL)
 		{
 			if (!set_exec_path(exectable, *exec_name_tab, exec_path, 0))
 			{
@@ -92,7 +92,7 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_var *var_lst
 	return (!has_error);
 }
 
-int			hash_builtins(t_ast *elem, t_alloc *alloc)
+int			builtin_hash(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 
@@ -108,6 +108,6 @@ int			hash_builtins(t_ast *elem, t_alloc *alloc)
 		return (!print_exectable(alloc->exectable));
 	if (has_opt(&opts, 'r'))
 		delete_hashentries(alloc->exectable);
-	return (!add_execs_to_hashtable(elem->input + opts.index
-				, *(alloc->var), alloc->exectable));
+	return (!add_execs_to_hashtable(elem->input + opts.index, alloc->vars
+				, alloc->exectable));
 }

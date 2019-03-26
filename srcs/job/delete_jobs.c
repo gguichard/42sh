@@ -68,7 +68,7 @@ void		terminate_all_jobs(void)
 	while (tmp)
 	{
 		job = tmp->content;
-		kill(job->pid, SIGINT);
+		kill(job->pid, SIGTERM);
 		waitpid(job->pid, 0, 0);
 		job->state = DONE;
 		if (job->pipe)

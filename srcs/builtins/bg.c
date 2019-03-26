@@ -55,7 +55,7 @@ static void	bring_to_bg_process(t_ast *elem, t_list *tmp, int index)
 	}
 }
 
-int			bg_builtins(t_ast *elem, t_alloc *alloc)
+int			builtin_bg(t_ast *elem, t_alloc *alloc)
 {
 	int		index;
 	t_list	*tmp;
