@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 11:13:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 15:59:14 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 17:12:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,27 @@ static int	is_char_escaped(const char *str, size_t offset)
 
 static int	expand_event(t_history *history, char **input, size_t *offset)
 {
+	int		ret;
 	size_t	len;
 	char	*event;
-	int		ret;
 
+	ret = 1;
 	len = 1;
 	while ((*input)[*offset + len] != '\0'
 			&& !ft_strchr(WORD_SEP_CHARS, (*input)[*offset + len]))
 		len++;
-	event = ft_strsub(*input, *offset, len);
-	if (event == NULL)
-		return (0);
-	ret = replace_event(history, input, offset, event);
-	if (!ret)
-		ft_dprintf(STDERR_FILENO, "42sh: %s: event not found\n", event);
-	free(event);
+	if (len > 1)
+	{
+		event = ft_strsub(*input, *offset, len);
+		if (event == NULL)
+			return (0);
+		if (!replace_event(history, input, offset, event))
+		{
+			ret = 0;
+			ft_dprintf(STDERR_FILENO, "42sh: %s: event not found\n", event);
+		}
+		free(event);
+	}
 	return (ret);
 }
 
