@@ -61,7 +61,7 @@ char	*last_sig_process(t_list *tmp)
 			tmp = tmp->next;
 		}
 	}
-	if (last && WTERMSIG(last->status) != SIGPIPE)
+	if (last && WTERMSIG(last->status) != SIGPIPE && WTERMSIG(last->status) != SIGINT)
 		return (sig_str(last->status));
 	return (0);
 }
