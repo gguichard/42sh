@@ -3,6 +3,7 @@
 
 # include <dirent.h>
 # include <sys/stat.h>
+# include "libft.h"
 # include "shell.h"
 
 typedef enum		e_ac_suff_type
@@ -43,14 +44,14 @@ size_t				count_same_char(const char *str1, const char *str2);
 int					strlist_insert_sort(t_list **lst, t_list *elem);
 
 void				check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
-		, t_ac_suff_inf *acs, t_var *var_lst);
+		, t_ac_suff_inf *acs, t_list *var_lst);
 
 /*
 ** Remplie le t_ac_suff_inf avec les informations pour autocompleter une
 ** commande builtin.
 */
 void				check_for_builtin_ac(const char *word, t_ac_rdir_inf *acrd
-		, t_ac_suff_inf *acs, t_builtin *builtin_tab);
+		, t_ac_suff_inf *acs, const t_builtin *builtin_tab);
 
 /*
 ** Remplie le t_ac_suff_inf avec les informations pour autocompleter depuis
@@ -101,10 +102,10 @@ void				*delete_ac_suff_inf(t_ac_suff_inf *acs);
 ** Le parametre is_a_cmd doit valoir true si le word doit etre un executable,
 ** false s'il peut etre un fichier quelconque.
 */
-t_ac_suff_inf		*autocomplete_word(t_var *var_lst, const char *word
-		, int is_a_cmd, t_builtin *builtin_tab);
+t_ac_suff_inf		*autocomplete_word(t_list *var_lst, const char *word
+		, int is_a_cmd, const t_builtin *builtin_tab);
 
-t_ac_suff_inf		*autocomplete_var(t_var *var_lst, const char *word);
+t_ac_suff_inf		*autocomplete_var(t_list *var_lst, const char *word);
 
 t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc);
 

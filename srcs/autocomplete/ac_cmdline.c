@@ -168,13 +168,13 @@ t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 	var_start = find_last_var_start(cur_tk->token);
 	if (var_start == NULL)
 	{
-		acs_inf = autocomplete_word(*alloc->var
+		acs_inf = autocomplete_word(alloc->vars
 				, (cur_tk->token == NULL ? "" : cur_tk->token)
 				, cur_tk->type == TK_CMD, alloc->builtins);
 	}
 	else
 	{
-		acs_inf = autocomplete_var(*alloc->var, var_start);
+		acs_inf = autocomplete_var(alloc->vars, var_start);
 	}
 	del_token(cur_tk, 0);
 	return (acs_inf);

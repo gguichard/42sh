@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "libft.h"
 #include "convert_path_to_tab.h"
 #include "shell.h"
 #include "autocomplete.h"
@@ -47,7 +48,7 @@ static char		*build_path_to_file(const char *path, const char *file)
 */
 
 static void		autocomplete_cmd(const char *word, char **path_tab
-		, t_builtin *builtin_tab, t_ac_suff_inf *acs)
+		, const t_builtin *builtin_tab, t_ac_suff_inf *acs)
 {
 	t_ac_rdir_inf	acrd;
 	char			*real_word;
@@ -69,8 +70,8 @@ static void		autocomplete_cmd(const char *word, char **path_tab
 	}
 }
 
-t_ac_suff_inf	*autocomplete_word(t_var *var_lst, const char *word
-		, int is_a_cmd, t_builtin *builtin_tab)
+t_ac_suff_inf	*autocomplete_word(t_list *var_lst, const char *word
+		, int is_a_cmd, const t_builtin *builtin_tab)
 {
 	t_ac_suff_inf	*acs;
 	char			**path_tab;
@@ -94,7 +95,7 @@ t_ac_suff_inf	*autocomplete_word(t_var *var_lst, const char *word
 	return (delete_ac_suff_inf(acs));
 }
 
-t_ac_suff_inf	*autocomplete_var(t_var *var_lst, const char *word)
+t_ac_suff_inf	*autocomplete_var(t_list *var_lst, const char *word)
 {
 	t_ac_suff_inf	*acs;
 	t_ac_rdir_inf	acrd;
