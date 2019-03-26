@@ -22,7 +22,7 @@ static int	remove_these_aliases(char **params, t_hashtable *aliastable)
 	return (no_error);
 }
 
-int			unalias_builtins(t_ast *elem, t_alloc *alloc)
+int			builtin_unalias(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 

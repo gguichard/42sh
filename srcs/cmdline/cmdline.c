@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 09:30:45 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/26 13:20:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 #include <signal.h>
 #include <term.h>
 #include "shell.h"
+#include "vars.h"
 #include "parser_lexer.h"
 #include "split_cmd_token.h"
 #include "str_cmd_inf.h"
 #include "cmdline.h"
-#include "builtins.h"
 
 static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 {
@@ -30,7 +30,14 @@ static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 	if (cmdline->input.buffer[0] == '\0')
 		return (full_input);
 	new_line = ft_strdup(cmdline->input.buffer);
-	if (new_line != NULL && full_input != NULL)
+	if (new_line == NULL)
+		return (NULL);
+	if (!expand_history_events(&cmdline->history, &new_line))
+	{
+		free(new_line);
+		return (NULL);
+	}
+	if (full_input != NULL)
 	{
 		tmp[0] = full_input;
 		tmp[1] = new_line;
@@ -66,10 +73,10 @@ static int	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret)
 
 int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	char	*term;
+	const char	*term;
 
 	g_cmdline = cmdline;
-	term = get_env_value(*alloc->var, "$TERM");
+	term = get_var_value(alloc->vars, "TERM");
 	if (term == NULL || term[0] == '\0')
 		term = "xterm-256color";
 	if (tgetent(NULL, term) == -1)
@@ -130,7 +137,7 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 			reset_term(cmdline);
 			save_history_entries(alloc, &cmdline->history);
 			ft_printf("exit\n");
-			exit(0); // TODO: exit with alloc ret value
+			exit(alloc->ret_val);
 		}
 		ft_dprintf(STDERR_FILENO
 				, "42sh: syntax error: unexpected end of file\n");

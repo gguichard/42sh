@@ -6,13 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:08:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 10:16:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 10:13:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include <term.h>
 #include <termios.h>
 #include <unistd.h>
-#include "libft.h"
 #include "cmdline.h"
 
 int	setup_term(t_cmdline *cmdline)
@@ -39,7 +40,14 @@ int	reset_term(t_cmdline *cmdline)
 
 int	update_winsize(t_cmdline *cmdline)
 {
-	if (ioctl(0, TIOCGWINSZ, &cmdline->winsize) == -1)
-		return (0);
-	return (1);
+	int	ret;
+
+	ret = 1;
+	if (ioctl(STDIN_FILENO, TIOCGWINSZ, &cmdline->winsize) == -1)
+		ret = 0;
+	if (!ret || cmdline->winsize.ws_col == 0)
+		cmdline->winsize.ws_col = tgetnum("co");
+	if (!ret || cmdline->winsize.ws_row == 0)
+		cmdline->winsize.ws_row = tgetnum("li");
+	return (ret);
 }

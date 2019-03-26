@@ -23,6 +23,7 @@ PATH_PATH		=	path
 PATH_TOKEN		=	token
 PATH_CMDLINE	=	cmdline
 PATH_AUTOCOMPL	=	autocomplete
+PATH_VARS		=	vars
 
 SRC_DIR	=	srcs
 SRC 	=	\
@@ -31,14 +32,7 @@ $(PATH_ERROR)/error_malloc.c \
 $(PATH_ERROR)/lexer_error.c \
 $(PATH_ERROR)/parser_error.c \
 $(PATH_ERROR)/error_redirection.c \
-$(PATH_ERROR)/error_cd.c \
 $(PATH_ERROR)/error_fd.c \
-$(PATH_ERROR)/error_set.c \
-$(PATH_ERROR)/error_unset.c \
-$(PATH_ERROR)/error_setenv.c \
-$(PATH_ERROR)/error_unsetenv.c \
-$(PATH_ERROR)/error_export.c \
-$(PATH_ERROR)/error_test.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
 $(PATH_LEXER)/replace_quote.c \
@@ -57,6 +51,7 @@ $(PATH_OPERATOR)/redirection.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_BUILT)/cd.c \
+$(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \
 $(PATH_BUILT)/exec_input.c \
 $(PATH_BUILT)/exit.c \
@@ -67,15 +62,12 @@ $(PATH_TOOLS)/clean_tools.c \
 $(PATH_TOOLS)/printer_ast.c \
 $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
-$(PATH_TOOLS)/env_tools.c \
-$(PATH_TOOLS)/env_tools_2.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
-$(PATH_TOOLS)/sort_tools.c \
 $(PATH_BUILT)/bg.c \
 $(PATH_BUILT)/export.c \
 $(PATH_BUILT)/fg.c \
-$(PATH_BUILT)/job.c \
+$(PATH_BUILT)/jobs.c \
 $(PATH_BUILT)/set.c \
 $(PATH_BUILT)/type.c \
 $(PATH_BUILT)/unset.c \
@@ -91,8 +83,6 @@ $(PATH_TOOLS)/analyzer_tools.c \
 $(PATH_TOOLS)/agreg_tools.c \
 $(PATH_TOOLS)/heredoc_tools.c \
 $(PATH_TOOLS)/redirection_tools.c \
-$(PATH_TOOLS)/cd_slash_tools.c \
-$(PATH_TOOLS)/cd_tools.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \
@@ -109,6 +99,8 @@ $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/handle_sigs.c \
 $(PATH_CMDLINE)/history.c \
+$(PATH_CMDLINE)/history_events.c \
+$(PATH_CMDLINE)/history_expand.c \
 $(PATH_CMDLINE)/history_utils.c \
 $(PATH_CMDLINE)/input.c \
 $(PATH_CMDLINE)/print_cmdline.c \
@@ -137,7 +129,11 @@ $(PATH_AUTOCOMPL)/ac_check_for.c \
 $(PATH_AUTOCOMPL)/ac_cmdline.c \
 $(PATH_AUTOCOMPL)/ac_rdir_utils.c \
 $(PATH_AUTOCOMPL)/ac_suff_utils.c \
-$(PATH_AUTOCOMPL)/utils.c
+$(PATH_AUTOCOMPL)/utils.c \
+$(PATH_VARS)/env.c \
+$(PATH_VARS)/shell_vars.c \
+$(PATH_VARS)/var_utils.c \
+$(PATH_VARS)/vars.c
 
 OBJ_DIR	=	.obj
 OBJ		=	$(SRC:.c=.o)
@@ -173,6 +169,7 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_insert 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_visual 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_AUTOCOMPL) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_VARS) 2> /dev/null || true
 
 clean:
 	$(MAKE) -C libft clean

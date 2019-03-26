@@ -43,7 +43,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
 		ft_exit_malloc();
 	modify = insert_new_tab(modify, i, new, elem);
-	delete_str_tab(elem->input);
+	ft_strtab_free(elem->input);
 	elem->input = modify;
 	*i += len_new;
 }

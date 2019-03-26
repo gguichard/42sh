@@ -54,7 +54,7 @@ static void		sort_ast(t_ast *lst, t_ast **sort)
 
 static t_ast	*clean_tab_and_ast(char **input, t_ast **lst)
 {
-	delete_str_tab(input);
+	ft_strtab_free(input);
 	del_lst_ast(lst);
 	return (NULL);
 }

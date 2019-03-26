@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:08:33 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 23:22:59 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 15:00:22 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,9 @@ void				add_history_entry(t_history *history, const char *content);
 void				push_history_entry(t_history *history, const char *content);
 const char			*peek_history_prev(t_history *history);
 const char			*peek_history_next(t_history *history);
+
+int					replace_event(t_history *history, char **input
+		, size_t *offset, char *event);
+int					expand_history_events(t_history *history, char **input);
 
 #endif
