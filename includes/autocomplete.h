@@ -19,7 +19,7 @@ typedef struct		s_ac_rdir_inf
 	char			*dir_to_use;
 	char			*file_word;
 	char			*cur_file_path;
-	char			*cur_file_name;
+	const char		*cur_file_name;
 	size_t			file_word_len;
 	struct stat		stat_buf;
 	int				need_to_be_cmd;
@@ -105,6 +105,8 @@ t_ac_suff_inf		*autocomplete_word(t_var *var_lst, const char *word
 		, int is_a_cmd, t_builtin *builtin_tab);
 
 t_ac_suff_inf		*autocomplete_var(t_var *var_lst, const char *word);
+
+t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc);
 
 /*
 ** Retourne 1 si le fichier present dans le t_ac_rdir_inf peut etre une

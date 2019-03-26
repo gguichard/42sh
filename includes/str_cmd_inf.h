@@ -41,6 +41,9 @@ char			scmd_cur_char(t_str_cmd_inf *str_cmd_inf);
 */
 const char		*scmd_cur_str(t_str_cmd_inf *str_cmd_inf);
 
+int				scmd_char_at_is_of(t_str_cmd_inf *str_cmd_inf, size_t pos
+		, const char *these);
+
 /*
 ** Retourne 1 si le char actuel du str_cmd_inf fait parti de la liste passe
 ** en parametre, 0 sinon. Retourne toujours 0 si le char actuel est '\0'.

@@ -22,6 +22,7 @@ PATH_HASHTABLE	=	hashtable
 PATH_PATH		=	path
 PATH_TOKEN		=	token
 PATH_CMDLINE	=	cmdline
+PATH_AUTOCOMPL	=	autocomplete
 
 SRC_DIR	=	srcs
 SRC 	=	\
@@ -130,7 +131,13 @@ $(PATH_CMDLINE)/mode_insert/misc_hooks.c \
 $(PATH_CMDLINE)/mode_insert/stop_reading.c \
 $(PATH_CMDLINE)/mode_visual/copy_paste_clipboard.c \
 $(PATH_CMDLINE)/mode_visual/select_utils.c \
-$(PATH_CMDLINE)/mode_visual/visual_utils.c
+$(PATH_CMDLINE)/mode_visual/visual_utils.c \
+$(PATH_AUTOCOMPL)/autocomplete.c \
+$(PATH_AUTOCOMPL)/ac_check_for.c \
+$(PATH_AUTOCOMPL)/ac_cmdline.c \
+$(PATH_AUTOCOMPL)/ac_rdir_utils.c \
+$(PATH_AUTOCOMPL)/ac_suff_utils.c \
+$(PATH_AUTOCOMPL)/utils.c
 
 OBJ_DIR	=	.obj
 OBJ		=	$(SRC:.c=.o)
@@ -165,6 +172,7 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_common 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_insert 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_visual 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_AUTOCOMPL) 2> /dev/null || true
 
 clean:
 	$(MAKE) -C libft clean
