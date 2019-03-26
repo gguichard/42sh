@@ -25,6 +25,8 @@ static int		is_dollared_spe_char(t_str_cmd_inf *str_cmd_inf, size_t at_pos
 int				scmd_char_at_is_escaped(t_str_cmd_inf *str_cmd_inf
 		, size_t at_pos)
 {
+	while (str_cmd_inf->sub_str_cmd != NULL)
+		str_cmd_inf = str_cmd_inf->sub_str_cmd;
 	if (str_cmd_inf->is_in_quote)
 		return (str_cmd_inf->str[str_cmd_inf->pos] != '\'');
 	if (str_cmd_inf->is_in_dbquote

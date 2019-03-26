@@ -14,7 +14,7 @@ static void		interpret_char_for_sub_str_cmd(t_str_cmd_inf *str_cmd_inf)
 		if ((new_scmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))) != NULL)
 		{
 			scmd_init(new_scmd, str_cmd_inf->str);
-			new_scmd->pos = str_cmd_inf->pos + 1;
+			new_scmd->pos = str_cmd_inf->pos;
 			if (str_cmd_inf->str[str_cmd_inf->pos] == '{')
 				new_scmd->cur_str_cmd_type = SCMD_TYPE_VAR;
 			else
@@ -50,8 +50,6 @@ static int		interpret_char_in_sub_str_cmd(t_str_cmd_inf *str_cmd_inf)
 	{
 		if (!interpret_char_in_sub_str_cmd(str_cmd_inf->sub_str_cmd))
 			ft_memdel((void**)&(str_cmd_inf->sub_str_cmd));
-		else
-			++(str_cmd_inf->sub_str_cmd->pos);
 		return (1);
 	}
 	else if (!scmd_cur_char_is_escaped(str_cmd_inf))
@@ -76,6 +74,8 @@ int				scmd_cur_char_is_in_nothing(t_str_cmd_inf *str_cmd_inf)
 
 int				scmd_move_to_next_char(t_str_cmd_inf *str_cmd_inf)
 {
+	t_str_cmd_inf *tmp_scmd;
+
 	if (str_cmd_inf->str[str_cmd_inf->pos] == '\0')
 		return (0);
 	if (!scmd_cur_char_is_escaped(str_cmd_inf))
@@ -89,6 +89,11 @@ int				scmd_move_to_next_char(t_str_cmd_inf *str_cmd_inf)
 			interpret_char_in_sub_str_cmd(str_cmd_inf);
 		}
 	}
-	++(str_cmd_inf->pos);
+	tmp_scmd = str_cmd_inf;
+	while (tmp_scmd != NULL)
+	{
+		++(tmp_scmd->pos);
+		tmp_scmd = tmp_scmd->sub_str_cmd;
+	}
 	return (1);
 }
