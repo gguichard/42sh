@@ -6,6 +6,22 @@
 #include "token_inf.h"
 #include "autocomplete.h"
 
+//TODO
+//TODO GERER LE BACKSLASH EN FIN DE COMMANDE ?!@#$%^&*!?@>$%<^>&$#>&*!@?
+//TODO
+//TODO GERER LES INIBITEURS DE CHAR AVANT D'APPELER AUTOCOMPLETE
+//TODO
+//TODO EXPAND LES ENV VAR AVANT DE TENTER L'AUTOCOMPLETION (SAUF SI VAR ACTUELLE)
+//TODO
+//TODO CHERCHER LES DOSSIERS DANS . SI EXECUTABLE NON TROUVE DANS LE PATH
+//TODO
+//TODO AUTOCOMPLETER LES ALIAS AUSSI (PSK C COOL)
+//TODO
+//TODO SUPPORT AUTOCOMPLETION APRES = OU : (PSK C MIEUX)
+//TODO
+//TODO SUPPORTER L'AUTOCOMPLETION DANS SOUS COMMANDE (FONCTION RECURSIVE AVEC BASE FUNC LOL)
+//TODO
+
 static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
@@ -51,7 +67,6 @@ static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 ** Alloue et retourne le dernier token de la commande. Renvoie NULL si erreur.
 */
 
-//TODO GERER LE BACKSLASH EN FIN DE COMMANDE ?!@#$%^&*!?@>$%<^>&$#>&*!@?
 static t_token_inf	*get_cur_token_cmd(const char *str, t_alloc *alloc)
 {
 	t_token_inf		*cur_tk_cmd;
@@ -81,16 +96,86 @@ static t_token_inf	*get_cur_token_cmd(const char *str, t_alloc *alloc)
 	return (cur_tk_cmd);
 }
 
+static int			is_valid_var_char(char var_char, size_t idx)
+{
+	if (idx == 0)
+	{
+		return (ft_isalpha(var_char) || var_char == '_' || var_char == '\0');
+	}
+	else
+	{
+		return (ft_isalnum(var_char) || var_char == '_' || var_char == '\0');
+	}
+}
+
+static void			update_last_var_inf(t_str_cmd_inf *scmd
+		, const char **last_var_start, int *is_inline_var)
+{
+	if (*last_var_start != NULL && *is_inline_var)
+	{
+		if (!is_valid_var_char(scmd_cur_char(scmd)
+					, scmd_cur_str(scmd) - *last_var_start))
+			*last_var_start = NULL;
+	}
+	else if (*last_var_start != NULL && !*is_inline_var)
+	{
+		if (scmd->sub_str_cmd == NULL
+				|| scmd->sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_VAR)
+			*last_var_start = NULL;
+	}
+	else if (!scmd->is_in_quote && scmd->sub_str_cmd == NULL
+			&& scmd_cur_char(scmd) == '$' && !scmd_cur_char_is_escaped(scmd)
+			&& is_valid_var_char(scmd->str[scmd->pos + 1], 0))
+	{
+		*last_var_start = scmd_cur_str(scmd) + 1;
+		*is_inline_var = 1;
+	}
+	else if (scmd->sub_str_cmd != NULL
+			&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_VAR)
+	{
+		*last_var_start = scmd_cur_str(scmd);
+		*is_inline_var = 0;
+	}
+}
+
+static const char	*find_last_var_start(const char *str)
+{
+	t_str_cmd_inf	scmd;
+	const char		*last_var_start;
+	int				is_inline_var;
+
+	if (str == NULL || !scmd_init(&scmd, str))
+		return (NULL);
+	last_var_start = NULL;
+	is_inline_var = 0;
+	while (1)
+	{
+		update_last_var_inf(&scmd, &last_var_start, &is_inline_var);
+		if (!scmd_move_to_next_char(&scmd))
+			break ;
+	}
+	scmd_clean(&scmd);
+	return (last_var_start);
+}
+
 t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 {
 	t_token_inf		*cur_tk;
 	t_ac_suff_inf	*acs_inf;
+	const char		*var_start;
 
 	cur_tk = get_cur_token_cmd(str, alloc);
-	//gerer vars ETC ETC ETC ETC ETC ETC ETC ETC ETC ETC
-	acs_inf = autocomplete_word(*alloc->var
-			, (cur_tk->token == NULL ? "" : cur_tk->token)
-			, cur_tk->type == TK_CMD, alloc->builtins);
+	var_start = find_last_var_start(cur_tk->token);
+	if (var_start == NULL)
+	{
+		acs_inf = autocomplete_word(*alloc->var
+				, (cur_tk->token == NULL ? "" : cur_tk->token)
+				, cur_tk->type == TK_CMD, alloc->builtins);
+	}
+	else
+	{
+		acs_inf = autocomplete_var(*alloc->var, var_start);
+	}
 	del_token(cur_tk, 0);
 	return (acs_inf);
 }
