@@ -10,7 +10,7 @@ int		error_expand(char *exp)
 
 int		check_expand_syntax(const char *str)
 {
-	if (ft_isalpha(str[0]) == 0 && str[0] != '_')
+	if (ft_isalpha(str[0]) == 0 && str[0] != '_' && str[0] != '?')
 		return (0);
 	return (1);
 }

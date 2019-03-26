@@ -4,35 +4,37 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-void	remove_escaped_char(t_str_cmd_inf *str_cmd, t_ast *elem, int i,
-		size_t *pos_elem)
+void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
 {
 	size_t	len;
 
 	if (*pos_elem == 0)
 		*pos_elem = str_cmd->pos;
-	len = ft_strlen(&(elem->input[i][*pos_elem]));
-	ft_memmove((void*)&(elem->input[i][*pos_elem - 1]),
-		(const void*)&(elem->input[i][*pos_elem]), len);
-	elem->input[i][*pos_elem + len - 1] = '\0';
+	len = ft_strlen(*input + *pos_elem);
+	ft_memmove((void*)(*input + *pos_elem - 1),
+		(const void*)(*input + *pos_elem), len);
+	(*input)[*pos_elem + len - 1] = '\0';
 	*pos_elem -= 1;
 }
 
-void	go_to_end_quote(t_str_cmd_inf *str_cmd, t_ast *elem, int i,
-		size_t *count_escape)
+void	go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
 {
-	remove_escaped_char(str_cmd, elem, i, count_escape);
+	remove_escaped_char(str_cmd, input, pos_elem);
 	while (str_cmd->is_in_quote == 1)
+	{
 		scmd_move_to_next_char(str_cmd);
-	remove_escaped_char(str_cmd, elem, i, count_escape);
+		*pos_elem += 1;
+	}
+	remove_escaped_char(str_cmd, input, pos_elem);
 }
 
-void	remove_escaped_char_db(t_ast *elem, int i, size_t *pos)
+void	update_pos_index(t_str_cmd_inf *str_cmd, size_t *pos_elem)
 {
-	size_t	len;
-
-	len = ft_strlen(&(elem->input[i][*pos]));
-	ft_memmove((void*)&(elem->input[i][*pos - 1]),
-		(const void*)&(elem->input[i][*pos]), len);
-	elem->input[i][*pos + len - 1] = '\0';
+	while (scmd_cur_is_of(str_cmd, SUBCMD_SPE_CHAR) == 0
+			&& scmd_cur_char(str_cmd))
+		scmd_move_to_next_char(str_cmd);
+	if (str_cmd->pos > 0)
+		str_cmd->pos -= 1;
+	if (*pos_elem > 0)
+		*pos_elem -= 1;
 }
