@@ -55,18 +55,12 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp,
 		if (check_expand_syntax(&(exp[2])) == 0)
 			return (error_expand(*input));
 		else
-		{
 			*str = get_expand_value(*(alloc->var), &(exp[2]), 1);
-			insert_var_input(*str, input, 1);
-		}
 	}
 	else if (check_expand_syntax(&(exp[1])) == 0)
 		return (error_expand(*input));
 	else
-	{
 		*str = get_expand_value(*(alloc->var), &(exp[1]), 0);
-		insert_var_input(*str, input, 0);
-	}
 	return (1);
 }
 
@@ -81,15 +75,14 @@ int			expand(t_ast *elem, t_alloc *alloc, int *i, size_t pos)
 	exp = NULL;
 	str = NULL;
 	x = 0;
-	// while ((exp = ft_strchr(&(elem->input[*i][pos]), '$')))
-	// {
 	exp = ft_strchr(&(elem->input[*i][pos]), '$');
-	if (!exp)
-		ft_printf("OUPS\n");
 	x = ft_strlen(elem->input[*i]) - ft_strlen(exp);
 	if (expand_var(&str, alloc, exp, &(elem->input[*i])) == 0)
 		return (0);
-	// }
+	if (elem->input[*i][pos + 1] == '{')
+		insert_var_input(str, &(elem->input[*i]), 1, pos);
+	else
+		insert_var_input(str, &(elem->input[*i]), 0, pos);
 	if (str)
 		create_new_input(elem, i, ft_strsplit(elem->input[*i], ' '));
 	return (1);

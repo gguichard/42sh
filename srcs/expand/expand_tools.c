@@ -10,21 +10,15 @@ int		error_expand(char *exp)
 
 int		check_expand_syntax(const char *str)
 {
-	ft_printf("EXP = |%s|\n", str);
 	if (ft_isalpha(str[0]) == 0 && str[0] != '_')
 		return (0);
 	return (1);
 }
 
-void	insert_var_input(char *str, char **input, int type)
+void	insert_var_input(char *str, char **input, int type, size_t start)
 {
-	int		start;
 	int		end;
 
-	start = 0;
-	end = 0;
-	while ((*input)[start] != '$')
-		start += 1;
 	end = start + 1;
 	if (type == 1)
 		while ((*input)[end] != '}')

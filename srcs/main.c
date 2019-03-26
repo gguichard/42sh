@@ -27,13 +27,13 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 /*
 **	VERIF TOKEN AND PRINT BEFORE PARSE
 */
-	t_list	*tmp;
-	tmp = lst_tk;
-	while (tmp)
-	{
-		ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
-		tmp = tmp->next;
-	}
+	// t_list	*tmp;
+	// tmp = lst_tk;
+	// while (tmp)
+	// {
+	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
+	// 	tmp = tmp->next;
+	// }
 
 	while (lst_tk)
 	{
