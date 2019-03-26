@@ -45,19 +45,15 @@ static void	display_job_full(t_list *tmp, int index)
 		print_job_pipe(job->pipe);
 }
 
-static void	display_option_job(t_list *tmp, t_opts *opts, int index, char *option_s)
+static void	display_option_job(t_list *tmp, t_opts *opts, int index)
 {
-	if (!has_opt(opts, 'l'))
-		display_simple_job(tmp, index, opts);
-	else if (!has_opt(opts, 'p'))
+	if (has_opt(opts, 'l'))
 		display_job_full(tmp, index);
-	else if (option_s && option_s[ft_strlen(option_s) - 1] == 'p')
-		display_simple_job(tmp, index, opts);
 	else
-		display_job_full(tmp, index);
+		display_simple_job(tmp, index, opts);
 }
 
-static int	display_jobs(t_opts *opts, char *option_s, int param)
+static int	display_jobs(t_opts *opts, int param)
 {
 	t_list	*tmp;
 	int		index;
@@ -68,11 +64,11 @@ static int	display_jobs(t_opts *opts, char *option_s, int param)
 	{
 		if (param == index)
 		{
-			display_option_job(tmp, opts, index, option_s);
+			display_option_job(tmp, opts, index);
 			break ;
 		}
 		else if (param == -1)
-			display_option_job(tmp, opts, index, option_s);
+			display_option_job(tmp, opts, index);
 		index += 1;
 		tmp = tmp->next;
 	}
@@ -86,7 +82,7 @@ int			builtin_jobs(t_ast *elem, t_alloc *alloc)
 
 	(void)alloc;
 	param = -1;
-	parse_opts(&opts, elem->input, "lp");
+	parse_opts(&opts, elem->input, "{lp}");
 	if (opts.error)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: jobs: -%c: invalid option\n", opts.error);
@@ -101,5 +97,5 @@ int			builtin_jobs(t_ast *elem, t_alloc *alloc)
 		return (1);
 	}
 	refresh_jobs();
-	return (display_jobs(&opts, elem->input[opts.index - 1], param));
+	return (display_jobs(&opts, param));
 }
