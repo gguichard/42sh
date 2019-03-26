@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 16:14:08 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 16:38:53 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,13 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 	const t_seq	*seq;
 
 	reset_cmdline(cmdline, prompt);
-	while (cmdline->input.reading == 1 && read(STDIN_FILENO, &input, 1) == 1)
+	while (cmdline->input.reading == 1)
 	{
+		if (read(STDIN_FILENO, &input, 1) <= 0)
+		{
+			cmdline->input.reading = -1;
+			return (0);
+		}
 		seq = get_sequence(cmdline, input);
 		if (seq != NULL)
 			handle_sequence(cmdline, seq);
