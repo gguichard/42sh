@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 11:13:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 14:37:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/26 15:59:14 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "libft.h"
 #include "cmdline.h"
 #include "history.h"
-#include "str_cmd_inf.h"
 #include "split_cmd_token.h"
 
 static int	is_char_escaped(const char *str, size_t offset)
