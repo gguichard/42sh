@@ -1,29 +1,27 @@
+#include "libft.h"
 #include "shell.h"
 #include "parser_lexer.h"
-#include "builtins.h"
+#include "vars.h"
 
-void		expand_home_shortcut(char **s, t_var *lst_env)
+void		expand_home_shortcut(char **s, t_list *vars)
 {
 	char	*dir;
 
 	dir = 0;
-
 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
 	{
-		dir = ft_strjoin(get_env_value(lst_env, "$HOME"),
-			((*s)[1] == '/') ? (*s) + 1 : 0);
+		dir = ft_strjoin(get_var_value(vars, "HOME")
+				, ((*s)[1] == '/') ? (*s) + 1 : 0);
 	}
-	else if (ft_strncmp(*s, "~-", 2) == 0 && ((*s)[2] == '/'
-	|| (*s)[2] == '\0'))
+	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
 	{
-		dir = ft_strjoin(get_env_value(lst_env, "$OLDPWD"),
-			((*s)[2] == '/') ? (*s) + 2 : 0);
+		dir = ft_strjoin(get_var_value(vars, "OLDPWD")
+				, ((*s)[2] == '/') ? (*s) + 2 : 0);
 	}
-	else if (ft_strncmp("~+", *s, 2) == 0 && ((*s)[2] == '/'
-	|| (*s)[2] == '\0'))
+	else if (ft_strnequ("~+", *s, 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
 	{
-		dir = ft_strjoin(get_env_value(lst_env, "$PWD"),
-			((*s)[2] == '/') ? (*s) + 2 : 0);
+		dir = ft_strjoin(get_var_value(vars, "PWD")
+				, ((*s)[2] == '/') ? (*s) + 2 : 0);
 	}
 	if (dir)
 	{

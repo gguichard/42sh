@@ -27,7 +27,7 @@ char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
 char	***read_lexer(char **lexer, char ***all_split_cmd);
 int		replace_val_ret(char **str, int i, int x);
-void	expand_home_shortcut(char **s, t_var *lst_env);
+void	expand_home_shortcut(char **s, t_list *vars);
 int		remove_quote(char **s, int *i, t_alloc *alloc);
 int		convert_quote(char **s, t_alloc *alloc);
 int		check_opening_quote(char **str, t_alloc *alloc);
@@ -120,7 +120,5 @@ void	lettre_in_quote(char const *s, int *i, int *nb_lettre);
 void	nb_lettre_operator(char *s, int i, int *nb_lettre);
 int		check_redir(char *s, int *i, unsigned int *nb_word);
 int		position_redir(char const *s, int *i, int wn, int *iw);
-
-
 
 #endif

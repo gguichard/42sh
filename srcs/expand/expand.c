@@ -55,12 +55,12 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp,
 		if (check_expand_syntax(&(exp[2])) == 0)
 			return (error_expand(*input));
 		else
-			*str = get_expand_value(*(alloc->var), &(exp[2]), 1);
+			*str = get_expand_value(&(exp[2]), 1, alloc);
 	}
 	else if (check_expand_syntax(&(exp[1])) == 0)
 		return (error_expand(*input));
 	else
-		*str = get_expand_value(*(alloc->var), &(exp[1]), 0);
+		*str = get_expand_value(&(exp[1]), 0, alloc);
 	return (1);
 }
 

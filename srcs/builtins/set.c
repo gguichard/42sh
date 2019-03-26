@@ -1,23 +1,32 @@
+#include <unistd.h>
+#include "libft.h"
+#include <unistd.h>
 #include "shell.h"
+#include "vars.h"
 #include "builtins.h"
-#include "error.h"
 
 // BUILTINS SET POSIX NORME BUT NO OPTIONS
 // JUST DISPLAY ALL VARIABLES
 // IF ARGUMENTS RETURN ERROR WITH USAGE
 
-int	set_builtins(t_ast *elem, t_alloc *alloc)
+int	builtin_set(t_ast *elem, t_alloc *alloc)
 {
-	t_var	*tmp;
+	t_list	*cur;
+	t_var	*var;
 
-	tmp = *(alloc->var);
-	if (elem->input[1])
-		return (error_set(elem->input[1]));
-	while (tmp)
+	if (elem->input[1] != NULL)
 	{
-		if (tmp->value)
-			ft_printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
+		ft_dprintf(STDERR_FILENO, "42sh: set: %s: invalid usage\n"
+				"set: usage: set", elem->input[1]);
+		return (1);
+	}
+	cur = alloc->vars;
+	while (cur != NULL)
+	{
+		var = (t_var *)cur->content;
+		if (var->value != NULL)
+			ft_printf("%s=%s\n", var->key, var->value);
+		cur = cur->next;
 	}
 	return (0);
 }

@@ -33,10 +33,11 @@ void	insert_var_input(char *str, char **input, int type, size_t start)
 	ft_insert(input, str, start, end);
 }
 
-char	*get_expand_value(t_var *lst_var, const char *exp, int type)
+char	*get_expand_value(const char *exp, int type, t_alloc *alloc)
 {
 	int		i;
 	char	*str;
+	char	*value;
 
 	i = 0;
 	str = NULL;
@@ -48,13 +49,7 @@ char	*get_expand_value(t_var *lst_var, const char *exp, int type)
 			i += 1;
 	if (!(str = ft_strndup(exp, i)))
 		ft_exit_malloc();
-	while (lst_var)
-	{
-		if (ft_strcmp(lst_var->key, str) == 0)
-			break ;
-		else
-			lst_var = lst_var->next;
-	}
+	value = get_var_for_expand(alloc, str);
 	free(str);
-	return ((lst_var) ? lst_var->value : "");
+	return (value);
 }

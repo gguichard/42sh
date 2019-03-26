@@ -84,7 +84,7 @@ int			ft_error_parse_redir(char **input)
 			if (ft_isoperator(input[x][y]) == 1
 			&& check_operator_error(input, x, y) == 1)
 			{
-				delete_str_tab(input);
+				ft_strtab_free(input);
 				return (1);
 			}
 			y += 1;

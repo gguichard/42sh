@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include "libft.h"
 #include "shell.h"
 #include "convert_path_to_tab.h"
 #include "check_path.h"
@@ -32,7 +33,7 @@ static t_error	check_is_valid_path(const char *file_path)
 	return (error);
 }
 
-char			*search_exec(t_var *var_lst, const char *exec_name
+char			*search_exec(t_list *vars, const char *exec_name
 		, t_error *error)
 {
 	char	*file_path;
@@ -41,7 +42,7 @@ char			*search_exec(t_var *var_lst, const char *exec_name
 
 	file_path = NULL;
 	*error = ERRC_CMDNOTFOUND;
-	if ((path_tab = convert_path_to_tab(var_lst)) != NULL)
+	if ((path_tab = convert_path_to_tab(vars)) != NULL)
 	{
 		index = -1;
 		while (path_tab[++index] != NULL)

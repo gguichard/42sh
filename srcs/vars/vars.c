@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 15:35:38 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/26 15:26:07 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,21 @@ t_var		*get_var(t_list *lst, const char *key)
 	return (NULL);
 }
 
-int			create_var(t_list **lst, const char *key, const char *value)
+int			create_var(t_list **lst, const char *key, const char *value
+		, int is_env)
 {
 	t_var	var;
 	t_list	*elem;
 
 	var.key = ft_strdup(key);
-	var.value = ft_strdup(value);
-	if (var.key != NULL && var.value != NULL)
+	var.value = (value == NULL) ? NULL : ft_strdup(value);
+	var.is_env = is_env;
+	if (var.key != NULL && (var.value != NULL || value == NULL))
 	{
 		elem = ft_lstnew(&var, sizeof(t_var));
 		if (elem != NULL)
 		{
-			ft_lstpush(lst, elem);
+			insert_new_elem(lst, elem);
 			return (1);
 		}
 	}
@@ -68,13 +70,15 @@ int			update_var(t_list **lst, const char *key, const char *value)
 	var = get_var(*lst, key);
 	if (var != NULL)
 	{
-		if ((dup = ft_strdup(value)) == NULL)
+		if (value == NULL)
+			dup = NULL;
+		else if ((dup = ft_strdup(value)) == NULL)
 			return (0);
 		free(var->value);
 		var->value = dup;
 		return (1);
 	}
-	return (create_var(lst, key, value));
+	return (create_var(lst, key, value, 1));
 }
 
 int			unset_var(t_list **lst, const char *key)

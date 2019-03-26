@@ -71,39 +71,36 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		del_ast(&sort_ast);
 	}
 	scmd_clean(&scmd);
-// FUNCTION TO CLEAN LST_TK
+	// FUNCTION TO CLEAN LST_TK
 }
 
-//TODO faire un vrai main
-int		main(int argc, char **argv, char **env)
+int		main(int argc, char **argv, char **environ)
 {
-	t_var	*lst;
 	t_alloc	alloc;
 	char	*input;
 
-	(void)argc;
-	(void)argv;
-	lst = 0;
-	ft_bzero(&alloc, sizeof(t_alloc));
-	env_cp(env, &lst);
-	set_alloc(&alloc, &lst);
-	if (!init_cmdline(&alloc, &alloc.cmdline))
+	if (!setup_alloc(&alloc, argc, argv, environ))
+		ft_dprintf(STDERR_FILENO, "Unable to setup environment\n");
+	else
 	{
-		ft_dprintf(STDERR_FILENO, "Unable to init term\n");
-		return (1);
-	}
-	load_history_file_entries(&alloc, &alloc.cmdline.history);
-	while (1)
-	{
-		setup_term(&alloc.cmdline);
-		input = read_cmdline(&alloc, &alloc.cmdline);
-		reset_term(&alloc.cmdline);
-		if (input != NULL)
+		if (!init_cmdline(&alloc, &alloc.cmdline))
+			ft_dprintf(STDERR_FILENO, "Unable to init term\n");
+		else
 		{
-			lexer_parser(input, &alloc);
-			free(input);
+			load_history_file_entries(&alloc, &alloc.cmdline.history);
+			while (1)
+			{
+				setup_term(&alloc.cmdline);
+				input = read_cmdline(&alloc, &alloc.cmdline);
+				reset_term(&alloc.cmdline);
+				if (input != NULL)
+				{
+					lexer_parser(input, &alloc);
+					free(input);
+				}
+			}
 		}
 	}
 	del_alloc(&alloc);
-	return (0);
+	return (1);
 }

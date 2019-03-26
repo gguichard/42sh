@@ -27,7 +27,7 @@ int			expand_db(t_ast *elem, t_alloc *alloc, int *i, size_t *pos)
 }
 
 void	inhib_in_dbquote(t_ast *elem, int i, t_str_cmd_inf **str_cmd,
-		size_t *count_escape, t_alloc *alloc)
+		size_t *count_escape)
 {
 	size_t	pos;
 	size_t	len;
@@ -70,7 +70,7 @@ int		inhib_all(t_str_cmd_inf *str_cmd, t_ast *elem, int i, t_alloc *alloc)
 		if (str_cmd->is_in_quote == 1)
 			go_to_end_quote(str_cmd, elem, i, &pos_elem);
 		else if (str_cmd->is_in_dbquote)
-			inhib_in_dbquote(elem, i, &str_cmd, &pos_elem, alloc);
+			inhib_in_dbquote(elem, i, &str_cmd, &pos_elem);
 		else if (scmd_cur_char_is_escaped(str_cmd) == 1)
 			remove_escaped_char(str_cmd, elem, i, &pos_elem);
 		else if (scmd_cur_char(str_cmd) == '$')

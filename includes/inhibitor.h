@@ -13,6 +13,4 @@ void	go_to_end_quote(t_str_cmd_inf *str_cmd, t_ast *elem, int i,
 		size_t *count_escape);
 void	remove_escaped_char_db(t_ast *elem, int i, size_t *pos);
 
-
-
 #endif
