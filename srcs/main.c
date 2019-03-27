@@ -50,6 +50,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		// else
 		check_exit_cmd(sort_ast);
 		alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
+		refresh_jobs();
 		/*
 		 ** PRINT AST AND REINIT NODE
 		 */
