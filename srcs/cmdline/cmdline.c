@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:25:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:48:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	return (1);
 }
 
-static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
+static char	*read_full_input(t_cmdline *cmdline, t_rstate *ret, t_alloc *alloc)
 {
 	char			*full_input;
 	t_prompt		type;
@@ -100,7 +100,8 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
 	full_input = NULL;
 	type = PROMPT_DEFAULT;
 	while ((full_input == NULL || type != PROMPT_DEFAULT)
-			&& (*ret = read_input(cmdline, get_prompt(cmdline, type))) == 1)
+			&& (*ret = read_input(cmdline, get_prompt(cmdline, type)))
+			== RSTATE_END)
 	{
 		if ((full_input = join_command(cmdline, full_input, type)) == NULL
 				|| !scmd_init(&scmd_inf, full_input))
@@ -120,16 +121,15 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
 
 char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	int		ret;
-	char	*full_input;
+	t_rstate	ret;
+	char		*full_input;
 
-	ret = 1;
+	ret = RSTATE_END;
 	full_input = read_full_input(cmdline, &ret, alloc);
-	if (ret)
-	{
+	if (ret == RSTATE_END)
 		push_history_entry(&cmdline->history, full_input);
-		cmdline->history.offset = NULL;
-	}
+	else if (ret == RSTATE_ETX)
+		ft_strdel(&full_input);
 	else
 	{
 		if (full_input == NULL)
@@ -140,5 +140,6 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 			ft_strdel(&full_input);
 		}
 	}
+	cmdline->history.offset = NULL;
 	return (full_input);
 }

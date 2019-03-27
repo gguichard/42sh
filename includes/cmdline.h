@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:26:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:43:43 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void		print_cmdline(t_cmdline *cmdline);
 void		add_char_to_input(t_cmdline *cmdline, char c);
 
 const char	*get_prompt(t_cmdline *cmdline, t_prompt type);
-int			read_input(t_cmdline *cmdline, const char *prompt);
+t_rstate	read_input(t_cmdline *cmdline, const char *prompt);
 
 int			t_putchar(int c);
 

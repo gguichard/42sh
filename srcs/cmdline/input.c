@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:30:50 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:41:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,23 +56,23 @@ void			reset_cmdline(t_cmdline *cmdline, const char *prompt)
 	ft_memset(cmdline->input.buffer, 0, cmdline->input.capacity);
 	cmdline->input.offset = 0;
 	cmdline->input.size = 0;
-	cmdline->input.reading = 1;
+	cmdline->input.reading = RSTATE_READING;
 	cmdline->prompt.str = prompt;
 	print_prompt_and_cmdline(cmdline);
 }
 
-int				read_input(t_cmdline *cmdline, const char *prompt)
+t_rstate		read_input(t_cmdline *cmdline, const char *prompt)
 {
 	char		input;
 	const t_seq	*seq;
 
 	reset_cmdline(cmdline, prompt);
-	while (cmdline->input.reading == 1)
+	while (cmdline->input.reading == RSTATE_READING)
 	{
 		if (read(STDIN_FILENO, &input, 1) <= 0)
 		{
-			cmdline->input.reading = -1;
-			return (0);
+			cmdline->input.reading = RSTATE_EOT;
+			break ;
 		}
 		seq = get_sequence(cmdline, input);
 		if (seq != NULL)
@@ -84,5 +84,5 @@ int				read_input(t_cmdline *cmdline, const char *prompt)
 				add_char_to_input(cmdline, input);
 		}
 	}
-	return (cmdline->input.reading != -1);
+	return (cmdline->input.reading);
 }
