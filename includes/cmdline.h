@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:43:43 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 13:51:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int			handle_clear(t_cmdline *cmdline);
 int			handle_bell(t_cmdline *cmdline);
 int			handle_history_prev(t_cmdline *cmdline);
 int			handle_history_next(t_cmdline *cmdline);
+int			handle_autocomplete(t_cmdline *cmdline);
 
 /*
 ** VISUAL MODE.
