@@ -7,6 +7,13 @@
 # include "shell.h"
 # include "token_inf.h"
 
+typedef enum		e_dir_type
+{
+	DTYPE_NOT_A_DIR,
+	DTYPE_MAY_BE_DIR,
+	DTYPE_IS_A_DIR
+}					t_dir_type;
+
 typedef enum		e_ac_suff_type
 {
 	ACS_TYPE_NOTHING,
@@ -25,7 +32,7 @@ typedef struct		s_ac_rdir_inf
 	size_t			file_word_len;
 	struct stat		stat_buf;
 	int				need_to_be_cmd;
-	int				can_be_dir;
+	t_dir_type		dir_type;;
 	int				force_exec_type;
 }					t_ac_rdir_inf;
 
@@ -142,7 +149,7 @@ int					readdir_to_dirent(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs);
 ** parametre. Retourne 0 si l'initialisation rate, 1 si elle reussi.
 */
 int					init_ac_rdir(const char *word, t_ac_rdir_inf *acrd
-		, int need_to_be_cmd, int can_be_dir);
+		, int need_to_be_cmd, t_dir_type dir_type);
 
 /*
 ** Supprime le contenu du t_ac_rdir_inf.

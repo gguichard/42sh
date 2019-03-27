@@ -9,7 +9,7 @@
 void	check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
 		, t_ac_suff_inf *acs, t_list *var_lst)
 {
-	if (!init_ac_rdir(word, acrd, 1, 0))
+	if (!init_ac_rdir(word, acrd, 1, DTYPE_NOT_A_DIR))
 		return ;
 	ft_bzero(&(acrd->stat_buf), sizeof(struct stat));
 	acrd->force_exec_type = 1;
@@ -27,7 +27,7 @@ void	check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
 void	check_for_builtin_ac(const char *word, t_ac_rdir_inf *acrd
 		, t_ac_suff_inf *acs, const t_builtin *builtin_tab)
 {
-	if (!init_ac_rdir(word, acrd, 1, 0))
+	if (!init_ac_rdir(word, acrd, 1, DTYPE_NOT_A_DIR))
 		return ;
 	ft_bzero(&(acrd->stat_buf), sizeof(struct stat));
 	acrd->force_exec_type = 1;
@@ -48,7 +48,7 @@ void	check_for_alias_ac(const char *word, t_ac_rdir_inf *acrd
 	t_list	*hashentry_lst;
 	size_t	bucket_idx;
 
-	if (!init_ac_rdir(word, acrd, 1, 0))
+	if (!init_ac_rdir(word, acrd, 1, DTYPE_NOT_A_DIR))
 		return ;
 	ft_bzero(&(acrd->stat_buf), sizeof(struct stat));
 	acrd->force_exec_type = 1;
