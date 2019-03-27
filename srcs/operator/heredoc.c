@@ -6,13 +6,17 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 15:42:06 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 17:48:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include <stdlib.h>
 #include "libft.h"
 #include "shell.h"
+#include "job.h"
+#include "parser_lexer.h"
+#include "builtins.h"
 #include "cmdline.h"
 
 static char	*join_heredoc(char *heredoc, char *part)
@@ -52,9 +56,32 @@ char		*read_heredoc(t_cmdline *cmdline, const char *word)
 	return (heredoc);
 }
 
-int			heredoc(t_ast *elem, t_alloc *alloc)
+int			heredoc(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
-	(void)elem;
-	(void)alloc;
-	return (0);
+	pid_t	pid;
+	int		fildes[2];
+	char	*heredoc;
+
+	// TODO: skip prochains heredoc
+	if (!opt->fork)
+	{
+		pid = fork();
+		if (pid == -1)
+			return (2);
+		else if (pid > 0)
+		{
+			wait_pid(pid, elem->left, opt, alloc);
+			return (ret_status(alloc->ret_val, pid, 0));
+		}
+	}
+	opt->fork = true;
+	if (pipe(fildes) != -1)
+	{
+		dup2(fildes[0], STDIN_FILENO);
+		heredoc = "test de heredoc\n";
+		write(fildes[1], heredoc, ft_strlen(heredoc));
+		close(fildes[1]);
+		close(fildes[0]);
+	}
+	return (analyzer(elem->left, alloc, opt));
 }

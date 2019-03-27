@@ -14,7 +14,7 @@ pid_t					process_fork(t_ast *elem, t_alloc *alloc,
 int						waiting_line(bool wait_hang, t_list *tmp);
 int						job_control(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int						redirection(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
-int						heredoc(t_ast *elem, t_alloc *alloc);
+int						heredoc(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 int						complete_heredoc(t_ast *lst, t_alloc *alloc);
 
 /*

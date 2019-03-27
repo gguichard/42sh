@@ -3,7 +3,6 @@
 #include "builtins.h"
 #include "parser_lexer.h"
 
-
 int	dispatch_cmd(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	int					i;
@@ -61,7 +60,7 @@ int	dispatch_redir(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	else if (i == 3 || i == 4 || i == 5)
 		i = redirection_3(elem, alloc, opt);
 	else if (i == 6)
-		i = heredoc(elem, alloc);
+		i = heredoc(elem, alloc, opt);
 	else
 		i = dispatch_agreg(elem, alloc, opt);
 	return (i);
