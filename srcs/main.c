@@ -47,9 +47,13 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
 		// 	analyzer(sort_ast, alloc, TRUE);
 		// else
-		check_exit_cmd(sort_ast);
+
+		// check_exit_cmd(sort_ast);
+
 		// alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-		refresh_jobs();
+
+		// refresh_jobs();
+
 		/*
 		 ** PRINT AST AND REINIT NODE
 		 */

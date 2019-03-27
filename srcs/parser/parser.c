@@ -95,7 +95,6 @@ t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 	t_ast			*sort;
 	t_ast			*elem;
 	t_ast			*branch;
-	// t_token_type	type;
 
 	(void)alloc;
 	sort = NULL;
@@ -108,25 +107,18 @@ t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 		branch = create_ast_branch(lst_tk);
 		if (!sort)
 			sort = branch;
-		if (sort->type == CMD_SEP && !sort->left)
-			sort->left = branch;
-		else if (get_tk(*lst_tk)->type == TK_CMD_SEP)
-				// && ft_strcmp(get_tk(*lst_tk)->token, ";") == 0)
+		if (sort->type == CMD_SEP && !sort->right)
+		{
+			sort->right = branch;
+			branch->back = sort;
+		}
+		if (*lst_tk && get_tk(*lst_tk)->type == TK_CMD_SEP)
 		{
 			elem = create_elem(lst_tk);
 			elem->left = sort;
+			sort->back = elem;
 			sort = elem;
 		}
-	// 	type = get_tk(*lst_tk)->type;
-	// 	if (type == TK_CMD_SEP && (ft_strcmp(get_tk(*lst_tk)->token, ";") == 0
-	// 			|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
-	// 		break ;
-	// 	else if (type != TK_PARAM)
-	// 	{
-	// 		elem = create_elem(lst_tk);
-	// 		sort_ast(elem, &sort);
-	// 	}
-	// 	else
 		if (*lst_tk)
 			*lst_tk = (*lst_tk)->next;
 	}
