@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 16:13:52 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:02:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
 void		print_next_line_tcaps(void);
 int			print_big_cmdline_prompt(t_cmdline *cmdline);
+void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		update_cmdline_at_offset(t_cmdline *cmdline);
 void		print_cmdline(t_cmdline *cmdline);

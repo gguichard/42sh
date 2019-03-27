@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 16:38:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 00:51:23 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void			add_char_to_input(t_cmdline *cmdline, char c)
 void			reset_cmdline(t_cmdline *cmdline, const char *prompt)
 {
 	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
-	set_cursor_pos(&cmdline->cursor);
+	if (!set_cursor_pos(&cmdline->cursor))
+		cmdline->cursor.x = ft_strlen(prompt);
 	cmdline->saved_col = -1;
 	cmdline->row = 0;
 	cmdline->konami_code = 0;
