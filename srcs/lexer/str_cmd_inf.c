@@ -13,7 +13,8 @@ static void		interpret_char_for_sub_str_cmd(t_str_cmd_inf *str_cmd_inf)
 	{
 		if ((new_scmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))) != NULL)
 		{
-			scmd_init(new_scmd, str_cmd_inf->str);
+			scmd_init(new_scmd, NULL);
+			new_scmd->str = str_cmd_inf->str;
 			new_scmd->pos = str_cmd_inf->pos;
 			if (str_cmd_inf->str[str_cmd_inf->pos] == '{')
 				new_scmd->cur_str_cmd_type = SCMD_TYPE_VAR;
