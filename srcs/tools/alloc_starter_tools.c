@@ -1,44 +1,91 @@
 #include "shell.h"
+#include "vars.h"
 #include "builtins.h"
 #include "error.h"
 #include "exectable.h"
 
-static t_builtin	*set_tab_builtins(void)
-{
-	t_builtin			*builtins;
-	static char			*lst_built[] = {"echo", "cd", "exit", "type", "hash",
-		"alias", "unalias", "set", "unset", "export", "jobs", "fg", "bg"};
-	static t_built_fun	lst_function[] = { &echo_builtins, &cd_builtins,
-		&exit_builtins, &type_builtins, &hash_builtins, &alias_builtins,
-		&unalias_builtins, &set_builtins, &unset_builtins, &export_builtins,
-		&job_builtins, &fg_builtins, &bg_builtins };
-	int					i;
+static const t_builtin	g_builtins[] = {
+	{"echo", builtin_echo},
+	{"cd", builtin_cd},
+	{"exit", builtin_exit},
+	{"type", builtin_type},
+	{"hash", builtin_hash},
+	{"alias", builtin_alias},
+	{"unalias", builtin_unalias},
+	{"set", builtin_set},
+	{"unset", builtin_unset},
+	{"export", builtin_export},
+	{"jobs", builtin_jobs},
+	{"fg", builtin_fg},
+	{"bg", builtin_bg},
+	{"test", builtin_test},
+	{NULL, NULL}
+};
 
-	i = 0;
-	if (!(builtins = (t_builtin *)malloc(sizeof(t_builtin) * 14)))
-		ft_exit_malloc();
-	while (i < 13)
+static void				increase_shlvl(t_alloc *alloc)
+{
+	t_var	*var;
+	long	shlvl;
+	char	*endptr;
+	char	*tmp;
+
+	var = get_var(alloc->vars, "SHLVL");
+	if (var == NULL)
+		shlvl = 0;
+	else
 	{
-		builtins[i].name = lst_built[i];
-		builtins[i].built_fun = lst_function[i];
-		i += 1;
+		shlvl = ft_strtol(var->value, &endptr, 10);
+		if (*endptr != '\0' || shlvl < 0 || shlvl >= INT_MAX)
+			shlvl = 0;
 	}
-	builtins[i].name = NULL;
-	builtins[i].built_fun = NULL;
-	return (builtins);
+	tmp = ft_itoa((int)shlvl + 1);
+	if (tmp != NULL)
+	{
+		update_var(&alloc->vars, "SHLVL", tmp);
+		free(tmp);
+	}
 }
 
-void				set_alloc(t_alloc *al, t_var **lst)
+void					setup_def_vars(t_alloc *alloc)
 {
-	int		x;
+	t_var	*var;
+	char	*cur_pwd;
 
-	al->var = lst;
-	x = 0;
-	while (x < 10)
-		al->fd[x++] = -1;
-	al->builtins = set_tab_builtins();
-	if ((al->exectable = make_exectable()) == NULL)
-		ft_exit_malloc();
-	if ((al->aliastable = make_def_hashtable()) == NULL)
-		ft_exit_malloc();
+	increase_shlvl(alloc);
+	var = get_var(alloc->vars, "PWD");
+	if (var == NULL)
+	{
+		cur_pwd = getcwd(NULL, 0);
+		if (cur_pwd != NULL)
+		{
+			create_var(&alloc->vars, "PWD", cur_pwd, 1);
+			free(cur_pwd);
+		}
+	}
+}
+
+int						setup_alloc(t_alloc *alloc, int argc, char **argv
+		, char **environ)
+{
+	int	idx;
+
+	ft_memset(alloc, 0, sizeof(t_alloc));
+	alloc->argc = argc;
+	alloc->argv = argv;
+	alloc->vars = parse_env(environ);
+	setup_def_vars(alloc);
+	idx = 0;
+	while (idx < 10)
+	{
+		alloc->fd[idx] = -1;
+		idx++;
+	}
+	alloc->builtins = g_builtins;
+	alloc->exectable = make_exectable();
+	if (alloc->exectable == NULL)
+		return (0);
+	alloc->aliastable = make_def_hashtable();
+	if (alloc->aliastable == NULL)
+		return (0);
+	return (1);
 }

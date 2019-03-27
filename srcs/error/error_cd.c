@@ -18,7 +18,6 @@ int	error_cd(char *err, int type)
 	if (type == 4)
 	{
 		write(2, "21sh: cd: too many arguments\n", 29);
-		g_ret[0] = 2;
 		return (-1);
 	}
 	if (type == 0)
@@ -32,6 +31,5 @@ int	error_cd(char *err, int type)
 	write(2, err, ft_strlen(err));
 	(type == 2) ? write(2, " not set", 8) : 0;
 	write(2, "\n", 1);
-	g_ret[0] = 1;
 	return (-1);
 }

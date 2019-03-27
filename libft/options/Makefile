@@ -6,20 +6,22 @@
 #    By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/12 09:21:09 by gguichar          #+#    #+#              #
-#    Updated: 2018/12/20 21:14:39 by gguichar         ###   ########.fr        #
+#    Updated: 2019/03/20 20:18:37 by gguichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= 	options.a
+NAME	=	options.a
 
-SRC		= 	parsing.c utils.c
-SRC_DIR	= 	src
+SRC		=	\
+parsing.c	\
+utils.c
+SRC_DIR	=	src
 
-OBJ		= 	$(SRC:.c=.o)
-OBJ_DIR	= 	.obj
+OBJ		=	$(SRC:.c=.o)
+OBJ_DIR	=	.obj
 
-CC		= 	gcc
-CFLAGS	= 	-Wall -Wextra -Werror -O2 -I ../includes
+CC		=	gcc
+CFLAGS	=	-Wall -Wextra -Werror -O2 -I ../includes
 
 all: $(NAME)
 

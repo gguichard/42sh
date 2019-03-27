@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 20:32:03 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/15 14:48:25 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/25 17:06:25 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 typedef struct	s_opts
 {
-	int			value;
-	int			index;
-	char		error;
-	const char	*args[MAX_OPTS];
-	const char	*optstring;
+	unsigned int	value;
+	int				index;
+	char			error;
+	const char		*args[MAX_OPTS];
+	const char		*optstring;
 }				t_opts;
 
 /*

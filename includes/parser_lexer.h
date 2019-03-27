@@ -26,8 +26,8 @@ char	**lexer(t_str_cmd_inf *scmd);
 char	**clean_input(char *str);
 void	replace_str(char **str, char *insert, int pos);
 char	***read_lexer(char **lexer, char ***all_split_cmd);
-int		replace_val_ret(char **str, int i, int x);
-void	expand_home_shortcut(char **s, t_var *lst_env);
+int		replace_val_ret(char **str, int i, int x, int err);
+void	expand_home_shortcut(char **s, t_list *vars);
 int		remove_quote(char **s, int *i, t_alloc *alloc);
 int		convert_quote(char **s, t_alloc *alloc);
 int		check_opening_quote(char **str, t_alloc *alloc);
@@ -35,7 +35,6 @@ int		find_closing(char **str, int *i, t_alloc *alloc);
 int		check_cmd_pipe(char **input, t_alloc *alloc);
 char	**ft_splitwhitespace_shell(char *s);
 char	**ft_strsplit_shell(char *str, char c);
-int		ret_status(void);
 
 
 /*
@@ -53,7 +52,6 @@ void	get_position(char const *s, int *i, int wn, int *iw);
 void	in_quote(char const *s, int *i);
 void	lettre_in_quote(char const *s, int *i, int *nb_lettre);
 void	nb_lettre_operator(char *s, int i, int *nb_lettre);
-int		replace_val_ret(char **str, int i, int x);
 int		check_pos_operator(char *s, int *i, int wn, int *wd_search);
 int		check_operator(char *s, int *i, unsigned int *nb_word, size_t len);
 int		type_operator(char const *s, int *i);
@@ -67,12 +65,13 @@ char	*ft_back_quote(char *sub, t_alloc *alloc);
 
 t_ast	*parser(t_list **lst_tk, t_alloc *alloc);
 void	fill_ast(char **s, t_ast **lst, int save, int i);
-int		analyzer(t_ast *sort, t_alloc *alloc, int no_fork);
-int		dispatch_agreg(t_ast *elem, t_alloc *alloc, int no_fork);
-int		dispatch_operator(t_ast *elem, t_alloc *alloc, int no_fork);
-int		dispatch_redir(t_ast *elem, t_alloc *alloc, int no_fork);
-int		dispatch_logic(t_ast *elem, t_alloc *alloc, int no_fork);
-int		dispatch_cmd(t_ast *elem, t_alloc *alloc, int no_fork);
+int		analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_agreg(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_operator(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_redir(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_logic(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_cmd(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
+int		dispatch_assign(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 ********************************* PARSER TOOLS *********************************
@@ -119,7 +118,5 @@ void	lettre_in_quote(char const *s, int *i, int *nb_lettre);
 void	nb_lettre_operator(char *s, int i, int *nb_lettre);
 int		check_redir(char *s, int *i, unsigned int *nb_word);
 int		position_redir(char const *s, int *i, int wn, int *iw);
-
-
 
 #endif

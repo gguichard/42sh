@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "operator.h"
 
-int	agreg_1(t_ast *elem, t_alloc *alloc, int no_fork)
+int	agreg_1(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	int	fd[10];
 	int	i;
@@ -17,12 +17,12 @@ int	agreg_1(t_ast *elem, t_alloc *alloc, int no_fork)
 	(elem->type != REDIR) ? elem = elem->back : 0;
 	dup2(fd[1], 1);
 	dup2(fd[2], 2);
-	(elem) ? analyzer(elem->left, alloc, no_fork) : 0;
+	i = (elem) ? analyzer(elem->left, alloc, opt) : 1;
 	reinit_fd(fd, alloc);
-	return (0);
+	return (i);
 }
 
-int	agreg_2(t_ast *elem, t_alloc *alloc, int no_fork)
+int	agreg_2(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	int	fd[10];
 	int	i;
@@ -37,12 +37,12 @@ int	agreg_2(t_ast *elem, t_alloc *alloc, int no_fork)
 	(elem->type != REDIR) ? elem = elem->back : 0;
 	dup2(fd[1], 1);
 	dup2(fd[2], 2);
-	(elem) ? analyzer(elem->left, alloc, no_fork) : 0;
+	i = (elem) ? analyzer(elem->left, alloc, opt) : 1;
 	reinit_fd(fd, alloc);
-	return (0);
+	return (i);
 }
 
-int	agreg_3(t_ast *elem, t_alloc *alloc, int no_fork)
+int	agreg_3(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	int	fd_redir;
 	int	ret1;
@@ -63,13 +63,13 @@ int	agreg_3(t_ast *elem, t_alloc *alloc, int no_fork)
 		elem = elem->left;
 	(elem->type != REDIR) ? elem = elem->back : 0;
 	if (ret1 == -1)
-		return (-1);
-	(elem) ? analyzer(elem->left, alloc, no_fork) : 0;
+		return (1);
+	ret1 = (elem) ? analyzer(elem->left, alloc, opt) : 1;
 	reinit_fd(fd, alloc);
-	return (0);
+	return (ret1);
 }
 
-int	agreg_4(t_ast *elem, t_alloc *alloc, int no_fork)
+int	agreg_4(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	int	fd_close;
 	int	fd_save;
@@ -86,22 +86,23 @@ int	agreg_4(t_ast *elem, t_alloc *alloc, int no_fork)
 	}
 	alloc->fd[fd_close] = fd_save;
 	close(fd_close);
-	analyzer(elem->left, alloc, no_fork);
+	tmp = analyzer(elem->left, alloc, opt);
 	dup2(fd_save, fd_close);
 	alloc->fd[fd_close] = 0;
-	return (0);
+	return (tmp);
 }
 
-int	agreg_5(t_ast *elem, t_alloc *alloc, int no_fork)
+int	agreg_5(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	int	fd_close;
 	int	fd_save;
+	int	ret;
 
 	fd_close = (ft_isdigit(elem->input[0][0]) == 1) ?
 		ft_atoi(elem->input[0]) : 1;
 	fd_save = dup(fd_close);
 	close(fd_close);
-	analyzer(elem->left, alloc, no_fork);
+	ret = analyzer(elem->left, alloc, opt);
 	dup2(fd_save, fd_close);
-	return (0);
+	return (ret);
 }

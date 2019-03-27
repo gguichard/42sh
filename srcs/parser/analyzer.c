@@ -1,10 +1,12 @@
 #include "shell.h"
 #include "parser_lexer.h"
+#include "expand.h"
+#include "inhibitor.h"
 
-int	analyzer(t_ast *sort, t_alloc *alloc, int no_fork)
+int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 {
 	static t_dispatch	dispatch[] = { &dispatch_cmd, &dispatch_redir,
-						&dispatch_redir, &dispatch_agreg, &dispatch_operator,
+						&dispatch_redir, &dispatch_assign, &dispatch_operator,
 						&dispatch_logic };
 	t_ast				*tmp;
 	int					ret;
@@ -14,13 +16,14 @@ int	analyzer(t_ast *sort, t_alloc *alloc, int no_fork)
 	if (tmp && tmp->print == 0)
 	{
 		tmp->print = 1;
-		return (dispatch[tmp->type](tmp, alloc, no_fork));
+		if (inhibitor(tmp, alloc) == 1)
+			return (dispatch[tmp->type](tmp, alloc, opt));
 	}
 	if (tmp && tmp->left && tmp->left->print == 0)
-		return (analyzer(tmp->left, alloc, no_fork));
+		return (analyzer(tmp->left, alloc, opt));
 	else if (tmp && tmp->right && tmp->right->print == 0)
-		return (analyzer(tmp->right, alloc, no_fork));
+		return (analyzer(tmp->right, alloc, opt));
 	else if (tmp && tmp->back)
-		return (analyzer(tmp->back, alloc, no_fork));
+		return (analyzer(tmp->back, alloc, opt));
 	return (ret);
 }

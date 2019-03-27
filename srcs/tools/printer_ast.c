@@ -82,6 +82,7 @@ void	read_sort_descent(t_ast *sort, int active)
 		else
 			tmp = tmp->back;
 	}
+	ft_printf("\n");
 }
 
 void	reinit_print(t_ast *lst, int active)

@@ -1,6 +1,7 @@
 #ifndef EXECUTE_H
 # define EXECUTE_H
 
+# include "libft.h"
 # include "shell.h"
 # include "error.h"
 
@@ -10,7 +11,7 @@
 ** rencontree (ERRC_NOERROR s'il n'y a pas eu d'erreur). Un free du retour
 ** est necessaire.
 */
-char			*search_exec(t_var *var_lst, const char *exec_name
+char			*search_exec(t_list *vats, const char *exec_name
 		, t_error *error);
 
 #endif
