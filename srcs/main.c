@@ -33,42 +33,38 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 	//
-	// while (lst_tk)
+	if (!(sort_ast = parser(&lst_tk, alloc)))
+	{
+		ft_printf("ERROR BREAK\n");
+		// break ;
+	}
+	/*
+	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
+	 */
+	// if (get_tk(lst_tk)->type == TK_CMD_SEP
+	// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
+	// 	analyzer(sort_ast, alloc, TRUE);
+	// else
+
+	// check_exit_cmd(sort_ast);
+
+	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
+
+	// refresh_jobs();
+
+	/*
+	 ** PRINT AST AND REINIT NODE
+	 */
+	// if (sort_ast)
 	// {
-		if (!(sort_ast = parser(&lst_tk, alloc)))
-		{
-			ft_printf("ERROR BREAK\n");
-			// break ;
-		}
-		/*
-		 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
-		 */
-		// if (get_tk(lst_tk)->type == TK_CMD_SEP
-		// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
-		// 	analyzer(sort_ast, alloc, TRUE);
-		// else
-
-		// check_exit_cmd(sort_ast);
-
-		// alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-
-		// refresh_jobs();
-
-		/*
-		 ** PRINT AST AND REINIT NODE
-		 */
-		if (sort_ast)
-		{
-			read_sort_descent(sort_ast, 1);
-			reinit_print(alloc->ast, 1);
-		}
-		// if (lst_tk)
-		// 	lst_tk = lst_tk->next;
-//FUNCTION TO CLEAN AST
-		del_ast(&sort_ast);
+	// 	read_sort_descent(sort_ast, 1);
+	// 	reinit_print(alloc->ast, 1);
 	// }
+	// if (lst_tk)
+	// 	lst_tk = lst_tk->next;
+	//FUNCTION TO CLEAN AST
+	del_ast(&sort_ast);
 	scmd_clean(&scmd);
-	// FUNCTION TO CLEAN LST_TK
 }
 
 int		main(int argc, char **argv, char **environ)

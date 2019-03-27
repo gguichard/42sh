@@ -112,14 +112,14 @@ t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 			sort->right = branch;
 			branch->back = sort;
 		}
-		if (*lst_tk && get_tk(*lst_tk)->type == TK_CMD_SEP)
+		else if (*lst_tk && get_tk(*lst_tk)->type == TK_CMD_SEP)
 		{
 			elem = create_elem(lst_tk);
 			elem->left = sort;
 			sort->back = elem;
 			sort = elem;
 		}
-		if (*lst_tk)
+		else if (*lst_tk)
 			*lst_tk = (*lst_tk)->next;
 	}
 	return (sort);

@@ -16,8 +16,13 @@ int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 	if (tmp && tmp->print == 0)
 	{
 		tmp->print = 1;
-		if (inhibitor(tmp, alloc) == 1)
-			return (dispatch[tmp->type](tmp, alloc, opt));
+		if (tmp->type != CMD_SEP || (tmp->type == CMD_SEP
+				&& tmp->input[0][0] != ';'))
+		{
+			if (inhibitor(tmp, alloc) == 1)
+			dispatch[tmp->type](tmp, alloc, opt);
+			// return (dispatch[tmp->type](tmp, alloc, opt));
+		}
 	}
 	if (tmp && tmp->left && tmp->left->print == 0)
 		return (analyzer(tmp->left, alloc, opt));
