@@ -6,31 +6,34 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 00:23:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 11:54:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
-#include <term.h>
 #include "shell.h"
-#include "vars.h"
 #include "parser_lexer.h"
 #include "split_cmd_token.h"
 #include "str_cmd_inf.h"
+#include "builtins.h"
 #include "cmdline.h"
 
-static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
+static char		*join_command(t_cmdline *cmdline, char *full_input
+		, t_prompt type)
 {
 	char	*new_line;
 	char	*tmp[3];
 
-	if (cmdline->input.buffer[0] == '\0')
-		return (full_input);
 	new_line = ft_strdup(cmdline->input.buffer);
-	if (new_line != NULL && full_input != NULL)
+	if (new_line == NULL)
+		return (NULL);
+	if (!expand_history_events(&cmdline->history, &new_line))
+	{
+		free(new_line);
+		return (NULL);
+	}
+	if (full_input != NULL)
 	{
 		tmp[0] = full_input;
 		tmp[1] = new_line;
@@ -42,99 +45,89 @@ static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 	return (new_line);
 }
 
-static int	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret)
+static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
+		, t_prompt *type)
 {
 	if (ret == PR_PIPE || ret == PR_AND || ret == PR_OR)
-		return (PROMPT_OPERATOR);
+		*type = PROMPT_OPERATOR;
 	else
 	{
 		while (scmd_inf->sub_str_cmd != NULL)
 			scmd_inf = scmd_inf->sub_str_cmd;
 		if (scmd_inf->is_in_quote)
-			return (PROMPT_QUOTE);
+			*type = PROMPT_QUOTE;
 		else if (scmd_inf->is_in_dbquote)
-			return (PROMPT_DQUOTE);
+			*type = PROMPT_DQUOTE;
 		else if (scmd_inf->cur_str_cmd_type == SCMD_TYPE_VAR)
-			return (PROMPT_BRACKET);
+			*type = PROMPT_BRACKET;
 		else if (scmd_inf->cur_str_cmd_type == SCMD_TYPE_SUBCMD)
-			return (PROMPT_SUBCMD);
+			*type = PROMPT_SUBCMD;
 		else if (scmd_cur_char_is_escaped(scmd_inf))
-			return (PROMPT_BACKSLASH);
+			*type = PROMPT_BACKSLASH;
+		else
+		{
+			*type = PROMPT_DEFAULT;
+			return (ERRC_NOERROR);
+		}
 	}
-	return (PROMPT_DEFAULT);
+	return (ERRC_INCOMPLETECMD);
 }
 
-int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
+static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
+		, t_rstate *state, char **full_input)
 {
-	const char	*term;
-
-	g_cmdline = cmdline;
-	term = get_var_value(alloc->vars, "TERM");
-	if (term == NULL || term[0] == '\0')
-		term = "xterm-256color";
-	if (tgetent(NULL, term) == -1)
-		return (0);
-	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
-	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
-	update_winsize(cmdline);
-	signal(SIGINT, handle_sig);
-	signal(SIGWINCH, handle_sigwinch);
-	return (1);
-}
-
-static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
-{
-	char			*full_input;
+	t_error			error;
 	t_prompt		type;
-	t_recall_prompt	analyser_ret;
 	t_str_cmd_inf	scmd_inf;
 	t_list			*tokens;
+	t_recall_prompt	analyser_ret;
 
-	full_input = NULL;
+	error = ERRC_INCOMPLETECMD;
 	type = PROMPT_DEFAULT;
-	while ((full_input == NULL || type != PROMPT_DEFAULT)
-			&& (*ret = read_input(cmdline, get_prompt(cmdline, type))) == 1)
+	while (error == ERRC_INCOMPLETECMD)
 	{
-		if ((full_input = join_command(cmdline, full_input, type)) == NULL)
+		*state = read_input(cmdline, get_prompt(cmdline, type));
+		if (*state != RSTATE_END)
 			break ;
-		if (!scmd_init(&scmd_inf, full_input))
-			return (ft_memdel((void **)&full_input));
-		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL)
-			ft_strdel(&full_input);
-		else if ((analyser_ret = token_analyser(tokens)) == PR_ERROR)
-			ft_strdel(&full_input);
+		*full_input = join_command(cmdline, *full_input, type);
+		if (*full_input == NULL || !scmd_init(&scmd_inf, *full_input))
+			return (ERRC_UNEXPECTED);
+		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
+				|| (analyser_ret = token_analyser(tokens)) == PR_ERROR)
+			error = (tokens == NULL ? ERRC_UNEXPECTED : ERRC_LEXERROR);
 		else
-			type = change_prompt_type(&scmd_inf, analyser_ret);
+			error = change_prompt_type(&scmd_inf, analyser_ret, &type);
 		ft_lstdel(&tokens, del_token);
 		scmd_clean(&scmd_inf);
 	}
-	return (full_input);
+	return (error);
 }
 
-char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
+char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	int		ret;
-	char	*full_input;
+	t_rstate	state;
+	char		*full_input;
+	t_error		error;
 
-	ret = 1;
-	full_input = read_full_input(cmdline, &ret, alloc);
-	if (ret)
-	{
+	state = RSTATE_END;
+	full_input = NULL;
+	error = read_complete_command(cmdline, alloc, &state, &full_input);
+	if (state == RSTATE_END)
 		push_history_entry(&cmdline->history, full_input);
-		cmdline->history.offset = NULL;
-	}
+	else if (state == RSTATE_ETX)
+		ft_strdel(&full_input);
 	else
 	{
 		if (full_input == NULL)
+			builtin_exit(0, alloc);
+		else
 		{
-			reset_term(cmdline);
-			save_history_entries(alloc, &cmdline->history);
-			ft_printf("exit\n");
-			exit(alloc->ret_val);
+			ft_strdel(&full_input);
+			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");
 		}
-		ft_dprintf(STDERR_FILENO
-				, "42sh: syntax error: unexpected end of file\n");
-		ft_strdel(&full_input);
 	}
+	cmdline->history.offset = NULL;
+	if (error != ERRC_NOERROR)
+		ft_strdel(&full_input);
 	return (full_input);
 }

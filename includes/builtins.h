@@ -18,7 +18,7 @@ int		builtin_jobs(t_ast *elem, t_alloc *alloc);
 int		builtin_fg(t_ast *elem, t_alloc *alloc);
 int		builtin_bg(t_ast *elem, t_alloc *alloc);
 int		builtin_test(t_ast *elem, t_alloc *alloc);
-int		exec_input(t_ast *elem, t_alloc *alloc, int no_fork);
+int		exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 ************************************ TOOLS *************************************
@@ -26,5 +26,7 @@ int		exec_input(t_ast *elem, t_alloc *alloc, int no_fork);
 
 void	set_dir_to_canonical_form(char *dir);
 int		is_builtin(t_alloc *alloc, const char *built_name);
+void	wait_pid(pid_t child, t_ast *elem, t_exec_opt *opt, t_alloc *alloc);
+void	check_exit_cmd(t_ast *elem);
 
 #endif

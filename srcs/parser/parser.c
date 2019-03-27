@@ -9,6 +9,8 @@ t_ast	*set_new_elem(void)
 
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_exit_malloc();
+	new->fd[0] = -1;
+	new->fd[1] = -1;
 	new->print = 0;
 	new->type = NO_TYPE;
 	new->input = NULL;

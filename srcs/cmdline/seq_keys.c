@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 10:16:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 14:44:28 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:25:48 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "cmdline.h"
 
 static const t_seq	g_seqs[] = {
+	{"\003", MODE_COMMON, handle_end_of_text},
 	{"\012", MODE_INSERT, handle_cmdline_end},
 	{"\033[D", MODE_COMMON, handle_move_left},
 	{"\033[C", MODE_COMMON, handle_move_right},
