@@ -13,7 +13,6 @@ int	check_error_lst(t_ast *lst)
 			write(2, "21sh: syntax error near `", 25);
 			write(2, tmp->next->input[0], ft_strlen(tmp->next->input[0]));
 			write(2, "'\n", 2);
-			g_ret[0] = 1;
 			return (1);
 		}
 		else
@@ -28,7 +27,6 @@ int	check_error_lst(t_ast *lst)
 int	ft_error_splitshell(void)
 {
 	write(2, "21sh: parse error near `;;'\n", 28);
-	g_ret[0] = 1;
 	return (-1);
 }
 
@@ -56,6 +54,5 @@ int	ft_error_redir_format(char *ope, int len)
 	write(2, "21sh: parse error near `", 24);
 	write(2, &ope[size - 1], (len - size == 0) ? 1 : 2);
 	write(2, "'\n", 2);
-	g_ret[0] = 1;
 	return (-1);
 }

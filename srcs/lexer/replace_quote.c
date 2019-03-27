@@ -52,7 +52,6 @@ void		replace_str(char **str, char *insert, int pos)
 		free(end);
 	}
 }
-
 // static int	replace_env_var(char **str, int i, t_var *lst_env)
 // {
 // 	char	*key;

@@ -7,7 +7,7 @@ GREEN	=	\x1b[32m
 INC_DIR	=	includes
 
 CC		=	gcc
-CFLAGS 	=	-Wall -Werror -Wextra -I libft/includes -I $(INC_DIR)
+CFLAGS 	=	-Wall -g -Werror -Wextra -I libft/includes -I $(INC_DIR)
 LDFLAGS	=	-Llibft
 LDLIBS	=	-lft -ltermcap
 
@@ -22,8 +22,11 @@ PATH_HASHTABLE	=	hashtable
 PATH_PATH		=	path
 PATH_TOKEN		=	token
 PATH_CMDLINE	=	cmdline
+PATH_EXPAND		=	expand
+PATH_INHIB		=	inhib
 PATH_AUTOCOMPL	=	autocomplete
 PATH_VARS		=	vars
+PATH_JOB		=	job
 
 SRC_DIR	=	srcs
 SRC 	=	\
@@ -50,6 +53,7 @@ $(PATH_OPERATOR)/heredoc.c \
 $(PATH_OPERATOR)/redirection.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
+$(PATH_OPERATOR)/pipe_fork.c \
 $(PATH_BUILT)/cd.c \
 $(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \
@@ -83,6 +87,8 @@ $(PATH_TOOLS)/analyzer_tools.c \
 $(PATH_TOOLS)/agreg_tools.c \
 $(PATH_TOOLS)/heredoc_tools.c \
 $(PATH_TOOLS)/redirection_tools.c \
+$(PATH_TOOLS)/waitline_pipes.c \
+$(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \
@@ -116,6 +122,7 @@ $(PATH_CMDLINE)/mode_common/cursor_updown.c \
 $(PATH_CMDLINE)/mode_common/cursor_words.c \
 $(PATH_CMDLINE)/mode_common/enter_exit_visual.c \
 $(PATH_CMDLINE)/mode_common/mode_utils.c \
+$(PATH_CMDLINE)/mode_common/special_hooks.c \
 $(PATH_CMDLINE)/mode_insert/del_hooks.c \
 $(PATH_CMDLINE)/mode_insert/history_hooks.c \
 $(PATH_CMDLINE)/mode_insert/konami_code.c \
@@ -133,7 +140,22 @@ $(PATH_AUTOCOMPL)/utils.c \
 $(PATH_VARS)/env.c \
 $(PATH_VARS)/shell_vars.c \
 $(PATH_VARS)/var_utils.c \
-$(PATH_VARS)/vars.c
+$(PATH_VARS)/vars.c \
+$(PATH_JOB)/job_utils.c \
+$(PATH_JOB)/delete_jobs.c \
+$(PATH_JOB)/init_job_state.c \
+$(PATH_JOB)/pid_lst.c \
+$(PATH_JOB)/print_jobs_tools.c \
+$(PATH_JOB)/print_state_tools.c \
+$(PATH_JOB)/redirect_terminal_control.c \
+$(PATH_JOB)/refresh_jobs.c \
+$(PATH_JOB)/simple_display_job.c \
+$(PATH_JOB)/state_jobs_tools.c \
+$(PATH_TOOLS)/assign_tools.c \
+$(PATH_EXPAND)/expand.c \
+$(PATH_EXPAND)/expand_tools.c \
+$(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_tools.c
 
 OBJ_DIR	=	.obj
 OBJ		=	$(SRC:.c=.o)
@@ -160,6 +182,7 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_LEXER) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_PARSER) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_OPERATOR) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_JOB) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_TOOLS) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_HASHTABLE) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_PATH) 2> /dev/null || true
@@ -168,6 +191,8 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_common 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_insert 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_visual 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_EXPAND) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_INHIB) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_AUTOCOMPL) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_VARS) 2> /dev/null || true
 
@@ -183,5 +208,10 @@ fclean: clean
 re:
 	$(MAKE) fclean
 	$(MAKE) all
+
+debug: $(addprefix $(OBJ_DIR)/,$(OBJ))
+	$(MAKE) -C libft
+	$(CC) $(CFLAGS) -fsanitize=address -g $(LDFLAGS) $(LDLIBS) -o $@ $^
+
 
 .PHONY: all clean fclean

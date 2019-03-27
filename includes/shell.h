@@ -5,10 +5,17 @@
 *********************************** INCLUDES ***********************************
 */
 
+//for atom completion
+# include "../libft/includes/get_next_line.h"
+# include "../libft/includes/libft.h"
+# include "../libft/includes/printf.h"
+
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
 # include <fcntl.h>
+# include <signal.h>
+# include <stdbool.h>
 # include "libft.h"
 # include "get_next_line.h"
 # include "cmdline.h"
@@ -30,10 +37,17 @@
 ********************************** STRUCTURES **********************************
 */
 
+typedef struct			s_exec_opt
+{
+	bool				fork;
+	bool				wait_hang;
+}						t_exec_opt;
+
 typedef struct			s_ast
 {
 	int					print;
 	int					type;
+	int					fd[2];
 	char				*heredoc;
 	char				**input;
 	struct s_ast		*next;
@@ -65,7 +79,7 @@ typedef struct			s_alloc
 	int					fd[10];
 }						t_alloc;
 
-typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, int no_fork);
+typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 *********************************** CMDLINE ************************************
@@ -85,20 +99,22 @@ int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
 
 void	del_lst_ast(t_ast **lst);
 void	del_alloc(t_alloc *alloc);
-int		ret_status(void);
-int		replace_val_ret(char **str, int i, int x);
 
 //TOOLS TO PRINT LST AST
 void	read_lst(t_ast *lst, int active);
 void	read_sort_descent(t_ast *sort, int active);
 void	reinit_print(t_ast *lst, int active);
 
+// CLEN AST
+void	del_ast(t_ast **lst);
+void	del_elem_ast(t_ast **lst);
+void	delete_str_tab(char **tab_str);
+
+
 /*
 *********************************** GLOBALS ***********************************
 */
 
-int						g_in_exec;
-int						g_pid;
-int						g_ret[2];
+t_list					*g_jobs;
 
 #endif

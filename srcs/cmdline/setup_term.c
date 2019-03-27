@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:08:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 10:13:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:20:52 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	setup_term(t_cmdline *cmdline)
 	if (tcgetattr(STDIN_FILENO, &cmdline->default_term) == -1)
 		return (0);
 	ft_memcpy(&term, &cmdline->default_term, sizeof(struct termios));
-	term.c_lflag &= ~(ICANON | ECHO | ECHONL);
+	term.c_lflag &= ~(ICANON | ECHO | ECHONL | ISIG);
 	term.c_cc[VMIN] = 1;
 	term.c_cc[VTIME] = 0;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)

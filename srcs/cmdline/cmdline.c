@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 13:20:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:48:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "split_cmd_token.h"
 #include "str_cmd_inf.h"
 #include "cmdline.h"
+#include "builtins.h"
 
 static char	*join_command(t_cmdline *cmdline, char *full_input, t_prompt type)
 {
@@ -84,12 +85,11 @@ int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
 	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
 	update_winsize(cmdline);
-	signal(SIGINT, handle_sig);
 	signal(SIGWINCH, handle_sigwinch);
 	return (1);
 }
 
-static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
+static char	*read_full_input(t_cmdline *cmdline, t_rstate *ret, t_alloc *alloc)
 {
 	char			*full_input;
 	t_prompt		type;
@@ -100,48 +100,46 @@ static char	*read_full_input(t_cmdline *cmdline, int *ret, t_alloc *alloc)
 	full_input = NULL;
 	type = PROMPT_DEFAULT;
 	while ((full_input == NULL || type != PROMPT_DEFAULT)
-			&& (*ret = read_input(cmdline, get_prompt(cmdline, type))) == 1)
+			&& (*ret = read_input(cmdline, get_prompt(cmdline, type)))
+			== RSTATE_END)
 	{
-		if ((full_input = join_command(cmdline, full_input, type)) == NULL)
-			break ;
-		if (!scmd_init(&scmd_inf, full_input))
+		if ((full_input = join_command(cmdline, full_input, type)) == NULL
+				|| !scmd_init(&scmd_inf, full_input))
 			return (ft_memdel((void **)&full_input));
-		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL)
+		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
+				|| (analyser_ret = token_analyser(tokens)) == PR_ERROR)
 			ft_strdel(&full_input);
-		else if ((analyser_ret = token_analyser(tokens)) == PR_ERROR)
-			ft_strdel(&full_input);
-		else
+		if (full_input != NULL)
 			type = change_prompt_type(&scmd_inf, analyser_ret);
 		ft_lstdel(&tokens, del_token);
 		scmd_clean(&scmd_inf);
+		if (full_input == NULL)
+			break ;
 	}
 	return (full_input);
 }
 
 char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	int		ret;
-	char	*full_input;
+	t_rstate	ret;
+	char		*full_input;
 
-	ret = 1;
+	ret = RSTATE_END;
 	full_input = read_full_input(cmdline, &ret, alloc);
-	if (ret)
-	{
+	if (ret == RSTATE_END)
 		push_history_entry(&cmdline->history, full_input);
-		cmdline->history.offset = NULL;
-	}
+	else if (ret == RSTATE_ETX)
+		ft_strdel(&full_input);
 	else
 	{
 		if (full_input == NULL)
+			builtin_exit(0, alloc);
+		else
 		{
-			reset_term(cmdline);
-			save_history_entries(alloc, &cmdline->history);
-			ft_printf("exit\n");
-			exit(alloc->ret_val);
+			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");
+			ft_strdel(&full_input);
 		}
-		ft_dprintf(STDERR_FILENO
-				, "42sh: syntax error: unexpected end of file\n");
-		ft_strdel(&full_input);
 	}
+	cmdline->history.offset = NULL;
 	return (full_input);
 }

@@ -1,78 +1,82 @@
 #include "shell.h"
 #include "operator.h"
-#include "parser_lexer.h"
+#include "job.h"
 
-int			do_not_fork(t_ast *elem, t_alloc *alloc)
+static void	close_pipe(t_ast *elem, int already_piped)
 {
-	int		x;
-
-	while (elem && elem->type != CMD)
+	if (elem->left->type == OPERATOR || already_piped)
 	{
-		if (elem->type == OPERATOR && !ft_strcmp(elem->input[0], "|"))
-			break ;
-		elem = elem->left;
-	}
-	if (elem && elem->type == CMD)
-	{
-		x = 0;
-		while (alloc->builtins[x].name && ft_strcmp(elem->input[0], alloc->builtins[x].name))
-			x += 1;
-	}
-	if (!elem || elem->type == OPERATOR || alloc->builtins[x].name)
-		return (0);
-	return (1);
-}
-
-static int	process_pipe_left(t_ast *elem, t_alloc *alloc, int *fd)
-{
-	int	ret;
-	int	no_fork;
-
-	no_fork = do_not_fork(elem, alloc);
-	close(fd[0]);
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
-	ret = analyzer(elem, alloc, no_fork);
-	exit(ret);
-}
-
-static int	process_pipe_right(t_ast *elem, t_alloc *alloc, int *fd)
-{
-	int	no_fork;
-	int	ret;
-
-	no_fork = do_not_fork(elem, alloc);
-	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	ret = analyzer(elem, alloc, no_fork);
-	exit(ret);
-}
-
-int			do_pipe(t_ast *elem, t_alloc *alloc)
-{
-	int		pid1;
-	int		pid2;
-	int		fd[2];
-
-	if (g_pid == -1 || !elem->right || !elem->left || pipe(fd) == -1 || (pid1 = fork()) == -1)
-		return (0);
-	else if (!pid1)
-		process_pipe_left(elem->left, alloc, fd);
-	else
-	{
-		if ((pid2 = fork()) == -1)
-			return (0);
-		else if (!pid2)
-			process_pipe_right(elem->right, alloc, fd);
+		if (already_piped)
+		{
+			close(elem->fd[1]);
+			close(elem->fd[0]);
+		}
 		else
 		{
-			close(fd[1]);
-			close(fd[0]);
-			waitpid(pid1, &(g_ret[0]), 0);
-			waitpid(pid2, &(g_ret[0]), 0);
-			g_ret[1] = 1;
+			close(elem->left->fd[1]);
+			close(elem->left->fd[0]);
 		}
 	}
+}
+
+static void	kill_fg_pgid(void)
+{
+	t_list	*tmp;
+	t_job	*job;
+
+	tmp = g_jobs;
+	while (tmp)
+	{
+		job = tmp->content;
+		if (job->state == RUNNING_FG)
+		{
+			kill(job->pid, SIGINT);
+			waitpid(job->pid, 0, WNOHANG);
+			job->state = DONE;
+			if (job->pipe)
+				tmp = job->pipe;
+			else
+				tmp = tmp->next;
+		}
+	}
+}
+
+static void	set_connection(t_ast *elem, int already_piped)
+{
+	if (!already_piped && elem->fd[0] == -1 && elem->fd[1] == -1 && !pipe(elem->fd))
+	{
+		if (elem->left->type == OPERATOR)
+			elem->left->right->fd[1] = elem->fd[1];
+		else
+			elem->left->fd[1] = elem->fd[1];
+		elem->right->fd[0] = elem->fd[0];
+	}
+}
+
+int			do_pipe(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+{
+	int		already_piped;
+	pid_t	last_child;
+
+	already_piped = 0;
+	while (elem)
+	{
+		set_connection(elem, already_piped);
+		if ((last_child = process_fork(elem, alloc, already_piped, opt->wait_hang)) == -1)
+			break ;
+		close_pipe(elem, already_piped);
+		if (!elem->back || elem->back->type != OPERATOR)
+		{
+			if (already_piped)
+				break ;
+			already_piped = 1;
+		}
+		else
+			elem = elem->back;
+	}
+	if (last_child == -1)
+		kill_fg_pgid();
+	else
+		return (waiting_line(opt->wait_hang, 0));
 	return (1);
 }

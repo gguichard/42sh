@@ -17,7 +17,7 @@ int	builtin_set(t_ast *elem, t_alloc *alloc)
 	if (elem->input[1] != NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: set: %s: invalid usage\n"
-				"set: usage: set", elem->input[1]);
+				"set: usage: set\n", elem->input[1]);
 		return (1);
 	}
 	cur = alloc->vars;

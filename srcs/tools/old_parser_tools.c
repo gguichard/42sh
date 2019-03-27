@@ -9,6 +9,8 @@ t_ast	*create_new_elem(t_ast **lst)
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
 		ft_exit_malloc();
 	new->print = 0;
+	new->fd[0] = -1;
+	new->fd[1] = -1;
 	new->type = NO_TYPE;
 	new->input = NULL;
 	new->heredoc = NULL;

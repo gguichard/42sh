@@ -1,10 +1,10 @@
 #include "shell.h"
+#include "parser_lexer.h"
 #include "operator.h"
 
-int	job_control(t_ast *elem, t_alloc *alloc)
+int	job_control(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
-	(void)elem;
-	(void)alloc;
-	write(2, "21sh: no job control\n", 21);
+	opt->wait_hang = true;
+	analyzer(elem, alloc, opt);
 	return (1);
 }

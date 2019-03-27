@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 16:13:52 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:43:43 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
 void		print_next_line_tcaps(void);
 int			print_big_cmdline_prompt(t_cmdline *cmdline);
+void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		update_cmdline_at_offset(t_cmdline *cmdline);
 void		print_cmdline(t_cmdline *cmdline);
@@ -49,7 +50,7 @@ void		print_cmdline(t_cmdline *cmdline);
 void		add_char_to_input(t_cmdline *cmdline, char c);
 
 const char	*get_prompt(t_cmdline *cmdline, t_prompt type);
-int			read_input(t_cmdline *cmdline, const char *prompt);
+t_rstate	read_input(t_cmdline *cmdline, const char *prompt);
 
 int			t_putchar(int c);
 
@@ -61,8 +62,10 @@ void		handle_sequence(t_cmdline *cmdline, const t_seq *seq);
 const t_seq	*get_sequence(t_cmdline *cmdline, char c);
 
 /*
-** COMMON moves.
+** COMMON sequences.
 */
+int			handle_end_of_text(t_cmdline *cmdline);
+
 int			handle_move_left(t_cmdline *cmdline);
 int			handle_move_right(t_cmdline *cmdline);
 int			handle_prev_word(t_cmdline *cmdline);
@@ -116,7 +119,6 @@ int			vm_paste(t_cmdline *cmdline, int paste_after_cursor);
 ** SIGNALS.
 */
 
-void		handle_sig(int sig);
 void		handle_sigwinch(int sig);
 
 #endif
