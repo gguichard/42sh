@@ -20,7 +20,6 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
 	expand_var(&str, alloc, *input + *pos);
-	ft_printf("value: |%s|\n", str);
 	if ((*input)[*pos + 1] == '{' && str)
 		insert_var_input(str, input, 1, *pos);
 	else
