@@ -51,8 +51,11 @@ int		inhib_all(t_str_cmd_inf *str_cmd, t_ast *elem, int i, t_alloc *alloc)
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index(str_cmd, &pos_elem);
 		}
-		scmd_move_to_next_char(str_cmd);
-		pos_elem += 1;
+		else
+		{
+			scmd_move_to_next_char(str_cmd);
+			pos_elem += 1;
+		}
 	}
 	return (1);
 }
