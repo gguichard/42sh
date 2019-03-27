@@ -53,7 +53,8 @@ static void		insert_node(t_ast **sort, t_ast *tmp, t_ast *node)
 
 void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 {
-	if ((*sort)->type == LOGIC)
+	// if ((*sort)->type == LOGIC)
+	if ((*sort)->type > tmp->type)
 	{
 		if (node->right)
 		{

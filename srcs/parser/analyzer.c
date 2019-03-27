@@ -20,15 +20,14 @@ int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 				&& tmp->input[0][0] != ';'))
 		{
 			if (inhibitor(tmp, alloc) == 1)
-			dispatch[tmp->type](tmp, alloc, opt);
-			// return (dispatch[tmp->type](tmp, alloc, opt));
+			return (dispatch[tmp->type](tmp, alloc, opt));
 		}
 	}
 	if (tmp && tmp->left && tmp->left->print == 0)
-		return (analyzer(tmp->left, alloc, opt));
-	else if (tmp && tmp->right && tmp->right->print == 0)
-		return (analyzer(tmp->right, alloc, opt));
-	else if (tmp && tmp->back)
-		return (analyzer(tmp->back, alloc, opt));
+		analyzer(tmp->left, alloc, opt);
+	if (tmp && tmp->right && tmp->right->print == 0)
+		analyzer(tmp->right, alloc, opt);
+	if (tmp && tmp->back)
+		analyzer(tmp->back, alloc, opt);
 	return (ret);
 }
