@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 00:51:23 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:30:50 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,15 @@ void			add_char_to_input(t_cmdline *cmdline, char c)
 
 void			reset_cmdline(t_cmdline *cmdline, const char *prompt)
 {
-	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
-	if (!set_cursor_pos(&cmdline->cursor))
-		cmdline->cursor.x = ft_strlen(prompt);
 	cmdline->saved_col = -1;
 	cmdline->row = 0;
 	cmdline->konami_code = 0;
-	cmdline->prompt.str = prompt;
-	cmdline->prompt.offset = cmdline->cursor.x;
 	ft_memset(cmdline->input.buffer, 0, cmdline->input.capacity);
 	cmdline->input.offset = 0;
 	cmdline->input.size = 0;
 	cmdline->input.reading = 1;
+	cmdline->prompt.str = prompt;
+	print_prompt_and_cmdline(cmdline);
 }
 
 int				read_input(t_cmdline *cmdline, const char *prompt)

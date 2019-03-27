@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:02:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:26:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,10 @@ void		handle_sequence(t_cmdline *cmdline, const t_seq *seq);
 const t_seq	*get_sequence(t_cmdline *cmdline, char c);
 
 /*
-** COMMON moves.
+** COMMON sequences.
 */
+int			handle_end_of_text(t_cmdline *cmdline);
+
 int			handle_move_left(t_cmdline *cmdline);
 int			handle_move_right(t_cmdline *cmdline);
 int			handle_prev_word(t_cmdline *cmdline);
@@ -117,7 +119,6 @@ int			vm_paste(t_cmdline *cmdline, int paste_after_cursor);
 ** SIGNALS.
 */
 
-void		handle_sig(int sig);
 void		handle_sigwinch(int sig);
 
 #endif

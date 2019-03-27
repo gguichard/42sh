@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 21:52:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:25:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
 	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
 	update_winsize(cmdline);
-	signal(SIGINT, handle_sig);
 	signal(SIGWINCH, handle_sigwinch);
 	return (1);
 }
