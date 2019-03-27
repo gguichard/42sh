@@ -47,18 +47,10 @@ void		create_new_input(t_ast *elem, int *i, char **new)
 	*i += len_new;
 }
 
-int			expand_var(char **str, t_alloc *alloc, const char *exp,
-			char **input)
+int			expand_var(char **str, t_alloc *alloc, const char *exp)
 {
 	if (ft_strncmp(exp, "${", 2) == 0)
-	{
-		if (check_expand_syntax(&(exp[2])) == 0)
-			return (error_expand(*input));
-		else
 			*str = get_expand_value(&(exp[2]), 1, alloc);
-	}
-	else if (check_expand_syntax(&(exp[1])) == 0)
-		return (error_expand(*input));
 	else
 		*str = get_expand_value(&(exp[1]), 0, alloc);
 	return (1);
@@ -72,9 +64,8 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	exp = NULL;
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
-	if (expand_var(&str, alloc, exp, input) == 0)
-		return (0);
-	if ((*input)[*pos + 1] == '{')
+	expand_var(&str, alloc, exp);
+	if ((*input)[*pos + 1] == '{' && str)
 		insert_var_input(str, input, 1, *pos);
 	else
 		insert_var_input(str, input, 0, *pos);
@@ -83,5 +74,6 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 		*pos += ft_strlen(str);
 		ft_memdel((void **)&str);
 	}
+	ft_printf("INPUT: |%s|\n", *input);
 	return (1);
 }

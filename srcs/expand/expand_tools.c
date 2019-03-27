@@ -23,7 +23,7 @@ void	insert_var_input(char *str, char **input, int type, size_t start)
 	if (type == 1)
 		while ((*input)[end] != '}')
 			end += 1;
-	else
+	else if (!ft_isdigit((*input)[end]))
 	{
 		while ((*input)[end] && (ft_isalnum((*input)[end]) == 1
 				|| (*input)[end] == '_'))
@@ -44,6 +44,8 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc)
 	if (type == 1)
 		while (exp[i] && exp[i] != '}')
 			i += 1;
+	else if (ft_isdigit(exp[i]))
+		i += 1;
 	else
 		while (exp[i] && (ft_isalnum(exp[i]) == 1 || exp[i] == '_'))
 			i += 1;
