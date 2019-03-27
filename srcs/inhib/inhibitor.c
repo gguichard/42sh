@@ -7,7 +7,7 @@
 void	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 		t_alloc *alloc)
 {
-	remove_escaped_char(str_cmd, input, pos_elem);
+	remove_escaped_char_quote(str_cmd, input, pos_elem);
 	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
 	{
 		if (scmd_cur_char_is_escaped(str_cmd) == 1
@@ -17,10 +17,13 @@ void	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 		{
 			expand(input, alloc, pos_elem);
 			scmd_move_to_next_char(str_cmd);
-			update_pos_index_in_db(str_cmd, pos_elem);
+			update_pos_index(str_cmd);
 		}
-		scmd_move_to_next_char(str_cmd);
-		*pos_elem += 1;
+		else
+		{
+			scmd_move_to_next_char(str_cmd);
+			*pos_elem += 1;
+		}
 	}
 	remove_escaped_char(str_cmd, input, pos_elem);
 }
@@ -34,7 +37,7 @@ void	inhib_quote(t_str_cmd_inf *str_cmd, size_t *pos_elem,
 		inhib_in_db(str_cmd, pos_elem, input, alloc);
 }
 
-int		inhib_all(t_str_cmd_inf *str_cmd, t_ast *elem, int i, t_alloc *alloc)
+int		inhib_all(t_str_cmd_inf *str_cmd, char **str, t_alloc *alloc)
 {
 	size_t	pos_elem;
 
@@ -42,17 +45,20 @@ int		inhib_all(t_str_cmd_inf *str_cmd, t_ast *elem, int i, t_alloc *alloc)
 	while (scmd_cur_char(str_cmd))
 	{
 		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
-			inhib_quote(str_cmd, &pos_elem, &(elem->input[i]), alloc);
+			inhib_quote(str_cmd, &pos_elem, str, alloc);
 		else if (scmd_cur_char_is_escaped(str_cmd) == 1)
-			remove_escaped_char(str_cmd, &(elem->input[i]), &pos_elem);
+			remove_escaped_char(str_cmd, str, &pos_elem);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			expand(&(elem->input[i]), alloc, &pos_elem);
+			expand(str, alloc, &pos_elem);
 			scmd_move_to_next_char(str_cmd);
-			update_pos_index(str_cmd, &pos_elem);
+			update_pos_index(str_cmd);
 		}
-		scmd_move_to_next_char(str_cmd);
-		pos_elem += 1;
+		else
+		{
+			scmd_move_to_next_char(str_cmd);
+			pos_elem += 1;
+		}
 	}
 	return (1);
 }
@@ -70,7 +76,7 @@ int		inhibitor(t_ast *elem, t_alloc *alloc)
 	{
 		if (!scmd_init(str_cmd, elem->input[i]))
 			return (0);
-		inhib_all(str_cmd, elem, i, alloc);
+		inhib_all(str_cmd, &(elem->input[i]), alloc);
 		scmd_clean(str_cmd);
 		i += 1;
 	}

@@ -3,10 +3,7 @@
 
 # include "vars.h"
 
-char		**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);
-void		create_new_input(t_ast *elem, int *i, char **new);
-int			expand_var(char **str, t_alloc *alloc, const char *exp,
-			char **input);
+int			expand_var(char **str, t_alloc *alloc, const char *exp);
 int			expand(char **input, t_alloc *alloc, size_t *pos);
 
 /*

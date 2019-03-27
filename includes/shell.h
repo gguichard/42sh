@@ -70,6 +70,8 @@ typedef struct			s_alloc
 	int					argc;
 	char				**argv;
 	int					ret_val;
+	pid_t				last_bg;
+	pid_t				pid;
 	t_cmdline			cmdline;
 	t_ast				*ast;
 	t_list				*vars;
