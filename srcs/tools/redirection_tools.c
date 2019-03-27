@@ -59,7 +59,7 @@ int			ft_is_redir(t_ast *elem, int *fd, t_alloc *alloc)
 	i = -1;
 	if (!elem || !elem->input)
 		return (0);
-	while (i++ < 6)
+	while (++i < 6)
 		if (ft_strcmp(elem->input[0], tab_redir[i]) == 0
 			|| ft_strcmp(elem->input[1], tab_redir[i]) == 0)
 		{
