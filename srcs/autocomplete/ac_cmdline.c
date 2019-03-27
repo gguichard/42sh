@@ -154,6 +154,8 @@ static const char	*find_last_var_start(const char *str)
 		if (!scmd_move_to_next_char(&scmd))
 			break ;
 	}
+	if (last_var_start != NULL)
+		last_var_start = str + (last_var_start - scmd.str);
 	scmd_clean(&scmd);
 	return (last_var_start);
 }
