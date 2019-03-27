@@ -5,6 +5,7 @@
 # include <sys/stat.h>
 # include "libft.h"
 # include "shell.h"
+# include "token_inf.h"
 
 typedef enum		e_ac_suff_type
 {
@@ -42,6 +43,11 @@ typedef struct		s_ac_suff_inf
 size_t				count_same_char(const char *str1, const char *str2);
 
 int					strlist_insert_sort(t_list **lst, t_list *elem);
+
+/*
+** Alloue et retourne le dernier token de la commande. Renvoie NULL si erreur.
+*/
+t_token_inf			*get_cur_token_cmd(const char *str, t_alloc *alloc);
 
 void				check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
 		, t_ac_suff_inf *acs, t_list *var_lst);

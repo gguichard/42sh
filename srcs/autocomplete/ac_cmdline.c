@@ -19,8 +19,6 @@
 //TODO
 //TODO SUPPORT AUTOCOMPLETION APRES = OU : (PSK C MIEUX)
 //TODO
-//TODO SUPPORTER L'AUTOCOMPLETION DANS SOUS COMMANDE (FONCTION RECURSIVE AVEC BASE FUNC LOL)
-//TODO
 
 static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
@@ -53,21 +51,59 @@ static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 		, t_token_inf *last_tk, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
-	(void)scmd;
-	(void)alloc;
-	cur_tk->type = last_tk->type;
-	cur_tk->token = ft_strdup(last_tk->token);
+	t_token_inf		*tmp_token;
+	t_str_cmd_inf	new_scmd;
+	const char		*last_sub_cmd_start;
+
+	if (scmd->sub_str_cmd != NULL
+			&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)
+	{
+		scmd_init(&new_scmd, last_tk->token);
+		last_sub_cmd_start = NULL;
+		while (1)
+		{
+			if (last_sub_cmd_start == NULL && new_scmd.sub_str_cmd != NULL
+					&& new_scmd.sub_str_cmd->cur_str_cmd_type
+					== SCMD_TYPE_SUBCMD)
+			{
+				last_sub_cmd_start = scmd_cur_str(&new_scmd);
+			}
+			else if (last_sub_cmd_start != NULL && (new_scmd.sub_str_cmd == NULL
+						|| new_scmd.sub_str_cmd->cur_str_cmd_type
+						!= SCMD_TYPE_SUBCMD))
+			{
+				last_sub_cmd_start = NULL;
+			}
+			if (!scmd_move_to_next_char(&new_scmd))
+				break ;
+		}
+		if (last_sub_cmd_start != NULL)
+		{
+			tmp_token = get_cur_token_cmd(last_sub_cmd_start, alloc);
+			cur_tk->type = tmp_token->type;
+			cur_tk->token = tmp_token->token;
+			free(tmp_token);
+			scmd_clean(&new_scmd);
+			return ;
+		}
+		scmd_clean(&new_scmd);
+	}
+	if (last_tk->type == TK_RRED_OPT)
+	{
+		cur_tk->type = TK_RED_FILENAME;
+		cur_tk->token = NULL;
+	}
+	else
+	{
+		cur_tk->type = last_tk->type;
+		cur_tk->token = ft_strdup(last_tk->token);
+	}
 	//analyser le dernier token pour completer en consequence
 	//aller jusqu'au bout des sub_str_cmd et retokeniser si besoin (SUB_CMD)
 	//gerer correctement le cas du LRED_OPT (si contient "& text" ou "&-" etc
-	return ;
 }
 
-/*
-** Alloue et retourne le dernier token de la commande. Renvoie NULL si erreur.
-*/
-
-static t_token_inf	*get_cur_token_cmd(const char *str, t_alloc *alloc)
+t_token_inf			*get_cur_token_cmd(const char *str, t_alloc *alloc)
 {
 	t_token_inf		*cur_tk_cmd;
 	t_list			*tk_list;
