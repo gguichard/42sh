@@ -13,11 +13,9 @@
 //TODO
 //TODO EXPAND LES ENV VAR AVANT DE TENTER L'AUTOCOMPLETION (SAUF SI VAR ACTUELLE)
 //TODO
-//TODO CHERCHER LES DOSSIERS DANS . SI EXECUTABLE NON TROUVE DANS LE PATH
-//TODO
-//TODO AUTOCOMPLETER LES ALIAS AUSSI (PSK C COOL)
-//TODO
-//TODO SUPPORT AUTOCOMPLETION APRES = OU : (PSK C MIEUX)
+//TODO NE PAS OUBLIER D'ECHAPPER LE RESULTAT AC_SUFF_INF, PENSER AUX \n ('') AUX = / : (\)
+//TODO ET A TOUS LES CHAR SPECIAUX (\) JE CROIS C'EST OK
+//TODO ET PENSER A CHANGER LE TYPE D'ECHAPPEMENT SELON SI DANS ' / " ETC
 //TODO
 
 static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
@@ -159,14 +157,14 @@ static void			update_last_var_inf(t_str_cmd_inf *scmd
 				|| scmd->sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_VAR)
 			*last_var_start = NULL;
 	}
-	else if (!scmd->is_in_quote && scmd->sub_str_cmd == NULL
-			&& scmd_cur_char(scmd) == '$' && !scmd_cur_char_is_escaped(scmd)
-			&& is_valid_var_char(scmd->str[scmd->pos + 1], 0))
+	if (*last_var_start == NULL && !scmd->is_in_quote
+			&& scmd->sub_str_cmd == NULL && scmd_cur_char(scmd) == '$'
+			&& !scmd_cur_char_is_escaped(scmd))
 	{
 		*last_var_start = scmd_cur_str(scmd) + 1;
 		*is_inline_var = 1;
 	}
-	else if (scmd->sub_str_cmd != NULL
+	else if (*last_var_start == NULL && scmd->sub_str_cmd != NULL
 			&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_VAR)
 	{
 		*last_var_start = scmd_cur_str(scmd);
@@ -196,23 +194,56 @@ static const char	*find_last_var_start(const char *str)
 	return (last_var_start);
 }
 
+//NE PAS GERER LES INIHIENVBETIRS ICI
+//MAIS IHIBER CE QUI A APRES L'ASSIGN QUAND MEME APRES, EN PRENANT EN COMPOTE
+//LES IBHINNFHETEIX PRECEDENTS
+static const char	*find_last_assign_start(const char *str)
+{
+	size_t		idx;
+	const char	*last_assign;
+
+	if (str == NULL)
+		return (NULL);
+	idx = 0;
+	while (str[idx] != '\0')
+	{
+		if (!is_valid_var_char(str[idx], idx))
+			break ;
+		++idx;
+	}
+	if (str[idx] != '=')
+		return (NULL);
+	last_assign = str + idx + 1;
+	while (str[idx] != '\0')
+	{
+		if (str[idx] == ':')
+			last_assign = str + idx + 1;
+		++idx;
+	}
+	return (last_assign);
+}
+
 t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 {
 	t_token_inf		*cur_tk;
 	t_ac_suff_inf	*acs_inf;
-	const char		*var_start;
+	const char		*real_ac_start;
 
 	cur_tk = get_cur_token_cmd(str, alloc);
-	var_start = find_last_var_start(cur_tk->token);
-	if (var_start == NULL)
+	real_ac_start = find_last_var_start(cur_tk->token);
+	if (real_ac_start == NULL)
 	{
+		real_ac_start = (cur_tk->type == TK_RED_FILENAME
+				? NULL : find_last_assign_start(cur_tk->token));
+		if (real_ac_start == NULL)
+			real_ac_start = cur_tk->token;
 		acs_inf = autocomplete_word(alloc->vars
-				, (cur_tk->token == NULL ? "" : cur_tk->token)
+				, (real_ac_start == NULL ? "" : real_ac_start)
 				, cur_tk->type == TK_CMD, alloc);
 	}
 	else
 	{
-		acs_inf = autocomplete_var(alloc->vars, var_start);
+		acs_inf = autocomplete_var(alloc->vars, real_ac_start);
 	}
 	del_token(cur_tk, 0);
 	return (acs_inf);

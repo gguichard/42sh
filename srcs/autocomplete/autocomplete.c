@@ -11,11 +11,11 @@
 */
 
 static void		autocomplete_from_wordpath(const char *word, int is_a_cmd
-		, t_ac_suff_inf *acs)
+		, t_dir_type dir_type, t_ac_suff_inf *acs)
 {
 	t_ac_rdir_inf	acrd;
 
-	if (!init_ac_rdir(word, &acrd, is_a_cmd, 1))
+	if (!init_ac_rdir(word, &acrd, is_a_cmd, dir_type))
 	{
 		ft_memdel((void**)&(acs->suff));
 		return ;
@@ -58,7 +58,7 @@ static void		autocomplete_cmd(const char *word, char **path_tab
 	while (*path_tab != NULL)
 	{
 		if ((real_word = build_path_to_file(*path_tab, word)) == NULL
-				|| !init_ac_rdir(real_word, &acrd, 1, 0))
+				|| !init_ac_rdir(real_word, &acrd, 1, DTYPE_NOT_A_DIR))
 		{
 			free(real_word);
 			ft_memdel((void**)&(acs->suff));
@@ -69,6 +69,8 @@ static void		autocomplete_cmd(const char *word, char **path_tab
 		delete_ac_rdir(&acrd);
 		++path_tab;
 	}
+	if (acs->choices == NULL)
+		autocomplete_from_wordpath(word, 0, DTYPE_IS_A_DIR, acs);
 }
 
 t_ac_suff_inf	*autocomplete_word(t_list *var_lst, const char *word
@@ -82,7 +84,7 @@ t_ac_suff_inf	*autocomplete_word(t_list *var_lst, const char *word
 	if (init_ac_suff_inf(acs))
 	{
 		if (!is_a_cmd || ft_strchr(word, '/') != NULL)
-			autocomplete_from_wordpath(word, is_a_cmd, acs);
+			autocomplete_from_wordpath(word, is_a_cmd, DTYPE_MAY_BE_DIR, acs);
 		else
 		{
 			path_tab = convert_path_to_tab(var_lst);
