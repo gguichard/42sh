@@ -25,7 +25,6 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	/*
 	 **	VERIF TOKEN AND PRINT BEFORE PARSE
 	 */
-	// (void)alloc;
 	// t_list	*tmp;
 	// tmp = lst_tk;
 	// while (tmp)
@@ -34,12 +33,12 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 	//
-	while (lst_tk)
-	{
+	// while (lst_tk)
+	// {
 		if (!(sort_ast = parser(&lst_tk, alloc)))
 		{
 			ft_printf("ERROR BREAK\n");
-			break ;
+			// break ;
 		}
 		/*
 		 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
@@ -49,21 +48,21 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 		// 	analyzer(sort_ast, alloc, TRUE);
 		// else
 		check_exit_cmd(sort_ast);
-		alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
+		// alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
 		refresh_jobs();
 		/*
 		 ** PRINT AST AND REINIT NODE
 		 */
-		// if (sort_ast)
-		// {
-		// 	read_sort_descent(sort_ast, 1);
-		// 	reinit_print(alloc->ast, 1);
-		// }
-		if (lst_tk)
-			lst_tk = lst_tk->next;
+		if (sort_ast)
+		{
+			read_sort_descent(sort_ast, 1);
+			reinit_print(alloc->ast, 1);
+		}
+		// if (lst_tk)
+		// 	lst_tk = lst_tk->next;
 //FUNCTION TO CLEAN AST
 		del_ast(&sort_ast);
-	}
+	// }
 	scmd_clean(&scmd);
 	// FUNCTION TO CLEAN LST_TK
 }

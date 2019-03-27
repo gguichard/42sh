@@ -63,7 +63,7 @@ void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 		node->right = tmp;
 		tmp->back = node;
 	}
-	else if (tmp->type > HEREDOC)
+	else if (tmp->type > CMD)
 		insert_node(sort, tmp, node);
 	else
 	{
