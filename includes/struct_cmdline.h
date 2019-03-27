@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/23 21:56:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:40:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 # include <termios.h>
 # include <sys/ioctl.h>
 # include "history.h"
+
+typedef enum		e_rstate
+{
+	RSTATE_EOT,
+	RSTATE_ETX,
+	RSTATE_READING,
+	RSTATE_END
+}					t_rstate;
 
 typedef enum		e_prompt
 {
@@ -41,7 +49,7 @@ struct				s_input
 	int				capacity;
 	int				size;
 	int				offset;
-	int				reading;
+	t_rstate		reading;
 };
 
 typedef enum		e_seq_mode

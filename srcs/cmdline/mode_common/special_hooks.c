@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_sigs.c                                      :+:      :+:    :+:   */
+/*   special_hooks.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/24 15:58:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:24:48 by gguichar         ###   ########.fr       */
+/*   Created: 2019/03/27 01:22:49 by gguichar          #+#    #+#             */
+/*   Updated: 2019/03/27 01:45:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <term.h>
+#include <unistd.h>
 #include "cmdline.h"
 
-void	handle_sigwinch(int sig)
+int	handle_end_of_text(t_cmdline *cmdline)
 {
-	t_cmdline	*cmdline;
-
-	(void)sig;
-	cmdline = g_cmdline;
-	go_to_offset(cmdline, 0);
-	update_winsize(cmdline);
-	tputs(tgetstr("cr", NULL), 1, t_putchar);
-	tputs(tgetstr("cd", NULL), cmdline->winsize.ws_row - cmdline->cursor.y
-			, t_putchar);
-	print_prompt_and_cmdline(cmdline);
+	if (cmdline->visual.toggle)
+		handle_toggle_visual(cmdline);
+	write(STDOUT_FILENO, "^C", 2);
+	handle_end_key(cmdline);
+	write(STDOUT_FILENO, "\n", 1);
+	cmdline->input.reading = RSTATE_ETX;
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:39:28 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 01:09:00 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,22 @@ int			print_big_cmdline_prompt(t_cmdline *cmdline)
 		}
 	}
 	return (is_at_position);
+}
+
+void		print_prompt_and_cmdline(t_cmdline *cmdline)
+{
+	size_t	total;
+
+	total = 0;
+	if (cmdline->visual.toggle)
+		total += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
+	total += ft_max(write(STDOUT_FILENO, cmdline->prompt.str
+				, ft_strlen(cmdline->prompt.str)), 0);
+	if (!set_cursor_pos(&cmdline->cursor))
+	{
+		cmdline->cursor.y = total / ft_max(cmdline->winsize.ws_col, 1);
+		cmdline->cursor.x = total % ft_max(cmdline->winsize.ws_col, 1);
+	}
+	cmdline->prompt.offset = cmdline->cursor.x;
+	print_cmdline(cmdline);
 }
