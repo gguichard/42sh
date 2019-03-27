@@ -44,16 +44,17 @@ static char		*build_path_to_file(const char *path, const char *file)
 
 /*
 ** Remplie le t_ac_suff_inf avec les informations pour autocompleter une
-** commande builtin ou se trouvant dans le path.
+** commande builtin, alias, ou se trouvant dans le path.
 */
 
 static void		autocomplete_cmd(const char *word, char **path_tab
-		, const t_builtin *builtin_tab, t_ac_suff_inf *acs)
+		, t_alloc *alloc, t_ac_suff_inf *acs)
 {
 	t_ac_rdir_inf	acrd;
 	char			*real_word;
 
-	check_for_builtin_ac(word, &acrd, acs, builtin_tab);
+	check_for_builtin_ac(word, &acrd, acs, alloc->builtins);
+	check_for_alias_ac(word, &acrd, acs, alloc->aliastable);
 	while (*path_tab != NULL)
 	{
 		if ((real_word = build_path_to_file(*path_tab, word)) == NULL
@@ -71,7 +72,7 @@ static void		autocomplete_cmd(const char *word, char **path_tab
 }
 
 t_ac_suff_inf	*autocomplete_word(t_list *var_lst, const char *word
-		, int is_a_cmd, const t_builtin *builtin_tab)
+		, int is_a_cmd, t_alloc *alloc)
 {
 	t_ac_suff_inf	*acs;
 	char			**path_tab;
@@ -86,7 +87,7 @@ t_ac_suff_inf	*autocomplete_word(t_list *var_lst, const char *word
 		{
 			path_tab = convert_path_to_tab(var_lst);
 			if (path_tab != NULL)
-				autocomplete_cmd(word, path_tab, builtin_tab, acs);
+				autocomplete_cmd(word, path_tab, alloc, acs);
 			ft_strtab_free(path_tab);
 		}
 		if (acs->suff != NULL)

@@ -208,7 +208,7 @@ t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 	{
 		acs_inf = autocomplete_word(alloc->vars
 				, (cur_tk->token == NULL ? "" : cur_tk->token)
-				, cur_tk->type == TK_CMD, alloc->builtins);
+				, cur_tk->type == TK_CMD, alloc);
 	}
 	else
 	{

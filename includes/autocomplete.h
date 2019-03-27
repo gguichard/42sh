@@ -59,6 +59,9 @@ void				check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
 void				check_for_builtin_ac(const char *word, t_ac_rdir_inf *acrd
 		, t_ac_suff_inf *acs, const t_builtin *builtin_tab);
 
+void				check_for_alias_ac(const char *word, t_ac_rdir_inf *acrd
+		, t_ac_suff_inf *acs, t_hashtable *aliastable);
+
 /*
 ** Remplie le t_ac_suff_inf avec les informations pour autocompleter depuis
 ** les informations de fichier contenues dans le  t_ac_rdir_inf.
@@ -109,7 +112,7 @@ void				*delete_ac_suff_inf(t_ac_suff_inf *acs);
 ** false s'il peut etre un fichier quelconque.
 */
 t_ac_suff_inf		*autocomplete_word(t_list *var_lst, const char *word
-		, int is_a_cmd, const t_builtin *builtin_tab);
+		, int is_a_cmd, t_alloc *alloc);
 
 t_ac_suff_inf		*autocomplete_var(t_list *var_lst, const char *word);
 
