@@ -33,9 +33,9 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 	str = get_tk(lst_tk)->token;
 	while (ft_strcmp(ope[i], str) != 0 && i < 10)
 		i += 1;
-	if (i == 3)
-		elem->type = HEREDOC;
-	else if (i < 6)
+	// if (i == 3)
+	// 	elem->type = HEREDOC;
+	if (i < 6)
 		elem->type = REDIR;
 	else if (i < 8)
 		elem->type = OPERATOR;
