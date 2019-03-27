@@ -155,7 +155,7 @@ static void			update_last_var_inf(t_str_cmd_inf *scmd
 				|| scmd->sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_VAR)
 			*last_var_start = NULL;
 	}
-	else if (!scmd->is_in_quote && scmd->sub_str_cmd == NULL
+	if (!scmd->is_in_quote && scmd->sub_str_cmd == NULL
 			&& scmd_cur_char(scmd) == '$' && !scmd_cur_char_is_escaped(scmd)
 			&& is_valid_var_char(scmd->str[scmd->pos + 1], 0))
 	{
