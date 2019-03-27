@@ -7,7 +7,7 @@
 void	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 		t_alloc *alloc)
 {
-	remove_escaped_char(str_cmd, input, pos_elem);
+	remove_escaped_char_quote(str_cmd, input, pos_elem);
 	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
 	{
 		if (scmd_cur_char_is_escaped(str_cmd) == 1
@@ -19,8 +19,11 @@ void	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index_in_db(str_cmd, pos_elem);
 		}
-		scmd_move_to_next_char(str_cmd);
-		*pos_elem += 1;
+		else
+		{
+			scmd_move_to_next_char(str_cmd);
+			*pos_elem += 1;
+		}
 	}
 	remove_escaped_char(str_cmd, input, pos_elem);
 }

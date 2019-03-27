@@ -17,9 +17,11 @@ int		check_expand_syntax(const char *str)
 
 void	insert_var_input(char *str, char **input, int type, size_t start)
 {
-	int		end;
+	size_t	end;
+	size_t	len;
 
 	end = start + 1;
+	len = 0;
 	if (type == 1)
 		while ((*input)[end] != '}')
 			end += 1;
@@ -30,7 +32,14 @@ void	insert_var_input(char *str, char **input, int type, size_t start)
 			end += 1;
 		end -= 1;
 	}
-	ft_insert(input, str, start, end);
+	if (start != end)
+		ft_insert(input, str, start, end);
+	else
+	{
+		len = ft_strlen(*input + start);
+		ft_memmove(*input + start - 1, *input + start, len);
+		(*input)[start + len - 1] = '\0';
+	}
 }
 
 char	*get_expand_value(const char *exp, int type, t_alloc *alloc)
