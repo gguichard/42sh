@@ -17,23 +17,25 @@ int		check_expand_syntax(const char *str)
 
 void	insert_var_input(char *str, char **input, int type, size_t start)
 {
-	size_t	end;
+	size_t	i;
 	size_t	len;
 
-	end = start + 1;
+	i = start + 1;
 	len = 0;
 	if (type == 1)
-		while ((*input)[end] != '}')
-			end += 1;
-	else if (!ft_isdigit((*input)[end]))
+		while ((*input)[i] != '}')
+			i += 1;
+	else if ((*input)[i] == '?' || (*input)[i] == '!' || (*input)[i] == '$')
+		i += 1;
+	else if (!ft_isdigit((*input)[i]))
 	{
-		while ((*input)[end] && (ft_isalnum((*input)[end]) == 1
-				|| (*input)[end] == '_'))
-			end += 1;
-		end -= 1;
+		while ((*input)[i] && (ft_isalnum((*input)[i]) == 1
+				|| (*input)[i] == '_'))
+			i += 1;
+		i -= 1;
 	}
-	if (start != end)
-		ft_insert(input, str, start, end);
+	if (start != i)
+		ft_insert(input, str, start, i);
 	else
 	{
 		len = ft_strlen(*input + start);

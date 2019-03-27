@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 17:51:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 14:52:14 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 15:17:59 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ char	*get_var_for_expand(t_alloc *alloc, const char *key)
 	{
 		if (ft_strequ(key, "?"))
 			return (ft_itoa(alloc->ret_val));
+		if (ft_strequ(key, "!") && alloc->last_bg != -1)
+			return (ft_itoa(alloc->last->bg));
+		if (ft_strequ(key, "$"))
+				return (ft_itoa(alloc->pid));
 		if (ft_isdigit(key[0]))
 		{
 			tmp = ft_atoi(key);
