@@ -42,7 +42,7 @@ void	remove_escaped_char_quote(t_str_cmd_inf *str_cmd, char **input,
 		*pos_elem -= 1;
 }
 
-void	go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
+int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
 {
 	remove_escaped_char(str_cmd, input, pos_elem);
 	while (str_cmd->is_in_quote == 1)
@@ -51,20 +51,31 @@ void	go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
 		*pos_elem += 1;
 	}
 	remove_escaped_char(str_cmd, input, pos_elem);
+	return (1);
 }
 
 void	update_pos_index(t_str_cmd_inf *str_cmd)
 {
 	if (scmd_cur_char(str_cmd) == '?' || scmd_cur_char(str_cmd) == '!'
 			|| scmd_cur_char(str_cmd) == '$')
+	{
 		scmd_move_to_next_char(str_cmd);
-	else if (!ft_isdigit(scmd_cur_char(str_cmd)))
+		return ;
+	}
+	if (scmd_cur_char(str_cmd) != '{')
 	{
 		while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
 				&& scmd_cur_char(str_cmd)
-				&& ft_isalnum(scmd_cur_char(str_cmd)))
+				&& (ft_isalnum(scmd_cur_char(str_cmd))
+				|| scmd_cur_char(str_cmd) == '_'))
 			scmd_move_to_next_char(str_cmd);
 	}
-	else
+	else if (scmd_cur_char(str_cmd) == '{')
+	{
+		while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
+				&& scmd_cur_char(str_cmd)
+				&& scmd_cur_char(str_cmd) != '}')
+			scmd_move_to_next_char(str_cmd);
 		scmd_move_to_next_char(str_cmd);
+	}
 }
