@@ -53,7 +53,8 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc)
 	if (type == 1)
 		while (exp[i] && exp[i] != '}')
 			i += 1;
-	else if (ft_isdigit(exp[i]))
+	else if (ft_isdigit(exp[i]) || exp[i] == '?' || exp[i] == '!'
+			|| exp[i] == '$')
 		i += 1;
 	else
 		while (exp[i] && (ft_isalnum(exp[i]) == 1 || exp[i] == '_'))

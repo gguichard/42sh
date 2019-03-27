@@ -13,12 +13,11 @@ int				scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str)
 		return (1);
 }
 
-static void		scmd_delete(t_str_cmd_inf *str_cmd_inf)
+static void		scmd_delete_sub_str(t_str_cmd_inf *str_cmd_inf)
 {
 	if (str_cmd_inf != NULL)
 	{
-		scmd_delete(str_cmd_inf->sub_str_cmd);
-		free(str_cmd_inf->str);
+		scmd_delete_sub_str(str_cmd_inf->sub_str_cmd);
 		free(str_cmd_inf);
 	}
 }
@@ -27,7 +26,7 @@ void			scmd_clean(t_str_cmd_inf *str_cmd_inf)
 {
 	if (str_cmd_inf != NULL)
 	{
-		scmd_delete(str_cmd_inf->sub_str_cmd);
+		scmd_delete_sub_str(str_cmd_inf->sub_str_cmd);
 		free(str_cmd_inf->str);
 		scmd_init(str_cmd_inf, NULL);
 	}

@@ -64,7 +64,7 @@ static int	add_or_print_aliases(char **params, t_hashtable *aliastable)
 	while (*params != NULL)
 	{
 		equ_pos = ft_strchr(*params, '=');
-		if (equ_pos == NULL)
+		if (equ_pos == NULL || equ_pos == *params)
 			no_error = (print_alias_hashentry(get_hashentry(aliastable
 							, *params), *params) && no_error);
 		else

@@ -28,7 +28,7 @@ static t_error	check_is_valid_path(const char *file_path)
 	t_error	error;
 
 	error = check_file_rights(file_path, FT_FILE, X_OK);
-	if (error == ERRC_FILENOTFOUND || error == ERRC_NONEEDEDRIGHTS)
+	if (error != ERRC_NOERROR && error != ERRC_UNEXPECTED)
 		error = ERRC_CMDNOTFOUND;
 	return (error);
 }

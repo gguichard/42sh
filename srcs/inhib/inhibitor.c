@@ -17,7 +17,7 @@ void	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 		{
 			expand(input, alloc, pos_elem);
 			scmd_move_to_next_char(str_cmd);
-			update_pos_index_in_db(str_cmd, pos_elem);
+			update_pos_index(str_cmd);
 		}
 		else
 		{
@@ -52,7 +52,7 @@ int		inhib_all(t_str_cmd_inf *str_cmd, t_ast *elem, int i, t_alloc *alloc)
 		{
 			expand(&(elem->input[i]), alloc, &pos_elem);
 			scmd_move_to_next_char(str_cmd);
-			update_pos_index(str_cmd, &pos_elem);
+			update_pos_index(str_cmd);
 		}
 		else
 		{
