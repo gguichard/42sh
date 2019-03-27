@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:40:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/27 11:46:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ struct				s_visual
 
 typedef struct		s_cmdline
 {
+	int				term_init;
 	struct termios	default_term;
 	struct s_prompt	prompt;
 	struct s_input	input;
