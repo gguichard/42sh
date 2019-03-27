@@ -28,7 +28,7 @@ static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 	char			*new_str;
 	t_str_cmd_inf	new_scmd;
 	t_list			*tk_list;
-	t_list			*last_tk;;
+	t_list			*last_tk;
 
 	cur_tk->type = TK_NOTHING;
 	cur_tk->token = NULL;
