@@ -157,14 +157,14 @@ static void			update_last_var_inf(t_str_cmd_inf *scmd
 				|| scmd->sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_VAR)
 			*last_var_start = NULL;
 	}
-	if (!scmd->is_in_quote && scmd->sub_str_cmd == NULL
-			&& scmd_cur_char(scmd) == '$' && !scmd_cur_char_is_escaped(scmd)
-			&& is_valid_var_char(scmd->str[scmd->pos + 1], 0))
+	if (*last_var_start == NULL && !scmd->is_in_quote
+			&& scmd->sub_str_cmd == NULL && scmd_cur_char(scmd) == '$'
+			&& !scmd_cur_char_is_escaped(scmd))
 	{
 		*last_var_start = scmd_cur_str(scmd) + 1;
 		*is_inline_var = 1;
 	}
-	else if (scmd->sub_str_cmd != NULL
+	else if (*last_var_start == NULL && scmd->sub_str_cmd != NULL
 			&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_VAR)
 	{
 		*last_var_start = scmd_cur_str(scmd);
