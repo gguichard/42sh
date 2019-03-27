@@ -2,7 +2,7 @@
 #include "parser_lexer.h"
 #include "expand.h"
 
-int		error_expand(char *exp)
+int		error_expand(const char *exp)
 {
 	ft_dprintf(2, "42sh: %s: bad substitution\n", exp);
 	return (0);
@@ -10,8 +10,24 @@ int		error_expand(char *exp)
 
 int		check_expand_syntax(const char *str)
 {
-	if (ft_isalpha(str[0]) == 0 && str[0] != '_' && str[0] != '?')
-		return (0);
+	int i;
+
+	i = 0;
+	if (ft_isdigit(str[i]))
+	{
+		while (ft_isdigit(str[i]))
+			i += 1;
+		if (str[i] != '}')
+			return (0);
+	}
+	else
+	{
+		while (ft_isalnum(str[i]) || str[i] == '!' || str[i] == '?'
+				|| str[i] == '$' || str[i] == '_')
+			i += 1;
+		if (str[i] != '}')
+			return (0);
+	}
 	return (1);
 }
 
