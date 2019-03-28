@@ -101,6 +101,7 @@ int		save_history_entries(t_alloc *alloc, t_history *history);
 int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
 void	sig_block_ign(void);
 void	sigs_wait_line(t_alloc *alloc);
+void	sig_reset(void);
 
 void	del_lst_ast(t_ast **lst);
 void	del_alloc(t_alloc *alloc);

@@ -78,6 +78,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	save_history_entries(alloc, &alloc->cmdline.history);
 	reset_term(&alloc->cmdline);
 	del_alloc(alloc);
+	sig_reset();
 	exit(status);
 	return (1);
 }

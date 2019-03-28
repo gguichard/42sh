@@ -66,6 +66,7 @@ int		main(int argc, char **argv, char **environ)
 	char	*input;
 
 	g_jobs = 0;
+	sig_block_ign();
 	if (!setup_alloc(&alloc, argc, argv, environ))
 		ft_dprintf(STDERR_FILENO, "Unable to setup environment\n");
 	else
@@ -91,5 +92,6 @@ int		main(int argc, char **argv, char **environ)
 	}
 	terminate_all_jobs();
 	del_alloc(&alloc);
+	sig_reset();
 	return (1);
 }

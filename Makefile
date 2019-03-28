@@ -87,6 +87,8 @@ $(PATH_TOOLS)/heredoc_tools.c \
 $(PATH_TOOLS)/redirection_tools.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
+$(PATH_TOOLS)/assign_tools.c \
+$(PATH_TOOLS)/signal_management.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \
@@ -152,7 +154,6 @@ $(PATH_JOB)/redirect_terminal_control.c \
 $(PATH_JOB)/refresh_jobs.c \
 $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
-$(PATH_TOOLS)/assign_tools.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_INHIB)/inhibitor.c \

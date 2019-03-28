@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 13:44:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/28 15:46:08 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	reset_cmdline(t_cmdline *cmdline, const char *prompt)
 
 int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	const char	*term;
+	struct sigaction	act;
+	const char			*term;
 
 	g_cmdline = cmdline;
 	cmdline->alloc = alloc;
@@ -45,6 +46,9 @@ int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
 	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
 	update_winsize(cmdline);
-	signal(SIGWINCH, handle_sigwinch);
+	act.sa_handler = handle_sigwinch;
+	sigemptyset(&act.sa_mask);
+	sigaddset(&act.sa_mask, SIGWINCH);
+	sigaction(SIGWINCH, &act, 0);
 	return (1);
 }
