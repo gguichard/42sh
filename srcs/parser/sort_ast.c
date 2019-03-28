@@ -6,18 +6,19 @@ static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 	t_ast	*tmp;
 
 	tmp = sort;
-	if (tmp && tmp->type == LOGIC)
+	if (tmp && tmp->type > elem->type)
 	{
 		if (tmp->right && tmp->right->type > elem->type)
-		{
 			tmp = tmp->right;
-		}
-		return (tmp);
 	}
+	// if (tmp && elem->type == REDIR)
+	// {
+	// 	if (tmp->type >)
+	// }
 	return (tmp);
 }
 
-static void		cmd_ast(t_ast *node, t_ast *tmp)
+static void		redir_ast(t_ast *node, t_ast *tmp)
 {
 	if (!node->left)
 		node->left = tmp;
@@ -62,7 +63,7 @@ void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 		node->right = tmp;
 		tmp->back = node;
 	}
-	else if (tmp->type > CMD)
+	else if (tmp->type > REDIR)
 		insert_node(sort, tmp, node);
 	else
 	{
@@ -89,9 +90,9 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 			(*sort)->back = tmp;
 			*sort = tmp;
 		}
-		else if (tmp->type != CMD)
+		else if (tmp->type != REDIR)
 			link_new_node(sort, tmp, node);
-		else if (tmp->type == CMD)
-			cmd_ast(node, tmp);
+		else if (tmp->type == REDIR)
+			redir_ast(node, tmp);
 	}
 }

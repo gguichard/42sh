@@ -25,13 +25,12 @@
 ************************************ DEFINE ************************************
 */
 
-# define CMD_SEP	6
-# define LOGIC		5
-# define OPERATOR	4
-# define ASSIGN		3
-# define REDIR		2
-# define HEREDOC	1
-# define CMD		0
+# define CMD_SEP	5
+# define LOGIC		4
+# define OPERATOR	3
+# define ASSIGN		2
+# define CMD		1
+# define REDIR		0
 # define NO_TYPE	-1
 
 /*

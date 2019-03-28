@@ -24,24 +24,22 @@ t_ast	*set_new_elem(void)
 
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
-	static char	*ope[10] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
-	"&&", "||"};
+	static char	*ope[11] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
+	"&&", "||", ";"};
 	char		*str;
 	int			i;
 
 	i = 0;
 	str = get_tk(lst_tk)->token;
-	while (ft_strcmp(ope[i], str) != 0 && i < 10)
+	while (ft_strcmp(ope[i], str) != 0 && i < 11)
 		i += 1;
-	// if (i == 3)
-	// 	elem->type = HEREDOC;
 	if (i < 6)
 		elem->type = REDIR;
 	else if (i < 8)
 		elem->type = OPERATOR;
 	else if (i < 10)
 		elem->type = LOGIC;
-	else if (str[0] == ';')
+	else if (i == 10)
 		elem->type = CMD_SEP;
 }
 

@@ -31,7 +31,13 @@ find a way pour check si un process a repris
 
 
 TODO:
-	-
+	- Update AST CMD FIRST
+	- REDIRECTION AFTER ORDER LEFT to RIGHT
+		WITH LEFT FIRST AND RIGHT AFTER ...
+	- HEREDOC = REDIRECTION
+
+
+
 
 SEGV:
 	echo $_TRR$+
