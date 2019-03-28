@@ -41,6 +41,8 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 		elem->type = OPERATOR;
 	else if (i < 10)
 		elem->type = LOGIC;
+	else if (str[0] == ';')
+		elem->type = CMD_SEP;
 }
 
 void	init_input(t_ast *elem, int len, t_list *lst_tk)
@@ -63,22 +65,19 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	elem->input[len] = NULL;
 }
 
-t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
+t_ast	*create_ast_branch(t_list **lst_tk)
 {
 	t_ast			*sort;
 	t_ast			*elem;
 	t_token_type	type;
 
-	(void)alloc;
 	sort = NULL;
 	elem = NULL;
-	if (token_analyser(*lst_tk) == PR_ERROR)
-		return (NULL);
 	while (*lst_tk)
 	{
 		type = get_tk(*lst_tk)->type;
 		if (type == TK_CMD_SEP && (ft_strcmp(get_tk(*lst_tk)->token, ";") == 0
-		|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
+				|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
 			break ;
 		else if (type != TK_PARAM)
 		{
@@ -86,6 +85,41 @@ t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 			sort_ast(elem, &sort);
 		}
 		else
+			*lst_tk = (*lst_tk)->next;
+	}
+	return (sort);
+}
+
+t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
+{
+	t_ast			*sort;
+	t_ast			*elem;
+	t_ast			*branch;
+
+	(void)alloc;
+	sort = NULL;
+	elem = NULL;
+	branch = NULL;
+	if (token_analyser(*lst_tk) == PR_ERROR)
+		return (NULL);
+	while (*lst_tk)
+	{
+		branch = create_ast_branch(lst_tk);
+		if (!sort)
+			sort = branch;
+		if (sort->type == CMD_SEP && !sort->right)
+		{
+			sort->right = branch;
+			branch->back = sort;
+		}
+		else if (*lst_tk && get_tk(*lst_tk)->type == TK_CMD_SEP)
+		{
+			elem = create_elem(lst_tk);
+			elem->left = sort;
+			sort->back = elem;
+			sort = elem;
+		}
+		else if (*lst_tk)
 			*lst_tk = (*lst_tk)->next;
 	}
 	return (sort);

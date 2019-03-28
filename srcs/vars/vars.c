@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 15:26:07 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/28 11:47:08 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int			unset_var(t_list **lst, const char *key)
 		{
 			if (prev != NULL)
 				prev->next = curr->next;
+			else
+				*lst = curr->next;
 			ft_lstdelone(&curr, &free_var);
 			return (1);
 		}

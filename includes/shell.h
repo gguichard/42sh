@@ -25,6 +25,7 @@
 ************************************ DEFINE ************************************
 */
 
+# define CMD_SEP	6
 # define LOGIC		5
 # define OPERATOR	4
 # define ASSIGN		3
