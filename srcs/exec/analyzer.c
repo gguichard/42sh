@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "shell.h"
 #include "parser_lexer.h"
+#include "operator.h"
 #include "execution.h"
 
 static int	dispatch_logic(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
@@ -52,6 +53,8 @@ int			analyzer(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 			return (dispatch_command(elem, alloc, opt));
 		if (elem->type == AST_REDIR)
 			ft_printf("%s %s\n", elem->input[0], elem->input[1]);
+		if (elem->type == AST_PIPE)
+			return (do_pipe(elem, alloc, opt));
 	}
 	return (0);
 }

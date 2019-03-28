@@ -40,16 +40,16 @@ static void		redir_pipe(t_ast *elem, int type)
 	{
 		dup2(elem->fd[0], STDIN_FILENO);
 		close(elem->fd[0]);
-		close(elem->back->fd[1]);
+		if (type && elem->back->back)
+			close(elem->back->back->fd[1]);
+		else
+			close(elem->back->fd[1]);
 	}
 	if (elem->fd[1] != -1)
 	{
 		dup2(elem->fd[1], STDOUT_FILENO);
 		close(elem->fd[1]);
-		if (type == 1)
-			close(elem->back->back->fd[0]);
-		else
-			close(elem->back->fd[0]);
+		close(elem->back->fd[0]);
 	}
 }
 
@@ -58,7 +58,7 @@ static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child, bool wait
 	static t_list	*first_cmd;
 	int				ret;
 
-	if (elem->left->type != AST_PIPE && !already_piped)
+	if ((!elem->back || elem->back->type != AST_PIPE) && !already_piped)
 	{
 		ret = setpgid(child, 0);
 		if (wait_hang == false)
@@ -68,7 +68,7 @@ static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child, bool wait
 	else if (already_piped)
 		ret = add_pid_lst_pipe(first_cmd, child, elem->right, false);
 	else
-		ret = add_pid_lst_pipe(first_cmd, child, elem->left->right, true);
+		ret = add_pid_lst_pipe(first_cmd, child, elem->left, true);
 	if (!ret)
 		return (child);
 	else
@@ -82,20 +82,15 @@ pid_t		process_fork(t_ast *elem, t_alloc *alloc, int already_piped, bool wait_ha
 	child = fork();
 	if (child > 0)
 		child = add_pid_pipe(elem, already_piped, child, wait_hand);
-	else if (!child && elem->left->type != AST_PIPE && !already_piped)
+	else if (!child && !already_piped)
 	{
-		redir_pipe(elem->left, 0);
+		redir_pipe(elem->left, 1);
 		process_pipe(elem->left, alloc);
 	}
 	else if (!child && already_piped)
 	{
 		redir_pipe(elem->right, 0);
 		process_pipe(elem->right, alloc);
-	}
-	else if (!child)
-	{
-		redir_pipe(elem->left->right, 1);
-		process_pipe(elem->left->right, alloc);
 	}
 	return (child);
 }
