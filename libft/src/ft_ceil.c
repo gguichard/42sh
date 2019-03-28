@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   special_hooks.c                                    :+:      :+:    :+:   */
+/*   ft_ceil.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/27 01:22:49 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 13:46:10 by gguichar         ###   ########.fr       */
+/*   Created: 2019/01/11 00:37:18 by gguichar          #+#    #+#             */
+/*   Updated: 2019/01/11 00:38:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "shell.h"
-#include "cmdline.h"
+#include "libft.h"
 
-int	handle_end_of_text(t_cmdline *cmdline)
+double	ft_ceil(double x)
 {
-	if (cmdline->visual.toggle)
-		handle_toggle_visual(cmdline);
-	write(STDOUT_FILENO, "^C", 2);
-	handle_end_key(cmdline);
-	write(STDOUT_FILENO, "\n", 1);
-	cmdline->input.reading = RSTATE_ETX;
-	cmdline->alloc->ret_val = 1;
-	return (1);
+	int	value;
+
+	value = (int)x;
+	if (x != value)
+		value++;
+	return (double)(value);
 }
