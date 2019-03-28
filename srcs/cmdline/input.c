@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 10:24:45 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/28 11:22:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ t_rstate		read_input(t_cmdline *cmdline, const char *prompt)
 			if (ft_isprint(input))
 				add_char_to_input(cmdline, input);
 		}
+		if (input != '\t')
+			cmdline->ac_flag = 0;
 	}
 	return (cmdline->input.reading);
 }

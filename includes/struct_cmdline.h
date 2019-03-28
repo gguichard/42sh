@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 11:46:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/28 11:18:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <termios.h>
 # include <sys/ioctl.h>
 # include "history.h"
+
+typedef struct s_alloc	t_alloc;
+typedef struct s_list	t_list;
 
 typedef enum		e_rstate
 {
@@ -82,6 +85,7 @@ struct				s_visual
 
 typedef struct		s_cmdline
 {
+	t_alloc			*alloc;
 	int				term_init;
 	struct termios	default_term;
 	struct s_prompt	prompt;
@@ -94,6 +98,7 @@ typedef struct		s_cmdline
 	int				saved_col;
 	int				konami_code;
 	t_history		history;
+	int				ac_flag;
 }					t_cmdline;
 
 typedef struct		s_seq
@@ -102,5 +107,14 @@ typedef struct		s_seq
 	t_seq_mode		mode;
 	int				(*fn)(t_cmdline *cmdline);
 }					t_seq;
+
+typedef struct		s_ac_format
+{
+	int				elems;
+	int				col_width;
+	int				max_col;
+	int				max_row;
+	t_list			**cols;
+}					t_ac_format;
 
 #endif
