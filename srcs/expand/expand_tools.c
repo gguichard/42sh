@@ -60,24 +60,23 @@ void	insert_var_input(char *str, char **input, int type, size_t start)
 	}
 }
 
-char	*get_expand_value(const char *exp, int type, t_alloc *alloc)
+char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 {
-	int		i;
 	char	*str;
 	char	*value;
 
-	i = 0;
+	*i = 0;
 	str = NULL;
 	if (type == 1)
-		while (exp[i] && exp[i] != '}')
-			i += 1;
-	else if (ft_isdigit(exp[i]) || exp[i] == '?' || exp[i] == '!'
-			|| exp[i] == '$')
-		i += 1;
+		while (exp[*i] && exp[*i] != '}')
+			*i += 1;
+	else if (ft_isdigit(exp[*i]) || exp[*i] == '?' || exp[*i] == '!'
+			|| exp[*i] == '$')
+		*i += 1;
 	else
-		while (exp[i] && (ft_isalnum(exp[i]) == 1 || exp[i] == '_'))
-			i += 1;
-	if (!(str = ft_strndup(exp, i)))
+		while (exp[*i] && (ft_isalnum(exp[*i]) == 1 || exp[*i] == '_'))
+			*i += 1;
+	if (!(str = ft_strndup(exp, *i)))
 		ft_exit_malloc();
 	value = get_var_for_expand(alloc, str);
 	free(str);

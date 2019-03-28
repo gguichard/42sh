@@ -27,22 +27,9 @@ quand ring back avec fg need display sig normal
 
 find a way pour check si un process a repris
 
-
-
-
 TODO:
-	- Update AST CMD FIRST
-	- REDIRECTION AFTER ORDER LEFT to RIGHT
-		WITH LEFT FIRST AND RIGHT AFTER ...
-	- HEREDOC = REDIRECTION
 
-!!!!	MODIF ANALYZER TOKEN !!!
-
-!!!!	USE FT_STREPLACE_INSIDE !!!
-
-
-SEGV:
-	echo $_TRR$+
+ IMPLEMENTER INHIB ET EXPAND POUR LE HEREDOC
 
 ADD:
 	$!
