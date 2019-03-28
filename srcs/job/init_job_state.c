@@ -10,7 +10,8 @@ int		ret_status(int ret, pid_t process, t_job *job)
 		err = WEXITSTATUS(ret);
 	if (!job)
 	{
-		job = get_job_pid(process);
+		if (!(job = get_job_pid(process)))
+			return (1);
 		job->status = ret;
 	}
 	job->state = DONE;

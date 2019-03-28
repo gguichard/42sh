@@ -25,9 +25,9 @@ void	ft_insert(char **source, char *insert, int pos1, int pos2)
 	end = ft_strsub(*source, pos2 + 1, (ft_strlen(&((*source)[pos2]) - 1)));
 	ft_memdel((void **)source);
 	if (!(tmp = ft_strjoin(begin, insert)))
-		ft_exit_malloc();
+		return ;
 	if (!(*source = ft_strjoin(tmp, end)))
-		ft_exit_malloc();
+		return ;
 	ft_memdel((void **)&begin);
 	ft_memdel((void **)&tmp);
 	ft_memdel((void **)&end);
@@ -42,7 +42,7 @@ void	ft_delete_inside(char **source, int start, int len)
 	end = ft_strsub(*source, start + len, ft_strlen(&(*source)[len + start]));
 	free(*source);
 	if (!(*source = ft_strjoin(begin, end)))
-		ft_exit_malloc();
+		return ;
 	free(begin);
 	free(end);
 }

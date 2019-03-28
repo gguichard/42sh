@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 17:51:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 16:25:58 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/03/28 12:39:20 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*get_var_for_expand(t_alloc *alloc, const char *key)
 	int		tmp;
 
 	var = NULL;
+	if (!key)
+		return (0);
 	if (ft_isalpha(key[0]) || key[0] == '_')
 		var = get_var(alloc->vars, key);
 	else

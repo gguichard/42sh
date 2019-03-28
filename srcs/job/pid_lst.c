@@ -70,9 +70,14 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, bool addpipe)
 
 	tmp = 0;
 	job = 0;
-	if (!(job = create_job(process, elem, addpipe)) || !(tmp = ft_lstnew(job, sizeof(t_job))))
-		ft_exit_malloc();
+	job = create_job(process, elem, addpipe);
+	tmp = ft_lstnew(job, sizeof(t_job));
 	ft_lstpush(&g_jobs, tmp);
+	if (!tmp || !job)
+	{
+		kill(process, SIGKILL);
+		ft_memdel((void **)&tmp);
+	}
 	ft_memdel((void **)&job);
 	return (tmp);
 }
@@ -86,9 +91,15 @@ int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, bool addpipe
 	tmp = 0;
 	job = 0;
 	ret = setpgid(process, ((t_job *)attach->content)->gpid);
-	if (!(job = create_job(process, elem, addpipe)) || !(tmp = ft_lstnew(job, sizeof(t_job))))
-		ft_exit_malloc();
+	job = create_job(process, elem, addpipe);
+	tmp = ft_lstnew(job, sizeof(t_job));
 	ft_lstpush(&((t_job *)attach->content)->pipe, tmp);
+	if (!tmp || !job)
+	{
+		kill(process, SIGKILL);
+		ft_memdel((void **)&tmp);
+		ret = -1;
+	}
 	ft_memdel((void **)&job);
 	return (ret);
 }

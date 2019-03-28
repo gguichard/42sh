@@ -14,8 +14,7 @@ void	delete_str_tab(char **tab_str)
 		ft_memdel((void **)&(tab_str[i]));
 		i += 1;
 	}
-	free(tab_str);
-	tab_str = NULL;
+	ft_memdel((void **)tab_str);
 }
 
 void	del_lst_ast(t_ast **lst)

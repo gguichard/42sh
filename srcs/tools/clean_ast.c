@@ -6,8 +6,7 @@ void	del_elem_ast(t_ast **lst)
 		return ;
 	ft_memdel((void **)((*lst)->heredoc));
 	delete_str_tab((*lst)->input);
-	free((*lst));
-	*lst = NULL;
+	ft_memdel((void **)lst);
 }
 
 void	del_ast(t_ast **lst)

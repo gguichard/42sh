@@ -20,7 +20,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	lst_tk = NULL;
 	ft_bzero(&exec_option, sizeof(t_exec_opt));
 	if (!scmd_init(&scmd, line))
-		ft_exit_malloc();
+		return ;
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 
 	/*
@@ -34,7 +34,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 
-	sort_ast = parser(&lst_tk, alloc);
+	if (!(sort_ast = parser(&lst_tk, alloc)))
+		return ;
 
 	/*
 	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL

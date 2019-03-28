@@ -63,7 +63,8 @@ static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child, bool wait
 		ret = setpgid(child, 0);
 		if (wait_hang == false)
 			redirect_term_controller(child, 0);
-		first_cmd = add_pid_lst(child, elem->left, true);
+		if (!(first_cmd = add_pid_lst(child, elem->left, true)))
+			return (-1);
 	}
 	else if (already_piped)
 		ret = add_pid_lst_pipe(first_cmd, child, elem->right, false);

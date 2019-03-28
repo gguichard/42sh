@@ -76,7 +76,7 @@ int		inhibitor(t_ast *elem, t_alloc *alloc)
 	i = 0;
 	str_cmd = NULL;
 	if (!(str_cmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))))
-		ft_exit_malloc();
+		return (0);
 	while (elem->input[i])
 	{
 		if (!scmd_init(str_cmd, elem->input[i]))

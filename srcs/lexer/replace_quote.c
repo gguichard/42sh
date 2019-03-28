@@ -30,28 +30,28 @@ void		expand_home_shortcut(char **s, t_list *vars)
 	}
 }
 
-void		replace_str(char **str, char *insert, int pos)
-{
-	char *begin;
-	char *end;
-	char *tmp;
-
-	if (!*str)
-		(!(*str = ft_strdup(insert))) ? ft_exit_malloc() : 0;
-	else
-	{
-		begin = ft_strsub(*str, 0, pos);
-		end = ft_strsub(*str, pos, ft_strlen(*str));
-		free(*str);
-		if (!(tmp = ft_strjoin(begin, insert)))
-			ft_exit_malloc();
-		if (!(*str = ft_strjoin(tmp, end)))
-			ft_exit_malloc();
-		free(tmp);
-		free(begin);
-		free(end);
-	}
-}
+// void		replace_str(char **str, char *insert, int pos)
+// {
+// 	char *begin;
+// 	char *end;
+// 	char *tmp;
+//
+// 	if (!*str)
+// 		(!(*str = ft_strdup(insert))) ? ft_exit_malloc() : 0;
+// 	else
+// 	{
+// 		begin = ft_strsub(*str, 0, pos);
+// 		end = ft_strsub(*str, pos, ft_strlen(*str));
+// 		free(*str);
+// 		if (!(tmp = ft_strjoin(begin, insert)))
+// 			ft_exit_malloc();
+// 		if (!(*str = ft_strjoin(tmp, end)))
+// 			ft_exit_malloc();
+// 		free(tmp);
+// 		free(begin);
+// 		free(end);
+// 	}
+// }
 // static int	replace_env_var(char **str, int i, t_var *lst_env)
 // {
 // 	char	*key;

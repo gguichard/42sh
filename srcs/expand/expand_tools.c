@@ -77,9 +77,8 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc)
 	else
 		while (exp[i] && (ft_isalnum(exp[i]) == 1 || exp[i] == '_'))
 			i += 1;
-	if (!(str = ft_strndup(exp, i)))
-		ft_exit_malloc();
+	str = ft_strndup(exp, i);
 	value = get_var_for_expand(alloc, str);
-	free(str);
+	ft_memdel((void **)&str);
 	return (value);
 }

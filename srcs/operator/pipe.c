@@ -30,7 +30,7 @@ static void	kill_fg_pgid(void)
 		job = tmp->content;
 		if (job->state == RUNNING_FG)
 		{
-			kill(job->pid, SIGINT);
+			kill(job->pid, SIGKILL);
 			waitpid(job->pid, 0, WNOHANG);
 			job->state = DONE;
 			if (job->pipe)
