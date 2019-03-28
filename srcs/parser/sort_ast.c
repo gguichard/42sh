@@ -1,19 +1,18 @@
 #include "shell.h"
 #include "parser_lexer.h"
 
-static t_ast	*get_available_node(t_ast *sort)
+static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 {
 	t_ast	*tmp;
 
 	tmp = sort;
 	if (tmp && tmp->type == LOGIC)
 	{
-		if (tmp->right)
+		if (tmp->right && tmp->right->type > elem->type)
 		{
-			while (tmp->right && tmp->right->type != CMD)
-				tmp = tmp->right;
-			return (tmp);
+			tmp = tmp->right;
 		}
+		return (tmp);
 	}
 	return (tmp);
 }
@@ -53,7 +52,7 @@ static void		insert_node(t_ast **sort, t_ast *tmp, t_ast *node)
 
 void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 {
-	if ((*sort)->type == LOGIC)
+	if (node->type > tmp->type)
 	{
 		if (node->right)
 		{
@@ -63,7 +62,7 @@ void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 		node->right = tmp;
 		tmp->back = node;
 	}
-	else if (tmp->type > HEREDOC)
+	else if (tmp->type > CMD)
 		insert_node(sort, tmp, node);
 	else
 	{
@@ -83,7 +82,7 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 		*sort = lst;
 	else
 	{
-		node = get_available_node(*sort);
+		node = get_available_node(*sort, tmp);
 		if (tmp->type == LOGIC)
 		{
 			tmp->left = *sort;
