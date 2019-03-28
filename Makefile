@@ -46,6 +46,7 @@ $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
 $(PATH_PARSER)/token_analyzer.c \
 $(PATH_EXEC)/analyzer.c \
+$(PATH_EXEC)/exec_builtin.c \
 $(PATH_EXEC)/exec_input.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \

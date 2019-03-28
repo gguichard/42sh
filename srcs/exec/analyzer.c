@@ -26,16 +26,12 @@ static int	dispatch_logic(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 
 static int	dispatch_command(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
-	int	idx;
+	int	ret;
 
-	idx = 0;
-	while (alloc->builtins[idx].name != NULL)
-	{
-		if (ft_strequ(elem->input[0], alloc->builtins[idx].name))
-			return (alloc->builtins[idx].built_fun(elem, alloc));
-		idx++;
-	}
-	return (exec_input(elem, alloc, opt));
+	ret = try_builtin_execution(alloc, elem, opt);
+	if (ret == -1)
+		ret = exec_input(elem, alloc, opt);
+	return (ret);
 }
 
 int			analyzer(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
@@ -52,7 +48,7 @@ int			analyzer(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 		if (elem->type == AST_CMD)
 			return (dispatch_command(elem, alloc, opt));
 		if (elem->type == AST_REDIR)
-			ft_printf("%s %s\n", elem->input[0], elem->input[1]);
+			; // TODO
 		if (elem->type == AST_PIPE)
 			return (do_pipe(elem, alloc, opt));
 		if (elem->type == AST_JOB)
