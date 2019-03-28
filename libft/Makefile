@@ -6,7 +6,7 @@
 #    By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/29 17:35:18 by gguichar          #+#    #+#              #
-#    Updated: 2019/03/25 09:27:22 by fwerner          ###   ########.fr        #
+#    Updated: 2019/03/28 11:08:44 by gguichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ ft_abs.c				\
 ft_atoi.c				\
 ft_atoi_base.c			\
 ft_bzero.c				\
+ft_ceil.c				\
 ft_isalnum.c			\
 ft_isalpha.c			\
 ft_isascii.c			\
