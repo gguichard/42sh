@@ -42,6 +42,9 @@ int				get_cur_spe_char_token_len_and_set_type(
 				&& scmd_cur_char(sp_cmd->scmd)
 				== sp_cmd->scmd->str[sp_cmd->scmd->pos + 1])
 			++len;
+		else if (scmd_cur_is_of(sp_cmd->scmd, RED_TYPE_SPE_CHARS)
+				&& sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] == '&')
+			++len;
 		if (scmd_cur_is_of(sp_cmd->scmd, RED_TYPE_SPE_CHARS))
 			sp_cmd->cur_tk_type = TK_RED_OPE;
 		else
@@ -61,7 +64,7 @@ t_token_type	get_tk_type_before_cur_char(t_split_cmd_inf *sp_cmd)
 	if (scmd_cur_is_of(sp_cmd->scmd, RED_TYPE_SPE_CHARS))
 	{
 		if (cur_token_is_number(sp_cmd))
-			return (TK_LRED_OPT);
+			return (TK_RED_LOPT_FD);
 		else if (sp_cmd->scmd->pos > 0
 				&& sp_cmd->scmd->str[sp_cmd->scmd->pos] == '>'
 				&& !scmd_char_at_is_escaped(sp_cmd->scmd, sp_cmd->scmd->pos - 1)
@@ -79,11 +82,9 @@ t_token_type	get_next_word_tk_type(t_split_cmd_inf *sp_cmd)
 
 	if (sp_cmd->last_start_cmd != NULL)
 	{
-		if (get_tk(sp_cmd->last_tk_added)->type == TK_RED_OPE
-				|| (get_tk(sp_cmd->last_tk_added)->type == TK_RRED_OPT
-					&& ft_strequ(get_tk(sp_cmd->last_tk_added)->token, "&")))
+		if (get_tk(sp_cmd->last_tk_added)->type == TK_RED_OPE)
 		{
-			return (TK_RED_FILENAME);
+			return (TK_RED_ROPT_FILE);
 		}
 	}
 	cur_lst_elem = sp_cmd->last_start_cmd;

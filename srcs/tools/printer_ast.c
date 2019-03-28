@@ -48,74 +48,74 @@ void	read_lst(t_ast *lst, int active)
 void	read_sort_descent(t_ast *sort, int active)
 {
 	t_ast	*tmp;
-	// char	*s;
-	int		i;
+	char	*s;
+	// int		i;
 
-	(void)active;
+	// (void)active;
 
 	tmp = sort;
-	while (tmp->left)
-	{
-		ft_printf("\ntype= %d\n", tmp->type);
-		i = 0;
-		while (tmp->input[i])
-		{
-			ft_printf("input[%d]: %s\n", i, tmp->input[i]);
-			i += 1;
-		}
-		tmp->print = 1;
-		tmp = tmp->left;
-	}
-	ft_printf("\ntype= %d\n", tmp->type);
-	i = 0;
-	while (tmp->input[i])
-	{
-		ft_printf("input[%d]: %s\n", i, tmp->input[i]);
-		i += 1;
-	}
-	tmp->print = 1;
-	while (tmp)
-	{
-		if (tmp->left && tmp->left->print == 0)
-		{
-			tmp = tmp->left;
-			ft_printf("\ntype= %d\n", tmp->type);
-			i = 0;
-			while (tmp->input[i])
-			{
-				ft_printf("input[%d]: %s\n", i, tmp->input[i]);
-				i += 1;
-			}
-			tmp->print = 1;
-		}
-		else if (tmp->right && tmp->right->print == 0)
-		{
-			tmp = tmp->right;
-			ft_printf("\ntype= %d\n", tmp->type);
-			i = 0;
-			while (tmp->input[i])
-			{
-				ft_printf("input[%d]: %s\n", i, tmp->input[i]);
-				i += 1;
-			}
-			tmp->print = 1;
-		}
-		else
-			tmp = tmp->back;
-	}
-	ft_printf("\n");
-	// if (!tmp)
-	// 	return ;
-	// active += 10;
-	// read_sort_descent(tmp->right, active);
-	// ft_printf("\n");
-	// for (i = 10; i < active; i++) {
-	// 	ft_printf(" ");
+	// while (tmp->left)
+	// {
+	// 	ft_printf("\ntype= %d\n", tmp->type);
+	// 	i = 0;
+	// 	while (tmp->input[i])
+	// 	{
+	// 		ft_printf("input[%d]: %s\n", i, tmp->input[i]);
+	// 		i += 1;
+	// 	}
+	// 	tmp->print = 1;
+	// 	tmp = tmp->left;
 	// }
-	// s = ft_tab_to_str(tmp->input);
-	// ft_printf("input= %s\n", s);
-	// ft_memdel((void **)&s);
-	// read_sort_descent(tmp->left, active);
+	// ft_printf("\ntype= %d\n", tmp->type);
+	// i = 0;
+	// while (tmp->input[i])
+	// {
+	// 	ft_printf("input[%d]: %s\n", i, tmp->input[i]);
+	// 	i += 1;
+	// }
+	// tmp->print = 1;
+	// while (tmp)
+	// {
+	// 	if (tmp->left && tmp->left->print == 0)
+	// 	{
+	// 		tmp = tmp->left;
+	// 		ft_printf("\ntype= %d\n", tmp->type);
+	// 		i = 0;
+	// 		while (tmp->input[i])
+	// 		{
+	// 			ft_printf("input[%d]: %s\n", i, tmp->input[i]);
+	// 			i += 1;
+	// 		}
+	// 		tmp->print = 1;
+	// 	}
+	// 	else if (tmp->right && tmp->right->print == 0)
+	// 	{
+	// 		tmp = tmp->right;
+	// 		ft_printf("\ntype= %d\n", tmp->type);
+	// 		i = 0;
+	// 		while (tmp->input[i])
+	// 		{
+	// 			ft_printf("input[%d]: %s\n", i, tmp->input[i]);
+	// 			i += 1;
+	// 		}
+	// 		tmp->print = 1;
+	// 	}
+	// 	else
+	// 		tmp = tmp->back;
+	// }
+	ft_printf("\n");
+	if (!tmp)
+		return ;
+	active += 10;
+	read_sort_descent(tmp->right, active);
+	ft_printf("\n");
+	for (int i = 10; i < active; i++) {
+		ft_printf(" ");
+	}
+	s = ft_tab_to_str(tmp->input);
+	ft_printf("input= %s\n", s);
+	ft_memdel((void **)&s);
+	read_sort_descent(tmp->left, active);
 	return ;
 }
 

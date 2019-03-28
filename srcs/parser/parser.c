@@ -35,8 +35,10 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 		i += 1;
 	if (i < 6)
 		elem->type = REDIR;
-	else if (i < 8)
-		elem->type = OPERATOR;
+	else if (i == 6)
+		elem->type = JOB;
+	else if (i == 7)
+		elem->type = PIPE;
 	else if (i < 10)
 		elem->type = LOGIC;
 	else if (i == 10)
@@ -48,7 +50,7 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	t_token_type	type;
 
 	type = get_tk(lst_tk)->type;
-	if (type == TK_LRED_OPT)
+	if (type == TK_RED_LOPT_FD)
 		set_type(elem, lst_tk->next);
 	else if (type > 3)
 		set_type(elem, lst_tk);
@@ -74,8 +76,7 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 	while (*lst_tk)
 	{
 		type = get_tk(*lst_tk)->type;
-		if (type == TK_CMD_SEP && (ft_strcmp(get_tk(*lst_tk)->token, ";") == 0
-				|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
+		if (type == TK_CMD_SEP && ft_strcmp(get_tk(*lst_tk)->token, ";") == 0)
 			break ;
 		else if (type != TK_PARAM)
 		{

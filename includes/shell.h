@@ -25,9 +25,10 @@
 ************************************ DEFINE ************************************
 */
 
-# define CMD_SEP	5
+# define CMD_SEP	6
+# define JOB		5
 # define LOGIC		4
-# define OPERATOR	3
+# define PIPE		3
 # define ASSIGN		2
 # define CMD		1
 # define REDIR		0

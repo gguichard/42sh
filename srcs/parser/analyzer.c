@@ -15,7 +15,8 @@ static int	dispatch_cmd_sep(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 {
 	static t_dispatch	dispatch[] = { &dispatch_redir, &dispatch_cmd,
-						&dispatch_assign, &dispatch_operator, &dispatch_logic };
+						&dispatch_assign, &dispatch_operator, &dispatch_logic,
+						&dispatch_operator };
 	t_ast				*tmp;
 	int					ret;
 

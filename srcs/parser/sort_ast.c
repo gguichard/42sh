@@ -10,11 +10,10 @@ static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 	{
 		if (tmp->right && tmp->right->type > elem->type)
 			tmp = tmp->right;
+		if (elem->type == REDIR)
+			while (tmp->left && tmp->left->type == REDIR)
+				tmp = tmp->left;
 	}
-	// if (tmp && elem->type == REDIR)
-	// {
-	// 	if (tmp->type >)
-	// }
 	return (tmp);
 }
 
@@ -84,7 +83,7 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 	else
 	{
 		node = get_available_node(*sort, tmp);
-		if (tmp->type == LOGIC)
+		if (tmp->type >= LOGIC)
 		{
 			tmp->left = *sort;
 			(*sort)->back = tmp;
