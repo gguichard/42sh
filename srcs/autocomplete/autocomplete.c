@@ -113,3 +113,19 @@ t_ac_suff_inf	*autocomplete_var(t_list *var_lst, const char *word)
 	}
 	return (delete_ac_suff_inf(acs));
 }
+
+t_ac_suff_inf	*autocomplete_user(const char *word)
+{
+	t_ac_suff_inf	*acs;
+	t_ac_rdir_inf	acrd;
+
+	if ((acs = (t_ac_suff_inf*)malloc(sizeof(t_ac_suff_inf))) == NULL)
+		return (NULL);
+	if (init_ac_suff_inf(acs))
+	{
+		check_for_user_ac(word, &acrd, acs);
+		if (acs->suff != NULL)
+			return (acs);
+	}
+	return (delete_ac_suff_inf(acs));
+}
