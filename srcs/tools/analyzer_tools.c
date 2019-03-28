@@ -10,7 +10,7 @@ int	dispatch_cmd(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	int					ret;
 
 	i = 0;
-	ret = 0	;
+	ret = 0;
 	while (alloc->builtins[i].name)
 	{
 		if (ft_strcmp(elem->input[0], alloc->builtins[i].name) == 0)
@@ -71,7 +71,7 @@ int	dispatch_operator(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	if (ft_strcmp(elem->input[0], "|") == 0)
 	{
-		while (elem->left->type == OPERATOR)
+		while (elem->left->type == PIPE)
 			elem = elem->left;
 		return (do_pipe(elem, alloc, opt));
 	}

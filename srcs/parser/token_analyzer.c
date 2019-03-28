@@ -22,11 +22,11 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 static int				check_red_ope(t_list **lst_tk)
 {
 	*lst_tk = (*lst_tk)->next;
-	if (!(*lst_tk) || (get_tk(*lst_tk)->type != TK_RRED_OPT
-			&& get_tk(*lst_tk)->type != TK_RED_FILENAME))
+	if (!(*lst_tk) || (get_tk(*lst_tk)->type != TK_RED_ROPT_FILE
+			&& get_tk(*lst_tk)->type != TK_RED_ROPT_FILE))
 		return (0);
 	if (ft_strcmp((get_tk(*lst_tk)->token), "&") == 0 && (*lst_tk)->next
-			&& get_tk((*lst_tk)->next)->type != TK_RED_FILENAME)
+			&& get_tk((*lst_tk)->next)->type != TK_RED_ROPT_FILE)
 		return (0);
 	return (1);
 }
@@ -54,7 +54,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk)
 			break ;
 		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
 			return (syntax_error(get_tk(lst_tk->next)->token));
-		else if (type == TK_LRED_OPT && !check_lred_opt(&lst_tk))
+		else if (type == TK_RED_LOPT_FD && !check_lred_opt(&lst_tk))
 			return (syntax_error(get_tk(lst_tk)->token));
 		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk))
 			return (syntax_error(get_tk(lst_tk)->token));

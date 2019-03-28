@@ -153,15 +153,15 @@ static int			is_valid_var_char(char var_char, size_t idx)
 }
 
 static void			update_last_var_inf(t_str_cmd_inf *scmd
-		, const char **last_var_start, int *is_inline_var)
+		, const char **last_var_start, int *is_in_bracket)
 {
-	if (*last_var_start != NULL && *is_inline_var)
+	if (*last_var_start != NULL && !*is_in_bracket)
 	{
 		if (!is_valid_var_char(scmd_cur_char(scmd)
 					, scmd_cur_str(scmd) - *last_var_start))
 			*last_var_start = NULL;
 	}
-	else if (*last_var_start != NULL && !*is_inline_var)
+	else if (*last_var_start != NULL && *is_in_bracket)
 	{
 		if (scmd->sub_str_cmd == NULL
 				|| scmd->sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_VAR)
@@ -172,29 +172,28 @@ static void			update_last_var_inf(t_str_cmd_inf *scmd
 			&& !scmd_cur_char_is_escaped(scmd))
 	{
 		*last_var_start = scmd_cur_str(scmd) + 1;
-		*is_inline_var = 1;
+		*is_in_bracket = 0;
 	}
 	else if (*last_var_start == NULL && scmd->sub_str_cmd != NULL
 			&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_VAR)
 	{
 		*last_var_start = scmd_cur_str(scmd);
-		*is_inline_var = 0;
+		*is_in_bracket = 1;
 	}
 }
 
-static const char	*find_last_var_start(const char *str)
+static const char	*find_last_var_start(const char *str, int *is_in_bracket)
 {
 	t_str_cmd_inf	scmd;
 	const char		*last_var_start;
-	int				is_inline_var;
 
+	*is_in_bracket = 0;
 	if (str == NULL || !scmd_init(&scmd, str))
 		return (NULL);
 	last_var_start = NULL;
-	is_inline_var = 0;
 	while (1)
 	{
-		update_last_var_inf(&scmd, &last_var_start, &is_inline_var);
+		update_last_var_inf(&scmd, &last_var_start, is_in_bracket);
 		if (!scmd_move_to_next_char(&scmd))
 			break ;
 	}
@@ -238,22 +237,25 @@ t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 	t_token_inf		*cur_tk;
 	t_ac_suff_inf	*acs_inf;
 	const char		*real_ac_start;
+	int				is_in_bracket;
 
 	cur_tk = get_cur_token_cmd(str, alloc);
-	real_ac_start = find_last_var_start(cur_tk->token);
+	real_ac_start = find_last_var_start(cur_tk->token, &is_in_bracket);
 	if (real_ac_start == NULL)
 	{
 		real_ac_start = (cur_tk->type == TK_RED_FILENAME
 				? NULL : find_last_assign_start(cur_tk->token));
 		if (real_ac_start == NULL)
 			real_ac_start = cur_tk->token;
-		acs_inf = autocomplete_word(alloc->vars
-				, (real_ac_start == NULL ? "" : real_ac_start)
-				, cur_tk->type == TK_CMD, alloc);
+		acs_inf = autocomplete_word(alloc->vars, (real_ac_start == NULL ? ""
+					: real_ac_start) , cur_tk->type == TK_CMD, alloc);
 	}
 	else
 	{
 		acs_inf = autocomplete_var(alloc->vars, real_ac_start);
+		if (acs_inf != NULL && acs_inf->suff_type == ACS_TYPE_FILE
+				&& is_in_bracket)
+			acs_inf->suff_type = ACS_TYPE_VAR_IN_BRACKETS;
 	}
 	del_token(cur_tk, 0);
 	return (acs_inf);
