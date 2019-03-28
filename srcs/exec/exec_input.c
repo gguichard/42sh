@@ -100,6 +100,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 			analyzer(elem->left, alloc, opt);
 		execute_cmd(alloc, elem, path_exec);
 	}
+	opt->fork = 0;
 	ft_strdel(&path_exec);
 	wait_pid(child, elem, opt, alloc);
 	return (ret_status(alloc->ret_val, child, 0));

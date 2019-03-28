@@ -22,7 +22,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	lst_tk = NULL;
 	ft_bzero(&exec_option, sizeof(t_exec_opt));
 	if (!scmd_init(&scmd, line))
-		ft_exit_malloc();
+		return ;
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 
 	/*
@@ -53,7 +53,6 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	read_sort_descent(sort_ast, 0);
 	check_exit_cmd(sort_ast);
 	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-	refresh_jobs();
 
 	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);

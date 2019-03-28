@@ -55,6 +55,8 @@ int			analyzer(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 			ft_printf("%s %s\n", elem->input[0], elem->input[1]);
 		if (elem->type == AST_PIPE)
 			return (do_pipe(elem, alloc, opt));
+		if (elem->type == AST_JOB)
+			return (job_control(elem, alloc, opt));
 	}
 	return (0);
 }
