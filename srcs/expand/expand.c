@@ -1,8 +1,11 @@
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
+#include "inhibitor.h"
+#include "str_cmd_inf.h"
 
-int			expand_var(char **str, t_alloc *alloc, const char *exp, size_t *len)
+int		expand_var(char **str, t_alloc *alloc, const char *exp,
+		size_t *len)
 {
 	if (ft_strncmp(exp, "${", 2) == 0)
 	{
@@ -15,7 +18,7 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp, size_t *len)
 	return (1);
 }
 
-int			expand(char **input, t_alloc *alloc, size_t *pos)
+int		expand(char **input, t_alloc *alloc, size_t *pos)
 {
 	char		*str;
 	const char	*exp;
@@ -23,7 +26,6 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 
 	exp = NULL;
 	str = NULL;
-	len = 0;
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);

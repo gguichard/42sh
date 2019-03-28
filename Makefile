@@ -158,6 +158,7 @@ $(PATH_TOOLS)/assign_tools.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c
 
 OBJ_DIR	=	.obj

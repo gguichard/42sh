@@ -1,6 +1,8 @@
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
+#include "inhibitor.h"
+#include "str_cmd_inf.h"
 
 int		error_expand(const char *exp)
 {
@@ -81,4 +83,14 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 	value = get_var_for_expand(alloc, str);
 	free(str);
 	return (value);
+}
+
+int		do_expand(char **array, t_alloc *alloc, size_t *pos_array,
+		t_str_cmd_inf *str_cmd)
+{
+	if (!expand(&(array[get_pos_in_array(array)]), alloc, pos_array))
+		return (0);
+	scmd_move_to_next_char(str_cmd);
+	update_pos_index(str_cmd);
+	return (1);
 }

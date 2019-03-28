@@ -4,55 +4,10 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-char		**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (x < *i)
-	{
-		if (!(modify[x] = ft_strdup(elem->input[x])))
-			ft_exit_malloc();
-		x += 1;
-	}
-	while (new[y])
-		if (!(modify[x++] = ft_strdup(new[y++])))
-			ft_exit_malloc();
-	y = *i + 1;
-	while (elem->input[y])
-		if (!(modify[x++] = ft_strdup(elem->input[y++])))
-			ft_exit_malloc();
-	modify[x] = NULL;
-	return (modify);
-}
-
-void		create_new_input(t_ast *elem, int *i, char **new)
-{
-	int		len_new;
-	int		len_input;
-	char	**modify;
-
-	len_new = 0;
-	len_input = 0;
-	modify = NULL;
-	while (new[len_new])
-		len_new += 1;
-	while (elem->input[len_input])
-		len_input += 1;
-	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
-		ft_exit_malloc();
-	modify = insert_new_tab(modify, i, new, elem);
-	delete_str_tab(elem->input);
-	elem->input = modify;
-	*i += len_new;
-}
-
 //Permet d'inhiber d'expandre et de remove le quote
 //Return 0 en cas d'erreur;
-int	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
-		t_alloc *alloc)
+int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
+			t_alloc *alloc)
 {
 	remove_escaped_char(str_cmd, input, pos);
 	str_cmd->pos -= 1;
@@ -89,48 +44,22 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc, int opt)
 	char			**array;
 
 	pos_array = 0;
-	if (!(array = (char **)malloc(sizeof(char *) * 2)))
-		return (NULL);
-	if (!(str_cmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))))
-		return (NULL);
-	if (!scmd_init(str_cmd, str))
-		return (NULL);
-	array[0] = ft_strdup(str_cmd->str);
-	array[1] = NULL;
+	str_cmd = NULL;
+	array = NULL;
+	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
+		return (error_inhib_expand(str_cmd, array));
 	while (scmd_cur_char(str_cmd))
-	{
-		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
-		{
-			if (!(inhib_expand_in_quote(str_cmd, array, &pos_array, alloc)))
-			{
-				scmd_clean(str_cmd);
-				delete_str_tab(array);
-				return (NULL);
-			}
-		}
+		if ((str_cmd->is_in_quote || str_cmd->is_in_dbquote)
+				&& !(inhib_expand_in_quote(str_cmd, array, &pos_array, alloc)))
+			return (error_inhib_expand(str_cmd, array));
 		else if (scmd_cur_char_is_escaped(str_cmd) && opt == 0)
-			remove_escaped_char(str_cmd, &array[get_pos_in_array(array)],
-					&pos_array);
-		else if (scmd_cur_char_is_escaped(str_cmd) && opt == 1)
-			remove_escaped_char_autocomplete(str_cmd,
-					&array[get_pos_in_array(array)], &pos_array);
-		else if (scmd_cur_char(str_cmd) == '$')
-		{
-			if (!expand(&(array[get_pos_in_array(array)]), alloc, &pos_array))
-			{
-				scmd_clean(str_cmd);
-				delete_str_tab(array);
-				return (NULL);
-			}
-			scmd_move_to_next_char(str_cmd);
-			update_pos_index(str_cmd);
-		}
+			remove_escaped_char_select(str_cmd, &array[get_pos_in_array(array)],
+				&pos_array, opt);
+		else if (scmd_cur_char(str_cmd) == '$'
+				&& !do_expand(array, alloc, &pos_array, str_cmd))
+			return (error_inhib_expand(str_cmd, array));
 		else
-		{
-			scmd_move_to_next_char(str_cmd);
-			pos_array += 1;
-		}
-	}
+			pos_array += scmd_move_to_next_char(str_cmd);
 	scmd_clean(str_cmd);
 	return (array);
 }
@@ -148,10 +77,19 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 		if (!(new_array = inhib_expand_str(elem->input[i], alloc, 0)))
 			return (0);
 		create_new_input(elem, &i, new_array);
-		int x = 0;
-		while (elem->input[x++])
-			ft_printf("elem[%d]: %s\n", x, elem->input[x]);
-		ft_printf("\n\n");
 	}
+	return (1);
+}
+
+int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
+		size_t *pos, t_alloc *alloc)
+{
+	size_t	i;
+
+	i = get_pos_in_array(array);
+	if (str_cmd->is_in_quote)
+		return (go_to_end_quote(str_cmd, &array[i], pos));
+	else if (str_cmd->is_in_dbquote)
+			return (inhib_in_db(str_cmd, pos, &array[i], alloc));
 	return (1);
 }
