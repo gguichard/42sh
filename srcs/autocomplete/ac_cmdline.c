@@ -17,8 +17,6 @@
 //TODO ET A TOUS LES CHAR SPECIAUX (\) JE CROIS C'EST OK
 //TODO ET PENSER A CHANGER LE TYPE D'ECHAPPEMENT SELON SI DANS ' / " ETC
 //TODO
-//TODO RECHANGER LA GESTION DU RRED_OPT PASKIL EXIT PLUS !?!?!?!?!!?!?!?
-//TODO
 
 static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
@@ -75,18 +73,6 @@ static size_t		get_pos_last_sub_cmd_start(t_str_cmd_inf *scmd)
 	return (last_sub_cmd_start_pos);
 }
 
-static char			*get_rred_opt_real_content(const char *token)
-{
-	if (*token == '&')
-		++token;
-	if (*token == '-')
-		++token;
-	if (*token == '\0')
-		return (NULL);
-	else
-		return (ft_strdup(token));
-}
-
 static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 		, t_token_inf *last_tk, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
@@ -103,11 +89,8 @@ static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 			}
 		}
 	}
-	cur_tk->type = (last_tk->type == TK_RRED_OPT
-			? TK_RED_FILENAME : last_tk->type);
-	cur_tk->token = (last_tk->type == TK_RRED_OPT
-			? get_rred_opt_real_content(last_tk->token)
-			: ft_strdup(last_tk->token));
+	cur_tk->type = last_tk->type;
+	cur_tk->token = ft_strdup(last_tk->token);
 }
 
 void				set_cur_token_cmd(t_token_inf *cur_tk_cmd
@@ -233,7 +216,7 @@ t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc)
 	real_ac_start = find_last_var_start(cur_tk.token, &is_in_bracket);
 	if (real_ac_start == NULL)
 	{
-		real_ac_start = (cur_tk.type == TK_RED_FILENAME
+		real_ac_start = (cur_tk.type == TK_RED_ROPT_FILE
 				? NULL : find_last_assign_start(cur_tk.token));
 		if (real_ac_start == NULL)
 			real_ac_start = cur_tk.token;
