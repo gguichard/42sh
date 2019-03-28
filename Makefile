@@ -46,7 +46,6 @@ $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
 $(PATH_PARSER)/token_analyzer.c \
 $(PATH_EXEC)/analyzer.c \
-$(PATH_OPERATOR)/heredoc.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
@@ -79,7 +78,6 @@ $(PATH_BUILT)/test/file_tests_flags.c \
 $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
-$(PATH_TOOLS)/heredoc_tools.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \
