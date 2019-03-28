@@ -112,6 +112,7 @@ $(PATH_CMDLINE)/print_cmdline.c \
 $(PATH_CMDLINE)/print_cmdline_utils.c \
 $(PATH_CMDLINE)/prompt.c \
 $(PATH_CMDLINE)/seq_keys.c \
+$(PATH_CMDLINE)/setup_cmdline.c \
 $(PATH_CMDLINE)/setup_term.c \
 $(PATH_CMDLINE)/tcaps_utils.c \
 $(PATH_CMDLINE)/mode_common/cursor_home_end.c \

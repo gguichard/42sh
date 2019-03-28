@@ -25,6 +25,7 @@
 ************************************ DEFINE ************************************
 */
 
+# define CMD_SEP	6
 # define LOGIC		5
 # define OPERATOR	4
 # define ASSIGN		3
@@ -70,6 +71,8 @@ typedef struct			s_alloc
 	int					argc;
 	char				**argv;
 	int					ret_val;
+	pid_t				last_bg;
+	pid_t				pid;
 	t_cmdline			cmdline;
 	t_ast				*ast;
 	t_list				*vars;
