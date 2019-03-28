@@ -69,6 +69,18 @@ static const char	*get_last_sub_cmd_start(t_str_cmd_inf *scmd)
 	return (last_sub_cmd_start);
 }
 
+static char			*get_rred_opt_real_content(const char *token)
+{
+	if (*token == '&')
+		++token;
+	if (*token == '-')
+		++token;
+	if (*token == '\0')
+		return (NULL);
+	else
+		return (ft_strdup(token));
+}
+
 static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 		, t_token_inf *last_tk, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
@@ -95,7 +107,8 @@ static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 	cur_tk->type = (last_tk->type == TK_RRED_OPT
 			? TK_RED_FILENAME : last_tk->type);
 	cur_tk->token = (last_tk->type == TK_RRED_OPT
-			? NULL : ft_strdup(last_tk->token));
+			? get_rred_opt_real_content(last_tk->token)
+			: ft_strdup(last_tk->token));
 }
 
 t_token_inf			*get_cur_token_cmd(const char *str, t_alloc *alloc)
