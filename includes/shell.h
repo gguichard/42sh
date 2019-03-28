@@ -25,14 +25,14 @@
 ************************************ DEFINE ************************************
 */
 
-# define CMD_SEP	6
-# define JOB		5
-# define LOGIC		4
-# define PIPE		3
-# define ASSIGN		2
-# define CMD		1
-# define REDIR		0
-# define NO_TYPE	-1
+# define AST_CMD_SEP	6
+# define AST_JOB		5
+# define AST_LOGIC		4
+# define AST_PIPE		3
+# define AST_ASSIGN		2
+# define AST_CMD		1
+# define AST_REDIR		0
+# define AST_NO_TYPE	-1
 
 /*
 ********************************** STRUCTURES **********************************
@@ -104,7 +104,7 @@ void	del_alloc(t_alloc *alloc);
 //TOOLS TO PRINT LST AST
 void	read_sort_descent(t_ast *sort, int active);
 
-// CLEN AST
+// CLEAN AST
 void	del_ast(t_ast **lst);
 void	del_elem_ast(t_ast **lst);
 

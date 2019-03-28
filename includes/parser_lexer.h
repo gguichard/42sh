@@ -33,7 +33,6 @@ void			replace_str(char **str, char *insert, int pos);
 */
 
 t_ast			*parser(t_list **lst_tk);
-int				analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 ********************************* PARSER TOOLS *********************************

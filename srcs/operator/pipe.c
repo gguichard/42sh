@@ -4,7 +4,7 @@
 
 static void	close_pipe(t_ast *elem, int already_piped)
 {
-	if (elem->left->type == PIPE || already_piped)
+	if (elem->left->type == AST_PIPE || already_piped)
 	{
 		if (already_piped)
 		{
@@ -45,7 +45,7 @@ static void	set_connection(t_ast *elem, int already_piped)
 {
 	if (!already_piped && elem->fd[0] == -1 && elem->fd[1] == -1 && !pipe(elem->fd))
 	{
-		if (elem->left->type == PIPE)
+		if (elem->left->type == AST_PIPE)
 			elem->left->right->fd[1] = elem->fd[1];
 		else
 			elem->left->fd[1] = elem->fd[1];
@@ -65,7 +65,7 @@ int			do_pipe(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 		if ((last_child = process_fork(elem, alloc, already_piped, opt->wait_hang)) == -1)
 			break ;
 		close_pipe(elem, already_piped);
-		if (!elem->back || elem->back->type != PIPE)
+		if (!elem->back || elem->back->type != AST_PIPE)
 		{
 			if (already_piped)
 				break ;

@@ -41,15 +41,17 @@ int			analyzer(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	if (elem != NULL)
 	{
-		if (elem->type == CMD_SEP)
+		if (elem->type == AST_CMD_SEP)
 		{
 			analyzer(elem->left, alloc, opt);
 			return (analyzer(elem->right, alloc, opt));
 		}
-		if (elem->type == LOGIC)
+		if (elem->type == AST_LOGIC)
 			return (dispatch_logic(elem, alloc, opt));
-		if (elem->type == CMD)
+		if (elem->type == AST_CMD)
 			return (dispatch_command(elem, alloc, opt));
+		if (elem->type == AST_REDIR)
+			ft_printf("%s %s\n", elem->input[0], elem->input[1]);
 	}
 	return (0);
 }

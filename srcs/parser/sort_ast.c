@@ -10,10 +10,10 @@ static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 	{
 		while (tmp->right && tmp->right->type > elem->type)
 			tmp = tmp->right;
-		if (elem->type == REDIR)
-			while (tmp->left && tmp->left->type == REDIR)
+		if (elem->type == AST_REDIR)
+			while (tmp->left && tmp->left->type == AST_REDIR)
 				tmp = tmp->left;
-		else if (elem->type == PIPE || elem->type == JOB)
+		else if (elem->type == AST_PIPE || elem->type == AST_JOB)
 			while (tmp->right && tmp->right->type == elem->type)
 				tmp = tmp->right;
 	}
@@ -65,7 +65,7 @@ void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 		node->right = tmp;
 		tmp->back = node;
 	}
-	else if (tmp->type > REDIR)
+	else if (tmp->type > AST_REDIR)
 		insert_node(sort, tmp, node);
 	else
 	{
@@ -86,15 +86,15 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 	else
 	{
 		node = get_available_node(*sort, tmp);
-		if (tmp->type == LOGIC)
+		if (tmp->type == AST_LOGIC)
 		{
 			tmp->left = *sort;
 			(*sort)->back = tmp;
 			*sort = tmp;
 		}
-		else if (tmp->type != REDIR)
+		else if (tmp->type != AST_REDIR)
 			link_new_node(sort, tmp, node);
-		else if (tmp->type == REDIR)
+		else if (tmp->type == AST_REDIR)
 			redir_ast(node, tmp);
 	}
 }

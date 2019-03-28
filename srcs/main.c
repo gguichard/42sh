@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "cmdline.h"
 #include "builtins.h"
+#include "execution.h"
 #include "exectable.h"
 #include "hashtable.h"
 #include "parser_lexer.h"

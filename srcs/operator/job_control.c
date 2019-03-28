@@ -1,6 +1,6 @@
 #include "shell.h"
-#include "parser_lexer.h"
 #include "operator.h"
+#include "execution.h"
 
 int	job_control(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {

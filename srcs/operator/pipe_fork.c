@@ -1,24 +1,24 @@
 #include "shell.h"
-#include "parser_lexer.h"
 #include "job.h"
+#include "execution.h"
 
 static int		do_not_fork(t_ast *elem, t_alloc *alloc)
 {
 	int		x;
 
-	while (elem && elem->type != CMD)
+	while (elem && elem->type != AST_CMD)
 	{
-		if (elem->type == PIPE)
+		if (elem->type == AST_PIPE)
 			break ;
 		elem = elem->left;
 	}
-	if (elem && elem->type == CMD)
+	if (elem && elem->type == AST_CMD)
 	{
 		x = 0;
 		while (alloc->builtins[x].name && ft_strcmp(elem->input[0], alloc->builtins[x].name))
 			x += 1;
 	}
-	if (!elem || elem->type == PIPE || alloc->builtins[x].name)
+	if (!elem || elem->type == AST_PIPE || alloc->builtins[x].name)
 		return (false);
 	return (true);
 }
@@ -58,7 +58,7 @@ static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child, bool wait
 	static t_list	*first_cmd;
 	int				ret;
 
-	if (elem->left->type != PIPE && !already_piped)
+	if (elem->left->type != AST_PIPE && !already_piped)
 	{
 		ret = setpgid(child, 0);
 		if (wait_hang == false)
@@ -82,7 +82,7 @@ pid_t		process_fork(t_ast *elem, t_alloc *alloc, int already_piped, bool wait_ha
 	child = fork();
 	if (child > 0)
 		child = add_pid_pipe(elem, already_piped, child, wait_hand);
-	else if (!child && elem->left->type != PIPE && !already_piped)
+	else if (!child && elem->left->type != AST_PIPE && !already_piped)
 	{
 		redir_pipe(elem->left, 0);
 		process_pipe(elem->left, alloc);

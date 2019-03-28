@@ -46,13 +46,13 @@ $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
 $(PATH_PARSER)/token_analyzer.c \
 $(PATH_EXEC)/analyzer.c \
+$(PATH_EXEC)/exec_input.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
 $(PATH_BUILT)/cd.c \
 $(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \
-$(PATH_BUILT)/exec_input.c \
 $(PATH_BUILT)/exit.c \
 $(PATH_BUILT)/hash.c \
 $(PATH_BUILT)/alias.c \
