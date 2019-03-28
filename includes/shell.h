@@ -46,12 +46,10 @@ typedef struct			s_exec_opt
 
 typedef struct			s_ast
 {
-	int					print;
 	int					type;
 	int					fd[2];
 	char				*heredoc;
 	char				**input;
-	struct s_ast		*next;
 	struct s_ast		*back;
 	struct s_ast		*left;
 	struct s_ast		*right;
@@ -104,15 +102,11 @@ void	del_lst_ast(t_ast **lst);
 void	del_alloc(t_alloc *alloc);
 
 //TOOLS TO PRINT LST AST
-void	read_lst(t_ast *lst, int active);
 void	read_sort_descent(t_ast *sort, int active);
-void	reinit_print(t_ast *lst, int active);
 
 // CLEN AST
 void	del_ast(t_ast **lst);
 void	del_elem_ast(t_ast **lst);
-void	delete_str_tab(char **tab_str);
-
 
 /*
 *********************************** GLOBALS ***********************************

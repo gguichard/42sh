@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "parser_lexer.h"
-#include "error.h"
 #include "token_inf.h"
+#include "error.h"
 
 t_ast	*set_new_elem(void)
 {
@@ -11,11 +11,9 @@ t_ast	*set_new_elem(void)
 		ft_exit_malloc();
 	new->fd[0] = -1;
 	new->fd[1] = -1;
-	new->print = 0;
 	new->type = NO_TYPE;
 	new->input = NULL;
 	new->heredoc = NULL;
-	new->next = NULL;
 	new->back = NULL;
 	new->left = NULL;
 	new->right = NULL;
@@ -24,8 +22,11 @@ t_ast	*set_new_elem(void)
 
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
-	static char	*ope[11] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
-	"&&", "||", ";"};
+	static char	*ope[11] = {
+		">", ">>", "<", "<<",
+		">&", "<&", "&",
+		"|", "&&", "||", ";"
+	};
 	char		*str;
 	int			i;
 
@@ -89,13 +90,12 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 	return (sort);
 }
 
-t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
+t_ast	*parser(t_list **lst_tk)
 {
 	t_ast			*sort;
 	t_ast			*elem;
 	t_ast			*branch;
 
-	(void)alloc;
 	sort = NULL;
 	elem = NULL;
 	branch = NULL;

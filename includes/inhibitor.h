@@ -1,6 +1,9 @@
 #ifndef INHIBITOR_H
 # define INHIBITOR_H
 
+# include "shell.h"
+# include "str_cmd_inf.h"
+
 int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 		t_alloc *alloc);
 int		inhib_quote(t_str_cmd_inf *str_cmd, size_t *pos_elem,

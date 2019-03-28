@@ -3,6 +3,7 @@
 #include "expand.h"
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
+#include "error.h"
 
 int	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
 		t_alloc *alloc)

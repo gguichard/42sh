@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "shell.h"
 
 void	del_elem_ast(t_ast **lst)
@@ -5,7 +6,7 @@ void	del_elem_ast(t_ast **lst)
 	if (!lst || !(*lst))
 		return ;
 	ft_memdel((void **)((*lst)->heredoc));
-	delete_str_tab((*lst)->input);
+	ft_strtab_free((*lst)->input);
 	free((*lst));
 	*lst = NULL;
 }

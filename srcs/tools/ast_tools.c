@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "parser_lexer.h"
 #include "token_inf.h"
+#include "error.h"
 
 t_ast	*fill_cmd(t_list **lst_tk, t_ast *elem)
 {

@@ -8,6 +8,7 @@
 #include "split_cmd_token.h"
 #include "token_inf.h"
 #include "job.h"
+#include "error.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
@@ -34,7 +35,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 
-	sort_ast = parser(&lst_tk, alloc);
+	sort_ast = parser(&lst_tk);
 
 	/*
 	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL

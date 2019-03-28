@@ -31,8 +31,6 @@ SRC_DIR	=	srcs
 SRC 	=	\
 main.c		\
 $(PATH_ERROR)/error_malloc.c \
-$(PATH_ERROR)/lexer_error.c \
-$(PATH_ERROR)/parser_error.c \
 $(PATH_ERROR)/error_redirection.c \
 $(PATH_ERROR)/error_fd.c \
 $(PATH_ERROR)/exec_error.c \
@@ -45,11 +43,9 @@ $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
-$(PATH_PARSER)/analyzer.c \
 $(PATH_PARSER)/token_analyzer.c \
-$(PATH_OPERATOR)/agregation.c \
+$(PATH_EXEC)/analyzer.c \
 $(PATH_OPERATOR)/heredoc.c \
-$(PATH_OPERATOR)/redirection.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
@@ -82,10 +78,7 @@ $(PATH_BUILT)/test/file_tests_flags.c \
 $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
-$(PATH_TOOLS)/analyzer_tools.c \
-$(PATH_TOOLS)/agreg_tools.c \
 $(PATH_TOOLS)/heredoc_tools.c \
-$(PATH_TOOLS)/redirection_tools.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \

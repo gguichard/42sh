@@ -1,19 +1,6 @@
-#include "shell.h"
-#include "parser_lexer.h"
-
-int		ft_isquote(char c)
-{
-	if (c == '\'' || c == '"' || c == '`')
-		return (1);
-	return (0);
-}
-
-int		ft_isoperator(char c)
-{
-	if (c == '>' || c == '<' || c == '|' || c == '&')
-		return (1);
-	return (0);
-}
+#include <stdlib.h>
+#include "libft.h"
+#include "error.h"
 
 void	ft_insert(char **source, char *insert, int pos1, int pos2)
 {
@@ -45,20 +32,4 @@ void	ft_delete_inside(char **source, int start, int len)
 		ft_exit_malloc();
 	free(begin);
 	free(end);
-}
-
-int		ft_str_is_empty(char *s)
-{
-	int	i;
-
-	i = 0;
-	if (!s)
-		return (1);
-	while (s[i])
-	{
-		if (ft_isspace(s[i]) == 0)
-			return (0);
-		i += 1;
-	}
-	return (1);
 }
