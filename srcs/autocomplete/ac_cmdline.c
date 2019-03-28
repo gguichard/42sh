@@ -17,6 +17,8 @@
 //TODO ET A TOUS LES CHAR SPECIAUX (\) JE CROIS C'EST OK
 //TODO ET PENSER A CHANGER LE TYPE D'ECHAPPEMENT SELON SI DANS ' / " ETC
 //TODO
+//TODO RECHANGER LA GESTION DU RRED_OPT PASKIL EXIT PLUS !?!?!?!?!!?!?!?
+//TODO
 
 static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
@@ -46,27 +48,31 @@ static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 	scmd_clean(&new_scmd);
 }
 
-static const char	*get_last_sub_cmd_start(t_str_cmd_inf *scmd)
+static size_t		get_pos_last_sub_cmd_start(t_str_cmd_inf *scmd)
 {
-	const char		*last_sub_cmd_start;
+	int		last_start_found;
+	size_t	last_sub_cmd_start_pos;
 
-	last_sub_cmd_start = NULL;
+	last_start_found = 0;
+	last_sub_cmd_start_pos = 0;
 	while (1)
 	{
-		if (last_sub_cmd_start == NULL && scmd->sub_str_cmd != NULL
+		if (!last_start_found && scmd->sub_str_cmd != NULL
 				&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)
 		{
-			last_sub_cmd_start = scmd_cur_str(scmd);
+			last_sub_cmd_start_pos = scmd->pos;
+			last_start_found = 1;
 		}
-		else if (last_sub_cmd_start != NULL && (scmd->sub_str_cmd == NULL
+		else if (last_start_found && (scmd->sub_str_cmd == NULL
 					|| scmd->sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_SUBCMD))
 		{
-			last_sub_cmd_start = NULL;
+			last_sub_cmd_start_pos = 0;
+			last_start_found = 0;
 		}
 		if (!scmd_move_to_next_char(scmd))
 			break ;
 	}
-	return (last_sub_cmd_start);
+	return (last_sub_cmd_start_pos);
 }
 
 static char			*get_rred_opt_real_content(const char *token)
@@ -84,25 +90,18 @@ static char			*get_rred_opt_real_content(const char *token)
 static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 		, t_token_inf *last_tk, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
-	t_token_inf		*tmp_token;
-	t_str_cmd_inf	new_scmd;
-	const char		*last_sub_cmd_start;
-
 	if (scmd->sub_str_cmd != NULL
 			&& scmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)
 	{
-		scmd_init(&new_scmd, last_tk->token);
-		last_sub_cmd_start = get_last_sub_cmd_start(&new_scmd);
-		if (last_sub_cmd_start != NULL)
+		if (scmd_reset(scmd, last_tk->token))
 		{
-			tmp_token = get_cur_token_cmd(last_sub_cmd_start, alloc);
-			cur_tk->type = tmp_token->type;
-			cur_tk->token = tmp_token->token;
-			free(tmp_token);
-			scmd_clean(&new_scmd);
-			return ;
+			scmd->pos = get_pos_last_sub_cmd_start(scmd);
+			if (scmd_reset(scmd, scmd->str + scmd->pos))
+			{
+				set_cur_token_cmd(cur_tk, scmd, alloc);
+				return ;
+			}
 		}
-		scmd_clean(&new_scmd);
 	}
 	cur_tk->type = (last_tk->type == TK_RRED_OPT
 			? TK_RED_FILENAME : last_tk->type);
@@ -111,33 +110,24 @@ static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 			: ft_strdup(last_tk->token));
 }
 
-t_token_inf			*get_cur_token_cmd(const char *str, t_alloc *alloc)
+void				set_cur_token_cmd(t_token_inf *cur_tk_cmd
+		, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
-	t_token_inf		*cur_tk_cmd;
 	t_list			*tk_list;
 	t_list			*last_tk;
-	t_str_cmd_inf	scmd;
 
-	if (!scmd_init(&scmd, str)
-			|| (cur_tk_cmd = (t_token_inf*)malloc(sizeof(t_token_inf))) == NULL)
-	{
-		scmd_clean(&scmd);
-		return (NULL);
-	}
-	tk_list = split_cmd_token_without_last_alias(&scmd, alloc->aliastable);
+	tk_list = split_cmd_token_without_last_alias(scmd, alloc->aliastable);
 	last_tk = tk_list;
 	while (last_tk != NULL && last_tk->next != NULL)
 		last_tk = last_tk->next;
-	if (scmd_cur_char_is_in_nothing(&scmd) && (scmd.pos == 0 || last_tk == NULL
-				|| scmd_char_at_is_of(&scmd, scmd.pos - 1, WORD_SEP_CHARS)
+	if (scmd_cur_char_is_in_nothing(scmd) && (scmd->pos == 0 || last_tk == NULL
+				|| scmd_char_at_is_of(scmd, scmd->pos - 1, WORD_SEP_CHARS)
 				|| get_tk(last_tk)->type == TK_RED_OPE
 				|| get_tk(last_tk)->type == TK_CMD_SEP))
-		fill_cur_tk_with_new_token(cur_tk_cmd, &scmd, alloc);
+		fill_cur_tk_with_new_token(cur_tk_cmd, scmd, alloc);
 	else
-		fill_cur_tk_with_last_token(cur_tk_cmd, get_tk(last_tk), &scmd, alloc);
+		fill_cur_tk_with_last_token(cur_tk_cmd, get_tk(last_tk), scmd, alloc);
 	ft_lstdel(&tk_list, del_token);
-	scmd_clean(&scmd);
-	return (cur_tk_cmd);
 }
 
 static int			is_valid_var_char(char var_char, size_t idx)
@@ -232,23 +222,23 @@ static const char	*find_last_assign_start(const char *str)
 	return (last_assign);
 }
 
-t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
+t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc)
 {
-	t_token_inf		*cur_tk;
+	t_token_inf		cur_tk;
 	t_ac_suff_inf	*acs_inf;
 	const char		*real_ac_start;
 	int				is_in_bracket;
 
-	cur_tk = get_cur_token_cmd(str, alloc);
-	real_ac_start = find_last_var_start(cur_tk->token, &is_in_bracket);
+	set_cur_token_cmd(&cur_tk, scmd, alloc);
+	real_ac_start = find_last_var_start(cur_tk.token, &is_in_bracket);
 	if (real_ac_start == NULL)
 	{
-		real_ac_start = (cur_tk->type == TK_RED_FILENAME
-				? NULL : find_last_assign_start(cur_tk->token));
+		real_ac_start = (cur_tk.type == TK_RED_FILENAME
+				? NULL : find_last_assign_start(cur_tk.token));
 		if (real_ac_start == NULL)
-			real_ac_start = cur_tk->token;
+			real_ac_start = cur_tk.token;
 		acs_inf = autocomplete_word(alloc->vars, (real_ac_start == NULL ? ""
-					: real_ac_start) , cur_tk->type == TK_CMD, alloc);
+					: real_ac_start) , cur_tk.type == TK_CMD, alloc);
 	}
 	else
 	{
@@ -257,6 +247,6 @@ t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc)
 				&& is_in_bracket)
 			acs_inf->suff_type = ACS_TYPE_VAR_IN_BRACKETS;
 	}
-	del_token(cur_tk, 0);
+	free(cur_tk.token);
 	return (acs_inf);
 }

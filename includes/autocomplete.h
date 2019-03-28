@@ -5,6 +5,7 @@
 # include <sys/stat.h>
 # include "libft.h"
 # include "shell.h"
+# include "str_cmd_inf.h"
 # include "token_inf.h"
 
 typedef enum		e_dir_type
@@ -52,9 +53,11 @@ size_t				count_same_char(const char *str1, const char *str2);
 int					strlist_insert_sort(t_list **lst, t_list *elem);
 
 /*
-** Alloue et retourne le dernier token de la commande. Renvoie NULL si erreur.
+** Remplie cur_tk_cmd avec les infos du dernier token de la commande. La
+** variable cur_tk_cmd->token pourra valoir null si vide.
 */
-t_token_inf			*get_cur_token_cmd(const char *str, t_alloc *alloc);
+void				set_cur_token_cmd(t_token_inf *cur_tk_cmd
+		, t_str_cmd_inf *scmd, t_alloc *alloc);
 
 void				check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
 		, t_ac_suff_inf *acs, t_list *var_lst);
@@ -128,8 +131,7 @@ t_ac_suff_inf		*autocomplete_var(t_list *var_lst, const char *word);
 
 t_ac_suff_inf		*autocomplete_user(const char *word);
 
-
-t_ac_suff_inf		*autocomplete_cmdline(const char *str, t_alloc *alloc);
+t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc);
 
 /*
 ** Retourne 1 si le fichier present dans le t_ac_rdir_inf peut etre une
