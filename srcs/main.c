@@ -22,6 +22,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	if (!scmd_init(&scmd, line))
 		ft_exit_malloc();
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
+
 	/*
 	 **	VERIF TOKEN AND PRINT BEFORE PARSE
 	 */
@@ -32,9 +33,9 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
 	// 	tmp = tmp->next;
 	// }
-	//
-	if (!(sort_ast = parser(&lst_tk, alloc)))
-		ft_printf("ERROR BREAK\n");
+
+	sort_ast = parser(&lst_tk, alloc);
+
 	/*
 	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
 	 */
@@ -42,17 +43,18 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
 	// 	analyzer(sort_ast, alloc, TRUE);
 	// else
-	if (sort_ast)
-		read_sort_descent(sort_ast, 0);
-	check_exit_cmd(sort_ast);
-	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-	refresh_jobs();
+
 	/*
 	 ** PRINT AST AND REINIT NODE
 	 */
-	// if (lst_tk)
-	// 	lst_tk = lst_tk->next;
-	//FUNCTION TO CLEAN AST
+	if (sort_ast)
+		read_sort_descent(sort_ast, 0);
+
+	check_exit_cmd(sort_ast);
+	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
+	refresh_jobs();
+
+	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);
 	scmd_clean(&scmd);
 }
