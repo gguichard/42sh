@@ -28,7 +28,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
 	if ((*input)[*pos + 1] == '{' && str)
-		ft_strreplace_inside(input, *pos, len + 2, str);
+		ft_strreplace_inside(input, *pos, len + 3, str);
 	else if (!ft_isalnum(exp[1]) && exp[1] != '_' && exp[1] != '?'
 			&& exp[1] != '!' && exp[1] != '\'' && exp[1] != '"' && exp[1] != '$')
 	{
