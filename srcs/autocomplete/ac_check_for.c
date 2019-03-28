@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include "libft.h"
 #include "shell.h"
 #include "hashtable.h"
@@ -65,6 +67,27 @@ void	check_for_alias_ac(const char *word, t_ac_rdir_inf *acrd
 		}
 		++bucket_idx;
 	}
+	acrd->force_exec_type = 0;
+	delete_ac_rdir(acrd);
+}
+
+void	check_for_user_ac(const char *word, t_ac_rdir_inf *acrd
+		, t_ac_suff_inf *acs)
+{
+	struct passwd	*user;
+
+	if (!init_ac_rdir(word, acrd, 1, DTYPE_NOT_A_DIR))
+		return ;
+	ft_bzero(&(acrd->stat_buf), sizeof(struct stat));
+	acrd->force_exec_type = 1;
+	setpwent();
+	while ((user = getpwent()) != NULL)
+	{
+		acrd->cur_file_name = ft_strdup(user->pw_name);
+		if (!try_ac_for_this_file(acrd, acs))
+			break ;
+	}
+	endpwent();
 	acrd->force_exec_type = 0;
 	delete_ac_rdir(acrd);
 }
