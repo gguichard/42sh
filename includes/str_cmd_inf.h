@@ -31,6 +31,8 @@ int				scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str);
 */
 void			scmd_clean(t_str_cmd_inf *str_cmd_inf);
 
+int				scmd_reset(t_str_cmd_inf *str_cmd_inf, const char *new_str);
+
 /*
 ** Retourne le char actuel du str_cmd_inf.
 */
@@ -40,6 +42,9 @@ char			scmd_cur_char(t_str_cmd_inf *str_cmd_inf);
 ** Retourne la string dont le 1er char est le char actuel de str_cmd_inf.
 */
 const char		*scmd_cur_str(t_str_cmd_inf *str_cmd_inf);
+
+int				scmd_char_at_is_of(t_str_cmd_inf *str_cmd_inf, size_t pos
+		, const char *these);
 
 /*
 ** Retourne 1 si le char actuel du str_cmd_inf fait parti de la liste passe

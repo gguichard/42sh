@@ -6,13 +6,16 @@ static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 	t_ast	*tmp;
 
 	tmp = sort;
-	if (tmp && tmp->type > elem->type)
+	if (tmp && tmp->type >= elem->type)
 	{
-		if (tmp->right && tmp->right->type > elem->type)
+		while (tmp->right && tmp->right->type > elem->type)
 			tmp = tmp->right;
 		if (elem->type == REDIR)
 			while (tmp->left && tmp->left->type == REDIR)
 				tmp = tmp->left;
+		else if (elem->type == PIPE || elem->type == JOB)
+			while (tmp->right && tmp->right->type == elem->type)
+				tmp = tmp->right;
 	}
 	return (tmp);
 }
@@ -52,7 +55,7 @@ static void		insert_node(t_ast **sort, t_ast *tmp, t_ast *node)
 
 void			link_new_node(t_ast **sort, t_ast *tmp, t_ast *node)
 {
-	if (node->type > tmp->type)
+	if (node->type >= tmp->type)
 	{
 		if (node->right)
 		{
@@ -83,7 +86,7 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 	else
 	{
 		node = get_available_node(*sort, tmp);
-		if (tmp->type >= LOGIC)
+		if (tmp->type == LOGIC)
 		{
 			tmp->left = *sort;
 			(*sort)->back = tmp;
