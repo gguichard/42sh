@@ -29,7 +29,8 @@ static char		*create_cmd_job(t_ast *elem, bool addpipe)
 	char	*prev;
 
 	output = 0;
-	while (elem && elem->back && elem->back->type < OPERATOR && elem->back->type > CMD)
+	//UPDATE: NEW AST
+	while (elem && elem->back && elem->back->type < PIPE && elem->back->type > CMD)
 		elem = elem->back;
 	while (elem)
 	{

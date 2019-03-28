@@ -3,11 +3,20 @@
 #include "expand.h"
 #include "inhibitor.h"
 
+static int	dispatch_cmd_sep(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
+{
+	if (sort->left)
+		alloc->ret_val = analyzer(sort->left, alloc, opt);
+	if (sort->right)
+		alloc->ret_val = analyzer(sort->right, alloc, opt);
+	return (0);
+}
+
 int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 {
-	static t_dispatch	dispatch[] = { &dispatch_cmd, &dispatch_redir,
-						&dispatch_redir, &dispatch_assign, &dispatch_operator,
-						&dispatch_logic };
+	static t_dispatch	dispatch[] = { &dispatch_redir, &dispatch_cmd,
+						&dispatch_assign, &dispatch_operator, &dispatch_logic,
+						&dispatch_operator };
 	t_ast				*tmp;
 	int					ret;
 
@@ -22,6 +31,8 @@ int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 			if (inhibitor(tmp, alloc) == 1)
 			return (dispatch[tmp->type](tmp, alloc, opt));
 		}
+		else
+			return (dispatch_cmd_sep(sort, alloc, opt));
 	}
 	if (tmp && tmp->left && tmp->left->print == 0)
 		return (analyzer(tmp->left, alloc, opt));
