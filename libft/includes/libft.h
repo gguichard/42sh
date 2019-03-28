@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/29 15:05:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 09:27:40 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/28 11:09:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ int				ft_max(int a, int b);
 int				ft_abs(int n);
 int				ft_pow(int n, int pow);
 size_t			ft_llsize(long long l);
+double			ft_ceil(double x);
 
 size_t			ft_strtab_count(char **tab);
 void			*ft_strtab_free(char **tab);

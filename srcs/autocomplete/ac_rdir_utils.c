@@ -9,17 +9,27 @@ int		valid_file_for_ac(t_ac_rdir_inf *acrd)
 {
 	if (acrd->cur_file_name[0] != '.' || acrd->file_word[0] == '.')
 	{
-		if (!acrd->need_to_be_cmd || acrd->force_exec_type
-				|| (acrd->can_be_dir && S_ISDIR(acrd->stat_buf.st_mode))
-				|| (S_ISREG(acrd->stat_buf.st_mode)
-					&& access(acrd->cur_file_path, X_OK) == 0))
+		if (acrd->need_to_be_cmd)
 		{
-			if (ft_strnequ(acrd->cur_file_name, acrd->file_word
-						, acrd->file_word_len))
-			{
-				return (1);
-			}
+			if (!acrd->force_exec_type && !(S_ISREG(acrd->stat_buf.st_mode)
+						&& access(acrd->cur_file_path, X_OK) == 0)
+					&& (acrd->dir_type == DTYPE_NOT_A_DIR
+						|| !S_ISDIR(acrd->stat_buf.st_mode)))
+				return (0);
 		}
+		if (acrd->dir_type == DTYPE_IS_A_DIR)
+		{
+			if(!S_ISDIR(acrd->stat_buf.st_mode))
+				return (0);
+		}
+		if (acrd->dir_type == DTYPE_NOT_A_DIR)
+		{
+			if (S_ISDIR(acrd->stat_buf.st_mode))
+				return (0);
+		}
+		if (ft_strnequ(acrd->cur_file_name, acrd->file_word
+					, acrd->file_word_len))
+			return (1);
 	}
 	return (0);
 }
@@ -70,13 +80,13 @@ int		readdir_to_dirent(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs)
 }
 
 int		init_ac_rdir(const char *word, t_ac_rdir_inf *acrd
-		, int need_to_be_cmd, int can_be_dir)
+		, int need_to_be_cmd, t_dir_type dir_type)
 {
 	char	*last_slash;
 
 	acrd->need_to_be_cmd = need_to_be_cmd;
 	acrd->force_exec_type = 0;
-	acrd->can_be_dir = can_be_dir;
+	acrd->dir_type = dir_type;
 	if ((last_slash = ft_strrchr(word, '/')) == NULL)
 		acrd->dir_to_use = ft_strdup("./");
 	else
