@@ -3,13 +3,19 @@
 #include "shell.h"
 #include "vars.h"
 #include "builtins.h"
+#include "hashtable.h"
 
-// BUILTINS UNSET POSIX NORME NO OPTIONS
-// JUST UNSET ALL THE VARIABLES
-// IF THERE IS AN '=' IN THE NAME VARIABLE
-// RETURN ERROR
+static int	unset_builtin_var(t_alloc *alloc, const char *key)
+{
+	if (!is_var_valid_identifier(key))
+		return (0);
+	unset_var(&alloc->vars, key);
+	if (ft_strequ(key, "PATH"))
+		delete_hashentries(alloc->exectable);
+	return (1);
+}
 
-int	builtin_unset(t_ast *elem, t_alloc *alloc)
+int			builtin_unset(t_ast *elem, t_alloc *alloc)
 {
 	int	idx;
 	int	ret;
@@ -18,9 +24,7 @@ int	builtin_unset(t_ast *elem, t_alloc *alloc)
 	ret = 0;
 	while (elem->input[idx] != NULL)
 	{
-		if (is_var_valid_identifier(elem->input[idx]))
-			unset_var(&alloc->vars, elem->input[idx]);
-		else
+		if (!unset_builtin_var(alloc, elem->input[idx]))
 		{
 			ft_dprintf(2, "42sh: unset: '%s': not a valid identifier"
 					, elem->input[idx]);
