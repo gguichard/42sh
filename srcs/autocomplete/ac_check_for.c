@@ -83,7 +83,7 @@ void	check_for_user_ac(const char *word, t_ac_rdir_inf *acrd
 	setpwent();
 	while ((user = getpwent()) != NULL)
 	{
-		acrd->cur_file_name = ft_strdup(user->pw_name);
+		acrd->cur_file_name = user->pw_name;
 		if (!try_ac_for_this_file(acrd, acs))
 			break ;
 	}
