@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include "libft.h"
+#include "autocomplete.h"
 
 size_t			count_same_char(const char *str1, const char *str2)
 {

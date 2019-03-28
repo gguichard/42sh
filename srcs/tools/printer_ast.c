@@ -1,6 +1,6 @@
 #include "shell.h"
 
-static char		*ft_tab_to_str(char **tab)
+char		*ft_tab_to_str(char **tab)
 {
 	size_t	x;
 	size_t	y;
@@ -49,7 +49,9 @@ void	read_sort_descent(t_ast *sort, int active)
 {
 	t_ast	*tmp;
 	char	*s;
-	int		i;
+	// int		i;
+
+	// (void)active;
 
 	tmp = sort;
 	// while (tmp->left)
@@ -101,13 +103,13 @@ void	read_sort_descent(t_ast *sort, int active)
 	// 	else
 	// 		tmp = tmp->back;
 	// }
-	// ft_printf("\n");
+	ft_printf("\n");
 	if (!tmp)
 		return ;
 	active += 10;
 	read_sort_descent(tmp->right, active);
 	ft_printf("\n");
-	for (i = 10; i < active; i++) {
+	for (int i = 10; i < active; i++) {
 		ft_printf(" ");
 	}
 	s = ft_tab_to_str(tmp->input);

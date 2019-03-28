@@ -8,7 +8,7 @@ int	check_error_lst(t_ast *lst)
 	tmp = lst;
 	while (tmp)
 	{
-		if (tmp->type >= OPERATOR && tmp->next && tmp->next->type >= OPERATOR)
+		if (tmp->type >= PIPE && tmp->next && tmp->next->type >= PIPE)
 		{
 			write(2, "21sh: syntax error near `", 25);
 			write(2, tmp->next->input[0], ft_strlen(tmp->next->input[0]));
