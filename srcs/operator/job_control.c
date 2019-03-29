@@ -27,11 +27,11 @@ void	print_bg(pid_t process)
 
 int		job_control(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
-	while (elem->right)
+	while (elem)
 	{
 		opt->wait_hang = true;
 		analyzer(elem->left, alloc, opt);
-		if (elem->right->type == AST_JOB)
+		if (elem->right && elem->right->type == AST_JOB)
 			elem = elem->right;
 		else
 			break;
