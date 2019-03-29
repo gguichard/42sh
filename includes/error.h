@@ -16,27 +16,15 @@ typedef enum	e_error
 	ERRC_INCOMPLETECMD
 }				t_error;
 
-int		check_error_lst(t_ast *lst);
-void	ft_exit_malloc(void);
-void	error_redir(char *file);
-void	error_access(char *file);
-int		check_arg_cd(t_ast *elem, int i);
-void	exec_file_error(t_error err, char *files);
-int		error_cd(char *err, int type);
-int		error_setenv(int i);
-int		error_unsetenv(int i, char *s);
-int		ft_fd_exist(char *str_fd);
-int		error_set(char *str);
-int		error_unset(char *str);
-int		error_export(char c);
-void	error_test(int argc, char **argv);
+void			ft_exit_malloc(void);
+void			exec_file_error(t_error err, char *file);
 
 /*
 ** Free la variable var et retourne err.
 ** Fonction utilitaire ayant pour but de reduire le nombre de ligne.
 */
-t_error		del_then_ret_err(void *var, t_error err);
+t_error			del_then_ret_err(void *var, t_error err);
 
-const char	*error_to_str(t_error error);
+const char		*error_to_str(t_error error);
 
 #endif

@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "libft.h"
 #include "error.h"
 
@@ -18,18 +17,4 @@ void	ft_insert(char **source, char *insert, int pos1, int pos2)
 	ft_memdel((void **)&begin);
 	ft_memdel((void **)&tmp);
 	ft_memdel((void **)&end);
-}
-
-void	ft_delete_inside(char **source, int start, int len)
-{
-	char	*begin;
-	char	*end;
-
-	begin = ft_strsub(*source, 0, start);
-	end = ft_strsub(*source, start + len, ft_strlen(&(*source)[len + start]));
-	free(*source);
-	if (!(*source = ft_strjoin(begin, end)))
-		ft_exit_malloc();
-	free(begin);
-	free(end);
 }

@@ -16,8 +16,6 @@ typedef enum	e_recall_prompt
 ************************************ LEXER *************************************
 */
 
-void			replace_str(char **str, char *insert, int pos);
-int				replace_val_ret(char **str, int i, int x, int err);
 void			expand_home_shortcut(char **s, t_list *vars);
 
 /*
@@ -25,8 +23,6 @@ void			expand_home_shortcut(char **s, t_list *vars);
 */
 
 void			ft_insert(char **source, char *insert, int pos1, int pos2);
-void			ft_delete_inside(char **source, int start, int len);
-void			replace_str(char **str, char *insert, int pos);
 
 /*
 ************************************ PARSER ************************************
