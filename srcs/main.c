@@ -56,7 +56,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	read_sort_descent(sort_ast, 0);
 
 	check_exit_cmd(sort_ast);
-	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
+	alloc->ret_val = analyzer(alloc, sort_ast, &exec_option);
 
 	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);

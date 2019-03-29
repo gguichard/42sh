@@ -59,7 +59,6 @@ $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
-$(PATH_TOOLS)/assign_tools.c \
 $(PATH_BUILT)/cd.c \
 $(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \

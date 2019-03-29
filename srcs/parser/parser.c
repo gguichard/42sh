@@ -13,7 +13,6 @@ t_ast	*set_new_elem(void)
 	new->fd[1] = -1;
 	new->type = AST_NO_TYPE;
 	new->input = NULL;
-	new->heredoc = NULL;
 	new->back = NULL;
 	new->left = NULL;
 	new->right = NULL;

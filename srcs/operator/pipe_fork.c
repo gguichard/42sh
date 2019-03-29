@@ -2,7 +2,7 @@
 #include "job.h"
 #include "execution.h"
 
-static int		do_not_fork(t_ast *elem, t_alloc *alloc)
+static int		do_not_fork(t_alloc *alloc, t_ast *elem)
 {
 	int		x;
 
@@ -23,14 +23,14 @@ static int		do_not_fork(t_ast *elem, t_alloc *alloc)
 	return (true);
 }
 
-static int		process_pipe(t_ast *elem, t_alloc *alloc)
+static int		process_pipe(t_alloc *alloc, t_ast *elem)
 {
 	t_exec_opt	opt_new;
 	int			ret;
 
-	opt_new.fork = do_not_fork(elem, alloc);
+	opt_new.fork = do_not_fork(alloc, elem);
 	opt_new.wait_hang = false;
-	ret = analyzer(elem, alloc, &opt_new);
+	ret = analyzer(alloc, elem, &opt_new);
 	exit(ret);
 }
 
@@ -53,7 +53,8 @@ static void		redir_pipe(t_ast *elem, int type)
 	}
 }
 
-static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child, bool wait_hang)
+static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child
+		, int wait_hang)
 {
 	static t_list	*first_cmd;
 	int				ret;
@@ -75,7 +76,8 @@ static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child, bool wait
 		return (-1);
 }
 
-pid_t		process_fork(t_ast *elem, t_alloc *alloc, int already_piped, bool wait_hand)
+pid_t		process_fork(t_alloc *alloc, t_ast *elem, int already_piped
+		, int wait_hand)
 {
 	pid_t	child;
 
@@ -85,12 +87,12 @@ pid_t		process_fork(t_ast *elem, t_alloc *alloc, int already_piped, bool wait_ha
 	else if (!child && !already_piped)
 	{
 		redir_pipe(elem->left, 1);
-		process_pipe(elem->left, alloc);
+		process_pipe(alloc, elem->left);
 	}
 	else if (!child && already_piped)
 	{
 		redir_pipe(elem->right, 0);
-		process_pipe(elem->right, alloc);
+		process_pipe(alloc, elem->right);
 	}
 	return (child);
 }

@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "operator.h"
+#include "execution.h"
 #include "job.h"
 
 static void	close_pipe(t_ast *elem, int already_piped)
@@ -50,7 +50,7 @@ static void	set_connection(t_ast *elem, int already_piped)
 	}
 }
 
-int			do_pipe(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	int		already_piped;
 	pid_t	last_child;
@@ -59,7 +59,8 @@ int			do_pipe(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	while (elem)
 	{
 		set_connection(elem, already_piped);
-		if ((last_child = process_fork(elem, alloc, already_piped, opt->wait_hang)) == -1)
+		if ((last_child = process_fork(alloc, elem, already_piped
+						, opt->wait_hang)) == -1)
 			break ;
 		close_pipe(elem, already_piped);
 		if (elem->right->type != AST_PIPE)

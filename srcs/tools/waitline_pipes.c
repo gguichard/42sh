@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "execution.h"
 #include "job.h"
 
 static void	pipe_waits(t_list *lst, int wait_opt)
@@ -41,7 +42,7 @@ static int	get_ret_val(t_list *tmp)
 	return (stop);
 }
 
-int		waiting_line(bool wait_hang, t_list *tmp)
+int		waiting_line(int wait_hang, t_list *tmp)
 {
 	if (!tmp)
 	{
@@ -52,7 +53,7 @@ int		waiting_line(bool wait_hang, t_list *tmp)
 			return (1);
 	}
 	pipe_waits(tmp, WNOHANG);
-	if (wait_hang == false)
+	if (!wait_hang)
 	{
 		pipe_waits(tmp, WUNTRACED);
 		redirect_term_controller(0, 1);
@@ -65,11 +66,11 @@ int		waiting_line(bool wait_hang, t_list *tmp)
 	return (get_ret_val(tmp));
 }
 
-void	wait_pid(pid_t child, t_ast *elem, t_exec_opt *opt, t_alloc *alloc)
+void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	setpgid(child, 0);
-	add_pid_lst(child, elem, false);
-	if (opt->wait_hang == false)
+	add_pid_lst(child, elem, 0);
+	if (!opt->wait_hang)
 	{
 		redirect_term_controller(child, 0);
 		waitpid(child, &alloc->ret_val, WUNTRACED);

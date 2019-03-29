@@ -10,7 +10,6 @@
 #include "search_exec.h"
 #include "check_path.h"
 #include "execution.h"
-#include "builtins.h" // TODO: deplacer le prototype de wait_pid
 
 static char	*srch_exec(t_list *vars, t_ast *elem, int *hashable)
 {
@@ -39,7 +38,7 @@ static char	*check_right_alias(char *alias)
 	return (alias);
 }
 
-static char	*exec_path(t_ast *elem, t_alloc *alloc, int *hashable)
+static char	*exec_path(t_alloc *alloc, t_ast *elem, int *hashable)
 {
 	const char	*alias;
 	char		*path_exec;
@@ -77,7 +76,7 @@ void		execute_cmd(t_alloc *alloc, t_ast *elem, char *path_exec)
 	exit(126);
 }
 
-int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+int			exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	int		hashable;
 	char	*path_exec;
@@ -85,7 +84,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	int		ret;
 
 	hashable = 0;
-	if ((path_exec = exec_path(elem, alloc, &hashable)) == NULL)
+	if ((path_exec = exec_path(alloc, elem, &hashable)) == NULL)
 		return (127);
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
@@ -97,12 +96,12 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 		return (1);
 	else if (child == 0)
 	{
-		if (elem->left != NULL && (ret = analyzer(elem->left, alloc, opt)) != 0)
+		if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 			exit(ret);
 		execute_cmd(alloc, elem, path_exec);
 	}
 	opt->fork = 0;
 	ft_strdel(&path_exec);
-	wait_pid(child, elem, opt, alloc);
+	wait_pid(child, alloc, elem, opt);
 	return (ret_status(alloc->ret_val, child, 0));
 }
