@@ -4,54 +4,16 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
+size_t	get_pos_in_array(char **array)
 {
-	size_t	len;
+	size_t	i;
 
-	if (*pos_elem == 0)
-		*pos_elem = str_cmd->pos;
-	len = ft_strlen(*input + *pos_elem);
-	ft_memmove((void*)(*input + *pos_elem - 1),
-		(const void*)(*input + *pos_elem), len);
-	(*input)[*pos_elem + len - 1] = '\0';
-	if (scmd_cur_char(str_cmd) == '\n' && str_cmd->is_in_dbquote)
-	{
-		len = ft_strlen(*input + *pos_elem);
-		ft_memmove((void*)(*input + *pos_elem - 1),
-			(const void*)(*input + *pos_elem), len);
-		(*input)[*pos_elem + len - 1] = '\0';
-		if (*pos_elem > 0)
-			*pos_elem -= 1;
-	}
-	scmd_move_to_next_char(str_cmd);
-
-}
-
-void	remove_escaped_char_quote(t_str_cmd_inf *str_cmd, char **input,
-		size_t *pos_elem)
-{
-	size_t	len;
-
-	if (*pos_elem == 0)
-		*pos_elem = str_cmd->pos;
-	len = ft_strlen(*input + *pos_elem);
-	ft_memmove((void*)(*input + *pos_elem - 1),
-		(const void*)(*input + *pos_elem), len);
-	(*input)[*pos_elem + len - 1] = '\0';
-	if (*pos_elem > 0)
-		*pos_elem -= 1;
-}
-
-int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos_elem)
-{
-	remove_escaped_char(str_cmd, input, pos_elem);
-	while (str_cmd->is_in_quote == 1)
-	{
-		scmd_move_to_next_char(str_cmd);
-		*pos_elem += 1;
-	}
-	remove_escaped_char(str_cmd, input, pos_elem);
-	return (1);
+	i = 0;
+	if (!(*array))
+		return (i);
+	while (array[i])
+		i += 1;
+	return (i - 1);
 }
 
 void	update_pos_index(t_str_cmd_inf *str_cmd)
@@ -78,4 +40,56 @@ void	update_pos_index(t_str_cmd_inf *str_cmd)
 			scmd_move_to_next_char(str_cmd);
 		scmd_move_to_next_char(str_cmd);
 	}
+}
+
+char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (x < *i)
+	{
+		if (!(modify[x] = ft_strdup(elem->input[x])))
+			ft_exit_malloc();
+		x += 1;
+	}
+	while (new[y])
+		if (!(modify[x++] = ft_strdup(new[y++])))
+			ft_exit_malloc();
+	y = *i + 1;
+	while (elem->input[y])
+		if (!(modify[x++] = ft_strdup(elem->input[y++])))
+			ft_exit_malloc();
+	modify[x] = NULL;
+	return (modify);
+}
+
+void	create_new_input(t_ast *elem, int *i, char **new)
+{
+	int		len_new;
+	int		len_input;
+	char	**modify;
+
+	len_new = 0;
+	len_input = 0;
+	modify = NULL;
+	while (new[len_new])
+		len_new += 1;
+	while (elem->input[len_input])
+		len_input += 1;
+	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
+		ft_exit_malloc();
+	modify = insert_new_tab(modify, i, new, elem);
+	delete_str_tab(elem->input);
+	elem->input = modify;
+	*i += len_new;
+}
+
+char	**error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
+{
+	scmd_clean(str_cmd);
+	delete_str_tab(array);
+	return (NULL);
 }

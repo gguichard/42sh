@@ -28,7 +28,7 @@ int	analyzer(t_ast *sort, t_alloc *alloc, t_exec_opt *opt)
 		if (tmp->type != CMD_SEP || (tmp->type == CMD_SEP
 				&& tmp->input[0][0] != ';'))
 		{
-			if (inhibitor(tmp, alloc) == 1)
+			if (inhib_expand_tab(tmp, alloc) == 1)
 			return (dispatch[tmp->type](tmp, alloc, opt));
 		}
 		else
