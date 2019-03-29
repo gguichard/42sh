@@ -3,6 +3,7 @@
 #include "parser_lexer.h"
 #include "redirect_inf.h"
 #include "execution.h"
+#include "inhibitor.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -55,6 +56,8 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	if (elem != NULL)
 	{
+		if (!inhib_expand_tab(elem, alloc))
+			return (1);
 		if (elem->type == AST_CMD_SEP)
 		{
 			analyzer(alloc, elem->left, opt);
