@@ -56,10 +56,9 @@ t_error		check_dir_of_file_rights(const char *path, int rights)
 	}
 	check_cd_ret = ERRC_NOERROR;
 	if ((last_slash = ft_strrchr(path_cpy, '/')) != NULL)
-	{
 		last_slash[1] = '\0';
-		check_cd_ret = check_dir_rights(path_cpy, rights);
-	}
+	check_cd_ret = check_dir_rights((last_slash == NULL ? "." : path_cpy)
+			, rights);
 	return (del_then_ret_err(path_cpy, check_cd_ret));
 }
 
