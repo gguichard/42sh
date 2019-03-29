@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "operator.h"
 #include "builtins.h"
-#include "parser_lexer.h"
+#include "execution.h"
 #include "vars.h"
 
 static int		add_cp_var(t_list **tmp, char *key, char *value, int is_env)
@@ -87,7 +87,7 @@ int	dispatch_assign(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 
 	i = 0;
 	save = alloc->vars;
-	if (elem->left && elem->left->type == CMD)
+	if (elem->left && elem->left->type == AST_CMD)
 	{
 		tmp = create_tmp_var_lst(elem, alloc->vars);
 		alloc->vars = tmp;
