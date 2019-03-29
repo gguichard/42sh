@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "split_cmd_token.h"
+#include "inhibitor.h"
 #include "str_cmd_inf.h"
 #include "token_inf.h"
 #include "autocomplete.h"
@@ -223,32 +224,64 @@ static const char		*find_last_home_user(const char *str)
 		return (NULL);
 }
 
+/*
+** Alloue et retourne une nouvelle string representant la version inhibe de
+** str. Retourne NULL en cas d'erreur.
+*/
+
+static char				*inhibe_this_str_for_autocomplete(const char *str
+		, t_alloc *alloc)
+{
+	char	**str_tab;
+	char	**tmp_tab;
+	char	*new_str;
+
+	new_str = NULL;
+	str_tab = inhib_expand_str(str, alloc);
+	tmp_tab = str_tab;
+	while (tmp_tab != NULL && *tmp_tab != NULL)
+	{
+		new_str = *tmp_tab;
+		++tmp_tab;
+	}
+	if (new_str == NULL)
+		new_str = ft_strdup(str);
+	else
+		new_str = ft_strdup(new_str);
+	ft_strtab_free(str_tab);
+	return (new_str);
+}
+
 static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
 		, t_alloc *alloc)
 {
 	const char		*real_start;
 	const char		*tmp_start;
+	char			*inhibed_str;
 	t_ac_suff_inf	*acs_inf;
 
 	real_start = (cur_tk->token == NULL ? "" : cur_tk->token);
 	tmp_start = NULL;
 	if (cur_tk->type != TK_RED_ROPT_FILE)
 	{
+		//TODO MIEUX GERER L'INHIB A CAUSE DE CA PSK IL PEUT Y AVOIR DES TOKENS D'IHNIB PLUS TOT
 		if((tmp_start = find_last_assign_start(real_start)) != NULL)
 			real_start = tmp_start;
 	}
 	if ((tmp_start = find_last_home_user(real_start)) != NULL)
 	{
-		real_start = tmp_start;
-		acs_inf = autocomplete_user(real_start);
+		inhibed_str = inhibe_this_str_for_autocomplete(tmp_start, alloc);
+		acs_inf = autocomplete_user(inhibed_str == NULL ? "" : inhibed_str);
 		if (acs_inf != NULL && acs_inf->suff_type == ACS_TYPE_FILE)
 			acs_inf->suff_type = ACS_TYPE_DIR;
 	}
 	else
 	{
-		acs_inf = autocomplete_word(alloc->vars, real_start
-				, cur_tk->type == TK_CMD, alloc);
+		inhibed_str = inhibe_this_str_for_autocomplete(real_start, alloc);
+		acs_inf = autocomplete_word(alloc->vars, (inhibed_str == NULL
+					? "" : inhibed_str), cur_tk->type == TK_CMD, alloc);
 	}
+	free(inhibed_str);
 	return (acs_inf);
 }
 
