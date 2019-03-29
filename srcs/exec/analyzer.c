@@ -33,7 +33,7 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	process_redir(&redirect_inf);
 	ret = 0;
-	if (!setup_redirection(&redirect_inf))
+	if (!setup_redirection(&redirect_inf, opt))
 		ret = 1;
 	clean_redirect(&redirect_inf);
 	if (ret == 0)

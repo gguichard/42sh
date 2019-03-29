@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 13:51:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 11:23:47 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 15:26:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		process_redir(t_redirect_inf *redirect_inf)
 		redirect_file(redirect_inf);
 }
 
-int			setup_redirection(t_redirect_inf *redirect_inf)
+int			setup_redirection(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
 	if (redirect_inf->lopt_fd == FD_ERROR
 			|| redirect_inf->ropt_fd == FD_ERROR)
@@ -60,10 +60,10 @@ int			setup_redirection(t_redirect_inf *redirect_inf)
 		return (0);
 	}
 	if ((redirect_inf->red_type == RD_R || redirect_inf->red_type == RD_RR)
-			&& !redirect_output(redirect_inf))
+			&& !redirect_output(redirect_inf, opt))
 		return (0);
 	else if (redirect_inf->red_type == RD_L
-			&& !redirect_input(redirect_inf))
+			&& !redirect_input(redirect_inf, opt))
 		return (0);
 	/*else if (redirect_inf->red_type == RD_LL
 			&& !redirect_heredoc(redirect_inf))

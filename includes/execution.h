@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 13:31:33 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 15:28:02 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct	s_exec_opt
 	int			fork;
 	int			wait_hang;
 	int			should_save_fd;
-	t_list		*save_fd;
+	t_list		*red_save;
 }				t_exec_opt;
 
 int				do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
@@ -46,15 +46,15 @@ int				analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 int				try_builtin_execution(t_alloc *alloc, t_ast *elem
 		, t_exec_opt *opt);
 
-int				dup2_with_rc(t_redirect_inf *redirect_inf, int lopt_fd
-		, int ropt_fd);
-int				close_with_rc(t_redirect_inf *redirect_inf, int fd);
+void			use_rc_on_shell(t_exec_opt *opt);
+int				dup2_with_rc(t_exec_opt *opt, int lopt_fd, int ropt_fd);
+int				close_with_rc(t_exec_opt *opt, int fd);
 
-int				redirect_output(t_redirect_inf *redirect_inf);
-int				redirect_input(t_redirect_inf *redirect_inf);
-int				redirect_heredoc(t_redirect_inf *redirect_inf);
+int				redirect_output(t_redirect_inf *redirect_inf, t_exec_opt *opt);
+int				redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt);
 
 void			process_redir(t_redirect_inf *redirect_inf);
-int				setup_redirection(t_redirect_inf *redirect_inf);
+int				setup_redirection(t_redirect_inf *redirect_inf
+		, t_exec_opt *opt);
 
 #endif
