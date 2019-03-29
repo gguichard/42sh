@@ -73,7 +73,8 @@ int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 			elem = elem->right;
 		else if (already_piped)
 			break ;
-		already_piped = 1;
+		else
+			already_piped = 1;
 	}
 	return (waiting_line(opt->wait_hang, 0));
 }
