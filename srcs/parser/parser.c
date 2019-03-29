@@ -90,20 +90,20 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 	return (sort);
 }
 
-t_ast	*parser(t_list **lst_tk)
+t_ast	*parser(t_list *lst_tk)
 {
-	t_ast			*sort;
-	t_ast			*elem;
-	t_ast			*branch;
+	t_ast	*sort;
+	t_ast	*elem;
+	t_ast	*branch;
 
 	sort = NULL;
 	elem = NULL;
 	branch = NULL;
-	if (token_analyser(*lst_tk) == PR_ERROR)
+	if (token_analyser(lst_tk) == PR_ERROR)
 		return (NULL);
-	while (*lst_tk)
+	while (lst_tk != NULL)
 	{
-		branch = create_ast_branch(lst_tk);
+		branch = create_ast_branch(&lst_tk);
 		if (!sort)
 			sort = branch;
 		if (sort->type == AST_CMD_SEP && !sort->right)
@@ -111,15 +111,15 @@ t_ast	*parser(t_list **lst_tk)
 			sort->right = branch;
 			branch->back = sort;
 		}
-		else if (*lst_tk && get_tk(*lst_tk)->type == TK_CMD_SEP)
+		else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
 		{
-			elem = create_elem(lst_tk);
+			elem = create_elem(&lst_tk);
 			elem->left = sort;
 			sort->back = elem;
 			sort = elem;
 		}
-		else if (*lst_tk)
-			*lst_tk = (*lst_tk)->next;
+		else if (lst_tk != NULL)
+			lst_tk = lst_tk->next;
 	}
 	return (sort);
 }

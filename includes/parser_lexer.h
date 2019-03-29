@@ -28,7 +28,7 @@ void			ft_insert(char **source, char *insert, int pos1, int pos2);
 ************************************ PARSER ************************************
 */
 
-t_ast			*parser(t_list **lst_tk);
+t_ast			*parser(t_list *lst_tk);
 
 /*
 ********************************* PARSER TOOLS *********************************

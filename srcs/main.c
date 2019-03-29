@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "shell.h"
 #include "cmdline.h"
 #include "builtins.h"
@@ -24,6 +25,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	if (!scmd_init(&scmd, line))
 		return ;
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
+	scmd_clean(&scmd);
 
 	/*
 	 **	VERIF TOKEN AND PRINT BEFORE PARSE
@@ -36,7 +38,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 
-	sort_ast = parser(&lst_tk);
+	sort_ast = parser(lst_tk);
+	ft_lstdel(&lst_tk, del_token);
 
 	/*
 	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
@@ -57,7 +60,6 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 
 	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);
-	scmd_clean(&scmd);
 }
 
 int		main(int argc, char **argv, char **environ)
