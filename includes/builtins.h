@@ -26,7 +26,6 @@ int		builtin_test(t_ast *elem, t_alloc *alloc);
 
 void	set_dir_to_canonical_form(char *dir);
 int		is_builtin(t_alloc *alloc, const char *built_name);
-void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 void	check_exit_cmd(t_ast *elem);
 
 #endif

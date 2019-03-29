@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "operator.h"
 #include "execution.h"
 #include "job.h"
 

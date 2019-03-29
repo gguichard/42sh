@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "shell.h"
 #include "parser_lexer.h"
-#include "operator.h"
 #include "redirect_inf.h"
 #include "execution.h"
 

@@ -10,7 +10,6 @@
 #include "search_exec.h"
 #include "check_path.h"
 #include "execution.h"
-#include "builtins.h" // TODO: deplacer le prototype de wait_pid
 
 static char	*srch_exec(t_list *vars, t_ast *elem, int *hashable)
 {
