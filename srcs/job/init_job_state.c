@@ -10,24 +10,24 @@ int		ret_status(int ret, pid_t process, t_job *job)
 	{
 		if (!(job = get_job_pid(process)))
 			return (1);
-		job->status = ret;
 	}
-	if (WIFSTOPPED(ret))
+	if (WIFEXITED(ret))
+	{
+		job->state = DONE;
+		err = WEXITSTATUS(ret);
+		job->status = WEXITSTATUS(ret);
+	}
+	else if (WIFSTOPPED(ret))
 	{
 		err = WSTOPSIG(ret) + 128;
 		job->state = STOPPED_PENDING;
-		job->status = ret;
-		ft_printf("coucou");
+		job->status = WSTOPSIG(ret);
 	}
 	else if (WIFSIGNALED(ret))
 	{
 		err = WTERMSIG(ret) + 128;
 		job->state = SIG;
-	}
-	else if (WIFEXITED(ret))
-	{
-		job->state = DONE;
-		err = WEXITSTATUS(ret);
+		job->status = WTERMSIG(ret);
 	}
 	return (err);
 }

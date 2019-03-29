@@ -36,7 +36,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 
-	if (!(sort_ast = parser(&lst_tk, alloc)))
+	if (!(sort_ast = parser(&lst_tk)))
 		return ;
 
 	/*

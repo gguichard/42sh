@@ -37,6 +37,7 @@ int			ret_status(int ret, pid_t process, t_job *job);
 void		redirect_term_controller(pid_t new_controler, int type);
 
 t_job		*get_job_pid(pid_t process);
+t_job		*get_job_allpid(pid_t process);
 
 void		refresh_jobs(void);
 void		print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index);
@@ -56,6 +57,7 @@ char		*job_state_str(t_list *tmp);
 char		*single_job_state_str(t_job *job);
 char		*job_cmd(t_job *job);
 
+void		update_job_state(pid_t process, t_job_state state);
 t_job		*check_job_state(t_list *tmp, t_job_state state);
 int			job_state_done(t_list *tmp);
 int			job_state_run_or_done(t_list *tmp);

@@ -13,8 +13,8 @@ static void	print_job_pipe(t_list *tmp)
 		state = single_job_state_str(job);
 		if (job->state == STOPPED)
 			ft_printf("      %s(%s) %d %s\n", state, status_stop_str(job->status), job->pid, job->cmd);
-		else if (job->state == DONE && WEXITSTATUS(job->status))
-			ft_printf("      %s(%d) %d %s\n", state, WEXITSTATUS(job->status), job->pid, job->cmd);
+		else if (job->state == DONE && job->status)
+			ft_printf("      %s(%d) %d %s\n", state, job->status, job->pid, job->cmd);
 		else
 			ft_printf("      %s %d %s\n", state, job->pid, job->cmd);
 		tmp = tmp->next;
@@ -37,8 +37,8 @@ static void	display_job_full(t_list *tmp, int index)
 	state = single_job_state_str(job);
 	if (job->state == STOPPED)
 		ft_printf("[%d] %c %s(%s) %d %s\n", index, current, state, status_stop_str(job->status), job->gpid, job->cmd);
-	else if (job->state == DONE && WEXITSTATUS(job->status))
-		ft_printf("[%d] %c %s(%d) %d %s\n", index, current, state, WEXITSTATUS(job->status), job->gpid, job->cmd);
+	else if (job->state == DONE && job->status)
+		ft_printf("[%d] %c %s(%d) %d %s\n", index, current, state, job->status, job->gpid, job->cmd);
 	else
 		ft_printf("[%d] %c %s %d %s\n", index, current, state, job->gpid, job->cmd);
 	if (job->pipe)

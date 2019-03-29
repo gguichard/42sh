@@ -78,8 +78,8 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 			|| exp[*i] == '$')
 		*i += 1;
 	else
-		while (exp[i] && (ft_isalnum(exp[i]) == 1 || exp[i] == '_'))
-			i += 1;
+		while (exp[*i] && (ft_isalnum(exp[*i]) == 1 || exp[*i] == '_'))
+			*i += 1;
 	str = ft_strndup(exp, *i);
 	value = get_var_for_expand(alloc, str);
 	ft_memdel((void **)&str);

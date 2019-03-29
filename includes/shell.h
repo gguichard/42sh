@@ -100,6 +100,9 @@ int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
 void	sig_block_ign(void);
 void	sigs_wait_line(t_alloc *alloc);
 void	sig_reset(void);
+void	sig_unblock_sig(int sig);
+void	sig_block_sig(int sig);
+void	sig_handler(int sig, siginfo_t *info, void *uap);
 
 void	del_lst_ast(t_ast **lst);
 void	del_alloc(t_alloc *alloc);

@@ -25,14 +25,14 @@ static int	get_ret_val(t_list *tmp)
 	stop = 0;
 	job = tmp->content;
 	ret = ret_status(job->status, job->pid, job);
-	if (WIFSTOPPED(job->status))
+	if (job->state == STOPPED_PENDING)
 		stop = ret;
 	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
 		ret = ret_status(job->status, job->pid, job);
-		if (WIFSTOPPED(job->status))
+		if (job->state == STOPPED_PENDING)
 			stop = ret;
 		tmp = tmp->next;
 	}
