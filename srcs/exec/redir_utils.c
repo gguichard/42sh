@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 10:46:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 15:28:33 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 22:09:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		use_rc_on_shell(t_exec_opt *opt)
 	{
 		red_save = (t_redirect_save *)tmp->content;
 		dup2(red_save->to_fd, red_save->original_fd);
+		close(red_save->to_fd);
 		tmp = tmp->next;
 	}
 	ft_lstdel(&opt->red_save, del_redirect_save);
