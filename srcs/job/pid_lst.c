@@ -22,7 +22,7 @@ static char		*ft_tab_to_str(char **tab)
 	return (out);
 }
 
-static char		*create_cmd_job(t_ast *elem, bool addpipe)
+static char		*create_cmd_job(t_ast *elem, int addpipe)
 {
 	char	*output;
 	char	*actual;
@@ -37,7 +37,7 @@ static char		*create_cmd_job(t_ast *elem, bool addpipe)
 		if (!(actual = ft_tab_to_str(elem->input)))
 			return (0);
 		prev = output;
-		(!prev && addpipe == true) ? prev = ft_strdup("| ") : 0;
+		(!prev && addpipe) ? prev = ft_strdup("| ") : 0;
 		output = ft_strjoin(actual, prev);
 		ft_memdel((void **)&prev);
 		ft_memdel((void **)&actual);
@@ -50,7 +50,7 @@ static char		*create_cmd_job(t_ast *elem, bool addpipe)
 	return (output);
 }
 
-static t_job	*create_job(pid_t process, t_ast *elem, bool addpipe)
+static t_job	*create_job(pid_t process, t_ast *elem, int addpipe)
 {
 	t_job	*job;
 
@@ -64,7 +64,7 @@ static t_job	*create_job(pid_t process, t_ast *elem, bool addpipe)
 	return (job);
 }
 
-t_list			*add_pid_lst(pid_t process, t_ast *elem, bool addpipe)
+t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 {
 	t_list		*tmp;
 	t_job		*job;
@@ -78,7 +78,7 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, bool addpipe)
 	return (tmp);
 }
 
-int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, bool addpipe)
+int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, int addpipe)
 {
 	t_list	*tmp;
 	t_job	*job;

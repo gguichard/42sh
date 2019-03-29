@@ -1,3 +1,4 @@
+#include <sys/wait.h>
 #include "shell.h"
 #include "execution.h"
 #include "job.h"

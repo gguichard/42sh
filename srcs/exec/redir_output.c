@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 11:58:43 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 11:12:29 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 15:26:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 #include "redirect_inf.h"
 #include "execution.h"
 
-static void	redirect_close_fd(t_redirect_inf *redirect_inf)
+static void	redirect_close_fd(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
 	if (redirect_inf->lopt_fd >= 0)
-		close_with_rc(redirect_inf, redirect_inf->lopt_fd);
+		close_with_rc(opt, redirect_inf->lopt_fd);
 	if (redirect_inf->lopt_fd == FD_AMPERSAND
 			|| redirect_inf->lopt_fd == FD_DEFAULT)
-		close_with_rc(redirect_inf, STDOUT_FILENO);
+		close_with_rc(opt, STDOUT_FILENO);
 	if (redirect_inf->lopt_fd == FD_AMPERSAND)
-		close_with_rc(redirect_inf, STDERR_FILENO);
+		close_with_rc(opt, STDERR_FILENO);
 }
 
 static int	open_redirect_file(t_redirect_inf *redirect_inf, int append_to_file)
@@ -61,7 +61,7 @@ static int	redirect_fd(t_redirect_inf *redirect_inf)
 	return (redirect_inf->ropt_fd);
 }
 
-static int	redirect_ropt_fd(t_redirect_inf *redirect_inf)
+static int	redirect_ropt_fd(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
 	int	fd;
 	int	dup_ret;
@@ -70,14 +70,14 @@ static int	redirect_ropt_fd(t_redirect_inf *redirect_inf)
 		return (0);
 	dup_ret = 1;
 	if (redirect_inf->lopt_fd >= 0)
-		dup_ret = dup2_with_rc(redirect_inf, fd, redirect_inf->lopt_fd);
+		dup_ret = dup2_with_rc(opt, fd, redirect_inf->lopt_fd);
 	else
 	{
 		if (redirect_inf->lopt_fd == FD_AMPERSAND
 				|| redirect_inf->lopt_fd == FD_DEFAULT)
-			dup_ret = dup2_with_rc(redirect_inf, fd, STDOUT_FILENO);
+			dup_ret = dup2_with_rc(opt, fd, STDOUT_FILENO);
 		if (dup_ret && redirect_inf->lopt_fd == FD_AMPERSAND)
-			dup_ret = dup2_with_rc(redirect_inf, fd, STDERR_FILENO);
+			dup_ret = dup2_with_rc(opt, fd, STDERR_FILENO);
 	}
 	if (!dup_ret)
 		ft_dprintf(STDERR_FILENO, "42sh: %d: bad file descriptor\n", fd);
@@ -86,12 +86,12 @@ static int	redirect_ropt_fd(t_redirect_inf *redirect_inf)
 	return (dup_ret);
 }
 
-int			redirect_output(t_redirect_inf *redirect_inf)
+int			redirect_output(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
 	if (redirect_inf->close_ropt_fd && redirect_inf->ropt_fd == FD_DEFAULT)
 	{
-		redirect_close_fd(redirect_inf);
+		redirect_close_fd(redirect_inf, opt);
 		return (1);
 	}
-	return (redirect_ropt_fd(redirect_inf));
+	return (redirect_ropt_fd(redirect_inf, opt));
 }

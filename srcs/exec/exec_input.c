@@ -91,16 +91,15 @@ int			exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	child = 0;
 	if (!opt->fork)
 		child = fork();
-	opt->fork = 1;
 	if (child == -1)
 		return (1);
 	else if (child == 0)
 	{
+		opt->fork = 1;
 		if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 			exit(ret);
 		execute_cmd(alloc, elem, path_exec);
 	}
-	opt->fork = 0;
 	ft_strdel(&path_exec);
 	wait_pid(child, alloc, elem, opt);
 	return (ret_status(alloc->ret_val, child, 0));

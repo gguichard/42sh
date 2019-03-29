@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "shell.h"
 #include "parser_lexer.h"
 #include "token_inf.h"

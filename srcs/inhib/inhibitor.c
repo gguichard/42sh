@@ -38,7 +38,7 @@ int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
 //Inhib et expand une string et renvoi un tableau de string ou NULL en cas d'erreur
 //si opt == 0 '\' en fin de ligne est delete
 //si opt == 1 '\' fin de ligne reste (pour autocompletion)
-char	**inhib_expand_str(const char *str, t_alloc *alloc, int opt)
+char	**inhib_expand_str(const char *str, t_alloc *alloc)
 {
 	size_t			pos_array;
 	t_str_cmd_inf	*str_cmd;
@@ -53,9 +53,9 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc, int opt)
 		if ((str_cmd->is_in_quote || str_cmd->is_in_dbquote)
 				&& !(inhib_expand_in_quote(str_cmd, array, &pos_array, alloc)))
 			return (error_inhib_expand(str_cmd, array));
-		else if (scmd_cur_char_is_escaped(str_cmd) && opt == 0)
-			remove_escaped_char_select(str_cmd, &array[get_pos_in_array(array)],
-				&pos_array, opt);
+		else if (scmd_cur_char_is_escaped(str_cmd))
+			remove_escaped_char(str_cmd, &array[get_pos_in_array(array)],
+				&pos_array);
 		else if (scmd_cur_char(str_cmd) == '$'
 				&& !do_expand(array, alloc, &pos_array, str_cmd))
 			return (error_inhib_expand(str_cmd, array));
@@ -75,7 +75,7 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	i = 0;
 	while (elem->input[i])
 	{
-		if (!(new_array = inhib_expand_str(elem->input[i], alloc, 0)))
+		if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
 			return (0);
 		create_new_input(elem, &i, new_array);
 	}

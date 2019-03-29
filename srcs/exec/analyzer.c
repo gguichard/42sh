@@ -3,6 +3,7 @@
 #include "parser_lexer.h"
 #include "redirect_inf.h"
 #include "execution.h"
+#include "inhibitor.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -33,7 +34,7 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	process_redir(&redirect_inf);
 	ret = 0;
-	if (!setup_redirection(&redirect_inf))
+	if (!setup_redirection(&redirect_inf, opt))
 		ret = 1;
 	clean_redirect(&redirect_inf);
 	if (ret == 0)
@@ -55,6 +56,8 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	if (elem != NULL)
 	{
+		if (!inhib_expand_tab(elem, alloc))
+			return (1);
 		if (elem->type == AST_CMD_SEP)
 		{
 			analyzer(alloc, elem->left, opt);

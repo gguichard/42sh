@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <limits.h>
 #include "shell.h"
 #include "vars.h"
 #include "builtins.h"
