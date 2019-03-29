@@ -51,6 +51,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	 */
 	// if (sort_ast)
 	// 	read_sort_descent(sort_ast, 0);
+
 	check_exit_cmd(sort_ast);
 	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
 

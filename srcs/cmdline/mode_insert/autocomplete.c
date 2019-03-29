@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 13:42:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 15:20:00 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/28 16:22:37 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "str_cmd_inf.h"
 #include "cmdline.h"
 
-static void	ac_append_to_cmdline(t_cmdline *cmdline, t_ac_suff_inf *acs_inf)
+static void	ac_append_to_cmdline(t_cmdline *cmdline, t_ac_suff_inf *acs_inf
+		, t_str_cmd_inf *scmd, int at_end_of_line)
 {
 	char	*suff;
 
@@ -26,10 +27,19 @@ static void	ac_append_to_cmdline(t_cmdline *cmdline, t_ac_suff_inf *acs_inf)
 		add_char_to_input(cmdline, *suff);
 		suff++;
 	}
-	if (acs_inf->suff_type == ACS_TYPE_DIR)
-		add_char_to_input(cmdline, '/');
-	else if (acs_inf->suff_type == ACS_TYPE_VAR_IN_BRACKETS)
+	if (acs_inf->suff_type == ACS_TYPE_VAR_IN_BRACKETS)
 		add_char_to_input(cmdline, '}');
+	if (at_end_of_line && (acs_inf->suff_type == ACS_TYPE_FILE
+				|| acs_inf->suff_type == ACS_TYPE_VAR_IN_BRACKETS))
+	{
+		if (scmd->is_in_quote)
+			add_char_to_input(cmdline, '\'');
+		else if (scmd->is_in_dbquote)
+			add_char_to_input(cmdline, '\"');
+		add_char_to_input(cmdline, ' ');
+	}
+	else if (acs_inf->suff_type == ACS_TYPE_DIR)
+		add_char_to_input(cmdline, '/');
 }
 
 int			handle_autocomplete(t_cmdline *cmdline)
@@ -59,7 +69,7 @@ int			handle_autocomplete(t_cmdline *cmdline)
 	if (acs_inf->choices == NULL)
 		ret = 0;
 	if (acs_inf->suff != NULL)
-		ac_append_to_cmdline(cmdline, acs_inf);
+		ac_append_to_cmdline(cmdline, acs_inf, &scmd, cmdline->input.offset == cmdline->input.size);
 	if (acs_inf->choices != NULL && cmdline->ac_flag)
 	{
 		write(STDOUT_FILENO, "\n", 1);
