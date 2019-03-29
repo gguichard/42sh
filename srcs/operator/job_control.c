@@ -26,7 +26,7 @@ void	print_bg(pid_t process)
 
 int		job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	while (elem->right)
+	while (elem)
 	{
 		opt->wait_hang = 1;
 		analyzer(alloc, elem->left, opt);
