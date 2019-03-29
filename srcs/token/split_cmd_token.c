@@ -29,32 +29,7 @@ static int				process_token_before_cur_char(t_split_cmd_inf *sp_cmd)
 	sp_cmd->scmd->pos = old_pos;
 	if (sp_cmd->last_tk_end_by_and)
 	{
-		if (!add_whole_token_to_lst(sp_cmd, "&", TK_LRED_OPT))
-			return (0);
-	}
-	return (1);
-}
-
-/*
-** Ajoute le token apres la redirection dans la liste si c'est un RRED_OPT.
-*/
-
-static int				process_after_red_ope(t_split_cmd_inf *sp_cmd)
-{
-	if (sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] == '&')
-	{
-		++sp_cmd->scmd->pos;
-		sp_cmd->tk_start = (sp_cmd->scmd->str + sp_cmd->scmd->pos);
-		while (ft_isdigit(sp_cmd->scmd->str[sp_cmd->scmd->pos + 1]))
-			++(sp_cmd->scmd->pos);
-		if (sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] == '-')
-			++(sp_cmd->scmd->pos);
-		if (!is_a_spe_char(sp_cmd->scmd->str[sp_cmd->scmd->pos + 1])
-				&& sp_cmd->scmd->str[sp_cmd->scmd->pos + 1] != '\0'
-				&& sp_cmd->tk_start[1] != '-')
-			sp_cmd->scmd->pos = sp_cmd->tk_start - sp_cmd->scmd->str;
-		sp_cmd->cur_tk_type = TK_RRED_OPT;
-		if (!add_cur_token_to_lst(sp_cmd))
+		if (!add_whole_token_to_lst(sp_cmd, "&", TK_RED_LOPT_FD))
 			return (0);
 	}
 	return (1);
@@ -78,13 +53,6 @@ static int				split_spe_char(t_split_cmd_inf *sp_cmd)
 		sp_cmd->scmd->pos += get_cur_spe_char_token_len_and_set_type(sp_cmd)
 			- 1;
 		if (!add_cur_token_to_lst(sp_cmd))
-			return (0);
-	}
-	if (sp_cmd->tk_start == (sp_cmd->scmd->str + sp_cmd->scmd->pos)
-			&& (sp_cmd->scmd->str[sp_cmd->scmd->pos] == '>'
-				|| sp_cmd->scmd->str[sp_cmd->scmd->pos] == '<'))
-	{
-		if (!process_after_red_ope(sp_cmd))
 			return (0);
 	}
 	return (1);

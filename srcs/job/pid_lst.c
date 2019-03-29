@@ -29,7 +29,8 @@ static char		*create_cmd_job(t_ast *elem, bool addpipe)
 	char	*prev;
 
 	output = 0;
-	while (elem && elem->back && elem->back->type < OPERATOR && elem->back->type > CMD)
+	//UPDATE: NEW AST
+	while (elem && elem->back && elem->back->type < AST_PIPE && elem->back->type > AST_CMD)
 		elem = elem->back;
 	while (elem)
 	{
@@ -40,7 +41,7 @@ static char		*create_cmd_job(t_ast *elem, bool addpipe)
 		output = ft_strjoin(actual, prev);
 		ft_memdel((void **)&prev);
 		ft_memdel((void **)&actual);
-		if (!output || elem->type == CMD)
+		if (!output || elem->type == AST_CMD)
 			break ;
 		elem = elem->left;
 	}

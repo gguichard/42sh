@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "parser_lexer.h"
-#include "error.h"
 #include "token_inf.h"
+#include "error.h"
 
 t_ast	*set_new_elem(void)
 {
@@ -11,11 +11,9 @@ t_ast	*set_new_elem(void)
 		return (0);
 	new->fd[0] = -1;
 	new->fd[1] = -1;
-	new->print = 0;
-	new->type = NO_TYPE;
+	new->type = AST_NO_TYPE;
 	new->input = NULL;
 	new->heredoc = NULL;
-	new->next = NULL;
 	new->back = NULL;
 	new->left = NULL;
 	new->right = NULL;
@@ -24,25 +22,28 @@ t_ast	*set_new_elem(void)
 
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
-	static char	*ope[10] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
-	"&&", "||"};
+	static char	*ope[11] = {
+		">", ">>", "<", "<<",
+		">&", "<&", "&",
+		"|", "&&", "||", ";"
+	};
 	char		*str;
 	int			i;
 
 	i = 0;
 	str = get_tk(lst_tk)->token;
-	while (ft_strcmp(ope[i], str) != 0 && i < 10)
+	while (ft_strcmp(ope[i], str) != 0 && i < 11)
 		i += 1;
-	// if (i == 3)
-	// 	elem->type = HEREDOC;
 	if (i < 6)
-		elem->type = REDIR;
-	else if (i < 8)
-		elem->type = OPERATOR;
+		elem->type = AST_REDIR;
+	else if (i == 6)
+		elem->type = AST_JOB;
+	else if (i == 7)
+		elem->type = AST_PIPE;
 	else if (i < 10)
-		elem->type = LOGIC;
-	else if (str[0] == ';')
-		elem->type = CMD_SEP;
+		elem->type = AST_LOGIC;
+	else if (i == 10)
+		elem->type = AST_CMD_SEP;
 }
 
 void	init_input(t_ast *elem, int len, t_list *lst_tk)
@@ -50,14 +51,14 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	t_token_type	type;
 
 	type = get_tk(lst_tk)->type;
-	if (type == TK_LRED_OPT)
+	if (type == TK_RED_LOPT_FD)
 		set_type(elem, lst_tk->next);
 	else if (type > 3)
 		set_type(elem, lst_tk);
 	else if (type == TK_ASSIGN)
-		elem->type = ASSIGN;
+		elem->type = AST_ASSIGN;
 	else if (type == TK_CMD)
-		elem->type = CMD;
+		elem->type = AST_CMD;
 	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
 		return ;
 	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
@@ -79,8 +80,7 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 	while (*lst_tk)
 	{
 		type = get_tk(*lst_tk)->type;
-		if (type == TK_CMD_SEP && (ft_strcmp(get_tk(*lst_tk)->token, ";") == 0
-				|| ft_strcmp(get_tk(*lst_tk)->token, "&") == 0))
+		if (type == TK_CMD_SEP && ft_strcmp(get_tk(*lst_tk)->token, ";") == 0)
 			break ;
 		else if (type != TK_PARAM)
 		{
@@ -97,13 +97,12 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 	return (sort);
 }
 
-t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
+t_ast	*parser(t_list **lst_tk)
 {
 	t_ast			*sort;
 	t_ast			*elem;
 	t_ast			*branch;
 
-	(void)alloc;
 	sort = NULL;
 	elem = NULL;
 	branch = NULL;
@@ -114,7 +113,7 @@ t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
 		branch = create_ast_branch(lst_tk);
 		if (!sort)
 			sort = branch;
-		if (sort->type == CMD_SEP && !sort->right)
+		if (sort->type == AST_CMD_SEP && !sort->right)
 		{
 			sort->right = branch;
 			branch->back = sort;

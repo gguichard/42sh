@@ -57,6 +57,11 @@ int		waiting_line(bool wait_hang, t_list *tmp)
 		pipe_waits(tmp, WUNTRACED);
 		redirect_term_controller(0, 1);
 	}
+	else
+	{
+		print_bg(((t_job *)tmp->content)->pid);
+		return (0);
+	}
 	return (get_ret_val(tmp));
 }
 
@@ -71,5 +76,8 @@ void	wait_pid(pid_t child, t_ast *elem, t_exec_opt *opt, t_alloc *alloc)
 		redirect_term_controller(0, 1);
 	}
 	else
+	{
+		print_bg(child);
 		waitpid(child, &alloc->ret_val, WNOHANG);
+	}
 }

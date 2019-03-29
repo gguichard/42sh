@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "parser_lexer.h"
 #include "token_inf.h"
+#include "error.h"
 
 t_ast	*fill_cmd(t_list **lst_tk, t_ast *elem)
 {
@@ -45,22 +46,17 @@ t_ast	*fill_ope(t_list **lst_tk, t_ast *elem)
 {
 	int				len;
 	int				i;
-	t_list			*tmp;
 	t_token_type	type;
 
 	if (!elem)
 		return (0);
 	i = 1;
-	len = 1;
+	len = 0;
 	type = get_tk(*lst_tk)->type;
-	tmp = (*lst_tk)->next;
-	while (tmp && get_tk(tmp)->type >= TK_RED_OPE
-			&& get_tk(tmp)->type < TK_CMD_SEP)
-	{
-		type = get_tk(tmp)->type;
-		len += 1;
-		tmp = tmp->next;
-	}
+	if (type == TK_RED_OPE)
+		len = 2;
+	else if (type == TK_RED_LOPT_FD)
+		len = 3;
 	init_input(elem, len, *lst_tk);
 	if (!elem->input)
 	{
@@ -140,7 +136,7 @@ t_ast	*create_elem(t_list **lst_tk)
 	type = get_tk(*lst_tk)->type;
 	if (type == TK_CMD)
 		elem = fill_cmd(lst_tk, set_new_elem());
-	else if (type == TK_LRED_OPT || type == TK_RED_OPE)
+	else if (type == TK_RED_LOPT_FD || type == TK_RED_OPE)
 		elem = fill_ope(lst_tk, set_new_elem());
 	else if (type == TK_CMD_SEP)
 		elem = fill_cmd_sep(lst_tk, set_new_elem());

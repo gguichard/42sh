@@ -150,7 +150,7 @@ int			add_cur_token_to_lst(t_split_cmd_inf *sp_cmd)
 			<= sp_cmd->tk_start - sp_cmd->scmd->str
 			&& (sp_cmd->cur_tk_type == TK_CMD
 				|| ((sp_cmd->cur_tk_type == TK_PARAM
-						|| sp_cmd->cur_tk_type == TK_RED_FILENAME)
+						|| sp_cmd->cur_tk_type == TK_RED_ROPT_FILE)
 					&& sp_cmd->last_alias_ended_with_blank))
 			&& expand_alias(sp_cmd))
 		return (1);

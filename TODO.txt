@@ -27,14 +27,9 @@ quand ring back avec fg need display sig normal
 
 find a way pour check si un process a repris
 
-
-
-
 TODO:
-	-
 
-SEGV:
-	echo $_TRR$+
+ IMPLEMENTER INHIB ET EXPAND POUR LE HEREDOC
 
 ADD:
 	$!

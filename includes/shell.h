@@ -25,14 +25,14 @@
 ************************************ DEFINE ************************************
 */
 
-# define CMD_SEP	6
-# define LOGIC		5
-# define OPERATOR	4
-# define ASSIGN		3
-# define REDIR		2
-# define HEREDOC	1
-# define CMD		0
-# define NO_TYPE	-1
+# define AST_CMD_SEP	6
+# define AST_JOB		5
+# define AST_LOGIC		4
+# define AST_PIPE		3
+# define AST_ASSIGN		2
+# define AST_CMD		1
+# define AST_REDIR		0
+# define AST_NO_TYPE	-1
 
 /*
 ********************************** STRUCTURES **********************************
@@ -46,12 +46,10 @@ typedef struct			s_exec_opt
 
 typedef struct			s_ast
 {
-	int					print;
 	int					type;
 	int					fd[2];
 	char				*heredoc;
 	char				**input;
-	struct s_ast		*next;
 	struct s_ast		*back;
 	struct s_ast		*left;
 	struct s_ast		*right;
@@ -107,15 +105,11 @@ void	del_lst_ast(t_ast **lst);
 void	del_alloc(t_alloc *alloc);
 
 //TOOLS TO PRINT LST AST
-void	read_lst(t_ast *lst, int active);
 void	read_sort_descent(t_ast *sort, int active);
-void	reinit_print(t_ast *lst, int active);
 
-// CLEN AST
+// CLEAN AST
 void	del_ast(t_ast **lst);
 void	del_elem_ast(t_ast **lst);
-void	delete_str_tab(char **tab_str);
-
 
 /*
 *********************************** GLOBALS ***********************************

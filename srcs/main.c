@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "cmdline.h"
 #include "builtins.h"
+#include "execution.h"
 #include "exectable.h"
 #include "hashtable.h"
 #include "parser_lexer.h"
@@ -8,6 +9,7 @@
 #include "split_cmd_token.h"
 #include "token_inf.h"
 #include "job.h"
+#include "error.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
@@ -48,12 +50,11 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	/*
 	 ** PRINT AST AND REINIT NODE
 	 */
-	if (sort_ast)
-		read_sort_descent(sort_ast, 0);
+	// if (sort_ast)
+	// 	read_sort_descent(sort_ast, 0);
 
 	check_exit_cmd(sort_ast);
 	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-	refresh_jobs();
 
 	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);

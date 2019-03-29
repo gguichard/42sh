@@ -10,9 +10,8 @@ typedef enum		e_token_type
 	TK_CMD,
 	TK_PARAM,
 	TK_RED_OPE,
-	TK_LRED_OPT,
-	TK_RRED_OPT,
-	TK_RED_FILENAME,
+	TK_RED_LOPT_FD,
+	TK_RED_ROPT_FILE,
 	TK_CMD_SEP
 }					t_token_type;
 
