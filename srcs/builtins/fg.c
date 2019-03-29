@@ -1,3 +1,5 @@
+#include <signal.h>
+#include <sys/wait.h>
 #include "shell.h"
 #include "execution.h"
 #include "job.h"
@@ -24,7 +26,7 @@ static int	bring_back_pid(t_list *tmp, int index)
 	tcsetpgrp(STDIN_FILENO, job->gpid);
 	killpg(job->gpid, SIGCONT);
 	if (job->pipe)
-		return (waiting_line(false, tmp));
+		return (waiting_line(0, tmp));
 	waitpid(job->pid, &job->status, WUNTRACED);
 	redirect_term_controller(0, 1);
 	return (ret_status(job->status, job->pid, job));

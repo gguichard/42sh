@@ -1,3 +1,5 @@
+#include <unistd.h>
+#include <signal.h>
 #include "shell.h"
 
 void	redirect_term_controller(pid_t new_controler, int type)

@@ -1,3 +1,5 @@
+#include <signal.h>
+#include <sys/wait.h>
 #include "shell.h"
 #include "job.h"
 
