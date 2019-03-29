@@ -32,6 +32,6 @@ void					del_redirect(void *content, size_t content_size);
 ** non initialise.
 */
 int						fill_redirect_inf(t_redirect_inf *red_inf
-		, const char **token_tab);
+		, char **token_tab);
 
 #endif

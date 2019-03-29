@@ -82,6 +82,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	int		hashable;
 	char	*path_exec;
 	pid_t	child;
+	int		ret;
 
 	hashable = 0;
 	if ((path_exec = exec_path(elem, alloc, &hashable)) == NULL)
@@ -96,8 +97,8 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 		return (1);
 	else if (child == 0)
 	{
-		if (elem->left != NULL)
-			analyzer(elem->left, alloc, opt);
+		if (elem->left != NULL && (ret = analyzer(elem->left, alloc, opt)) != 0)
+			exit(ret);
 		execute_cmd(alloc, elem, path_exec);
 	}
 	opt->fork = 0;

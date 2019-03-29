@@ -46,6 +46,10 @@ $(PATH_PARSER)/redirect_inf.c \
 $(PATH_EXEC)/analyzer.c \
 $(PATH_EXEC)/exec_builtin.c \
 $(PATH_EXEC)/exec_input.c \
+$(PATH_EXEC)/redir_input.c \
+$(PATH_EXEC)/redir_output.c \
+$(PATH_EXEC)/redir_utils.c \
+$(PATH_EXEC)/redirections.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
