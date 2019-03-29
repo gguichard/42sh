@@ -66,7 +66,7 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	else if (elem->type == AST_CMD_SEP)
 	{
-		analyzer(alloc, elem->left, opt);
+		alloc->ret_val = analyzer(alloc, elem->left, opt);
 		return (analyzer(alloc, elem->right, opt));
 	}
 	else if (elem->type == AST_JOB)
