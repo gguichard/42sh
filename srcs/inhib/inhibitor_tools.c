@@ -84,6 +84,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 		ft_exit_malloc();
 	modify = insert_new_tab(modify, i, new, elem);
 	ft_strtab_free(elem->input);
+	ft_strtab_free(new);
 	elem->input = modify;
 	*i += len_new;
 }

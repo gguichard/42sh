@@ -44,6 +44,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	t_str_cmd_inf	*str_cmd;
 	char			**array;
 
+	(void)alloc;
+
 	pos_array = 0;
 	str_cmd = NULL;
 	array = NULL;
@@ -62,6 +64,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		else
 			pos_array += scmd_move_to_next_char(str_cmd);
 	scmd_clean(str_cmd);
+	free(str_cmd);
 	return (array);
 }
 
