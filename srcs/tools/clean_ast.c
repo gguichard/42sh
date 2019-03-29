@@ -6,7 +6,6 @@ void	del_elem_ast(t_ast **lst)
 {
 	if (lst == NULL || *lst == NULL)
 		return ;
-	ft_strdel(&(*lst)->heredoc);
 	ft_strtab_free((*lst)->input);
 	free(*lst);
 	*lst = NULL;

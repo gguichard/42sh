@@ -78,7 +78,7 @@ static t_list	*create_tmp_var_lst(t_ast *elem, t_list *lst)
 	return (tmp);
 }
 
-int	dispatch_assign(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+int	dispatch_assign(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	t_list	*tmp;
 	t_list	*save;
@@ -91,7 +91,7 @@ int	dispatch_assign(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	{
 		tmp = create_tmp_var_lst(elem, alloc->vars);
 		alloc->vars = tmp;
-		analyzer(elem, alloc, opt);
+		analyzer(alloc, elem, opt);
 		ft_lstdel(&tmp, &free_var);
 		alloc->vars = save;
 	}

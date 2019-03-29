@@ -38,17 +38,10 @@
 ********************************** STRUCTURES **********************************
 */
 
-typedef struct			s_exec_opt
-{
-	bool				fork;
-	bool				wait_hang;
-}						t_exec_opt;
-
 typedef struct			s_ast
 {
 	int					type;
 	int					fd[2];
-	char				*heredoc;
 	char				**input;
 	struct s_ast		*back;
 	struct s_ast		*left;
@@ -56,6 +49,7 @@ typedef struct			s_ast
 }						t_ast;
 
 struct					s_alloc;
+
 typedef int				(*t_built_fun)(t_ast *, struct s_alloc *);
 
 typedef struct			s_builtin
@@ -77,10 +71,7 @@ typedef struct			s_alloc
 	const t_builtin		*builtins;
 	t_hashtable			*exectable;
 	t_hashtable			*aliastable;
-	int					fd[10];
 }						t_alloc;
-
-typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 *********************************** CMDLINE ************************************
