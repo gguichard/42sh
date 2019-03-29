@@ -16,6 +16,8 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 		return (PR_OR);
 	else if (ft_strcmp(get_tk(lst_tk)->token, "&&") == 0)
 		return (PR_AND);
+	else if (ft_strcmp(get_tk(lst_tk)->token, "&&") == 0)
+		return (PR_AND);
 	return (PR_ERROR);
 }
 
@@ -61,7 +63,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk)
 		lst_tk = lst_tk->next;
 	}
 	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP
-			&& ft_strcmp(get_tk(lst_tk)->token, ";") != 0)
+			&& ft_strcmp(get_tk(lst_tk)->token, ";") && ft_strcmp(get_tk(lst_tk)->token, "&"))
 		return (recall_prompt_type(lst_tk));
 	else if (lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
 		return (syntax_error("newline"));
