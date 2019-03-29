@@ -33,11 +33,11 @@ static int	dispatch_redirection(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 	if (!fill_redirect_inf(&redirect_inf, elem->input))
 		return (1);
 	process_redir(&redirect_inf);
-	ret = 1;
+	ret = 0;
 	if (!setup_redirection(&redirect_inf))
-		ret = 0;
+		ret = 1;
 	clean_redirect(&redirect_inf);
-	if (ret)
+	if (ret == 0)
 		ret = analyzer(elem->left, alloc, opt);
 	return (ret);
 }
