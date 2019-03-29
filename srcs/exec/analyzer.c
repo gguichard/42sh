@@ -3,6 +3,7 @@
 #include "parser_lexer.h"
 #include "redirect_inf.h"
 #include "execution.h"
+#include "inhibitor.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -61,22 +62,25 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	if (elem == NULL)
 		return (0);
-	if (elem->type == AST_CMD_SEP)
+	else if (!inhib_expand_tab(elem, alloc))
+		return (1);
+	else if (elem->type == AST_CMD_SEP)
 	{
 		analyzer(alloc, elem->left, opt);
 		return (analyzer(alloc, elem->right, opt));
 	}
-	if (elem->type == AST_LOGIC)
-		return (dispatch_logic(alloc, elem, opt));
-	if (elem->type == AST_CMD)
-		return (dispatch_command(alloc, elem, opt));
-	if (elem->type == AST_REDIR)
-		return (dispatch_redirection(alloc, elem, opt));
-	if (elem->type == AST_PIPE)
-		return (do_pipe(alloc, elem, opt));
-	if (elem->type == AST_JOB)
+	else if (elem->type == AST_JOB)
 		return (job_control(alloc, elem, opt));
-	if (elem->type == AST_ASSIGN)
+	else if (elem->type == AST_LOGIC)
+		return (dispatch_logic(alloc, elem, opt));
+	else if (elem->type == AST_PIPE)
+		return (do_pipe(alloc, elem, opt));
+	else if (elem->type == AST_ASSIGN)
 		return (dispatch_assign(alloc, elem, opt));
-	return (1);
+	else if (elem->type == AST_CMD)
+		return (dispatch_command(alloc, elem, opt));
+	else if (elem->type == AST_REDIR)
+		return (dispatch_redirection(alloc, elem, opt));
+	else
+		return (1);
 }

@@ -73,13 +73,3 @@ int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array,
 	(*array)[1] = NULL;
 	return (1);
 }
-
-void	remove_escaped_char_select(t_str_cmd_inf *str_cmd, char **input,
-		size_t *pos_array, int opt)
-{
-	if (opt == 0)
-		remove_escaped_char(str_cmd, input, pos_array);
-	else if (opt == 1)
-		remove_escaped_char_autocomplete(str_cmd, input, pos_array);
-
-}
