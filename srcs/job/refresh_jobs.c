@@ -5,6 +5,7 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 {
 	int		ret;
 
+	ret = 0;
 	if (job->state < SIG)
 		ret = waitpid(job->pid, &job->status, WNOHANG);
 	if (job->state == RUNNING_BG && ret > 0)

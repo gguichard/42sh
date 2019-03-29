@@ -67,19 +67,11 @@ void					setup_def_vars(t_alloc *alloc)
 int						setup_alloc(t_alloc *alloc, int argc, char **argv
 		, char **environ)
 {
-	int	idx;
-
 	ft_memset(alloc, 0, sizeof(t_alloc));
 	alloc->argc = argc;
 	alloc->argv = argv;
 	alloc->vars = parse_env(environ);
 	setup_def_vars(alloc);
-	idx = 0;
-	while (idx < 10)
-	{
-		alloc->fd[idx] = -1;
-		idx++;
-	}
 	alloc->builtins = g_builtins;
 	alloc->exectable = make_exectable();
 	if (alloc->exectable == NULL)

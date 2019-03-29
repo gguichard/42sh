@@ -42,6 +42,7 @@ void		refresh_jobs(void);
 void		print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index);
 void		print_job(pid_t process, int after_signal);
 void		display_simple_job(t_list *tmp, int index, t_opts *opts);
+void		print_bg(pid_t process);
 
 void		delete_jobs_terminated(t_list *tmp);
 void		terminate_all_jobs(void);

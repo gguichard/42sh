@@ -1,6 +1,8 @@
+#include "libft.h"
 #include "shell.h"
 #include "cmdline.h"
 #include "builtins.h"
+#include "execution.h"
 #include "exectable.h"
 #include "hashtable.h"
 #include "parser_lexer.h"
@@ -8,6 +10,7 @@
 #include "split_cmd_token.h"
 #include "token_inf.h"
 #include "job.h"
+#include "error.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
@@ -20,8 +23,9 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	lst_tk = NULL;
 	ft_bzero(&exec_option, sizeof(t_exec_opt));
 	if (!scmd_init(&scmd, line))
-		ft_exit_malloc();
+		return ;
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
+	scmd_clean(&scmd);
 
 	/*
 	 **	VERIF TOKEN AND PRINT BEFORE PARSE
@@ -34,7 +38,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	tmp = tmp->next;
 	// }
 
-	sort_ast = parser(&lst_tk, alloc);
+	sort_ast = parser(lst_tk);
+	ft_lstdel(&lst_tk, del_token);
 
 	/*
 	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
@@ -47,16 +52,14 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	/*
 	 ** PRINT AST AND REINIT NODE
 	 */
-	if (sort_ast)
-		read_sort_descent(sort_ast, 0);
+	// if (sort_ast)
+	// 	read_sort_descent(sort_ast, 0);
 
 	check_exit_cmd(sort_ast);
-	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-	refresh_jobs();
+	alloc->ret_val = analyzer(alloc, sort_ast, &exec_option);
 
 	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);
-	scmd_clean(&scmd);
 }
 
 int		main(int argc, char **argv, char **environ)

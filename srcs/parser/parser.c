@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "parser_lexer.h"
-#include "error.h"
 #include "token_inf.h"
+#include "error.h"
 
 t_ast	*set_new_elem(void)
 {
@@ -11,11 +11,8 @@ t_ast	*set_new_elem(void)
 		ft_exit_malloc();
 	new->fd[0] = -1;
 	new->fd[1] = -1;
-	new->print = 0;
-	new->type = NO_TYPE;
+	new->type = AST_NO_TYPE;
 	new->input = NULL;
-	new->heredoc = NULL;
-	new->next = NULL;
 	new->back = NULL;
 	new->left = NULL;
 	new->right = NULL;
@@ -24,8 +21,11 @@ t_ast	*set_new_elem(void)
 
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
-	static char	*ope[11] = {">", ">>", "<", "<<", ">&", "<&", "&", "|",
-	"&&", "||", ";"};
+	static char	*ope[11] = {
+		">", ">>", "<", "<<",
+		">&", "<&", "&",
+		"|", "&&", "||", ";"
+	};
 	char		*str;
 	int			i;
 
@@ -34,15 +34,15 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 	while (ft_strcmp(ope[i], str) != 0 && i < 11)
 		i += 1;
 	if (i < 6)
-		elem->type = REDIR;
+		elem->type = AST_REDIR;
 	else if (i == 6)
-		elem->type = JOB;
+		elem->type = AST_JOB;
 	else if (i == 7)
-		elem->type = PIPE;
+		elem->type = AST_PIPE;
 	else if (i < 10)
-		elem->type = LOGIC;
+		elem->type = AST_LOGIC;
 	else if (i == 10)
-		elem->type = CMD_SEP;
+		elem->type = AST_CMD_SEP;
 }
 
 void	init_input(t_ast *elem, int len, t_list *lst_tk)
@@ -55,9 +55,9 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	else if (type > 3)
 		set_type(elem, lst_tk);
 	else if (type == TK_ASSIGN)
-		elem->type = ASSIGN;
+		elem->type = AST_ASSIGN;
 	else if (type == TK_CMD)
-		elem->type = CMD;
+		elem->type = AST_CMD;
 	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
 		ft_exit_malloc();
 	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
@@ -89,37 +89,36 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 	return (sort);
 }
 
-t_ast	*parser(t_list **lst_tk, t_alloc *alloc)
+t_ast	*parser(t_list *lst_tk)
 {
-	t_ast			*sort;
-	t_ast			*elem;
-	t_ast			*branch;
+	t_ast	*sort;
+	t_ast	*elem;
+	t_ast	*branch;
 
-	(void)alloc;
 	sort = NULL;
 	elem = NULL;
 	branch = NULL;
-	if (token_analyser(*lst_tk) == PR_ERROR)
+	if (token_analyser(lst_tk) == PR_ERROR)
 		return (NULL);
-	while (*lst_tk)
+	while (lst_tk != NULL)
 	{
-		branch = create_ast_branch(lst_tk);
+		branch = create_ast_branch(&lst_tk);
 		if (!sort)
 			sort = branch;
-		if (sort->type == CMD_SEP && !sort->right)
+		if (sort->type == AST_CMD_SEP && !sort->right)
 		{
 			sort->right = branch;
 			branch->back = sort;
 		}
-		else if (*lst_tk && get_tk(*lst_tk)->type == TK_CMD_SEP)
+		else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
 		{
-			elem = create_elem(lst_tk);
+			elem = create_elem(&lst_tk);
 			elem->left = sort;
 			sort->back = elem;
 			sort = elem;
 		}
-		else if (*lst_tk)
-			*lst_tk = (*lst_tk)->next;
+		else if (lst_tk != NULL)
+			lst_tk = lst_tk->next;
 	}
 	return (sort);
 }

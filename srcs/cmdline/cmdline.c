@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 11:54:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/28 15:39:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "str_cmd_inf.h"
 #include "builtins.h"
 #include "cmdline.h"
+#include "error.h"
 
 static char		*join_command(t_cmdline *cmdline, char *full_input
 		, t_prompt type)
