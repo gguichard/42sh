@@ -90,7 +90,7 @@ static int		process_ropt_redirect(t_redirect_inf *new_red
 	return ((new_red->ropt_file = ft_strdup(token)) != NULL);
 }
 
-void				del_redirect(void *content, size_t content_size)
+void			del_redirect(void *content, size_t content_size)
 {
 	(void)content_size;
 	free(((t_redirect_inf*)content)->ropt_file);
