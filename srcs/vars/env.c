@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 14:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 15:59:06 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 17:54:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char		**get_environ_from_list(t_list *env)
 	if (environ != NULL)
 	{
 		index = 0;
-		while (index < size && env != NULL)
+		while (env != NULL)
 		{
 			var = (t_var *)env->content;
 			if (var->is_env && var->value != NULL)
@@ -79,9 +79,9 @@ char		**get_environ_from_list(t_list *env)
 				environ[index] = env_key_equal_value(var);
 				if (environ[index] == NULL)
 					return (ft_strtab_free(environ));
+				index++;
 			}
 			env = env->next;
-			index++;
 		}
 		environ[index] = NULL;
 	}
