@@ -28,13 +28,18 @@ static int	dispatch_logic(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 static int	dispatch_redirection(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
 	t_redirect_inf	redirect_inf;
+	int				ret;
 
 	if (!fill_redirect_inf(&redirect_inf, elem->input))
 		return (1);
 	process_redir(&redirect_inf);
+	ret = 1;
 	if (!setup_redirection(&redirect_inf))
-		return (1);
-	return (analyzer(elem->left, alloc, opt));
+		ret = 0;
+	clean_redirect(&redirect_inf);
+	if (ret)
+		ret = analyzer(elem->left, alloc, opt);
+	return (ret);
 }
 
 static int	dispatch_command(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)

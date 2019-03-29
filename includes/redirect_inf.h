@@ -24,7 +24,7 @@ typedef struct			s_redirect_inf
 	char				*ropt_file;
 }						t_redirect_inf;
 
-void					del_redirect(void *content, size_t content_size);
+void					clean_redirect(t_redirect_inf *red_inf);
 
 /*
 ** Retourne 1 si red_inf a ete rempli correctement, 0 sinon. S'il n'a pas ete
