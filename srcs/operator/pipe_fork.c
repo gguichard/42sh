@@ -42,10 +42,10 @@ static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child
 		ret = setpgid(child, 0);
 		if (!wait_hang)
 			redirect_term_controller(child, 0);
-		first_cmd = add_pid_lst(child, elem->left, 1);
+		first_cmd = add_pid_lst(child, elem->left, 0);
 	}
 	else if (already_piped)
-		ret = add_pid_lst_pipe(first_cmd, child, elem->right, 0);
+		ret = add_pid_lst_pipe(first_cmd, child, elem->right, 1);
 	else
 		ret = add_pid_lst_pipe(first_cmd, child, elem->left, 1);
 	if (!ret)

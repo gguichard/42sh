@@ -29,8 +29,7 @@ static char		*create_cmd_job(t_ast *elem, int addpipe)
 	char	*prev;
 
 	output = 0;
-	//UPDATE: NEW AST
-	while (elem && elem->back && elem->back->type < AST_PIPE && elem->back->type > AST_CMD)
+	while (elem->back && elem->back->type == AST_ASSIGN)
 		elem = elem->back;
 	while (elem)
 	{
@@ -38,15 +37,18 @@ static char		*create_cmd_job(t_ast *elem, int addpipe)
 			return (0);
 		prev = output;
 		(!prev && addpipe) ? prev = ft_strdup("| ") : 0;
-		output = ft_strjoin(actual, prev);
+		output = ft_strjoin(prev, actual);
 		ft_memdel((void **)&prev);
 		ft_memdel((void **)&actual);
-		if (!output || elem->type == AST_CMD)
+		if (!output)
 			break ;
-		elem = elem->left;
+		//fix pour l'instant delete le if en dessous, quand apres les assign, les cmd sront a gauche
+		if (elem->back && elem->back->type == AST_ASSIGN && elem->right)
+			elem = elem->right;
+		else
+			elem = elem->left;
 	}
-	if (!elem)
-		ft_memdel((void **)&output);
+	ft_dprintf(2, "CMD = %s\n", output);
 	return (output);
 }
 
