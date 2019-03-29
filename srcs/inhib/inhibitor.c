@@ -3,6 +3,7 @@
 #include "expand.h"
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
+#include "error.h"
 
 //Permet d'inhiber d'expandre et de remove le quote
 //Return 0 en cas d'erreur;

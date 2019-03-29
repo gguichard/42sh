@@ -90,15 +90,13 @@ static int		process_ropt_redirect(t_redirect_inf *new_red
 	return ((new_red->ropt_file = ft_strdup(token)) != NULL);
 }
 
-void			del_redirect(void *content, size_t content_size)
+void			clean_redirect(t_redirect_inf *red_inf)
 {
-	(void)content_size;
-	free(((t_redirect_inf*)content)->ropt_file);
-	free(content);
+	free(red_inf->ropt_file);
 }
 
 int				fill_redirect_inf(t_redirect_inf *red_inf
-		, const char **token_tab)
+		, char **token_tab)
 {
 	size_t	idx;
 	int		ended_with_ampersand;

@@ -3,6 +3,7 @@
 #include "expand.h"
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
+#include "error.h"
 
 size_t	get_pos_in_array(char **array)
 {
@@ -82,7 +83,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
 		ft_exit_malloc();
 	modify = insert_new_tab(modify, i, new, elem);
-	delete_str_tab(elem->input);
+	ft_strtab_free(elem->input);
 	elem->input = modify;
 	*i += len_new;
 }
@@ -90,6 +91,6 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 char	**error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
 {
 	scmd_clean(str_cmd);
-	delete_str_tab(array);
+	ft_strtab_free(array);
 	return (NULL);
 }

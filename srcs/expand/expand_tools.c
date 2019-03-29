@@ -1,8 +1,10 @@
+#include "libft.h"
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
+#include "error.h"
 
 int		error_expand(const char *exp)
 {
