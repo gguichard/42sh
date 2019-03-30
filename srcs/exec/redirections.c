@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 13:51:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 15:26:54 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 15:03:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int			setup_redirection(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 	else if (redirect_inf->red_type == RD_L
 			&& !redirect_input(redirect_inf, opt))
 		return (0);
-	/*else if (redirect_inf->red_type == RD_LL
-			&& !redirect_heredoc(redirect_inf))
-		return (0);*/
+	else if (redirect_inf->red_type == RD_LL
+			&& !redirect_heredoc(redirect_inf, opt))
+		return (0);
 	else
 		return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 15:25:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 15:05:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,24 @@ int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 	}
 	if (redirect_inf->close_ropt_fd)
 		close(ropt_fd);
+	return (ret);
+}
+
+int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
+{
+	int	fildes[2];
+	int	ret;
+
+	if (pipe(fildes) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: heredoc: pipe error\n");
+		return (0);
+	}
+	ret = dup2_with_rc(opt, fildes[0], STDIN_FILENO);
+	close(fildes[0]);
+	if (ret)
+		write(fildes[1], redirect_inf->ropt_file
+				, ft_strlen(redirect_inf->ropt_file));
+	close(fildes[1]);
 	return (ret);
 }
