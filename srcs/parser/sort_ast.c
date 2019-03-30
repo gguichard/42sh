@@ -10,8 +10,8 @@ static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 	{
 		while (tmp->right && tmp->right->type > elem->type)
 			tmp = tmp->right;
-		if (elem->type == AST_REDIR)
-			while (tmp->left)
+		if (elem->type == AST_REDIR && tmp->type != AST_PIPE)
+			while (tmp->left && tmp->left->type == AST_REDIR)
 				tmp = tmp->left;
 		else if (elem->type == AST_PIPE || elem->type == AST_JOB)
 			while (tmp->right && tmp->right->type == elem->type)
