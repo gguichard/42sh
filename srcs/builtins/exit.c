@@ -76,6 +76,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	ft_putstr("exit\n");
 	terminate_all_jobs();
 	save_history_entries(alloc, &alloc->cmdline.history);
+	// TODO: clean history
 	reset_term(&alloc->cmdline);
 	del_alloc(alloc);
 	exit(status);
