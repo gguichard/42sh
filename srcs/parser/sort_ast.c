@@ -11,7 +11,7 @@ static t_ast	*get_available_node(t_ast *sort, t_ast *elem)
 		while (tmp->right && tmp->right->type > elem->type)
 			tmp = tmp->right;
 		if (elem->type == AST_REDIR)
-			while (tmp->left && tmp->left->type == AST_REDIR)
+			while (tmp->left)
 				tmp = tmp->left;
 		else if (elem->type == AST_PIPE || elem->type == AST_JOB)
 			while (tmp->right && tmp->right->type == elem->type)
@@ -92,6 +92,8 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 			(*sort)->back = tmp;
 			*sort = tmp;
 		}
+		else if (node->type == AST_ASSIGN)
+			redir_ast(node, tmp);
 		else if (tmp->type != AST_REDIR)
 			link_new_node(sort, tmp, node);
 		else if (tmp->type == AST_REDIR)
