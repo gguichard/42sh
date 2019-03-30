@@ -31,7 +31,14 @@ int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
 			*pos += 1;
 		}
 	}
-	remove_escaped_char(str_cmd, input, pos);
+	str_cmd->pos -= 1;
+	if (scmd_cur_char(str_cmd) == '"')
+	{
+		str_cmd->pos += 1;
+		remove_escaped_char(str_cmd, input, pos);
+	}
+	else
+		str_cmd->pos += 1;
 	return (1);
 }
 
