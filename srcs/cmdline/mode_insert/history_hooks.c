@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 20:21:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 20:48:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,14 @@ static void	fill_input_buffer(t_cmdline *cmdline, const char *entry)
 
 static void	load_entry_in_cmdline(t_cmdline *cmdline, const char *entry)
 {
-	static char	*ce_tcap = NULL;
-	static char	*cr_tcap = NULL;
-	static char	*do_tcap = NULL;
 	static char	*cd_tcap = NULL;
-	t_cursor	home_cursor;
 
-	if (ce_tcap == NULL)
-		ce_tcap = tgetstr("ce", NULL);
-	if (cr_tcap == NULL)
-		cr_tcap = tgetstr("cr", NULL);
-	if (do_tcap == NULL)
-		do_tcap = tgetstr("do", NULL);
 	if (cd_tcap == NULL)
 		cd_tcap = tgetstr("cd", NULL);
 	fill_input_buffer(cmdline, entry);
-	home_cursor = (t_cursor){cmdline->prompt.offset, 0};
-	go_to_cursor_pos(cmdline, home_cursor);
-	tputs(ce_tcap, 1, t_putchar);
-	tputs(cr_tcap, 1, t_putchar);
-	tputs(do_tcap, 1, t_putchar);
+	go_to_cursor_pos(cmdline, (t_cursor){0, 0});
 	tputs(cd_tcap, 1, t_putchar);
-	cmdline->cursor.x = 0;
-	cmdline->cursor.y += 1;
-	go_to_cursor_pos(cmdline, home_cursor);
-	print_cmdline(cmdline);
+	print_prompt_and_cmdline(cmdline);
 }
 
 int			handle_history_prev(t_cmdline *cmdline)

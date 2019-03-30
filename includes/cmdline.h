@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 20:05:29 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 20:56:01 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ void		go_to_cursor_pos(t_cmdline *cmdline, t_cursor cursor);
 ** INPUT/OUTPUT.
 */
 
+
+void		print_line_by_line(t_cmdline *cmdline, int off_start);
 void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
-void		print_prompt_and_cmdline(t_cmdline *cmdline);
+void		print_only_cmdline(t_cmdline *cmdline);
 
 void		update_cmdline_at_offset(t_cmdline *cmdline);
-void		print_cmdline(t_cmdline *cmdline);
+void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		add_char_to_input(t_cmdline *cmdline, char c);
 
