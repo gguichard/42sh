@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 13:44:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 18:32:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 void	reset_cmdline(t_cmdline *cmdline, const char *prompt)
 {
 	cmdline->saved_col = -1;
-	cmdline->row = 0;
 	cmdline->konami_code = 0;
 	ft_memset(cmdline->input.buffer, 0, cmdline->input.capacity);
 	cmdline->input.offset = 0;

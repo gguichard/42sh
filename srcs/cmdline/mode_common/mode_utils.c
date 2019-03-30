@@ -6,13 +6,13 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 10:11:35 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 01:45:57 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 20:03:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmdline.h"
 
-int			get_rightmost_column(t_cmdline *cmdline, int offset)
+int		get_rightmost_column(t_cmdline *cmdline, int offset)
 {
 	int	col;
 
@@ -35,13 +35,13 @@ int			get_rightmost_column(t_cmdline *cmdline, int offset)
 	}
 }
 
-t_cursor	go_to_offset(t_cmdline *cmdline, int offset)
+void	go_to_offset(t_cmdline *cmdline, int offset)
 {
 	t_cursor	cursor;
 	int			idx;
 
 	cursor.x = cmdline->prompt.offset;
-	cursor.y = cmdline->cursor.y - cmdline->row;
+	cursor.y = 0;
 	idx = 0;
 	while (idx < offset)
 	{
@@ -55,6 +55,5 @@ t_cursor	go_to_offset(t_cmdline *cmdline, int offset)
 		}
 		idx++;
 	}
-	go_to_cursor_pos(cursor);
-	return (cursor);
+	go_to_cursor_pos(cmdline, cursor);
 }
