@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 12:23:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 15:37:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 				|| !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
 		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
-				|| (analyser_ret = token_analyser(tokens)) == PR_ERROR)
+				|| (analyser_ret = token_analyser(tokens, 0)) == PR_ERROR)
 			error = (tokens == NULL ? ERRC_UNEXPECTED : ERRC_LEXERROR);
 		else
 			error = change_prompt_type(&scmd_inf, analyser_ret, &type);

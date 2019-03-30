@@ -34,7 +34,7 @@ t_ast			*parser(t_list *lst_tk);
 ********************************* PARSER TOOLS *********************************
 */
 
-t_recall_prompt	token_analyser(t_list *lst_tk);
+t_recall_prompt	token_analyser(t_list *lst_tk, int prompt_heredoc);
 
 
 /*
