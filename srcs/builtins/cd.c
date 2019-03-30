@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 14:05:26 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/03/29 12:07:42 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int				builtin_cd(t_ast *elem, t_alloc *alloc)
 	if (opts.error != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: cd: -%c: invalid option\n"
-				"cd: usage: cd [-L|-P] [dir]", opts.error);
+				"cd: usage: cd [-L|-P] [dir]\n", opts.error);
 		return (2);
 	}
 	cur_path = get_cur_path(alloc, &opts, elem->input[opts.index]);

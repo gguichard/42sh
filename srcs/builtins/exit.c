@@ -31,7 +31,7 @@ static int	check_stopped_job(void)
 
 static void	parkour_ast_for_exit(t_ast *elem, int *del)
 {
-	if (!elem || elem->type == OPERATOR)
+	if (!elem || elem->type == AST_PIPE)
 		return ;
 	if (elem->left)
 		check_exit_cmd(elem->left);
@@ -76,6 +76,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	ft_putstr("exit\n");
 	terminate_all_jobs();
 	save_history_entries(alloc, &alloc->cmdline.history);
+	// TODO: clean history
 	reset_term(&alloc->cmdline);
 	del_alloc(alloc);
 	exit(status);

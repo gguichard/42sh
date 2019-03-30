@@ -1,12 +1,12 @@
-#include "shell.h"
+#include <unistd.h>
 #include "error.h"
 
-void	exec_file_error(t_error err, char *files)
+void	exec_file_error(t_error err, char *file)
 {
-	const char	*s;
+	const char	*str;
 
-	s = error_to_str(err);
+	str = error_to_str(err);
 	if (err == ERRC_UNEXPECTED)
-		s = "malloc failed";
-	ft_dprintf(2, "42sh: %s: %s\n", files, error_to_str(err));
+		str = "malloc failed";
+	ft_dprintf(STDERR_FILENO, "42sh: %s: %s\n", file, str);
 }

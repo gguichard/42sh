@@ -1,6 +1,8 @@
 #ifndef JOB_H
 # define JOB_H
 
+# include <unistd.h>
+# include "libft.h"
 # include "shell.h"
 # include "options.h"
 
@@ -29,19 +31,22 @@ typedef struct			s_job
 ********************************** JOB CONTROL ************************************
 */
 
-t_list		*add_pid_lst(pid_t process, t_ast *elem, bool addpipe);
-int			add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, bool addpipe);
+t_list		*add_pid_lst(pid_t process, t_ast *elem, int addpipe);
+int			add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem
+		, int addpipe);
 
 int			ret_status(int ret, pid_t process, t_job *job);
 
-void		redirect_term_controller(pid_t new_controler, int type);
+void		redirect_term_controller(pid_t new_controller, int type);
 
 t_job		*get_job_pid(pid_t process);
 
 void		refresh_jobs(void);
-void		print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index);
+void		print_refreshed_jobs(t_list *tmp, int print, int stop_print
+		, int index);
 void		print_job(pid_t process, int after_signal);
 void		display_simple_job(t_list *tmp, int index, t_opts *opts);
+void		print_bg(pid_t process);
 
 void		delete_jobs_terminated(t_list *tmp);
 void		terminate_all_jobs(void);

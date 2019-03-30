@@ -5,6 +5,7 @@
 #include "vars.h"
 #include "builtins.h"
 #include "error.h"
+#include "hashtable.h"
 
 static void	display_env_vars(t_list *vars)
 {
@@ -24,24 +25,33 @@ static void	display_env_vars(t_list *vars)
 	}
 }
 
-static int	export_vars(t_list **vars, char **argv, int idx)
+static int	export_builtin_var(t_alloc *alloc, const char *key
+		, const char *value)
+{
+	t_var	*var;
+
+	if (!is_var_valid_identifier(key))
+		return (0);
+	if ((var = get_var(alloc->vars, key)) != NULL)
+		var->is_env = 1;
+	if (var == NULL || value != NULL)
+		update_var(&alloc->vars, key, value);
+	if (value != NULL && ft_strequ(key, "PATH"))
+		delete_hashentries(alloc->exectable);
+	return (1);
+}
+
+static int	export_vars(t_alloc *alloc, char **argv, int idx)
 {
 	int		ret;
 	char	*tmp;
-	t_var	*var;
 
 	ret = 0;
 	while (argv[idx] != NULL)
 	{
 		if ((tmp = ft_strchr(argv[idx], '=')) != NULL)
 			*tmp = '\0';
-		if (is_var_valid_identifier(argv[idx]))
-		{
-			if ((var = get_var(*vars, argv[idx])) != NULL)
-				var->is_env = 1;
-			update_var(vars, argv[idx], (tmp == NULL) ? NULL : tmp + 1);
-		}
-		else
+		if (!export_builtin_var(alloc, argv[idx], tmp != NULL ? tmp + 1 : NULL))
 		{
 			ret = 1;
 			ft_dprintf(STDERR_FILENO
@@ -70,5 +80,5 @@ int			builtin_export(t_ast *elem, t_alloc *alloc)
 		display_env_vars(alloc->vars);
 		return (0);
 	}
-	return (export_vars(&alloc->vars, elem->input, opts.index));
+	return (export_vars(alloc, elem->input, opts.index));
 }

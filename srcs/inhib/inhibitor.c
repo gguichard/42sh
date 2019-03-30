@@ -3,82 +3,94 @@
 #include "expand.h"
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
+#include "error.h"
 
-void	inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos_elem, char **input,
-		t_alloc *alloc)
+//Permet d'inhiber d'expandre et de remove le quote
+//Return 0 en cas d'erreur;
+int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
+			t_alloc *alloc)
 {
-	remove_escaped_char_quote(str_cmd, input, pos_elem);
+	remove_escaped_char(str_cmd, input, pos);
+	str_cmd->pos -= 1;
+	*pos -= 1;
 	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
 	{
 		if (scmd_cur_char_is_escaped(str_cmd) == 1
 				&& scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 1)
-			remove_escaped_char(str_cmd, input, pos_elem);
+			remove_escaped_char(str_cmd, input, pos);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			expand(input, alloc, pos_elem);
+			if (!expand(input, alloc, pos))
+				return (0);
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index(str_cmd);
 		}
 		else
 		{
 			scmd_move_to_next_char(str_cmd);
-			*pos_elem += 1;
+			*pos += 1;
 		}
 	}
-	remove_escaped_char(str_cmd, input, pos_elem);
+	remove_escaped_char(str_cmd, input, pos);
+	return (1);
 }
 
-void	inhib_quote(t_str_cmd_inf *str_cmd, size_t *pos_elem,
-		char **input, t_alloc *alloc)
+//Inhib et expand une string et renvoi un tableau de string ou NULL en cas d'erreur
+//si opt == 0 '\' en fin de ligne est delete
+//si opt == 1 '\' fin de ligne reste (pour autocompletion)
+char	**inhib_expand_str(const char *str, t_alloc *alloc)
 {
-	if (str_cmd->is_in_quote)
-		go_to_end_quote(str_cmd, input, pos_elem);
-	else if (str_cmd->is_in_dbquote)
-		inhib_in_db(str_cmd, pos_elem, input, alloc);
-}
+	size_t			pos_array;
+	t_str_cmd_inf	*str_cmd;
+	char			**array;
 
-int		inhib_all(t_str_cmd_inf *str_cmd, char **str, t_alloc *alloc)
-{
-	size_t	pos_elem;
-
-	pos_elem = 0;
+	pos_array = 0;
+	str_cmd = NULL;
+	array = NULL;
+	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
+		return (error_inhib_expand(str_cmd, array));
 	while (scmd_cur_char(str_cmd))
-	{
-		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
-			inhib_quote(str_cmd, &pos_elem, str, alloc);
-		else if (scmd_cur_char_is_escaped(str_cmd) == 1)
-			remove_escaped_char(str_cmd, str, &pos_elem);
-		else if (scmd_cur_char(str_cmd) == '$')
-		{
-			expand(str, alloc, &pos_elem);
-			scmd_move_to_next_char(str_cmd);
-			update_pos_index(str_cmd);
-		}
+		if ((str_cmd->is_in_quote || str_cmd->is_in_dbquote)
+				&& !(inhib_expand_in_quote(str_cmd, array, &pos_array, alloc)))
+			return (error_inhib_expand(str_cmd, array));
+		else if (scmd_cur_char_is_escaped(str_cmd))
+			remove_escaped_char(str_cmd, &array[get_pos_in_array(array)],
+				&pos_array);
+		else if (scmd_cur_char(str_cmd) == '$'
+				&& !do_expand(array, alloc, &pos_array, str_cmd))
+			return (error_inhib_expand(str_cmd, array));
 		else
-		{
-			scmd_move_to_next_char(str_cmd);
-			pos_elem += 1;
-		}
+			pos_array += scmd_move_to_next_char(str_cmd);
+	scmd_clean(str_cmd);
+	return (array);
+}
+
+//Inhib et expand chaque string du tableau contenu dans l'AST
+//Return 1 en cas de success et 0 e cas d'erreur
+int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
+{
+	int		i;
+	char	**new_array;
+
+	i = 0;
+	while (elem->input[i])
+	{
+		if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
+			return (0);
+		create_new_input(elem, &i, new_array);
 	}
 	return (1);
 }
 
-int		inhibitor(t_ast *elem, t_alloc *alloc)
+int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
+		size_t *pos, t_alloc *alloc)
 {
-	t_str_cmd_inf	*str_cmd;
-	int				i;
+	size_t	i;
 
-	i = 0;
-	str_cmd = NULL;
-	if (!(str_cmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))))
-		ft_exit_malloc();
-	while (elem->input[i])
-	{
-		if (!scmd_init(str_cmd, elem->input[i]))
-			return (0);
-		inhib_all(str_cmd, &(elem->input[i]), alloc);
-		scmd_clean(str_cmd);
-		i += 1;
-	}
+	i = get_pos_in_array(array);
+	if (str_cmd->is_in_quote)
+		return (go_to_end_quote(str_cmd, &array[i], pos));
+	else if (str_cmd->is_in_dbquote)
+			return (inhib_in_db(str_cmd, pos, &array[i], alloc));
 	return (1);
 }

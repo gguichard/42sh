@@ -24,6 +24,7 @@ PATH_TOKEN		=	token
 PATH_CMDLINE	=	cmdline
 PATH_EXPAND		=	expand
 PATH_INHIB		=	inhib
+PATH_AUTOCOMPL	=	autocomplete
 PATH_VARS		=	vars
 PATH_JOB		=	job
 
@@ -31,42 +32,41 @@ SRC_DIR	=	srcs
 SRC 	=	\
 main.c		\
 $(PATH_ERROR)/error_malloc.c \
-$(PATH_ERROR)/lexer_error.c \
-$(PATH_ERROR)/parser_error.c \
-$(PATH_ERROR)/error_redirection.c \
-$(PATH_ERROR)/error_fd.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
 $(PATH_LEXER)/replace_quote.c \
-$(PATH_LEXER)/replace_val_ret.c \
 $(PATH_LEXER)/str_cmd_inf.c \
 $(PATH_LEXER)/str_cmd_inf_utils.c \
 $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
-$(PATH_PARSER)/analyzer.c \
 $(PATH_PARSER)/token_analyzer.c \
-$(PATH_OPERATOR)/agregation.c \
-$(PATH_OPERATOR)/heredoc.c \
-$(PATH_OPERATOR)/redirection.c \
+$(PATH_PARSER)/redirect_inf.c \
+$(PATH_EXEC)/analyzer.c \
+$(PATH_EXEC)/exec_builtin.c \
+$(PATH_EXEC)/exec_input.c \
+$(PATH_EXEC)/redir_input.c \
+$(PATH_EXEC)/redir_output.c \
+$(PATH_EXEC)/redir_utils.c \
+$(PATH_EXEC)/redirections.c \
+$(PATH_EXEC)/var_assigns.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
-$(PATH_BUILT)/cd.c \
-$(PATH_BUILT)/cd_utils.c \
-$(PATH_BUILT)/echo.c \
-$(PATH_BUILT)/exec_input.c \
-$(PATH_BUILT)/exit.c \
-$(PATH_BUILT)/hash.c \
-$(PATH_BUILT)/alias.c \
-$(PATH_BUILT)/unalias.c \
 $(PATH_TOOLS)/clean_tools.c \
 $(PATH_TOOLS)/printer_ast.c \
 $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
+$(PATH_BUILT)/cd.c \
+$(PATH_BUILT)/cd_utils.c \
+$(PATH_BUILT)/echo.c \
+$(PATH_BUILT)/exit.c \
+$(PATH_BUILT)/hash.c \
+$(PATH_BUILT)/alias.c \
+$(PATH_BUILT)/unalias.c \
 $(PATH_BUILT)/bg.c \
 $(PATH_BUILT)/export.c \
 $(PATH_BUILT)/fg.c \
@@ -82,10 +82,6 @@ $(PATH_BUILT)/test/file_tests_flags.c \
 $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
-$(PATH_TOOLS)/analyzer_tools.c \
-$(PATH_TOOLS)/agreg_tools.c \
-$(PATH_TOOLS)/heredoc_tools.c \
-$(PATH_TOOLS)/redirection_tools.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \
@@ -123,14 +119,22 @@ $(PATH_CMDLINE)/mode_common/cursor_words.c \
 $(PATH_CMDLINE)/mode_common/enter_exit_visual.c \
 $(PATH_CMDLINE)/mode_common/mode_utils.c \
 $(PATH_CMDLINE)/mode_common/special_hooks.c \
+$(PATH_CMDLINE)/mode_insert/autocomplete.c \
 $(PATH_CMDLINE)/mode_insert/del_hooks.c \
 $(PATH_CMDLINE)/mode_insert/history_hooks.c \
 $(PATH_CMDLINE)/mode_insert/konami_code.c \
 $(PATH_CMDLINE)/mode_insert/misc_hooks.c \
+$(PATH_CMDLINE)/mode_insert/print_autocomplete.c \
 $(PATH_CMDLINE)/mode_insert/stop_reading.c \
 $(PATH_CMDLINE)/mode_visual/copy_paste_clipboard.c \
 $(PATH_CMDLINE)/mode_visual/select_utils.c \
 $(PATH_CMDLINE)/mode_visual/visual_utils.c \
+$(PATH_AUTOCOMPL)/autocomplete.c \
+$(PATH_AUTOCOMPL)/ac_check_for.c \
+$(PATH_AUTOCOMPL)/ac_cmdline.c \
+$(PATH_AUTOCOMPL)/ac_rdir_utils.c \
+$(PATH_AUTOCOMPL)/ac_suff_utils.c \
+$(PATH_AUTOCOMPL)/utils.c \
 $(PATH_VARS)/env.c \
 $(PATH_VARS)/shell_vars.c \
 $(PATH_VARS)/var_utils.c \
@@ -145,10 +149,10 @@ $(PATH_JOB)/redirect_terminal_control.c \
 $(PATH_JOB)/refresh_jobs.c \
 $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
-$(PATH_TOOLS)/assign_tools.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c
 
 OBJ_DIR	=	.obj
@@ -187,6 +191,7 @@ $(OBJ_DIR):
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_CMDLINE)/mode_visual 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_EXPAND) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_INHIB) 2> /dev/null || true
+	@/bin/mkdir $(OBJ_DIR)/$(PATH_AUTOCOMPL) 2> /dev/null || true
 	@/bin/mkdir $(OBJ_DIR)/$(PATH_VARS) 2> /dev/null || true
 
 clean:

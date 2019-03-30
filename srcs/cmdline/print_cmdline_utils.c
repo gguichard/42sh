@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:09:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/28 18:27:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,33 +33,24 @@ void		print_next_line_tcaps(void)
 	tputs(ce_tcap, 1, t_putchar);
 }
 
-static void	write_with_colors(const char *str)
-{
-	static int	color = 1;
-	char		*color_str;
-
-	while (*str != '\0')
-	{
-		ft_asprintf(&color_str, "\033[38;5;%dm", color);
-		if (color_str != NULL)
-		{
-			write(STDOUT_FILENO, color_str, ft_strlen(color_str));
-			free(color_str);
-		}
-		write(STDOUT_FILENO, str, 1);
-		write(STDOUT_FILENO, "\033[0m", 4);
-		color = (color % 232) + 1;
-		str++;
-	}
-}
-
 void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len)
 {
-	if (cmdline->konami_code)
-		write_with_colors(buffer);
-	else
+	static int	color = 1;
+	size_t		offset;
+
+	if (!cmdline->konami_code)
 		write(STDOUT_FILENO, buffer, len);
+	else
+	{
+		offset = 0;
+		while (offset < len)
+		{
+			ft_printf("\033[38;5;%dm%c\033[0m", color, buffer[offset]);
+			color = (color % 232) + 1;
+			offset++;
+		}
+	}
 }
 
 int			print_big_cmdline_prompt(t_cmdline *cmdline)
