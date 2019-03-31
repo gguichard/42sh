@@ -21,6 +21,7 @@ static const t_builtin	g_builtins[] = {
 	{"fg", builtin_fg},
 	{"bg", builtin_bg},
 	{"test", builtin_test},
+	{"exec", builtin_exec},
 	{NULL, NULL}
 };
 

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 15:02:07 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 20:10:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXECUTION_H
 
 # include "shell.h"
+# include "error.h"
 # include "redirect_inf.h"
 
 typedef struct	s_redirect_save
@@ -42,6 +43,9 @@ void			wait_pid(pid_t child, t_alloc *alloc, t_ast *elem
 
 int				job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 
+char			*exec_path(t_alloc *alloc, const char *name, int *hashable
+		, t_error *err);
+void			execute_cmd(t_alloc *alloc, char **argv, char *path_exec);
 int				exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 
 int				analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);

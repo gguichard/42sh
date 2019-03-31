@@ -82,6 +82,7 @@ $(PATH_BUILT)/test/file_tests_flags.c \
 $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
+$(PATH_BUILT)/exec.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \

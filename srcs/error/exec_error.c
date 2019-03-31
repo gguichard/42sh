@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include "error.h"
 
-void	exec_file_error(t_error err, char *file)
+void	exec_file_error(t_error err, const char *file)
 {
 	const char	*str;
 

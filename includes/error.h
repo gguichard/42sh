@@ -17,7 +17,7 @@ typedef enum	e_error
 }				t_error;
 
 void			ft_exit_malloc(void);
-void			exec_file_error(t_error err, char *file);
+void			exec_file_error(t_error err, const char *file);
 
 /*
 ** Free la variable var et retourne err.

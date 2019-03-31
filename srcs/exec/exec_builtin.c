@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 20:36:38 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 22:40:50 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 19:42:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static int	execute_builtin(t_alloc *alloc, t_ast *elem, t_exec_opt *opt
 
 	ret = 0;
 	new_opt = *opt;
+	if (builtin->built_fun == builtin_exec)
+		new_opt.fork = 1;
 	new_opt.from_builtin = 1;
 	if (elem->left != NULL)
 		ret = analyzer(alloc, elem->left, &new_opt);
