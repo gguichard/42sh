@@ -7,7 +7,7 @@
 
 static t_recall_prompt	syntax_error(t_token_inf *tk_error)
 {
-	if (tk_error)
+	if (tk_error != NULL)
 		ft_dprintf(STDERR_FILENO, "42sh: "
 				"syntax error near unexpected token `%s'\n", tk_error->token);
 	else
