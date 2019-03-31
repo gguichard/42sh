@@ -5,10 +5,14 @@
 #include "parser_lexer.h"
 #include "token_inf.h"
 
-static t_recall_prompt	syntax_error(const char *tk_error)
+static t_recall_prompt	syntax_error(t_token_inf *tk_error)
 {
-	ft_dprintf(STDERR_FILENO, "42sh: syntax error near unexpected token `%s'\n"
-			, tk_error);
+	if (tk_error)
+		ft_dprintf(STDERR_FILENO, "42sh: "
+				"syntax error near unexpected token `%s'\n", tk_error->token);
+	else
+		ft_dprintf(STDERR_FILENO, "42sh: "
+				"syntax error near unexpected token `newline'\n");
 	return (PR_ERROR);
 }
 
@@ -58,7 +62,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 	t_token_type	type;
 
 	if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
-		return (syntax_error(get_tk(lst_tk)->token));
+		return (syntax_error(get_tk(lst_tk)));
 	while (lst_tk != NULL && get_tk(lst_tk)->type == TK_ASSIGN)
 		lst_tk = lst_tk->next;
 	while (lst_tk != NULL && lst_tk->next != NULL)
@@ -67,11 +71,11 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 		if (type != TK_CMD_SEP && ft_strequ(get_tk(lst_tk)->token, ";"))
 			break ;
 		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
-			return (syntax_error(get_tk(lst_tk->next)->token));
+			return (syntax_error(get_tk(lst_tk->next)));
 		else if (type == TK_RED_LOPT_FD && !check_lred_opt(&lst_tk))
-			return (syntax_error(get_tk(lst_tk)->token));
+			return (syntax_error(get_tk(lst_tk)));
 		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk, prompt_heredoc))
-			return (syntax_error(get_tk(lst_tk)->token));
+			return (syntax_error(get_tk(lst_tk)));
 		lst_tk = lst_tk->next;
 	}
 	if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP
@@ -80,7 +84,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 		return (recall_prompt_type(lst_tk));
 	else if (lst_tk != NULL && lst_tk->next != NULL
 			&& get_tk(lst_tk)->type == TK_RED_OPE)
-		return (syntax_error("newline"));
+		return (syntax_error(NULL));
 	return (lst_tk == NULL
 			? PR_SUCCESS : token_analyser(lst_tk->next, prompt_heredoc));
 }
