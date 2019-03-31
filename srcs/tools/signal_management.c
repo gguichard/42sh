@@ -79,7 +79,7 @@ void	sig_block_ign(void)
 	// sigset_t			mask;
 
 	act.sa_sigaction = sig_handler;
-	act.sa_flags = SA_RESTART | SA_SIGINFO;
+	act.sa_flags = SA_SIGINFO;
 	sigaction(SIGCHLD, &act, 0);
 	// act.sa_handler = sig_int;
 	// act.sa_flags = SA_RESTART;
