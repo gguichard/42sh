@@ -2,9 +2,12 @@
 #include "parser_lexer.h"
 #include "token_inf.h"
 
-static t_recall_prompt	syntax_error(const char *tk_error)
+static t_recall_prompt	syntax_error(t_token_inf *tk_error)
 {
-	ft_dprintf(2, "42sh: syntax error near unexpected token `%s'\n", tk_error);
+	if (tk_error)
+		ft_dprintf(2, "42sh: syntax error near unexpected token `%s'\n", tk_error->token);
+	else
+		ft_dprintf(2, "42sh: syntax error near unexpected token `newline'\n");
 	return (PR_ERROR);
 }
 
@@ -46,7 +49,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk)
 	t_token_type	type;
 
 	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP)
-		return (syntax_error(get_tk(lst_tk)->token));
+		return (syntax_error(get_tk(lst_tk)));
 	while (lst_tk && get_tk(lst_tk)->type == TK_ASSIGN)
 		lst_tk = lst_tk->next;
 	while (lst_tk && lst_tk->next)
@@ -55,17 +58,17 @@ t_recall_prompt			token_analyser(t_list *lst_tk)
 		if (type != TK_CMD_SEP && ft_strcmp(get_tk(lst_tk)->token, ";") == 0)
 			break ;
 		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
-			return (syntax_error(get_tk(lst_tk->next)->token));
+			return (syntax_error(get_tk(lst_tk->next)));
 		else if (type == TK_RED_LOPT_FD && !check_lred_opt(&lst_tk))
-			return (syntax_error(get_tk(lst_tk)->token));
+			return (syntax_error(get_tk(lst_tk)));
 		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk))
-			return (syntax_error(get_tk(lst_tk)->token));
+			return (syntax_error(get_tk(lst_tk)));
 		lst_tk = lst_tk->next;
 	}
 	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP
 			&& ft_strcmp(get_tk(lst_tk)->token, ";") && ft_strcmp(get_tk(lst_tk)->token, "&"))
 		return (recall_prompt_type(lst_tk));
 	else if (lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
-		return (syntax_error("newline"));
+		return (syntax_error(NULL));
 	return ((!lst_tk) ? PR_SUCCESS : token_analyser(lst_tk->next));
 }
