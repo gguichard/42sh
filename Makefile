@@ -99,6 +99,7 @@ $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/handle_sigs.c \
+$(PATH_CMDLINE)/heredoc.c \
 $(PATH_CMDLINE)/history.c \
 $(PATH_CMDLINE)/history_events.c \
 $(PATH_CMDLINE)/history_expand.c \

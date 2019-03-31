@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 11:58:43 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 15:26:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 19:55:07 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,11 @@ static int	redirect_ropt_fd(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 			dup_ret = dup2_with_rc(opt, fd, STDERR_FILENO);
 	}
 	if (!dup_ret)
-		ft_dprintf(STDERR_FILENO, "42sh: %d: bad file descriptor\n", fd);
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: %d: bad file descriptor\n"
+				, (redirect_inf->ropt_fd == FD_NOTSET)
+				? redirect_inf->lopt_fd : redirect_inf->ropt_fd);
+	}
 	if (redirect_inf->close_ropt_fd || redirect_inf->ropt_fd == FD_NOTSET)
 		close(fd);
 	return (dup_ret);
