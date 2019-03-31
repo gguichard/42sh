@@ -4,17 +4,17 @@
 #include "execution.h"
 #include "job.h"
 
-static void	close_pipe(t_ast *elem, int already_piped)
+static void	close_pipe(t_ast *elem, int last_pipe_cmd)
 {
-	if (already_piped)
+	if (last_pipe_cmd)
 	{
-		close(elem->fd[1]);
 		close(elem->fd[0]);
+		close(elem->fd[1]);
 	}
 	else if (elem->back != NULL && elem->back->type == AST_PIPE)
 	{
-		close(elem->back->fd[1]);
 		close(elem->back->fd[0]);
+		close(elem->back->fd[1]);
 	}
 }
 
@@ -40,41 +40,42 @@ static void	kill_fg_pgid(void)
 	}
 }
 
-static void	pipe_inout(t_ast *elem, int already_piped)
+static void	setup_pipe_inout(t_ast *elem, int last_pipe_cmd)
 {
-	if (!already_piped && elem->fd[0] == -1 && elem->fd[1] == -1
+	if (!last_pipe_cmd
+			&& elem->fd[0] == -1 && elem->fd[1] == -1
 			&& pipe(elem->fd) == 0)
 	{
 		elem->left->fd[1] = elem->fd[1];
-		if (elem->right->type == AST_PIPE)
-			elem->right->left->fd[0] = elem->fd[0];
-		else
+		if (elem->right->type != AST_PIPE)
 			elem->right->fd[0] = elem->fd[0];
+		else
+			elem->right->left->fd[0] = elem->fd[0];
 	}
 }
 
 int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	int		already_piped;
+	int		last_pipe_cmd;
 	pid_t	last_child;
 
-	already_piped = 0;
+	last_pipe_cmd = 0;
 	while (elem != NULL)
 	{
-		pipe_inout(elem, already_piped);
-		if ((last_child = process_fork(alloc, elem, already_piped
+		setup_pipe_inout(elem, last_pipe_cmd);
+		if ((last_child = process_fork(alloc, elem, last_pipe_cmd
 						, opt->wait_hang)) == -1)
 		{
 			kill_fg_pgid();
 			return (1);
 		}
-		close_pipe(elem, already_piped);
+		close_pipe(elem, last_pipe_cmd);
 		if (elem->right->type == AST_PIPE)
 			elem = elem->right;
-		else if (already_piped)
+		else if (last_pipe_cmd)
 			break ;
 		else
-			already_piped = 1;
+			last_pipe_cmd = 1;
 	}
 	return (waiting_line(opt->wait_hang, 0));
 }

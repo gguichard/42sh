@@ -58,6 +58,7 @@ typedef struct			s_alloc
 	pid_t				last_bg;
 	pid_t				pid;
 	t_cmdline			cmdline;
+	char				*full_input;
 	t_ast				*ast;
 	t_list				*vars;
 	const t_builtin		*builtins;

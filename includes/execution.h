@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 17:45:44 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 22:40:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ typedef struct	s_exec_opt
 {
 	int			fork;
 	int			wait_hang;
-	int			should_save_fd;
 	t_list		*red_save;
+	int			from_builtin;
 }				t_exec_opt;
 
 void			process_assigns(t_alloc *alloc, t_ast *elem);

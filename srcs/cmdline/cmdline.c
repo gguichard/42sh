@@ -6,12 +6,12 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 15:39:54 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 12:23:22 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stdlib.h>
+#include "libft.h"
 #include "shell.h"
 #include "parser_lexer.h"
 #include "split_cmd_token.h"
@@ -75,7 +75,7 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 }
 
 static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
-		, t_rstate *state, char **full_input)
+		, t_rstate *state)
 {
 	t_error			error;
 	t_prompt		type;
@@ -90,8 +90,9 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 		*state = read_input(cmdline, get_prompt(cmdline, type));
 		if (*state != RSTATE_END)
 			break ;
-		*full_input = join_command(cmdline, *full_input, type);
-		if (*full_input == NULL || !scmd_init(&scmd_inf, *full_input))
+		alloc->full_input = join_command(cmdline, alloc->full_input, type);
+		if (alloc->full_input == NULL
+				|| !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
 		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
 				|| (analyser_ret = token_analyser(tokens)) == PR_ERROR)
@@ -107,28 +108,26 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
 	t_rstate	state;
-	char		*full_input;
 	t_error		error;
 
 	state = RSTATE_END;
-	full_input = NULL;
-	error = read_complete_command(cmdline, alloc, &state, &full_input);
+	error = read_complete_command(cmdline, alloc, &state);
 	if (state == RSTATE_END)
-		push_history_entry(&cmdline->history, full_input);
+		push_history_entry(&cmdline->history, alloc->full_input);
 	else if (state == RSTATE_ETX)
-		ft_strdel(&full_input);
+		ft_strdel(&alloc->full_input);
 	else
 	{
-		if (full_input == NULL)
-			builtin_exit(0, alloc);
+		if (alloc->full_input == NULL)
+			builtin_exit(NULL, alloc);
 		else
 		{
-			ft_strdel(&full_input);
+			ft_strdel(&alloc->full_input);
 			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");
 		}
 	}
 	cmdline->history.offset = NULL;
 	if (error != ERRC_NOERROR)
-		ft_strdel(&full_input);
-	return (full_input);
+		ft_strdel(&alloc->full_input);
+	return (alloc->full_input);
 }

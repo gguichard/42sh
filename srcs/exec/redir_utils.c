@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/29 10:46:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 15:28:33 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/29 22:34:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		use_rc_on_shell(t_exec_opt *opt)
 	{
 		red_save = (t_redirect_save *)tmp->content;
 		dup2(red_save->to_fd, red_save->original_fd);
+		close(red_save->to_fd);
 		tmp = tmp->next;
 	}
 	ft_lstdel(&opt->red_save, del_redirect_save);
@@ -43,7 +44,7 @@ int			dup2_with_rc(t_exec_opt *opt, int lopt_fd, int ropt_fd)
 	t_redirect_save	redirect_save;
 	t_list			*elem;
 
-	if (!opt->should_save_fd)
+	if (opt->fork)
 		return (dup2(lopt_fd, ropt_fd) != -1);
 	redirect_save.original_fd = ropt_fd;
 	redirect_save.to_fd = fcntl(ropt_fd, F_DUPFD, 10);
@@ -66,7 +67,7 @@ int			close_with_rc(t_exec_opt *opt, int fd)
 	t_redirect_save	redirect_save;
 	t_list			*elem;
 
-	if (!opt->should_save_fd)
+	if (opt->fork)
 		return (close(fd) != -1);
 	redirect_save.original_fd = fd;
 	redirect_save.to_fd = fcntl(fd, F_DUPFD, 10);
