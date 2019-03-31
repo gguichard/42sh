@@ -7,14 +7,13 @@
 
 //Permet d'inhiber d'expandre et de remove le quote
 //Return 0 en cas d'erreur;
-int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
+int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
 			t_alloc *alloc)
 {
 	remove_escaped_char(str_cmd, input, pos);
 	str_cmd->pos -= 1;
 	*pos -= 1;
 	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
-	{
 		if (scmd_cur_char_is_escaped(str_cmd) == 1
 				&& scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 1)
 			remove_escaped_char(str_cmd, input, pos);
@@ -30,15 +29,7 @@ int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
 			scmd_move_to_next_char(str_cmd);
 			*pos += 1;
 		}
-	}
-	str_cmd->pos -= 1;
-	if (scmd_cur_char(str_cmd) == '"')
-	{
-		str_cmd->pos += 1;
-		remove_escaped_char(str_cmd, input, pos);
-	}
-	else
-		str_cmd->pos += 1;
+	// remove_last_char(str_cmd, pos, input);
 	return (1);
 }
 
@@ -50,8 +41,6 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	size_t			pos_array;
 	t_str_cmd_inf	*str_cmd;
 	char			**array;
-
-	(void)alloc;
 
 	pos_array = 0;
 	str_cmd = NULL;
@@ -70,6 +59,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 			return (error_inhib_expand(str_cmd, array));
 		else
 			pos_array += scmd_move_to_next_char(str_cmd);
+	remove_last_char(str_cmd, &pos_array, &array[get_pos_in_array(array)]);
 	scmd_clean(str_cmd);
 	free(str_cmd);
 	return (array);
