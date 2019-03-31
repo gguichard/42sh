@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 11:13:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/31 16:00:01 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:33:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int			expand_history_events(t_history *history, char **input)
 	exp_inf.input = input;
 	while ((*exp_inf.input)[exp_inf.offset] != '\0')
 	{
-		if ((*exp_inf.input)[exp_inf.offset] == '\"')
+		if ((*exp_inf.input)[exp_inf.offset] == '\"' && !exp_inf.is_in_quote)
 			exp_inf.is_in_dbquote = !exp_inf.is_in_dbquote;
 		else if ((*exp_inf.input)[exp_inf.offset] == '\''
-				&& !is_char_escaped(&exp_inf))
+				&& !exp_inf.is_in_dbquote && !is_char_escaped(&exp_inf))
 			exp_inf.is_in_quote = !exp_inf.is_in_quote;
 		else if ((*exp_inf.input)[exp_inf.offset] == '!'
 				&& !exp_inf.is_in_quote && !is_char_escaped(&exp_inf))
