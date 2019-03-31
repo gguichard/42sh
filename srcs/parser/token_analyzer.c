@@ -82,7 +82,7 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 			&& !ft_strequ(get_tk(lst_tk)->token, ";")
 			&& !ft_strequ(get_tk(lst_tk)->token, "&"))
 		return (recall_prompt_type(lst_tk));
-	else if (lst_tk != NULL && lst_tk->next != NULL
+	else if (lst_tk != NULL && lst_tk->next == NULL
 			&& get_tk(lst_tk)->type == TK_RED_OPE)
 		return (syntax_error(NULL));
 	return (lst_tk == NULL
