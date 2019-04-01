@@ -76,8 +76,5 @@ void	wait_pid(pid_t child, t_ast *elem, t_exec_opt *opt, t_alloc *alloc)
 		redirect_term_controller(0, 1);
 	}
 	else
-	{
 		print_bg(child);
-		waitpid(child, &alloc->ret_val, WNOHANG);
-	}
 }

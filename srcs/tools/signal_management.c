@@ -11,34 +11,6 @@ void	sig_int(int sig)
 	handle_end_of_text(g_cmdline);
 }
 
-void	sig_handler(int sig, siginfo_t *info, void *uap)
-{
-	t_job	*job;
-
-	(void)uap;
-	job = get_job_allpid(info->si_pid);
-	ft_dprintf(2 ,"pid %d status %d code %d job found %d\n", info->si_pid, info->si_status, info->si_code, job != 0);
-	if (sig == SIGCHLD)
-	{
-		// ft_printf("pid %d status %d code %d job found %d\n", info->si_pid, info->si_status, info->si_code, job != 0);
-		// if (info->si_code == CLD_EXITED)
-		// {
-		// 	if (job->state != RUNNING_FG)
-		// 	{
-		// 		job->state = DONE;
-		// 		job->status = info->si_status;
-		// 		print_job(info->si_pid, 0);
-		// 	}
-		// 	job->state = DONE;
-		// 	job->status = info->si_status;
-		// }
-		if (info->si_code == CLD_STOPPED && job->state != STOPPED)
-			update_job_state(info->si_pid, STOPPED_PENDING);
-		else if (info->si_code == CLD_CONTINUED)
-			update_job_state(info->si_pid, RUNNING_BG);
-	}
-}
-
 void	sig_reset(void)
 {
 	struct sigaction	act;
@@ -75,12 +47,12 @@ void	sig_block_sig(int sig)
 
 void	sig_block_ign(void)
 {
-	struct sigaction	act;
+	// struct sigaction	act;
 	// sigset_t			mask;
 
-	act.sa_sigaction = sig_handler;
-	act.sa_flags = SA_SIGINFO;
-	sigaction(SIGCHLD, &act, 0);
+	// act.sa_sigaction = sig_handler;
+	// act.sa_flags = SA_SIGINFO | SA_RESTART;
+	// sigaction(SIGCHLD, &act, 0);
 	// act.sa_handler = sig_int;
 	// act.sa_flags = SA_RESTART;
 	// sigemptyset(&act.sa_mask);

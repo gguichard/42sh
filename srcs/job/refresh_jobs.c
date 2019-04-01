@@ -9,7 +9,7 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 	ret = 0;
 	status = 0;
 	if (job->state < SIG)
-		ret = waitpid(job->pid, &status, WNOHANG);
+		ret = waitpid(job->pid, &status, WNOHANG | WUNTRACED);
 	if (job->state == RUNNING_BG && ret > 0)
 	{
 		ret_status(status, job->pid, job);
@@ -33,6 +33,16 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 			if (job->state == STOPPED_PENDING)
 				*stop_print = 1;
 			job->state = STOPPED;
+		}
+	}
+	if (job->state == STOPPED)
+	{
+		kill(job->pid, SIGSTOP);
+		ret = waitpid(job->pid, &status, WUNTRACED | WNOHANG);
+		if (ret > 0)
+		{
+			job->state = RUNNING_BG;
+			kill(job->pid, SIGCONT);
 		}
 	}
 }
