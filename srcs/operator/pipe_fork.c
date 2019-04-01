@@ -1,18 +1,19 @@
+#include <unistd.h>
 #include <stdlib.h>
 #include "shell.h"
 #include "job.h"
 #include "execution.h"
 
-static int		process_pipe(t_alloc *alloc, t_ast *elem)
+static int		process_pipe_command(t_alloc *alloc, t_ast *elem)
 {
 	t_exec_opt	opt_new;
 
+	ft_memset(&opt_new, 0, sizeof(t_exec_opt));
 	opt_new.fork = 1;
-	opt_new.wait_hang = 0;
 	exit(analyzer(alloc, elem, &opt_new));
 }
 
-static void		redir_pipe(t_ast *elem, int type)
+static void		pipe_inout(t_ast *elem, int type)
 {
 	if (elem->fd[0] != -1)
 	{
@@ -31,48 +32,48 @@ static void		redir_pipe(t_ast *elem, int type)
 	}
 }
 
-static pid_t	add_pid_pipe(t_ast *elem, int already_piped, pid_t child
+static pid_t	add_pid_pipe(t_ast *elem, int last_pipe_cmd, pid_t child
 		, int wait_hang)
 {
-	static t_list	*first_cmd;
+	static t_list	*first_cmd = NULL;
 	int				ret;
 
-	if ((elem->back == NULL || elem->back->type != AST_PIPE) && !already_piped)
+	if ((elem->back == NULL || elem->back->type != AST_PIPE) && !last_pipe_cmd)
 	{
 		ret = setpgid(child, 0);
 		if (!wait_hang)
 			redirect_term_controller(child, 0);
-		first_cmd = add_pid_lst(child, elem->left, 1);
+		first_cmd = add_pid_lst(child, elem->left, 0);
 	}
-	else if (already_piped)
-		ret = add_pid_lst_pipe(first_cmd, child, elem->right, 0);
+	else if (last_pipe_cmd)
+	{
+		ret = add_pid_lst_pipe(first_cmd, child, elem->right, 1);
+		first_cmd = NULL;
+	}
 	else
 		ret = add_pid_lst_pipe(first_cmd, child, elem->left, 1);
-	if (!ret)
-		return (child);
-	else
-		return (-1);
+	return (ret == 0 ? child : -1);
 }
 
-pid_t			process_fork(t_alloc *alloc, t_ast *elem, int already_piped
+pid_t			process_fork(t_alloc *alloc, t_ast *elem, int last_pipe_cmd
 		, int wait_hand)
 {
 	pid_t	child;
 
 	child = fork();
 	if (child > 0)
-		child = add_pid_pipe(elem, already_piped, child, wait_hand);
+		child = add_pid_pipe(elem, last_pipe_cmd, child, wait_hand);
 	else if (child == 0)
 	{
-		if (!already_piped)
+		if (!last_pipe_cmd)
 		{
-			redir_pipe(elem->left, 1);
-			process_pipe(alloc, elem->left);
+			pipe_inout(elem->left, 1);
+			process_pipe_command(alloc, elem->left);
 		}
 		else
 		{
-			redir_pipe(elem->right, 0);
-			process_pipe(alloc, elem->right);
+			pipe_inout(elem->right, 0);
+			process_pipe_command(alloc, elem->right);
 		}
 	}
 	return (child);

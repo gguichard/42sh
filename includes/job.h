@@ -37,7 +37,7 @@ int			add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem
 
 int			ret_status(int ret, pid_t process, t_job *job);
 
-void		redirect_term_controller(pid_t new_controler, int type);
+void		redirect_term_controller(pid_t new_controller, int type);
 
 t_job		*get_job_pid(pid_t process);
 

@@ -6,10 +6,11 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 13:42:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 12:31:45 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/03/30 12:44:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <unistd.h>
 #include "shell.h"
 #include "autocomplete.h"
@@ -77,32 +78,29 @@ static void	ac_append_to_cmdline(t_cmdline *cmdline, t_ac_suff_inf *acs_inf
 
 int			handle_autocomplete(t_cmdline *cmdline)
 {
-	char			*old_char_pos;
-	char			old_char;
-	t_ac_suff_inf	*acs_inf;
+	char			*buffer;
 	int				ret;
+	t_ac_suff_inf	*acs_inf;
 	t_str_cmd_inf	scmd;
 
-	old_char_pos = cmdline->input.buffer + cmdline->input.offset;
-	old_char = *old_char_pos;
-	*old_char_pos = '\0';
-	if (!scmd_init(&scmd, cmdline->input.buffer))
+	buffer = ft_strjoin(cmdline->alloc->full_input, cmdline->input.buffer);
+	if (buffer == NULL)
+		return (0);
+	buffer[ft_strlen(buffer)
+		- (cmdline->input.size - cmdline->input.offset)] = '\0';
+	ret = scmd_init(&scmd, buffer);
+	free(buffer);
+	if (!ret || (acs_inf = autocomplete_cmdline(&scmd, cmdline->alloc)) == NULL)
 	{
-		*old_char_pos = old_char;
+		if (ret)
+			scmd_clean(&scmd);
 		return (0);
 	}
-	acs_inf = autocomplete_cmdline(&scmd, cmdline->alloc);
-	*old_char_pos = old_char;
-	if (acs_inf == NULL)
-	{
-		scmd_clean(&scmd);
-		return (0);
-	}
-	ret = 1;
 	if (acs_inf->choices == NULL)
 		ret = 0;
 	if (acs_inf->suff != NULL)
-		ac_append_to_cmdline(cmdline, acs_inf, &scmd, cmdline->input.offset == cmdline->input.size);
+		ac_append_to_cmdline(cmdline, acs_inf, &scmd
+				, cmdline->input.offset == cmdline->input.size);
 	if (acs_inf->choices != NULL && cmdline->ac_flag)
 	{
 		write(STDOUT_FILENO, "\n", 1);

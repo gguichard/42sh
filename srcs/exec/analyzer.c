@@ -52,27 +52,39 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	return (ret);
 }
 
+static int	dispatch_assign(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
+{
+	process_assigns(alloc, elem);
+	return (analyzer(alloc, elem->left, opt));
+}
+
 int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	if (elem != NULL)
+	if (elem == NULL)
 	{
-		if (!inhib_expand_tab(elem, alloc))
-			return (1);
-		if (elem->type == AST_CMD_SEP)
-		{
-			analyzer(alloc, elem->left, opt);
-			return (analyzer(alloc, elem->right, opt));
-		}
-		if (elem->type == AST_LOGIC)
-			return (dispatch_logic(alloc, elem, opt));
-		if (elem->type == AST_CMD)
-			return (dispatch_command(alloc, elem, opt));
-		if (elem->type == AST_REDIR)
-			return (dispatch_redirection(alloc, elem, opt));
-		if (elem->type == AST_PIPE)
-			return (do_pipe(alloc, elem, opt));
-		if (elem->type == AST_JOB)
-			return (job_control(alloc, elem, opt));
+		if (opt->red_save != NULL && !opt->from_builtin)
+			use_rc_on_shell(opt);
+		return (0);
 	}
-	return (0);
+	else if (!inhib_expand_tab(elem, alloc))
+		return (1);
+	else if (elem->type == AST_CMD_SEP)
+	{
+		alloc->ret_val = analyzer(alloc, elem->left, opt);
+		return (analyzer(alloc, elem->right, opt));
+	}
+	else if (elem->type == AST_JOB)
+		return (job_control(alloc, elem, opt));
+	else if (elem->type == AST_LOGIC)
+		return (dispatch_logic(alloc, elem, opt));
+	else if (elem->type == AST_PIPE)
+		return (do_pipe(alloc, elem, opt));
+	else if (elem->type == AST_ASSIGN)
+		return (dispatch_assign(alloc, elem, opt));
+	else if (elem->type == AST_CMD)
+		return (dispatch_command(alloc, elem, opt));
+	else if (elem->type == AST_REDIR)
+		return (dispatch_redirection(alloc, elem, opt));
+	else
+		return (1);
 }

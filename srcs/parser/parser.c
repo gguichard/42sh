@@ -99,7 +99,7 @@ t_ast	*parser(t_list *lst_tk)
 	sort = NULL;
 	elem = NULL;
 	branch = NULL;
-	if (token_analyser(lst_tk) == PR_ERROR)
+	if (token_analyser(lst_tk, 1) == PR_ERROR)
 		return (NULL);
 	while (lst_tk != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 15:28:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 20:10:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXECUTION_H
 
 # include "shell.h"
+# include "error.h"
 # include "redirect_inf.h"
 
 typedef struct	s_redirect_save
@@ -26,19 +27,25 @@ typedef struct	s_exec_opt
 {
 	int			fork;
 	int			wait_hang;
-	int			should_save_fd;
 	t_list		*red_save;
+	int			from_builtin;
 }				t_exec_opt;
+
+void			process_assigns(t_alloc *alloc, t_ast *elem);
 
 int				do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 pid_t			process_fork(t_alloc *alloc, t_ast *elem, int already_piped
 		, int wait_hang);
+
 int				waiting_line(int wait_hang, t_list *tmp);
 void			wait_pid(pid_t child, t_alloc *alloc, t_ast *elem
 		, t_exec_opt *opt);
 
 int				job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 
+char			*exec_path(t_alloc *alloc, const char *name, int *hashable
+		, t_error *err);
+void			execute_cmd(t_alloc *alloc, char **argv, char *path_exec);
 int				exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 
 int				analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
@@ -52,6 +59,7 @@ int				close_with_rc(t_exec_opt *opt, int fd);
 
 int				redirect_output(t_redirect_inf *redirect_inf, t_exec_opt *opt);
 int				redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt);
+int				redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt);
 
 void			process_redir(t_redirect_inf *redirect_inf);
 int				setup_redirection(t_redirect_inf *redirect_inf

@@ -50,6 +50,7 @@ $(PATH_EXEC)/redir_input.c \
 $(PATH_EXEC)/redir_output.c \
 $(PATH_EXEC)/redir_utils.c \
 $(PATH_EXEC)/redirections.c \
+$(PATH_EXEC)/var_assigns.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
@@ -81,6 +82,7 @@ $(PATH_BUILT)/test/file_tests_flags.c \
 $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
+$(PATH_BUILT)/exec.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_HASHTABLE)/exectable.c \
@@ -98,6 +100,7 @@ $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/handle_sigs.c \
+$(PATH_CMDLINE)/heredoc.c \
 $(PATH_CMDLINE)/history.c \
 $(PATH_CMDLINE)/history_events.c \
 $(PATH_CMDLINE)/history_expand.c \
