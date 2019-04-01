@@ -57,6 +57,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	// 	read_sort_descent(sort_ast, 0);
 
 	check_exit_cmd(sort_ast);
+	sig_reset();
+	set_signals_handlers_for_read();
 	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
 
 	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
@@ -91,7 +93,6 @@ int		main(int argc, char **argv, char **environ)
 					set_sigmask(SIG_BLOCK);
 					lexer_parser(input, &alloc);
 					free(input);
-					set_signals_handlers_for_read();
 				}
 			}
 		}

@@ -6,9 +6,10 @@
 
 void	handler_signals(int sig)
 {
-	close(STDIN_FILENO);
-	if (sig == SIGHUP)
-		terminate_all_jobs();
+	(void)sig;
+	// close(STDIN_FILENO);
+	// if (sig == SIGHUP)
+		// terminate_all_jobs();
 }
 
 void	handler_sigint(int sig)
@@ -45,10 +46,10 @@ void	sig_reset(void)
 	sigset_t			mask;
 	int					x;
 
-	x = 0;
+	x = 1;
 	act.sa_flags = 0;
-	act.sa_handler = SIG_DFL;
-	while (x < 31)
+	act.sa_handler = SIG_IGN;
+	while (x < 32)
 		sigaction(x++, &act, 0);
 	sigfillset(&mask);
 	sigprocmask(SIG_UNBLOCK, &mask, 0);
@@ -73,9 +74,13 @@ void	set_signals_handlers_for_read(void)
 	x = 1;
 	while (x < 32)
 	{
-		sigdelset(&act.sa_mask, x);
-		sigaction(x, &act, 0);
-		sigaddset(&act.sa_mask, x++);
+		if (x != 2 && x != 3 && x != 18 && x != 21 && x != 22 && x != 28 && x != 16 && x != 20)
+		{
+			sigdelset(&act.sa_mask, x);
+			sigaction(x, &act, 0);
+			sigaddset(&act.sa_mask, x);
+		}
+		x += 1;
 	}
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
