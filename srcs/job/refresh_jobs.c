@@ -23,7 +23,7 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 	}
 	else if (job->state == STOPPED || job->state == STOPPED_PENDING)
 	{
-		if (ret && (WIFSIGNALED(status) || WIFEXITED(status)))
+		if (ret > 0 && (WIFSIGNALED(status) || WIFEXITED(status)))
 		{
 			ret_status(status, job->pid, job);
 			*print = 1;
