@@ -23,8 +23,8 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	scmd_clean(&scmd);
 	sort_ast = parser(lst_tk);
 	ft_lstdel(&lst_tk, del_token);
-	//if (sort_ast)
-	//	read_sort_descent(sort_ast, 0);
+	// if (sort_ast)
+	// 	read_sort_descent(sort_ast, 0);
 	check_exit_cmd(sort_ast);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
 	alloc->ret_val = analyzer(alloc, sort_ast, &exec_opt);
