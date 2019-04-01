@@ -57,12 +57,6 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	char	*endptr;
 
 	status = alloc->ret_val;
-	if (check_stopped_job() && !retry_exit_job(-1))
-	{
-		ft_dprintf(STDERR_FILENO, "There are stopped jobs.\n");
-		retry_exit_job(1);
-		return (1);
-	}
 	if (elem != NULL && elem->input[1] != NULL)
 	{
 		status = ft_strtol(elem->input[1], &endptr, 10);
@@ -72,6 +66,14 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 			ft_dprintf(STDERR_FILENO, "42sh: exit: %s: "
 					"numeric argument required\n", elem->input[1]);
 		}
+	}
+	if (elem && elem->back && (elem->back->type == AST_PIPE || (elem->back->back && elem->back->back->type == AST_PIPE)))
+		exit(status);
+	if (check_stopped_job() && !retry_exit_job(-1))
+	{
+		ft_dprintf(STDERR_FILENO, "There are stopped jobs.\n");
+		retry_exit_job(1);
+		return (1);
 	}
 	ft_putstr("exit\n");
 	terminate_all_jobs();
