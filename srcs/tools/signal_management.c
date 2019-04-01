@@ -4,69 +4,87 @@
 #include "builtins.h"
 #include "cmdline.h"
 
-void	sig_int(int sig)
+void	handler_signals(int sig)
 {
+	close(STDIN_FILENO);
+	if (sig == SIGHUP)
+		terminate_all_jobs();
+}
+
+void	handler_sigint(int sig)
+{
+	t_list	*tmp;
+	t_list	*prev;
+	t_job	*job;
+
 	(void)sig;
-	ft_printf("Sigint handler\n");
-	handle_end_of_text(g_cmdline);
+	prev = 0;
+	tmp = g_jobs;
+	while (tmp)
+	{
+		job = tmp->content;
+		if (job->state == RUNNING_FG)
+			break ;
+		if (job->pipe)
+		{
+			prev = tmp;
+			tmp = job->pipe;
+		}
+		else
+			tmp = tmp->next;
+		if (!tmp && prev)
+			tmp = prev->next;
+	}
+	if (!tmp)
+		handle_end_of_text(g_cmdline);
 }
 
 void	sig_reset(void)
 {
 	struct sigaction	act;
 	sigset_t			mask;
+	int					x;
 
+	x = 0;
+	act.sa_flags = 0;
 	act.sa_handler = SIG_DFL;
-	sigaction(SIGINT, &act, 0);
-	sigaction(SIGQUIT, &act, 0);
-	sigaction(SIGTSTP, &act, 0);
+	while (x < 31)
+		sigaction(x++, &act, 0);
 	sigfillset(&mask);
-	sigdelset(&mask, SIGINT);
-	sigdelset(&mask, SIGTSTP);
-	sigdelset(&mask, SIGQUIT);
 	sigprocmask(SIG_UNBLOCK, &mask, 0);
 }
 
-void	sig_unblock_sig(int sig)
+void	set_sigmask(int type)
 {
-	sigset_t	mask;
+	sigset_t			mask;
 
-	sigemptyset(&mask);
-	sigdelset(&mask, sig);
-	sigprocmask(SIG_SETMASK, &mask, 0);
+	sigfillset(&mask);
+	sigprocmask(type, &mask, 0);
 }
 
-void	sig_block_sig(int sig)
+void	set_signals_handlers_for_read(void)
 {
-	sigset_t	mask;
+	struct sigaction	act;
+	int					x;
 
-	sigemptyset(&mask);
-	sigaddset(&mask, sig);
-	sigprocmask(SIG_SETMASK, &mask, 0);
-}
-
-void	sig_block_ign(void)
-{
-	// struct sigaction	act;
-	// sigset_t			mask;
-
-	// act.sa_sigaction = sig_handler;
-	// act.sa_flags = SA_SIGINFO | SA_RESTART;
-	// sigaction(SIGCHLD, &act, 0);
-	// act.sa_handler = sig_int;
-	// act.sa_flags = SA_RESTART;
-	// sigemptyset(&act.sa_mask);
-	// sigaddset(&act.sa_mask, SIGINT);
-	// sigaction(SIGINT, &act, 0);
-	// sigemptyset(&act.sa_mask);
-	// act.sa_handler = SIG_IGN;
-	// act.sa_flags = 0;
-	// sigaction(SIGQUIT, &act, 0);
-	// sigaction(SIGTSTP, &act, 0);
-	// sigdelset(&mask, SIGINT);
-	// sigdelset(&mask, SIGTSTP);
-	// sigdelset(&mask, SIGQUIT);
-	// sigprocmask(SIG_BLOCK, &mask, 0);
+	sigfillset(&act.sa_mask);
+	act.sa_handler = handler_signals;
+	act.sa_flags = SA_RESTART;
+	x = 1;
+	while (x < 32)
+	{
+		sigdelset(&act.sa_mask, x);
+		sigaction(x, &act, 0);
+		sigaddset(&act.sa_mask, x++);
+	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	act.sa_handler = handler_sigint;
+	sigdelset(&act.sa_mask, SIGINT);
+	sigaction(SIGINT, &act, 0);
+	set_sigmask(SIG_UNBLOCK);
 }
 
 void	sigs_wait_line(t_alloc *alloc)

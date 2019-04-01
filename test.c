@@ -1,25 +1,22 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <stdio.h>
 
 void	test(int sig)
 {
 	sig = 1;
-	write(1, "IN HANDLE\n", 10);
+	printf("In Handler sig %d\n", sig);
+	exit(0);
 }
 
 int main()
 {
 	int	proc;
+	int	x = 1;
 
-	signal(SIGCHLD, test);
-	proc = fork();
-	if (!proc)
-	{
-		sleep(50);
-		exit(0);
-	}
-	setpgid(proc, 0);
-	tcsetpgrp(0, proc);
-	waitpid(proc, 0, 0);
+	while (x < 32)
+		signal(x++, test);
+	printf("Sleep mode\n");
+	sleep(30);
 }

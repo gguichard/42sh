@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 15:58:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 15:46:48 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/01 14:07:46 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	handle_sigwinch(int sig)
 	t_cmdline	*cmdline;
 
 	(void)sig;
-	ft_printf("Sigwinch handler\n");
 	cmdline = g_cmdline;
 	go_to_offset(cmdline, 0);
 	update_winsize(cmdline);

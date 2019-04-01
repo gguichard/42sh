@@ -21,10 +21,12 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	sort_ast = NULL;
 	lst_tk = NULL;
 	ft_bzero(&exec_option, sizeof(t_exec_opt));
+	sigs_wait_line(alloc);
 	if (!scmd_init(&scmd, line))
 		return ;
+	sigs_wait_line(alloc);
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
-
+	sigs_wait_line(alloc);
 	/*
 	 **	VERIF TOKEN AND PRINT BEFORE PARSE
 	 */
@@ -38,6 +40,7 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 
 	if (!(sort_ast = parser(&lst_tk)))
 		return ;
+	sigs_wait_line(alloc);
 
 	/*
 	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
@@ -67,7 +70,7 @@ int		main(int argc, char **argv, char **environ)
 	char	*input;
 
 	g_jobs = 0;
-	sig_block_ign();
+	set_signals_handlers_for_read();
 	if (!setup_alloc(&alloc, argc, argv, environ))
 		ft_dprintf(STDERR_FILENO, "Unable to setup environment\n");
 	else
@@ -85,8 +88,10 @@ int		main(int argc, char **argv, char **environ)
 				reset_term(&alloc.cmdline);
 				if (input != NULL)
 				{
+					set_sigmask(SIG_BLOCK);
 					lexer_parser(input, &alloc);
 					free(input);
+					set_signals_handlers_for_read();
 				}
 			}
 		}
