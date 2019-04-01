@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 15:27:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/01 10:20:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define CMDLINE_H
 
 # include <string.h>
-# include <sys/ioctl.h>
 # include "struct_cmdline.h"
 
 # define INPUT_SIZE_INCR 1024
@@ -30,22 +29,20 @@ void		reset_cmdline(t_cmdline *cmdline, const char *prompt);
 int			setup_term(t_cmdline *cmdline);
 int			reset_term(t_cmdline *cmdline);
 int			update_winsize(t_cmdline *cmdline);
-int			set_cursor_pos(t_cursor *cursor);
-void		go_to_cursor_pos(t_cursor cursor);
-void		clear_after_cursor(t_cursor cursor, struct winsize winsize);
+void		go_to_cursor_pos(t_cmdline *cmdline, t_cursor cursor);
 
 /*
 ** INPUT/OUTPUT.
 */
 
+
+void		print_line_by_line(t_cmdline *cmdline, int off_start);
 void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
-void		print_next_line_tcaps(void);
-int			print_big_cmdline_prompt(t_cmdline *cmdline);
-void		print_prompt_and_cmdline(t_cmdline *cmdline);
+void		print_only_cmdline(t_cmdline *cmdline);
 
 void		update_cmdline_at_offset(t_cmdline *cmdline);
-void		print_cmdline(t_cmdline *cmdline);
+void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		add_char_to_input(t_cmdline *cmdline, char c);
 
@@ -112,8 +109,7 @@ int			handle_paste_before_key(t_cmdline *cmdline);
 */
 
 int			get_rightmost_column(t_cmdline *cmdline, int offset);
-t_cursor	go_to_offset(t_cmdline *cmdline, int offset);
-void		recompute_cursor(t_cmdline *cmdline);
+void		go_to_offset(t_cmdline *cmdline, int offset);
 
 void		update_visual_select(t_cmdline *cmdline);
 int			vm_copy(t_cmdline *cmdline, int cut_hook);

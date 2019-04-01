@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 18:27:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 20:55:46 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,18 @@
 #include <term.h>
 #include "cmdline.h"
 
-void		print_next_line_tcaps(void)
+static void	print_one_line(t_cmdline *cmdline, const char *buffer, int offset)
+{
+	static const char	*ce_tcap = NULL;
+
+	if (ce_tcap == NULL)
+		ce_tcap = tgetstr("ce", NULL);
+	if (offset > 0)
+		print_cmdline_str(cmdline, buffer, offset);
+	tputs(ce_tcap, 1, t_putchar);
+}
+
+static void	print_next_line_tcaps(void)
 {
 	static char	*cr_tcap = NULL;
 	static char	*do_tcap = NULL;
@@ -33,12 +44,48 @@ void		print_next_line_tcaps(void)
 	tputs(ce_tcap, 1, t_putchar);
 }
 
+void		print_line_by_line(t_cmdline *cmdline, int off_start)
+{
+	const char	*buffer;
+	const char	*eol;
+	int			buff_len;
+	int			offset;
+
+	buffer = cmdline->input.buffer + off_start;
+	buff_len = cmdline->input.size - off_start;
+	while (buff_len > 0)
+	{
+		eol = ft_strchr(buffer, '\n');
+		offset = (eol == NULL) ? buff_len : (eol - buffer);
+		print_one_line(cmdline, buffer, offset);
+		if (eol != NULL)
+		{
+			if (offset != 0 && cmdline->cursor.x == 0)
+				print_next_line_tcaps();
+			write(STDOUT_FILENO, "\n", 1);
+			cmdline->cursor.x = 0;
+			cmdline->cursor.y += 1;
+			offset++;
+		}
+		buffer += offset;
+		buff_len -= offset;
+	}
+}
+
 void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
-		, size_t len)
+, size_t len)
 {
 	static int	color = 1;
 	size_t		offset;
 
+	cmdline->cursor.x += len;
+	cmdline->cursor.y += cmdline->cursor.x / ft_max(1, cmdline->winsize.ws_col);
+	cmdline->cursor.x %= ft_max(1, cmdline->winsize.ws_col);
+	if (cmdline->cursor.x == 0)
+	{
+		cmdline->cursor.x = cmdline->winsize.ws_col - 1;
+		cmdline->cursor.y -= 1;
+	}
 	if (!cmdline->konami_code)
 		write(STDOUT_FILENO, buffer, len);
 	else
@@ -53,49 +100,25 @@ void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 	}
 }
 
-int			print_big_cmdline_prompt(t_cmdline *cmdline)
+void		print_only_cmdline(t_cmdline *cmdline)
 {
-	int			is_at_position;
+	t_cursor	start_cursor;
 	int			offset;
 
-	is_at_position = 0;
-	if (cmdline->row > cmdline->cursor.y)
+	start_cursor = cmdline->cursor;
+	print_line_by_line(cmdline, 0);
+	offset = 0;
+	while (offset < cmdline->input.offset)
 	{
-		go_to_cursor_pos((t_cursor){0, 0});
-		offset = 0;
-		if (cmdline->visual.toggle)
-			offset += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
-		offset += ft_max(write(STDOUT_FILENO, ">... ", 5), 0);
-		cmdline->prompt.big_offset = offset;
-		while (cmdline->cursor.y < 0)
+		if (cmdline->input.buffer[offset] != '\n'
+				&& (start_cursor.x + 1) < cmdline->winsize.ws_col)
+			start_cursor.x += 1;
+		else
 		{
-			if (!handle_cursor_down(cmdline))
-				break ;
-			is_at_position = 1;
+			start_cursor.x = 0;
+			start_cursor.y += 1;
 		}
-		if (!is_at_position)
-		{
-			is_at_position = 1;
-			go_to_cursor_pos(cmdline->cursor);
-		}
+		offset++;
 	}
-	return (is_at_position);
-}
-
-void		print_prompt_and_cmdline(t_cmdline *cmdline)
-{
-	size_t	total;
-
-	total = 0;
-	if (cmdline->visual.toggle)
-		total += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
-	total += ft_max(write(STDOUT_FILENO, cmdline->prompt.str
-				, ft_strlen(cmdline->prompt.str)), 0);
-	if (!set_cursor_pos(&cmdline->cursor))
-	{
-		cmdline->cursor.y = total / ft_max(cmdline->winsize.ws_col, 1);
-		cmdline->cursor.x = total % ft_max(cmdline->winsize.ws_col, 1);
-	}
-	cmdline->prompt.offset = cmdline->cursor.x;
-	print_cmdline(cmdline);
+	go_to_cursor_pos(cmdline, start_cursor);
 }

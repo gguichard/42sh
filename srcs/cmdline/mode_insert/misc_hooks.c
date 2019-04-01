@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 20:23:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 01:03:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 20:14:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,22 @@
 
 int	handle_clear(t_cmdline *cmdline)
 {
-	tputs(tgetstr("cl", NULL), 1, t_putchar);
+	static char	*cl_tcap = NULL;
+
+	if (cl_tcap == NULL)
+		cl_tcap = tgetstr("cl", NULL);
+	tputs(cl_tcap, 1, t_putchar);
 	print_prompt_and_cmdline(cmdline);
 	return (1);
 }
 
 int	handle_bell(t_cmdline *cmdline)
 {
+	static char	*bl_tcap = NULL;
+
+	if (bl_tcap == NULL)
+		bl_tcap = tgetstr("bl", NULL);
 	(void)cmdline;
-	tputs(tgetstr("bl", NULL), 1, t_putchar);
+	tputs(bl_tcap, 1, t_putchar);
 	return (1);
 }
