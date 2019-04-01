@@ -1,0 +1,4 @@
+TODO:
+
+	Multi tokens.
+		- Si quote non fermé faire multi tokens ou considerer comme dans quote ?!?

@@ -7,19 +7,22 @@
 
 //Permet d'inhiber d'expandre et de remove le quote
 //Return 0 en cas d'erreur;
-int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
+int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 			t_alloc *alloc)
 {
-	remove_escaped_char(str_cmd, input, pos);
+	size_t	index;
+
+	index = get_pos_in_array(array);
+	remove_escaped_char(str_cmd, &(array[index]), pos);
 	str_cmd->pos -= 1;
 	*pos -= 1;
 	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
 		if (scmd_cur_char_is_escaped(str_cmd) == 1
 				&& scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 1)
-			remove_escaped_char(str_cmd, input, pos);
+			remove_escaped_char(str_cmd, &(array[index]), pos);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			if (!expand(input, alloc, pos))
+			if (!expand(&(array[index]), alloc, pos))
 				return (0);
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index(str_cmd);
@@ -29,7 +32,9 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input,
 			scmd_move_to_next_char(str_cmd);
 			*pos += 1;
 		}
-	// remove_last_char(str_cmd, pos, input);
+	remove_last_char(str_cmd, pos, &(array[index]));
+	ft_printf("END DB: |%s|\n", scmd_cur_str(str_cmd));
+	ft_printf("INPUT: |%s|  pos= %zu|\n", array[index], *pos);
 	return (1);
 }
 
@@ -48,17 +53,25 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
 		return (error_inhib_expand(str_cmd, array));
 	while (scmd_cur_char(str_cmd))
-		if ((str_cmd->is_in_quote || str_cmd->is_in_dbquote)
-				&& !(inhib_expand_in_quote(str_cmd, array, &pos_array, alloc)))
-			return (error_inhib_expand(str_cmd, array));
+	{
+		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
+		{
+			if (!(inhib_expand_in_quote(str_cmd, array, &pos_array, alloc)))
+				return (error_inhib_expand(str_cmd, array));
+		}
 		else if (scmd_cur_char_is_escaped(str_cmd))
 			remove_escaped_char(str_cmd, &array[get_pos_in_array(array)],
 				&pos_array);
-		else if (scmd_cur_char(str_cmd) == '$'
-				&& !do_expand(array, alloc, &pos_array, str_cmd))
-			return (error_inhib_expand(str_cmd, array));
+		else if (scmd_cur_char(str_cmd) == '$')
+		{
+			printf("INIT\nPoz= %zu, str[pos]= %s\n", pos_array, &str[pos_array]);
+			if (!do_expand(&array, alloc, &pos_array, str_cmd))
+				return (error_inhib_expand(str_cmd, array));
+				printf("EMD\nPoz= %zu, str[pos]= %s\n", pos_array, &str[pos_array]);
+		}
 		else
 			pos_array += scmd_move_to_next_char(str_cmd);
+	}
 	remove_last_char(str_cmd, &pos_array, &array[get_pos_in_array(array)]);
 	scmd_clean(str_cmd);
 	free(str_cmd);
@@ -85,12 +98,12 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
 		size_t *pos, t_alloc *alloc)
 {
-	size_t	i;
+	// size_t	i;
 
-	i = get_pos_in_array(array);
+	// i = get_pos_in_array(array);
 	if (str_cmd->is_in_quote)
-		return (go_to_end_quote(str_cmd, &array[i], pos));
+		return (go_to_end_quote(str_cmd, array, pos));
 	else if (str_cmd->is_in_dbquote)
-			return (inhib_in_db(str_cmd, pos, &array[i], alloc));
+			return (inhib_in_db(str_cmd, pos, array, alloc));
 	return (1);
 }

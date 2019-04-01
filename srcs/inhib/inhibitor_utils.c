@@ -47,9 +47,12 @@ void	remove_escaped_char_autocomplete(t_str_cmd_inf *str_cmd, char **input,
 	scmd_move_to_next_char(str_cmd);
 }
 
-int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos)
+int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos)
 {
-	remove_escaped_char(str_cmd, input, pos);
+	size_t	i;
+
+	i = get_pos_in_array(array);
+	remove_escaped_char(str_cmd, &(array[i]), pos);
 	str_cmd->pos -= 1;
 	while (scmd_cur_char(str_cmd) && str_cmd->is_in_quote == 1)
 	{
@@ -64,7 +67,9 @@ int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos)
 	{
 		str_cmd->pos += 1;
 		*pos -= 1;
-		remove_escaped_char(str_cmd, input, pos);
+		remove_escaped_char(str_cmd, &(array[i]), pos);
+		str_cmd->pos -= 1;
+		*pos -= 1;
 	}
 	else
 		str_cmd->pos += 1;
@@ -96,6 +101,8 @@ void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input)
 	{
 		str_cmd->pos += 1;
 		remove_escaped_char(str_cmd, input, pos);
+		str_cmd->pos -= 1;
+		*pos -= 1;
 	}
 	else
 		str_cmd->pos += 1;
