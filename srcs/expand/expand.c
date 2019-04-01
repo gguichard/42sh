@@ -26,8 +26,6 @@ int		expand(char **input, t_alloc *alloc, size_t *pos)
 
 	exp = NULL;
 	str = NULL;
-	// printf("pos = %zu\n", *pos);
-	// printf("input: |%s|\n", *input);
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);

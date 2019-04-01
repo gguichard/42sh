@@ -16,7 +16,8 @@ int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array
 */
 
 size_t	get_pos_in_array(char **array);
-void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos);
+void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos,
+		int next);
 int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos);
 void	update_pos_index(t_str_cmd_inf *str_cmd);
 char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);
