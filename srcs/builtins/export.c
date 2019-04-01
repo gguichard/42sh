@@ -34,7 +34,7 @@ static int	export_builtin_var(t_alloc *alloc, const char *key
 		return (0);
 	if ((var = get_var(alloc->vars, key)) != NULL)
 	{
-		if (var->tmp_value != NULL)
+		if (value == NULL && var->tmp_value != NULL)
 		{
 			value = var->tmp_value;
 			var->tmp_value = NULL;

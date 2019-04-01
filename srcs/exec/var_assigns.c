@@ -11,7 +11,7 @@ static void	update_var_or_create_local(t_list **vars, const char *key
 	var = get_var(*vars, key);
 	if (var == NULL)
 		create_var(vars, key, value, is_tmp ? 2 : 0);
-	else if (is_tmp)
+	else if (is_tmp && var->is_env != 2)
 	{
 		free(var->tmp_value);
 		var->tmp_value = ft_strdup(value);

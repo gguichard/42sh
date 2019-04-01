@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/01 14:12:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/01 14:29:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,6 @@ int			create_var(t_list **lst, const char *key, const char *value
 	ft_memset(&var, 0, sizeof(t_var));
 	var.key = ft_strdup(key);
 	var.value = (value == NULL) ? NULL : ft_strdup(value);
-	if (is_env == 2)
-	{
-		var.tmp_value = var.value;
-		var.value = NULL;
-	}
 	var.is_env = is_env;
 	if (var.key != NULL && (var.value != NULL || value == NULL))
 	{
