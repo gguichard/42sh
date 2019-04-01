@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 11:47:08 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/01 14:29:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void		free_var(void *content, size_t content_size)
 	var = (t_var *)content;
 	free(var->key);
 	free(var->value);
+	free(var->tmp_value);
 	free(var);
 }
 
@@ -45,6 +46,7 @@ int			create_var(t_list **lst, const char *key, const char *value
 	t_var	var;
 	t_list	*elem;
 
+	ft_memset(&var, 0, sizeof(t_var));
 	var.key = ft_strdup(key);
 	var.value = (value == NULL) ? NULL : ft_strdup(value);
 	var.is_env = is_env;
@@ -94,11 +96,16 @@ int			unset_var(t_list **lst, const char *key)
 		var = (t_var *)curr->content;
 		if (ft_strequ(var->key, key))
 		{
-			if (prev != NULL)
-				prev->next = curr->next;
+			if (var->tmp_value != NULL)
+				ft_strdel(&var->tmp_value);
 			else
-				*lst = curr->next;
-			ft_lstdelone(&curr, &free_var);
+			{
+				if (prev != NULL)
+					prev->next = curr->next;
+				else
+					*lst = curr->next;
+				ft_lstdelone(&curr, &free_var);
+			}
 			return (1);
 		}
 		prev = curr;

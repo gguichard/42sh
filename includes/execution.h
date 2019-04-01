@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/31 20:10:51 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/01 11:25:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct	s_exec_opt
 	int			from_builtin;
 }				t_exec_opt;
 
-void			process_assigns(t_alloc *alloc, t_ast *elem);
+int				process_assigns(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 
 int				do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 pid_t			process_fork(t_alloc *alloc, t_ast *elem, int already_piped
