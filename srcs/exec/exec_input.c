@@ -88,7 +88,7 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	if ((path_exec = exec_path(alloc, elem->input[0], &hashable, &err)) == NULL)
 	{
 		exec_file_error(err, elem->input[0]);
-		return (127);
+		return (err == ERRC_CMDNOTFOUND ? 127 : 126);
 	}
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);

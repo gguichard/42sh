@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 17:53:02 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 14:12:12 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/01 13:56:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct	s_var
 	char		*key;
 	char		*value;
 	int			is_env;
+	char		*tmp_value;
 }				t_var;
 
 void			free_var(void *content, size_t content_size);
