@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 18:23:22 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/02 19:00:01 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include <termios.h>
 # include <sys/ioctl.h>
 # include "history.h"
+
+# define MODE_COMMON 0
+# define MODE_INSERT 1
+# define MODE_VISUAL 2
 
 typedef struct s_alloc	t_alloc;
 typedef struct s_list	t_list;
@@ -55,13 +59,6 @@ struct				s_input
 	t_rstate		reading;
 };
 
-typedef enum		e_seq_mode
-{
-	MODE_INSERT,
-	MODE_VISUAL,
-	MODE_COMMON
-}					t_seq_mode;
-
 typedef struct		s_seq_keys
 {
 	char			buffer[128];
@@ -73,7 +70,6 @@ struct				s_prompt
 {
 	const char		*str;
 	int				offset;
-	int				big_offset;
 };
 
 struct				s_visual
@@ -94,7 +90,6 @@ typedef struct		s_cmdline
 	struct s_visual	visual;
 	t_cursor		cursor;
 	t_seq_keys		seq_keys;
-	int				row;
 	int				saved_col;
 	int				konami_code;
 	int				stdin_dup;
@@ -105,7 +100,7 @@ typedef struct		s_cmdline
 typedef struct		s_seq
 {
 	const char		*str;
-	t_seq_mode		mode;
+	int				mode;
 	int				(*fn)(t_cmdline *cmdline);
 }					t_seq;
 

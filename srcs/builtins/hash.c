@@ -1,7 +1,8 @@
+#include <stdlib.h>
 #include <unistd.h>
-#include "shell.h"
-#include "search_exec.h"
 #include "options.h"
+#include "shell.h"
+#include "check_path.h"
 #include "exectable.h"
 #include "builtins.h"
 
@@ -72,7 +73,8 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_list *vars
 	has_error = 0;
 	while (*exec_name_tab != NULL)
 	{
-		if ((exec_path = search_exec(vars, *exec_name_tab, &error)) != NULL)
+		if ((exec_path = search_in_path(vars, *exec_name_tab, X_OK
+						, &error)) != NULL)
 		{
 			if (!set_exec_path(exectable, *exec_name_tab, exec_path, 0))
 			{

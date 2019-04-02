@@ -50,16 +50,18 @@ $(PATH_EXEC)/redir_input.c \
 $(PATH_EXEC)/redir_output.c \
 $(PATH_EXEC)/redir_utils.c \
 $(PATH_EXEC)/redirections.c \
+$(PATH_EXEC)/source_file.c \
+$(PATH_EXEC)/var_assigns.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
 $(PATH_TOOLS)/clean_tools.c \
+$(PATH_TOOLS)/home_tools.c \
 $(PATH_TOOLS)/printer_ast.c \
 $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
-$(PATH_TOOLS)/assign_tools.c \
 $(PATH_BUILT)/cd.c \
 $(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \
@@ -82,6 +84,8 @@ $(PATH_BUILT)/test/file_tests_flags.c \
 $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
+$(PATH_BUILT)/exec.c \
+$(PATH_BUILT)/source.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_TOOLS)/assign_tools.c \
@@ -94,7 +98,7 @@ $(PATH_HASHTABLE)/hashtable_delete.c \
 $(PATH_HASHTABLE)/hashtable_utils.c \
 $(PATH_PATH)/check_path.c \
 $(PATH_PATH)/convert_path_to_tab.c \
-$(PATH_PATH)/search_exec.c \
+$(PATH_PATH)/search_in_path.c \
 $(PATH_TOKEN)/token_inf.c \
 $(PATH_TOKEN)/split_cmd_token.c \
 $(PATH_TOKEN)/split_cmd_token_add.c \
@@ -102,6 +106,7 @@ $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/handle_sigs.c \
+$(PATH_CMDLINE)/heredoc.c \
 $(PATH_CMDLINE)/history.c \
 $(PATH_CMDLINE)/history_events.c \
 $(PATH_CMDLINE)/history_expand.c \
@@ -154,22 +159,28 @@ $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
+$(PATH_EXPAND)/ft_splitwhitespace.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c
 
-OBJ_DIR	=	.obj
-OBJ		=	$(SRC:.c=.o)
-DEP		=	$(OBJ:.o=.d)
+OBJ_RULE	=	OBJECTS
+OBJ_DIR		=	.obj
+OBJ			=	$(SRC:.c=.o)
+DEP			=	$(OBJ:.o=.d)
 
 all: $(NAME)
 
-$(NAME): $(addprefix $(OBJ_DIR)/,$(OBJ))
+$(NAME): $(addprefix $(SRC_DIR)/,$(SRC))
 	$(MAKE) -C libft
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $^
+	$(MAKE) $(OBJ_RULE)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $(addprefix $(OBJ_DIR)/,$(OBJ))
 	@echo "\n$(NAME):\t\t\t$(GREEN)[READY]\n\t\t¯\_(ツ)_/¯$(END)"
 
 -include $(addprefix $(OBJ_DIR)/,$(DEP))
+
+$(OBJ_RULE): $(addprefix $(OBJ_DIR)/,$(OBJ))
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -MMD -o $@ -c $<
@@ -214,5 +225,4 @@ debug: $(addprefix $(OBJ_DIR)/,$(OBJ))
 	$(MAKE) -C libft
 	$(CC) $(CFLAGS) -fsanitize=address -g $(LDFLAGS) $(LDLIBS) -o $@ $^
 
-
-.PHONY: all clean fclean
+.PHONY: all clean fclean $(OBJ_RULE)

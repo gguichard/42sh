@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 14:35:05 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 16:46:58 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 15:58:58 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,18 +86,18 @@ static t_history_entry	*replace_misc_event(t_history *history, char *event)
 	return (entry);
 }
 
-int						replace_event(t_history *history, char **input
-		, size_t *offset, char *event)
+int						replace_event(t_history *history
+		, t_hist_expand_inf *exp_inf, char *event)
 {
 	t_history_entry	*entry;
 
 	entry = replace_misc_event(history, event);
 	if (entry != NULL)
 	{
-		if (ft_strreplace_inside(input, *offset, ft_strlen(event)
-					, entry->content))
+		if (ft_strreplace_inside(exp_inf->input, exp_inf->offset
+					, ft_strlen(event), entry->content))
 		{
-			*offset += (ft_strlen(entry->content) - 1);
+			exp_inf->offset += (ft_strlen(entry->content) - 1);
 			return (1);
 		}
 	}

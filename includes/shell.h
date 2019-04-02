@@ -6,18 +6,10 @@
 */
 
 //for atom completion
-# include "../libft/includes/get_next_line.h"
 # include "../libft/includes/libft.h"
 # include "../libft/includes/printf.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <limits.h>
-# include <fcntl.h>
-# include <signal.h>
-# include <stdbool.h>
 # include "libft.h"
-# include "get_next_line.h"
 # include "cmdline.h"
 # include "hashtable.h"
 
@@ -38,17 +30,10 @@
 ********************************** STRUCTURES **********************************
 */
 
-typedef struct			s_exec_opt
-{
-	bool				fork;
-	bool				wait_hang;
-}						t_exec_opt;
-
 typedef struct			s_ast
 {
 	int					type;
 	int					fd[2];
-	char				*heredoc;
 	char				**input;
 	struct s_ast		*back;
 	struct s_ast		*left;
@@ -56,6 +41,7 @@ typedef struct			s_ast
 }						t_ast;
 
 struct					s_alloc;
+
 typedef int				(*t_built_fun)(t_ast *, struct s_alloc *);
 
 typedef struct			s_builtin
@@ -72,42 +58,41 @@ typedef struct			s_alloc
 	pid_t				last_bg;
 	pid_t				pid;
 	t_cmdline			cmdline;
+	char				*full_input;
 	t_ast				*ast;
 	t_list				*vars;
 	const t_builtin		*builtins;
 	t_hashtable			*exectable;
 	t_hashtable			*aliastable;
-	int					fd[10];
 }						t_alloc;
-
-typedef int				(*t_dispatch)(t_ast *elem, t_alloc *alloc, t_exec_opt *opt);
 
 /*
 *********************************** CMDLINE ************************************
 */
 
-int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
-char	*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
-char	*get_history_file_path(t_alloc *alloc);
-int		load_history_file_entries(t_alloc *alloc, t_history *history);
-int		save_history_entries(t_alloc *alloc, t_history *history);
+int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char		*get_history_file_path(t_alloc *alloc);
+int			load_history_file_entries(t_alloc *alloc, t_history *history);
+int			save_history_entries(t_alloc *alloc, t_history *history);
 
 /*
 ************************************ TOOLS *************************************
 */
 
+const char	*get_home_directory(t_list *vars);
 
-int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
+int			setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
 
-void	del_lst_ast(t_ast **lst);
-void	del_alloc(t_alloc *alloc);
+void		del_lst_ast(t_ast **lst);
+void		del_alloc(t_alloc *alloc);
 
 //TOOLS TO PRINT LST AST
-void	read_sort_descent(t_ast *sort, int active);
+void		read_sort_descent(t_ast *sort, int active);
 
 // CLEAN AST
-void	del_ast(t_ast **lst);
-void	del_elem_ast(t_ast **lst);
+void		del_ast(t_ast **lst);
+void		del_elem_ast(t_ast **lst);
 
 /*
 *********************************** GLOBALS ***********************************

@@ -11,7 +11,6 @@ void	del_lst_ast(t_ast **lst)
 	if (lst == NULL || tmp == NULL)
 		return ;
 	*lst = (*lst)->back;
-	ft_strdel(&tmp->heredoc);
 	ft_strtab_free(tmp->input);
 	free(tmp);
 }

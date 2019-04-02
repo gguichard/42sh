@@ -1,73 +1,51 @@
+#include <stdlib.h>
+#include "libft.h"
 #include "shell.h"
 #include "error.h"
 #include "job.h"
 
-static char		*ft_tab_to_str(char **tab)
-{
-	size_t	x;
-	size_t	y;
-	char	*out;
-
-	if (!tab)
-		return (0);
-	y = 0;
-	x = 0;
-	while (tab[y])
-		x += ft_strlen(tab[y++]) + 1;
-	if (!(out = ft_memalloc(x + 1)))
-		return (0);
-	y = 0;
-	while (tab[y])
-		ft_strcat(ft_strcat(out, tab[y++]), " ");
-	return (out);
-}
-
-static char		*create_cmd_job(t_ast *elem, bool addpipe)
+static char		*create_cmd_job(t_ast *elem, int addpipe)
 {
 	char	*output;
 	char	*actual;
 	char	*prev;
 
-	output = 0;
-	//UPDATE: NEW AST
-	while (elem && elem->back && elem->back->type < AST_PIPE && elem->back->type > AST_CMD)
+	output = NULL;
+	while (elem->back != NULL && elem->back->type == AST_ASSIGN)
 		elem = elem->back;
-	while (elem)
+	while (elem != NULL)
 	{
-		if (!(actual = ft_tab_to_str(elem->input)))
-			return (0);
+		if ((actual = ft_join(elem->input, " ")) == NULL)
+			return (NULL);
 		prev = output;
-		(!prev && addpipe == true) ? prev = ft_strdup("| ") : 0;
-		output = ft_strjoin(actual, prev);
-		ft_memdel((void **)&prev);
-		ft_memdel((void **)&actual);
-		if (!output || elem->type == AST_CMD)
+		(prev == NULL && addpipe) ? prev = ft_strdup("| ") : 0;
+		output = ft_strjoin(prev, actual);
+		ft_strdel(&prev);
+		ft_strdel(&actual);
+		if (output == NULL)
 			break ;
-		elem = elem->left;
+		//fix pour l'instant delete le if en dessous, quand apres les assign, les cmd sront a gauche
+		if (elem->back && elem->back->type == AST_ASSIGN && elem->right)
+			elem = elem->right;
+		else
+			elem = elem->left;
 	}
-	if (!elem)
-		ft_memdel((void **)&output);
 	return (output);
 }
 
-static t_job	*create_job(pid_t process, t_ast *elem, bool addpipe)
+static int		create_job(t_job *job, pid_t process, t_ast *elem, int addpipe)
 {
-	t_job	*job;
-
-	if (!(job = ft_memalloc(sizeof(t_job))))
-		return (0);
+	ft_memset(job, 0, sizeof(t_job));
 	job->pid = process;
 	job->gpid = getpgid(process);
-	if (!(job->cmd = create_cmd_job(elem, addpipe)))
-		return (0);
 	job->state = RUNNING_FG;
-	return (job);
+	return ((job->cmd = create_cmd_job(elem, addpipe)) != NULL);
 }
 
-t_list			*add_pid_lst(pid_t process, t_ast *elem, bool addpipe)
+t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 {
-	t_list		*tmp;
-	t_job		*job;
+	t_job	job;
+	t_list	*node;
 
 	tmp = 0;
 	job = 0;
@@ -83,11 +61,10 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, bool addpipe)
 	return (tmp);
 }
 
-int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, bool addpipe)
+int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, int addpipe)
 {
-	t_list	*tmp;
-	t_job	*job;
-	int		ret;
+	t_job	job;
+	t_list	*node;
 
 	tmp = 0;
 	job = 0;

@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "operator.h"
 #include "execution.h"
 #include "job.h"
 
@@ -25,21 +24,21 @@ void	print_bg(pid_t process)
 	}
 }
 
-int		job_control(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+int		job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	while (elem)
 	{
-		opt->wait_hang = true;
-		analyzer(elem->left, alloc, opt);
-		if (elem->right && elem->right->type == AST_JOB)
+		opt->wait_hang = 1;
+		analyzer(alloc, elem->left, opt);
+		if (elem->right->type == AST_JOB)
 			elem = elem->right;
 		else
 			break;
 	}
 	if (elem->right)
 	{
-		opt->wait_hang = false;
-		return (analyzer(elem->right, alloc, opt));
+		opt->wait_hang = 0;
+		return (analyzer(alloc, elem->right, opt));
 	}
 	return (0);
 }

@@ -91,11 +91,14 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 			return (1);
 	}
 	sig_reset();
-	if (!elem)
-		dup2(g_cmdline->stdin_dup, STDIN_FILENO);
 	terminate_all_jobs(SIGTERM);
 	save_history_entries(alloc, &alloc->cmdline.history);
-	reset_term(&alloc->cmdline);
+	if (elem == NULL)
+	{
+		dup2(g_cmdline->stdin_dup, STDIN_FILENO);
+		reset_term(&alloc->cmdline);
+	}
+	// TODO: clean history
 	del_alloc(alloc);
 	if (g_sig && g_sig != 15)
 		kill(0, g_sig);

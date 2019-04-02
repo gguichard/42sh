@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 11:40:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 15:50:07 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	get_redirect_input_fd(t_redirect_inf *redirect_inf)
 	return (fd);
 }
 
-int			redirect_input(t_redirect_inf *redirect_inf)
+int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
 	int	lopt_fd;
 	int	ropt_fd;
@@ -54,12 +54,31 @@ int			redirect_input(t_redirect_inf *redirect_inf)
 	ret = (lopt_fd == ropt_fd);
 	if (lopt_fd != ropt_fd)
 	{
-		ret = dup2_with_rc(redirect_inf, ropt_fd, lopt_fd);
+		ret = dup2_with_rc(opt, ropt_fd, lopt_fd);
 		if (!ret)
 			ft_dprintf(STDERR_FILENO, "42sh: %d: bad file descriptor\n"
 					, ropt_fd);
 	}
 	if (redirect_inf->close_ropt_fd)
 		close(ropt_fd);
+	return (ret);
+}
+
+int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
+{
+	int		fildes[2];
+	int		ret;
+
+	if (pipe(fildes) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: heredoc: pipe error\n");
+		return (0);
+	}
+	ret = dup2_with_rc(opt, fildes[0], STDIN_FILENO);
+	close(fildes[0]);
+	if (ret)
+		write(fildes[1], redirect_inf->ropt_file
+				, ft_strlen(redirect_inf->ropt_file));
+	close(fildes[1]);
 	return (ret);
 }

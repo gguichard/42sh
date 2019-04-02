@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 14:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/25 15:59:06 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/01 14:40:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,19 @@ t_list		*parse_env(char **environ)
 
 static char	*env_key_equal_value(t_var *var)
 {
-	size_t	key_len;
-	size_t	val_len;
-	char	*pair;
+	const char	*value;
+	size_t		key_len;
+	size_t		val_len;
+	char		*pair;
 
+	value = (var->tmp_value != NULL) ? var->tmp_value : var->value;
 	key_len = ft_strlen(var->key);
-	val_len = ft_strlen(var->value);
+	val_len = ft_strlen(value);
 	pair = (char *)malloc((key_len + val_len + 2) * sizeof(char));
 	if (pair == NULL)
 		return (NULL);
 	ft_memcpy(pair, var->key, key_len);
-	ft_memcpy(pair + key_len + 1, var->value, val_len + 1);
+	ft_memcpy(pair + key_len + 1, value, val_len + 1);
 	pair[key_len] = '=';
 	return (pair);
 }
@@ -71,17 +73,17 @@ char		**get_environ_from_list(t_list *env)
 	if (environ != NULL)
 	{
 		index = 0;
-		while (index < size && env != NULL)
+		while (env != NULL)
 		{
 			var = (t_var *)env->content;
-			if (var->is_env && var->value != NULL)
+			if (var->value != NULL && (var->is_env || var->tmp_value != NULL))
 			{
 				environ[index] = env_key_equal_value(var);
 				if (environ[index] == NULL)
 					return (ft_strtab_free(environ));
+				index++;
 			}
 			env = env->next;
-			index++;
 		}
 		environ[index] = NULL;
 	}

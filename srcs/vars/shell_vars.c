@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "vars.h"
 
-char	*get_var_value(t_list *vars, const char *key)
+const char	*get_var_value(t_list *vars, const char *key)
 {
 	t_var	*var;
 
@@ -9,7 +9,7 @@ char	*get_var_value(t_list *vars, const char *key)
 	return (var == NULL ? "" : var->value);
 }
 
-char	*get_var_for_expand(t_alloc *alloc, const char *key)
+char		*get_var_for_expand(t_alloc *alloc, const char *key)
 {
 	t_var	*var;
 	int		tmp;

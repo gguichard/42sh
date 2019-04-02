@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 11:13:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 22:02:52 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 16:40:14 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,43 +17,46 @@
 #include "history.h"
 #include "split_cmd_token.h"
 
-static int	is_char_escaped(const char *str, size_t offset)
+static int	is_char_escaped(t_hist_expand_inf *exp_inf)
 {
-	int	backslash_count;
+	int		backslash_count;
+	size_t	offset;
 
 	backslash_count = 0;
+	offset = exp_inf->offset;
 	while (offset > 0)
 	{
 		offset -= 1;
-		if (str[offset] != '\\')
+		if ((*exp_inf->input)[offset] != '\\')
 			break ;
 		backslash_count++;
 	}
 	return (backslash_count % 2 == 1);
 }
 
-static int	expand_event(t_history *history, char **input, size_t *offset)
+static int	expand_event(t_history *history, t_hist_expand_inf *exp_inf)
 {
 	size_t	len;
 	int		ret;
 	char	*event;
 
 	len = 1;
-	while ((*input)[*offset + len] != '\0'
-			&& !ft_strchr(WORD_SEP_CHARS, (*input)[*offset + len]))
+	while ((*exp_inf->input)[exp_inf->offset + len] != '\0'
+			&& !ft_strchr(WORD_SEP_CHARS
+				, (*exp_inf->input)[exp_inf->offset + len])
+			&& (!exp_inf->is_in_dbquote
+				|| (*exp_inf->input)[exp_inf->offset + len] != '\"'))
 		len++;
-	ret = 0;
+	ret = 1;
 	if (len > 1)
 	{
-		ret = 1;
-		event = ft_strsub(*input, *offset, len);
-		if (event == NULL || !replace_event(history, input, offset, event))
+		event = ft_strsub(*exp_inf->input, exp_inf->offset, len);
+		if (event != NULL && replace_event(history, exp_inf, event))
+			exp_inf->has_been_expanded = 1;
+		else
 		{
-			ret = -1;
-			if (event == NULL)
-				ft_dprintf(STDERR_FILENO, "42sh: event: unexpected error\n");
-			else
-				ft_dprintf(STDERR_FILENO, "42sh: %s: event not found\n", event);
+			ret = 0;
+			ft_dprintf(STDERR_FILENO, "42sh: %s: event not found\n", event);
 		}
 		free(event);
 	}
@@ -62,29 +65,27 @@ static int	expand_event(t_history *history, char **input, size_t *offset)
 
 int			expand_history_events(t_history *history, char **input)
 {
-	size_t	offset;
-	int		is_in_quote;
-	int		last_expand_ret;
-	int		has_been_expanded;
+	t_hist_expand_inf	exp_inf;
 
-	offset = 0;
-	is_in_quote = 0;
-	has_been_expanded = 0;
-	while ((*input)[offset] != '\0')
+	ft_memset(&exp_inf, 0, sizeof(t_hist_expand_inf));
+	exp_inf.input = input;
+	while ((*exp_inf.input)[exp_inf.offset] != '\0')
 	{
-		if ((*input)[offset] == '\'' && !is_char_escaped(*input, offset))
-			is_in_quote = !is_in_quote;
-		if ((*input)[offset] == '!' && !is_in_quote
-				&& !is_char_escaped(*input, offset))
+		if ((*exp_inf.input)[exp_inf.offset] == '\"' && !exp_inf.is_in_quote)
+			exp_inf.is_in_dbquote = !exp_inf.is_in_dbquote;
+		else if ((*exp_inf.input)[exp_inf.offset] == '\''
+				&& !exp_inf.is_in_dbquote
+				&& (exp_inf.is_in_quote || !is_char_escaped(&exp_inf)))
+			exp_inf.is_in_quote = !exp_inf.is_in_quote;
+		else if ((*exp_inf.input)[exp_inf.offset] == '!'
+				&& !exp_inf.is_in_quote && !is_char_escaped(&exp_inf))
 		{
-			if ((last_expand_ret = expand_event(history, input, &offset)) == -1)
+			if (!expand_event(history, &exp_inf))
 				return (0);
-			if (last_expand_ret == 1)
-				has_been_expanded = 1;
 		}
-		offset++;
+		exp_inf.offset++;
 	}
-	if (has_been_expanded)
-		ft_printf("%s\n", *input);
+	if (exp_inf.has_been_expanded)
+		ft_printf("%s\n", *exp_inf.input);
 	return (1);
 }

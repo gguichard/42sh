@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "split_cmd_token.h"
+#include "inhibitor.h"
 #include "str_cmd_inf.h"
 #include "token_inf.h"
 #include "autocomplete.h"
@@ -13,12 +14,11 @@
 //TODO
 //TODO EXPAND LES ENV VAR AVANT DE TENTER L'AUTOCOMPLETION (SAUF SI VAR ACTUELLE)
 //TODO
-//TODO NE PAS OUBLIER D'ECHAPPER LE RESULTAT AC_SUFF_INF, PENSER AUX \n ('') AUX = / : (\)
-//TODO ET A TOUS LES CHAR SPECIAUX (\) JE CROIS C'EST OK
-//TODO ET PENSER A CHANGER LE TYPE D'ECHAPPEMENT SELON SI DANS ' / " ETC
+//TODO GERER LE MULTILIGNE GENRE ECH\<newline>O LLLLLLLLLLLOOOOOOOOOOOOOLLLLLLLLLL
+//TODO ET AUSSI LE « LS "<newline><tab> »
 //TODO
 
-static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
+static void				fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
 	char			*new_str;
@@ -46,7 +46,7 @@ static void			fill_cur_tk_with_new_token(t_token_inf *cur_tk
 	scmd_clean(&new_scmd);
 }
 
-static size_t		get_pos_last_sub_cmd_start(t_str_cmd_inf *scmd)
+static size_t			get_pos_last_sub_cmd_start(t_str_cmd_inf *scmd)
 {
 	int		last_start_found;
 	size_t	last_sub_cmd_start_pos;
@@ -73,7 +73,7 @@ static size_t		get_pos_last_sub_cmd_start(t_str_cmd_inf *scmd)
 	return (last_sub_cmd_start_pos);
 }
 
-static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
+static void				fill_cur_tk_with_last_token(t_token_inf *cur_tk
 		, t_token_inf *last_tk, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
 	if (scmd->sub_str_cmd != NULL
@@ -93,7 +93,7 @@ static void			fill_cur_tk_with_last_token(t_token_inf *cur_tk
 	cur_tk->token = ft_strdup(last_tk->token);
 }
 
-void				set_cur_token_cmd(t_token_inf *cur_tk_cmd
+void					set_cur_token_cmd(t_token_inf *cur_tk_cmd
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
 	t_list			*tk_list;
@@ -113,7 +113,7 @@ void				set_cur_token_cmd(t_token_inf *cur_tk_cmd
 	ft_lstdel(&tk_list, del_token);
 }
 
-static int			is_valid_var_char(char var_char, size_t idx)
+static int				is_valid_var_char(char var_char, size_t idx)
 {
 	if (idx == 0)
 	{
@@ -125,7 +125,7 @@ static int			is_valid_var_char(char var_char, size_t idx)
 	}
 }
 
-static void			update_last_var_inf(t_str_cmd_inf *scmd
+static void				update_last_var_inf(t_str_cmd_inf *scmd
 		, const char **last_var_start, int *is_in_bracket)
 {
 	if (*last_var_start != NULL && !*is_in_bracket)
@@ -155,7 +155,7 @@ static void			update_last_var_inf(t_str_cmd_inf *scmd
 	}
 }
 
-static const char	*find_last_var_start(const char *str, int *is_in_bracket)
+static const char		*find_last_var_start(const char *str, int *is_in_bracket)
 {
 	t_str_cmd_inf	scmd;
 	const char		*last_var_start;
@@ -179,7 +179,7 @@ static const char	*find_last_var_start(const char *str, int *is_in_bracket)
 //NE PAS GERER LES INIHIENVBETIRS ICI
 //MAIS IHIBER CE QUI A APRES L'ASSIGN QUAND MEME APRES, EN PRENANT EN COMPOTE
 //LES IBHINNFHETEIX PRECEDENTS
-static const char	*find_last_assign_start(const char *str)
+static const char		*find_last_assign_start(const char *str)
 {
 	size_t		idx;
 	const char	*last_assign;
@@ -205,7 +205,91 @@ static const char	*find_last_assign_start(const char *str)
 	return (last_assign);
 }
 
-t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc)
+static const char		*find_last_home_user(const char *str)
+{
+	const char	*original_str;
+
+	if (str == NULL)
+		return (NULL);
+	original_str = str;
+	if (*str == '~')
+	{
+		++str;
+		while (*str != '\0')
+		{
+			if (*str == '/')
+				return (NULL);
+			++str;
+		}
+		return (original_str + 1);
+	}
+	else
+		return (NULL);
+}
+
+/*
+** Alloue et retourne une nouvelle string representant la version inhibe de
+** str. Retourne NULL en cas d'erreur.
+*/
+
+static char				*inhibe_this_str_for_autocomplete(const char *str
+		, t_alloc *alloc)
+{
+	char	**str_tab;
+	char	**tmp_tab;
+	char	*new_str;
+
+	new_str = NULL;
+	str_tab = inhib_expand_str(str, alloc);
+	tmp_tab = str_tab;
+	while (tmp_tab != NULL && *tmp_tab != NULL)
+	{
+		new_str = *tmp_tab;
+		++tmp_tab;
+	}
+	if (new_str == NULL)
+		new_str = ft_strdup(str);
+	else
+		new_str = ft_strdup(new_str);
+	ft_strtab_free(str_tab);
+	return (new_str);
+}
+
+static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
+		, t_alloc *alloc)
+{
+	const char		*real_start;
+	const char		*tmp_start;
+	char			*inhibed_str;
+	t_ac_suff_inf	*acs_inf;
+
+	real_start = (cur_tk->token == NULL ? "" : cur_tk->token);
+	tmp_start = NULL;
+	if (cur_tk->type != TK_RED_ROPT_FILE)
+	{
+		//TODO MIEUX GERER L'INHIB A CAUSE DE CA PSK IL PEUT Y AVOIR DES TOKENS D'IHNIB PLUS TOT
+		if((tmp_start = find_last_assign_start(real_start)) != NULL)
+			real_start = tmp_start;
+	}
+	if ((tmp_start = find_last_home_user(real_start)) != NULL)
+	{
+		inhibed_str = inhibe_this_str_for_autocomplete(tmp_start, alloc);
+		acs_inf = autocomplete_user(inhibed_str == NULL ? "" : inhibed_str);
+		if (acs_inf != NULL && acs_inf->suff_type == ACS_TYPE_FILE)
+			acs_inf->suff_type = ACS_TYPE_DIR;
+	}
+	else
+	{
+		inhibed_str = inhibe_this_str_for_autocomplete(real_start, alloc);
+		acs_inf = autocomplete_word(alloc->vars, (inhibed_str == NULL
+					? "" : inhibed_str), cur_tk->type == TK_CMD, alloc);
+	}
+	free(inhibed_str);
+	return (acs_inf);
+}
+
+t_ac_suff_inf			*autocomplete_cmdline(t_str_cmd_inf *scmd
+		, t_alloc *alloc)
 {
 	t_token_inf		cur_tk;
 	t_ac_suff_inf	*acs_inf;
@@ -216,12 +300,7 @@ t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc)
 	real_ac_start = find_last_var_start(cur_tk.token, &is_in_bracket);
 	if (real_ac_start == NULL)
 	{
-		real_ac_start = (cur_tk.type == TK_RED_ROPT_FILE
-				? NULL : find_last_assign_start(cur_tk.token));
-		if (real_ac_start == NULL)
-			real_ac_start = cur_tk.token;
-		acs_inf = autocomplete_word(alloc->vars, (real_ac_start == NULL ? ""
-					: real_ac_start) , cur_tk.type == TK_CMD, alloc);
+		acs_inf = autocomplete_cmdline_not_var(&cur_tk, alloc);
 	}
 	else
 	{

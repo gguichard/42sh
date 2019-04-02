@@ -1,18 +1,20 @@
+#include <stdlib.h>
+#include <signal.h>
 #include "shell.h"
-#include "operator.h"
+#include "execution.h"
 #include "job.h"
 
-static void	close_pipe(t_ast *elem, int already_piped)
+static void	close_pipe(t_ast *elem, int last_pipe_cmd)
 {
-	if (already_piped)
+	if (last_pipe_cmd)
 	{
-		close(elem->fd[1]);
 		close(elem->fd[0]);
+		close(elem->fd[1]);
 	}
-	else if (elem->back && elem->back->type == AST_PIPE)
+	else if (elem->back != NULL && elem->back->type == AST_PIPE)
 	{
-		close(elem->back->fd[1]);
 		close(elem->back->fd[0]);
+		close(elem->back->fd[1]);
 	}
 }
 
@@ -22,13 +24,13 @@ static void	kill_fg_pgid(void)
 	t_job	*job;
 
 	tmp = g_jobs;
-	while (tmp)
+	while (tmp != NULL)
 	{
 		job = tmp->content;
 		if (job->state == RUNNING_FG)
 		{
 			kill(job->pid, SIGKILL);
-			waitpid(job->pid, 0, WNOHANG);
+			waitpid(job->pid, NULL, WNOHANG);
 			job->state = DONE;
 			if (job->pipe)
 				tmp = job->pipe;
@@ -38,42 +40,42 @@ static void	kill_fg_pgid(void)
 	}
 }
 
-static void	set_connection(t_ast *elem, int already_piped)
+static void	setup_pipe_inout(t_ast *elem, int last_pipe_cmd)
 {
-	if (!already_piped && elem->fd[0] == -1 && elem->fd[1] == -1 && !pipe(elem->fd))
+	if (!last_pipe_cmd
+			&& elem->fd[0] == -1 && elem->fd[1] == -1
+			&& pipe(elem->fd) == 0)
 	{
-		if (elem->right->type == AST_PIPE)
-			elem->right->left->fd[0] = elem->fd[0];
-		else
-			elem->right->fd[0] = elem->fd[0];
 		elem->left->fd[1] = elem->fd[1];
+		if (elem->right->type != AST_PIPE)
+			elem->right->fd[0] = elem->fd[0];
+		else
+			elem->right->left->fd[0] = elem->fd[0];
 	}
 }
 
-int			do_pipe(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	int		already_piped;
+	int		last_pipe_cmd;
 	pid_t	last_child;
 
-	already_piped = 0;
-	while (elem)
+	last_pipe_cmd = 0;
+	while (elem != NULL)
 	{
-		set_connection(elem, already_piped);
-		if ((last_child = process_fork(elem, alloc, already_piped, opt->wait_hang)) == -1)
-			break ;
-		close_pipe(elem, already_piped);
-		if (elem->right->type != AST_PIPE)
+		setup_pipe_inout(elem, last_pipe_cmd);
+		if ((last_child = process_fork(alloc, elem, last_pipe_cmd
+						, opt->wait_hang)) == -1)
 		{
-			if (already_piped)
-				break ;
-			already_piped = 1;
+			kill_fg_pgid();
+			return (1);
 		}
-		else
+		close_pipe(elem, last_pipe_cmd);
+		if (elem->right->type == AST_PIPE)
 			elem = elem->right;
+		else if (last_pipe_cmd)
+			break ;
+		else
+			last_pipe_cmd = 1;
 	}
-	if (last_child == -1)
-		kill_fg_pgid();
-	else
-		return (waiting_line(opt->wait_hang, 0));
-	return (1);
+	return (waiting_line(opt->wait_hang, 0));
 }

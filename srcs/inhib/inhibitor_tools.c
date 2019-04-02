@@ -84,13 +84,15 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 		ft_exit_malloc();
 	modify = insert_new_tab(modify, i, new, elem);
 	ft_strtab_free(elem->input);
+	ft_strtab_free(new);
 	elem->input = modify;
 	*i += len_new;
 }
 
-char	**error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
+int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
 {
 	scmd_clean(str_cmd);
+	free(str_cmd);
 	ft_strtab_free(array);
-	return (NULL);
+	return (0);
 }
