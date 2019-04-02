@@ -7,6 +7,8 @@
 # define FT_DIR		2
 # define FT_ANY		3
 
+char		*join_path(const char *left_path, const char *right_path);
+
 /*
 ** Retourne ERRC_NOERROR (qui vaut 0) si le chemin pointe vers
 ** un dossier valide pour cd et a les droits demandes, ou

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 12:07:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:24:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,59 @@ static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
 	return (ft_strdup(var->value));
 }
 
+static char		*search_in_cd_path(t_alloc *alloc, const char *path
+		, const char *pwd)
+{
+	t_var	*var;
+	char	*tmp;
+	char	*cd_path;
+	char	*next_sep;
+	char	*full_path;
+
+	if ((var = get_var(alloc->vars, "CDPATH")) == NULL
+			|| var->value == NULL || (tmp = ft_strdup(var->value)) == NULL)
+		return (NULL);
+	cd_path = tmp;
+	full_path = NULL;
+	while (1)
+	{
+		if ((next_sep = ft_strchr(cd_path, ':')) != NULL)
+			*next_sep = '\0';
+		full_path = join_path((ft_strequ(cd_path, ".") ? pwd : cd_path), path);
+		if (full_path && check_dir_rights(full_path, X_OK) == ERRC_NOERROR)
+			break ;
+		ft_strdel(&full_path);
+		if (next_sep == NULL)
+			break ;
+		cd_path = next_sep + 1;
+	}
+	free(tmp);
+	return (full_path);
+}
+
 static char		*get_new_cur_path(t_alloc *alloc, const char *cur_path)
 {
 	char	*pwd;
-	size_t	pwd_len;
-	size_t	cur_len;
 	char	*new_path;
 
 	if (cur_path[0] == '/')
 		new_path = ft_strdup(cur_path);
 	else
 	{
+		new_path = NULL;
 		pwd = get_path_or_cwd(alloc, "PWD");
-		pwd_len = (pwd == NULL) ? 0 : ft_strlen(pwd);
-		if (pwd_len > 0 && pwd[pwd_len - 1] == '/')
-			pwd_len -= 1;
-		cur_len = ft_strlen(cur_path);
-		new_path = (char *)malloc((pwd_len + cur_len + 2) * sizeof(char));
+		if (!ft_strequ(cur_path, ".")
+				&& !ft_strequ(cur_path, "..")
+				&& !ft_strnequ(cur_path, "./", 2)
+				&& !ft_strnequ(cur_path, "../", 3))
+			new_path = search_in_cd_path(alloc, cur_path, pwd);
 		if (new_path != NULL)
+			ft_printf("%s\n", new_path);
+		else
 		{
-			if (pwd != NULL)
-				ft_memcpy(new_path, pwd, pwd_len);
-			new_path[pwd_len] = '/';
-			ft_memcpy(new_path + pwd_len + 1, cur_path, cur_len + 1);
+			new_path = join_path(pwd, cur_path);
+			free(pwd);
 		}
-		free(pwd);
 	}
 	return (new_path);
 }
