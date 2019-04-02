@@ -14,6 +14,9 @@
 //TODO
 //TODO EXPAND LES ENV VAR AVANT DE TENTER L'AUTOCOMPLETION (SAUF SI VAR ACTUELLE)
 //TODO
+//TODO GERER LE MULTILIGNE GENRE ECH\<newline>O LLLLLLLLLLLOOOOOOOOOOOOOLLLLLLLLLL
+//TODO ET AUSSI LE « LS "<newline><tab> »
+//TODO
 
 static void				fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
