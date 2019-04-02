@@ -7,16 +7,15 @@
 #include "error.h"
 #include "hashtable.h"
 #include "exectable.h"
-#include "search_exec.h"
 #include "check_path.h"
 #include "execution.h"
 
-static char			*srch_exec(t_list *vars, const char *name, int *hashable
+static char			*search_exec(t_list *vars, const char *name, int *hashable
 		, t_error *err)
 {
 	char	*path;
 
-	path = search_exec(vars, name, err);
+	path = search_in_path(vars, name, X_OK, err);
 	if (*err != ERRC_NOERROR)
 	{
 		ft_strdel(&path);
@@ -48,7 +47,7 @@ char				*exec_path(t_alloc *alloc, const char *name, int *hashable
 		if ((alias = get_exec_path(alloc->exectable, name, 1)) != NULL)
 			path_exec = ft_strdup(check_right_alias(alias, err));
 		else
-			path_exec = srch_exec(alloc->vars, name, hashable, err);
+			path_exec = search_exec(alloc->vars, name, hashable, err);
 	}
 	else
 	{
@@ -88,7 +87,7 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	if ((path_exec = exec_path(alloc, elem->input[0], &hashable, &err)) == NULL)
 	{
 		exec_file_error(err, elem->input[0]);
-		return (err == ERRC_CMDNOTFOUND ? 127 : 126);
+		return (err == ERRC_FILENOTFOUND ? 127 : 126);
 	}
 	if (hashable == 1)
 		set_exec_path(alloc->exectable, elem->input[0], path_exec, 1);
