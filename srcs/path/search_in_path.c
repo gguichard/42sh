@@ -4,36 +4,35 @@
 #include "shell.h"
 #include "convert_path_to_tab.h"
 #include "check_path.h"
-#include "search_exec.h"
 
-static char		*get_binary_path(const char *path, const char *binary)
+static char		*get_file_path(const char *path, const char *file)
 {
 	size_t	path_len;
-	size_t	binary_len;
+	size_t	file_len;
 	char	*file_path;
 
 	path_len = ft_strlen(path);
-	binary_len = ft_strlen(binary);
-	file_path = (char *)malloc(path_len + binary_len + 2);
+	file_len = ft_strlen(file);
+	file_path = (char *)malloc(path_len + file_len + 2);
 	if (file_path == NULL)
 		return (NULL);
 	ft_memcpy(file_path, path, path_len);
 	file_path[path_len] = '/';
-	ft_memcpy(&(file_path[path_len + 1]), binary, binary_len + 1);
+	ft_memcpy(&(file_path[path_len + 1]), file, file_len + 1);
 	return (file_path);
 }
 
-static t_error	check_is_valid_path(const char *file_path)
+static t_error	check_is_valid_path(const char *file_path, int rights)
 {
 	t_error	error;
 
-	error = check_file_rights(file_path, FT_FILE, X_OK);
+	error = check_file_rights(file_path, FT_FILE, rights);
 	if (error != ERRC_NOERROR && error != ERRC_UNEXPECTED)
-		error = ERRC_CMDNOTFOUND;
+		error = ERRC_FILENOTFOUND;
 	return (error);
 }
 
-char			*search_exec(t_list *vars, const char *exec_name
+char			*search_in_path(t_list *vars, const char *file_name, int rights
 		, t_error *error)
 {
 	char	*file_path;
@@ -41,19 +40,18 @@ char			*search_exec(t_list *vars, const char *exec_name
 	size_t	index;
 
 	file_path = NULL;
-	*error = ERRC_CMDNOTFOUND;
+	*error = ERRC_FILENOTFOUND;
 	if ((path_tab = convert_path_to_tab(vars)) != NULL)
 	{
 		index = -1;
 		while (path_tab[++index] != NULL)
 		{
-			if ((file_path = get_binary_path(path_tab[index], exec_name))
-					== NULL)
+			if ((file_path = get_file_path(path_tab[index], file_name)) == NULL)
 			{
 				*error = ERRC_UNEXPECTED;
 				break ;
 			}
-			*error = check_is_valid_path(file_path);
+			*error = check_is_valid_path(file_path, rights);
 			if (*error == ERRC_NOERROR)
 				break ;
 			ft_strdel(&file_path);

@@ -5,26 +5,6 @@
 #include "str_cmd_inf.h"
 #include "error.h"
 
-void	remove_last_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos,
-		size_t index)
-{
-	str_cmd->pos -= 1;
-	if ((scmd_cur_char(str_cmd) == '\"'
-			&& !scmd_cur_char_is_escaped(str_cmd))
-			|| (scmd_cur_char(str_cmd) == '\\' && !str_cmd->is_in_quote
-			&& !str_cmd->is_in_dbquote))
-	{
-		str_cmd->pos += 1;
-		remove_escaped_char(str_cmd, &(array[index]), pos, 0);
-		*pos -= 1;
-	}
-	else
-	{
-		str_cmd->pos += 1;
-		*pos += 1;
-	}
-}
-
 int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 			t_alloc *alloc)
 {
@@ -109,15 +89,5 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 			return (0);
 		create_new_input(elem, &i, new_array);
 	}
-	return (1);
-}
-
-int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
-		size_t *pos, t_alloc *alloc)
-{
-	if (str_cmd->is_in_quote)
-		return (go_to_end_quote(str_cmd, array, pos));
-	else if (str_cmd->is_in_dbquote)
-		return (inhib_in_db(str_cmd, pos, array, alloc));
 	return (1);
 }

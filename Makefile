@@ -92,7 +92,7 @@ $(PATH_HASHTABLE)/hashtable_delete.c \
 $(PATH_HASHTABLE)/hashtable_utils.c \
 $(PATH_PATH)/check_path.c \
 $(PATH_PATH)/convert_path_to_tab.c \
-$(PATH_PATH)/search_exec.c \
+$(PATH_PATH)/search_in_path.c \
 $(PATH_TOKEN)/token_inf.c \
 $(PATH_TOKEN)/split_cmd_token.c \
 $(PATH_TOKEN)/split_cmd_token_add.c \
@@ -155,6 +155,7 @@ $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/ft_splitwhitespace.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c
 
