@@ -29,9 +29,9 @@ int		expand(char **input, t_alloc *alloc, size_t *pos)
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
-	if ((*input)[*pos + 1] == '{' && str)
+	if (str && (*input)[*pos + 1] == '{' && str)
 		ft_strreplace_inside(input, *pos, len + 3, str);
-	else if (!ft_isalnum(exp[1]) && exp[1] != '_' && exp[1] != '?'
+	else if (str && !ft_isalnum(exp[1]) && exp[1] != '_' && exp[1] != '?'
 			&& exp[1] != '!' && exp[1] != '\'' && exp[1] != '"' && exp[1] != '$')
 	{
 		*pos += 1;

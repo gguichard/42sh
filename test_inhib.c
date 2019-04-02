@@ -14,7 +14,10 @@ int main(int argc, char **argv)
 	i = 0;
 
 	printf("INPUT: %s\n", argv[1]);
-	array = inhib_expand_str(argv[1], NULL);
+	if (argv[1])
+		array = inhib_expand_str(argv[1], NULL);
+	else
+		array = inhib_expand_str(NULL, NULL);
 	while (array && array[i])
 	{
 		printf("arr[%d]: |%s|\n",i ,array[i]);

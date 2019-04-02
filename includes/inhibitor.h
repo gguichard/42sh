@@ -22,7 +22,7 @@ int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos);
 void	update_pos_index(t_str_cmd_inf *str_cmd);
 char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);
 void	create_new_input(t_ast *elem, int *i, char **new);
-char	**error_inhib_expand(t_str_cmd_inf *str_cmd, char **array);
+int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array);
 int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array
 		, const char *str);
 void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input);
