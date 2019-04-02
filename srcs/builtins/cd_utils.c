@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 00:24:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 18:20:45 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:27:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static char		**dir_split_comps(char *dir)
 	if ((size = count_slash(dir)) == 0
 			|| (comps = (char **)malloc((size + 1) * sizeof(char *))) == NULL)
 		return (NULL);
-	ft_printf("dir is %s comps = %d\n", dir, size);
 	index = 0;
 	while (index < size)
 	{
@@ -99,7 +98,6 @@ void			set_dir_to_canonical_form(char *dir)
 	while (comps[index] != NULL)
 	{
 		ret = 0;
-		ft_printf("process comp %d %s\n", index, comps[index]);
 		if (ft_strequ(".", comps[index]) && (ret = 1) == 1)
 			dir_delete_comp(comps, index);
 		else if (ft_strequ("..", comps[index]) && (ret = 1) == 1)
@@ -112,7 +110,6 @@ void			set_dir_to_canonical_form(char *dir)
 			index++;
 	}
 	dir_glue_comps(comps, dir);
-	ft_printf("end dir is %s\n", dir);
 	free(comps);
 	if (dir[0] == '\0')
 		ft_strcpy(dir, "/");
