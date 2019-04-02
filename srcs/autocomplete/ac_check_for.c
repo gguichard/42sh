@@ -17,7 +17,7 @@ void	check_for_var_ac(const char *word, t_ac_rdir_inf *acrd
 	acrd->force_exec_type = 1;
 	while (var_lst != NULL)
 	{
-		acrd->cur_file_name = ((t_var*)var_lst->content)->key;
+		acrd->file_name = ((t_var*)var_lst->content)->key;
 		if (!try_ac_for_this_file(acrd, acs))
 			break ;
 		var_lst = var_lst->next;
@@ -35,7 +35,7 @@ void	check_for_builtin_ac(const char *word, t_ac_rdir_inf *acrd
 	acrd->force_exec_type = 1;
 	while (builtin_tab->name != NULL)
 	{
-		acrd->cur_file_name = builtin_tab->name;
+		acrd->file_name = builtin_tab->name;
 		if (!try_ac_for_this_file(acrd, acs))
 			break ;
 		++builtin_tab;
@@ -60,7 +60,7 @@ void	check_for_alias_ac(const char *word, t_ac_rdir_inf *acrd
 		hashentry_lst = aliastable->buckets[bucket_idx];
 		while (hashentry_lst != NULL)
 		{
-			acrd->cur_file_name = ((t_hashentry*)hashentry_lst->content)->key;
+			acrd->file_name = ((t_hashentry*)hashentry_lst->content)->key;
 			if (!try_ac_for_this_file(acrd, acs))
 				break ;
 			hashentry_lst = hashentry_lst->next;
@@ -83,7 +83,7 @@ void	check_for_user_ac(const char *word, t_ac_rdir_inf *acrd
 	setpwent();
 	while ((user = getpwent()) != NULL)
 	{
-		acrd->cur_file_name = user->pw_name;
+		acrd->file_name = user->pw_name;
 		if (!try_ac_for_this_file(acrd, acs))
 			break ;
 	}

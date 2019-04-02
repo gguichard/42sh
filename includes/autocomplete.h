@@ -27,13 +27,15 @@ typedef struct		s_ac_rdir_inf
 {
 	DIR				*dir;
 	char			*dir_to_use;
-	char			*file_word;
-	char			*cur_file_path;
-	const char		*cur_file_name;
-	size_t			file_word_len;
+	char			*word_to_ac;
+	char			*word_to_ac_with_pref;
+	char			*file_path;
+	const char		*file_name;
+	size_t			word_to_ac_len;
+	size_t			word_to_ac_with_pref_len;
 	struct stat		stat_buf;
 	int				need_to_be_cmd;
-	t_dir_type		dir_type;;
+	t_dir_type		dir_type;
 	int				force_exec_type;
 }					t_ac_rdir_inf;
 
@@ -41,6 +43,7 @@ typedef struct		s_ac_suff_inf
 {
 	t_list			*choices;
 	t_ac_suff_type	suff_type;
+	char			*pref;
 	char			*suff;
 	long long		suff_len;
 }					t_ac_suff_inf;
@@ -134,9 +137,11 @@ t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc);
 
 /*
 ** Retourne 1 si le fichier present dans le t_ac_rdir_inf peut etre une
-** autocompletion valide, 0 sinon.
+** autocompletion valide, 0 sinon ou si une erreur a eu lieu. Remplie le
+** acs->pref en consequence.
 */
-int					valid_file_for_ac(t_ac_rdir_inf *acrd);
+int					check_file_validity_and_init_pref(t_ac_rdir_inf *acrd
+		, t_ac_suff_inf *acs);
 
 /*
 ** Alloue et retourne un nouvel element representant un choix valide pour
