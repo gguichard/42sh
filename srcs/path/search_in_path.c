@@ -5,23 +5,6 @@
 #include "convert_path_to_tab.h"
 #include "check_path.h"
 
-static char		*get_file_path(const char *path, const char *file)
-{
-	size_t	path_len;
-	size_t	file_len;
-	char	*file_path;
-
-	path_len = ft_strlen(path);
-	file_len = ft_strlen(file);
-	file_path = (char *)malloc(path_len + file_len + 2);
-	if (file_path == NULL)
-		return (NULL);
-	ft_memcpy(file_path, path, path_len);
-	file_path[path_len] = '/';
-	ft_memcpy(&(file_path[path_len + 1]), file, file_len + 1);
-	return (file_path);
-}
-
 static t_error	check_is_valid_path(const char *file_path, int rights)
 {
 	t_error	error;
@@ -46,7 +29,7 @@ char			*search_in_path(t_list *vars, const char *file_name, int rights
 		index = -1;
 		while (path_tab[++index] != NULL)
 		{
-			if ((file_path = get_file_path(path_tab[index], file_name)) == NULL)
+			if ((file_path = join_path(path_tab[index], file_name)) == NULL)
 			{
 				*error = ERRC_UNEXPECTED;
 				break ;
