@@ -42,6 +42,7 @@ int		main(int argc, char **argv, char **environ)
 		ft_dprintf(STDERR_FILENO, "42sh: unable to init term\n");
 	else
 	{
+		source_rc_file(&alloc);
 		load_history_file_entries(&alloc, &alloc.cmdline.history);
 		while (1)
 		{

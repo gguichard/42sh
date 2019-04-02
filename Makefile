@@ -56,6 +56,7 @@ $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
 $(PATH_TOOLS)/clean_tools.c \
+$(PATH_TOOLS)/home_tools.c \
 $(PATH_TOOLS)/printer_ast.c \
 $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \

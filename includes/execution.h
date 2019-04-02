@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 14:11:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 14:43:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ int				setup_redirection(t_redirect_inf *redirect_inf
 		, t_exec_opt *opt);
 
 t_error			source_file(t_alloc *alloc, const char *path);
+void			source_rc_file(t_alloc *alloc);
 
 #endif
