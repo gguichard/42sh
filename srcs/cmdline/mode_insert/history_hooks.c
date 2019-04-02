@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:31:27 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/24 23:21:17 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 20:48:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ static void	fill_input_buffer(t_cmdline *cmdline, const char *entry)
 
 static void	load_entry_in_cmdline(t_cmdline *cmdline, const char *entry)
 {
+	static char	*cd_tcap = NULL;
+
+	if (cd_tcap == NULL)
+		cd_tcap = tgetstr("cd", NULL);
 	fill_input_buffer(cmdline, entry);
-	cmdline->cursor = (t_cursor){cmdline->prompt.offset
-		, ft_max(0, cmdline->cursor.y - cmdline->row)};
-	go_to_cursor_pos(cmdline->cursor);
-	clear_after_cursor(cmdline->cursor, cmdline->winsize);
-	print_cmdline(cmdline);
+	go_to_cursor_pos(cmdline, (t_cursor){0, 0});
+	tputs(cd_tcap, 1, t_putchar);
+	print_prompt_and_cmdline(cmdline);
 }
 
 int			handle_history_prev(t_cmdline *cmdline)

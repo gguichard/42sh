@@ -92,7 +92,7 @@ void			sort_ast(t_ast *lst, t_ast **sort)
 			(*sort)->back = tmp;
 			*sort = tmp;
 		}
-		else if (node->type == AST_ASSIGN)
+		else if (node->type == AST_ASSIGN && tmp->type <= AST_ASSIGN)
 			redir_ast(node, tmp);
 		else if (tmp->type != AST_REDIR)
 			link_new_node(sort, tmp, node);
