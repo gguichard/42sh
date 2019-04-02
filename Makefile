@@ -156,6 +156,7 @@ $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
+$(PATH_EXPAND)/expand_multi_tk.c \
 $(PATH_EXPAND)/ft_splitwhitespace.c \
 $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_remove.c \

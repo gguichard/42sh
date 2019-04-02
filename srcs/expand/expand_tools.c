@@ -92,66 +92,29 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 //1er mot join avec avant l'expand si il existe et que l'expand commence pas par un space
 //Dernier mot de l'expand join avec suite txt apres l'expand si fin expand ne fini pas par space
 
-
 int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 		t_str_cmd_inf *str_cmd)
 {
 	size_t	save;
-	size_t	i;
 	size_t	index;
-	char	*sub;
-	char	*bef_sub;
-	char	**new;
-	char	**replace;
 	size_t	len;
-	size_t 	x;
-	size_t	y;
 
-	save = *pos_array;
-	i = 0;
-	x = 0;
-	y = 1;
-	sub = NULL;
-	bef_sub = NULL;
-	new = NULL;
-	replace = NULL;
 	len = 0;
+	save = *pos_array;
 	index = get_pos_in_array(*array);
 	if (!expand(&((*array)[index]), alloc, pos_array))
 		return (0);
 	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
 	{
-	// 	while ((*array)[index][save + i] && !ft_isspace((*array)[index][save + i])
-	// 			&& save + i <= *pos_array)
-	// 		i += 1;
-	// 	if (i + save != *pos_array)
-	// 	{
-	// 		sub = ft_strsub((*array)[index], save, *pos_array - save);
-	// 		new = ft_splitwhitespace(sub);
-	// 		len = get_pos_in_array(new) + 1;
-	// 		len += index;
-	// 		if (!(replace = (char **)malloc(sizeof(char*) * (len + 1))))
-	// 			return (0);
-	// 		replace[len] = NULL;
-	// 		x = 0;
-	// 		while (x < index)
-	// 		{
-	// 			replace[x] = ft_strdup((*array)[x]);
-	// 			x += 1;
-	// 		}
-	// 		bef_sub = ft_strsub((*array)[index], 0, save);
-	// 		replace[x] = ft_strjoin(bef_sub, new[0]);
-	// 		x += 1;
-	// 		while (new[y] && y < len - 1)
-	// 			replace[x++] = ft_strdup(new[y++]);
-	// 		free(bef_sub);
-	// 		replace[x] = ft_strjoin(new[y], &((*array)[index][*pos_array]));
-	// 		if (new[y])
-	// 			*pos_array = ft_strlen(new[y]);
-	// 		ft_strtab_free(*array);
-	// 		ft_strtab_free(new);
-	// 		*array = replace;
-	// 	}
+		while ((*array)[index][save + len]
+				&& !ft_isspace((*array)[index][save + len])
+				&& save + len <= *pos_array)
+			len += 1;
+		if (len + save != *pos_array)
+		{
+			if (!(expand_var_to_tab(array, len, pos_array, save)))
+				return (0);
+		}
 	}
 	scmd_move_to_next_char(str_cmd);
 	update_pos_index(str_cmd);

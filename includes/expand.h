@@ -18,5 +18,7 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i);
 int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array
 		, t_str_cmd_inf *str_cmd_inf);
 char	**ft_splitwhitespace(char const *s);
+int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
+		, size_t save);
 
 #endif
