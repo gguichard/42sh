@@ -5,25 +5,9 @@
 #include "str_cmd_inf.h"
 #include "error.h"
 
-int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
-			t_alloc *alloc)
+void	remove_last_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos,
+		size_t index)
 {
-	size_t	index;
-	index = get_pos_in_array(array);
-	remove_escaped_char(str_cmd, &(array[index]), pos, 1);
-	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
-		if (scmd_cur_char_is_escaped(str_cmd) == 1
-				&& scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 1)
-			remove_escaped_char(str_cmd, &(array[index]), pos, 1);
-		else if (scmd_cur_char(str_cmd) == '$')
-		{
-			if (!expand(&(array[index]), alloc, pos))
-				return (0);
-			scmd_move_to_next_char(str_cmd);
-			update_pos_index(str_cmd);
-		}
-		else
-			*pos += scmd_move_to_next_char(str_cmd);
 	str_cmd->pos -= 1;
 	if ((scmd_cur_char(str_cmd) == '\"'
 			&& !scmd_cur_char_is_escaped(str_cmd))
@@ -39,6 +23,29 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 		str_cmd->pos += 1;
 		*pos += 1;
 	}
+}
+
+int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
+			t_alloc *alloc)
+{
+	size_t	index;
+
+	index = get_pos_in_array(array);
+	remove_escaped_char(str_cmd, &(array[index]), pos, 1);
+	while (scmd_cur_char(str_cmd) && str_cmd->is_in_dbquote)
+		if (scmd_cur_char_is_escaped(str_cmd) == 1
+				&& scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 1)
+			remove_escaped_char(str_cmd, &(array[index]), pos, 1);
+		else if (scmd_cur_char(str_cmd) == '$')
+		{
+			if (!expand(&(array[index]), alloc, pos))
+				return (0);
+			scmd_move_to_next_char(str_cmd);
+			update_pos_index(str_cmd);
+		}
+		else
+			*pos += scmd_move_to_next_char(str_cmd);
+	remove_last_quote(str_cmd, array, pos, index);
 	return (1);
 }
 
@@ -53,7 +60,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	array = NULL;
 	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
 		return (error_inhib_expand(str_cmd, array));
-	while (1)
+	while (scmd_cur_char(str_cmd))
 	{
 		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
 		{
@@ -70,11 +77,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		}
 		else
 			pos_array += scmd_move_to_next_char(str_cmd);
-		if (!scmd_cur_char(str_cmd))
-			break ;
 	}
-	if (scmd_cur_char(str_cmd))
-		remove_last_char(str_cmd, &pos_array, &array[get_pos_in_array(array)]);
+	remove_last_char(str_cmd, &pos_array, &array[get_pos_in_array(array)]);
 	scmd_clean(str_cmd);
 	free(str_cmd);
 	return (array);

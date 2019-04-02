@@ -76,11 +76,14 @@ int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos)
 void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input)
 {
 	str_cmd->pos -= 1;
-	if ((scmd_cur_char(str_cmd) == '"' && !scmd_cur_char_is_escaped(str_cmd))
+	*pos -= 1;
+	if ((scmd_cur_char(str_cmd) == '"' && (*input)[*pos] == '"' && !scmd_cur_char_is_escaped(str_cmd))
+			|| (scmd_cur_char(str_cmd) == '\'' && (*input)[*pos] == '\'' && !scmd_cur_char_is_escaped(str_cmd))
 			|| (scmd_cur_char(str_cmd) == '\\'
 			&& !scmd_cur_char_is_escaped(str_cmd) && !str_cmd->is_in_quote
 			&& !str_cmd->is_in_dbquote))
 	{
+		*pos += 1;
 		remove_escaped_char(str_cmd, input, pos, 1);
 		*pos -= 1;
 		str_cmd->pos += 1;
