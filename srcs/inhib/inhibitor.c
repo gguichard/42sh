@@ -24,7 +24,21 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 		}
 		else
 			*pos += scmd_move_to_next_char(str_cmd);
-	remove_escaped_char(str_cmd, &(array[index]), pos, 1);
+	str_cmd->pos -= 1;
+	if ((scmd_cur_char(str_cmd) == '\"'
+			&& !scmd_cur_char_is_escaped(str_cmd))
+			|| (scmd_cur_char(str_cmd) == '\\' && !str_cmd->is_in_quote
+			&& !str_cmd->is_in_dbquote))
+	{
+		str_cmd->pos += 1;
+		remove_escaped_char(str_cmd, &(array[index]), pos, 1);
+		*pos -= 1;
+	}
+	else
+	{
+		str_cmd->pos += 1;
+		*pos += 1;
+	}
 	return (1);
 }
 
@@ -39,7 +53,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	array = NULL;
 	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
 		return (error_inhib_expand(str_cmd, array));
-	while (scmd_cur_char(str_cmd))
+	while (1)
 	{
 		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
 		{
@@ -56,8 +70,11 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		}
 		else
 			pos_array += scmd_move_to_next_char(str_cmd);
+		if (!scmd_cur_char(str_cmd))
+			break ;
 	}
-	remove_last_char(str_cmd, &pos_array, &array[get_pos_in_array(array)]);
+	if (scmd_cur_char(str_cmd))
+		remove_last_char(str_cmd, &pos_array, &array[get_pos_in_array(array)]);
 	scmd_clean(str_cmd);
 	free(str_cmd);
 	return (array);

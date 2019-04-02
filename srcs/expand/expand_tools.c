@@ -119,8 +119,8 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 	index = get_pos_in_array(*array);
 	if (!expand(&((*array)[index]), alloc, pos_array))
 		return (0);
-	// if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
-	// {
+	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
+	{
 	// 	while ((*array)[index][save + i] && !ft_isspace((*array)[index][save + i])
 	// 			&& save + i <= *pos_array)
 	// 		i += 1;
@@ -152,7 +152,7 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 	// 		ft_strtab_free(new);
 	// 		*array = replace;
 	// 	}
-	// }
+	}
 	scmd_move_to_next_char(str_cmd);
 	update_pos_index(str_cmd);
 	return (1);
