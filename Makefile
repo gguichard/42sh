@@ -86,6 +86,7 @@ $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
 $(PATH_TOOLS)/assign_tools.c \
 $(PATH_TOOLS)/signal_management.c \
+$(PATH_TOOLS)/signal_handlers.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \

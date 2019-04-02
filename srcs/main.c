@@ -10,6 +10,7 @@
 #include "token_inf.h"
 #include "job.h"
 #include "error.h"
+#include "signals.h"
 
 static void	lexer_parser(char *line, t_alloc *alloc)
 {
@@ -21,47 +22,18 @@ static void	lexer_parser(char *line, t_alloc *alloc)
 	sort_ast = NULL;
 	lst_tk = NULL;
 	ft_bzero(&exec_option, sizeof(t_exec_opt));
-	sigs_wait_line(alloc);
 	if (!scmd_init(&scmd, line))
 		return ;
 	sigs_wait_line(alloc);
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 	sigs_wait_line(alloc);
-	/*
-	 **	VERIF TOKEN AND PRINT BEFORE PARSE
-	 */
-	// t_list	*tmp;
-	// tmp = lst_tk;
-	// while (tmp)
-	// {
-	// 	ft_printf("type: %d\ntoken: |%s|\n\n", get_tk(tmp)->type, get_tk(tmp)->token);
-	// 	tmp = tmp->next;
-	// }
-
 	if (!(sort_ast = parser(&lst_tk)))
 		return ;
 	sigs_wait_line(alloc);
-
-	/*
-	 ** COMPARAISON POUR RECONNAITRE LE JOB CONTROL
-	 */
-	// if (get_tk(lst_tk)->type == TK_CMD_SEP
-	// && ft_strcmp(get_tk(lst_tk)->token, "&") == 0)
-	// 	analyzer(sort_ast, alloc, TRUE);
-	// else
-
-	/*
-	 ** PRINT AST AND REINIT NODE
-	 */
 	// if (sort_ast)
 	// 	read_sort_descent(sort_ast, 0);
-
 	check_exit_cmd(sort_ast);
-	sig_reset();
-	set_signals_handlers_for_read();
 	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
-
-	//FUNCTION TO CLEAN / CLEAN TK_LIST MISSING
 	del_ast(&sort_ast);
 	scmd_clean(&scmd);
 }
@@ -72,7 +44,8 @@ int		main(int argc, char **argv, char **environ)
 	char	*input;
 
 	g_jobs = 0;
-	set_signals_handlers_for_read();
+	g_sig = 0;
+	set_signals_handlers();
 	if (!setup_alloc(&alloc, argc, argv, environ))
 		ft_dprintf(STDERR_FILENO, "Unable to setup environment\n");
 	else
@@ -92,12 +65,13 @@ int		main(int argc, char **argv, char **environ)
 				{
 					set_sigmask(SIG_BLOCK);
 					lexer_parser(input, &alloc);
-					free(input);
+					ft_memdel((void **)&input);
+					set_signals_handlers();
 				}
 			}
 		}
 	}
-	terminate_all_jobs();
+	terminate_all_jobs(SIGTERM);
 	del_alloc(&alloc);
 	sig_reset();
 	return (1);
