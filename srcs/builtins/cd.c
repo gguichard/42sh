@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 18:24:49 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 19:34:25 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "check_path.h"
 #include "builtins.h"
 
-static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
+static char	*get_path_or_cwd(t_alloc *alloc, const char *name)
 {
 	t_var			*var;
 	const char		*login;
@@ -37,37 +37,7 @@ static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
 	return (ft_strdup(var->value));
 }
 
-static char		*search_in_cd_path(t_alloc *alloc, const char *path
-		, const char *pwd)
-{
-	t_var	*var;
-	char	*tmp;
-	char	*cd_path;
-	char	*next_sep;
-	char	*full_path;
-
-	if ((var = get_var(alloc->vars, "CDPATH")) == NULL
-			|| var->value == NULL || (tmp = ft_strdup(var->value)) == NULL)
-		return (NULL);
-	cd_path = tmp;
-	full_path = NULL;
-	while (1)
-	{
-		if ((next_sep = ft_strchr(cd_path, ':')) != NULL)
-			*next_sep = '\0';
-		full_path = join_path((ft_strequ(cd_path, ".") ? pwd : cd_path), path);
-		if (full_path && check_dir_rights(full_path, X_OK) == ERRC_NOERROR)
-			break ;
-		ft_strdel(&full_path);
-		if (next_sep == NULL)
-			break ;
-		cd_path = next_sep + 1;
-	}
-	free(tmp);
-	return (full_path);
-}
-
-static char		*get_new_cur_path(t_alloc *alloc, const char *cur_path)
+static char	*get_new_cur_path(t_alloc *alloc, const char *cur_path)
 {
 	char	*pwd;
 	char	*new_path;
@@ -94,7 +64,7 @@ static char		*get_new_cur_path(t_alloc *alloc, const char *cur_path)
 	return (new_path);
 }
 
-static char		*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
+static char	*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
 {
 	char	*cur_path;
 	char	*tmp;
@@ -117,7 +87,7 @@ static char		*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
 	return (cur_path);
 }
 
-static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
+static int	change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 		, const char *operand)
 {
 	char		*pwd;
@@ -147,7 +117,7 @@ static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 	return (0);
 }
 
-int				builtin_cd(t_ast *elem, t_alloc *alloc)
+int			builtin_cd(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 	int		ret;
