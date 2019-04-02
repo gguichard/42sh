@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 14:05:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 14:45:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 14:48:42 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void		source_rc_file(t_alloc *alloc)
 	rc_path = ft_join(tab, home_dir[ft_strlen(home_dir) - 1] == '/' ? "" : "/");
 	if (rc_path == NULL)
 	{
-		ft_dprintf(STDERR_FILENO, "42sh: warning: unable to load 42shrc file"
+		ft_dprintf(STDERR_FILENO, "42sh: warning: unable to load 42shrc file\n"
 				, home_dir);
 		return ;
 	}
