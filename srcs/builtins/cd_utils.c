@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 00:24:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 19:23:15 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 21:00:08 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,22 +74,24 @@ static void		dir_delete_comp(char **comps, size_t index)
 static void		dir_glue_comps(char **comps, char *dir)
 {
 	size_t	index;
+	size_t	offset;
 	size_t	comp_len;
 
 	index = 0;
+	offset = 0;
 	while (comps[index] != NULL)
 	{
-		if (index > 0 && !ft_strequ(comps[index - 1], "/"))
+		if (offset > 0 && dir[offset - 1] != '/')
 		{
-			*dir = '/';
-			dir++;
+			dir[offset] = '/';
+			offset++;
 		}
 		comp_len = ft_strlen(comps[index]);
-		ft_memcpy(dir, comps[index], comp_len);
-		dir += comp_len;
+		ft_memcpy(dir + offset, comps[index], comp_len);
+		offset += comp_len;
 		index++;
 	}
-	*dir = '\0';
+	dir[offset] = '\0';
 }
 
 void			set_dir_to_canonical_form(char *dir)
@@ -115,4 +117,6 @@ void			set_dir_to_canonical_form(char *dir)
 	}
 	dir_glue_comps(comps, dir);
 	free(comps);
+	if (dir[0] == '\0')
+		ft_strcpy(dir, "/");
 }
