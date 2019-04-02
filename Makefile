@@ -50,6 +50,7 @@ $(PATH_EXEC)/redir_input.c \
 $(PATH_EXEC)/redir_output.c \
 $(PATH_EXEC)/redir_utils.c \
 $(PATH_EXEC)/redirections.c \
+$(PATH_EXEC)/source_file.c \
 $(PATH_EXEC)/var_assigns.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
