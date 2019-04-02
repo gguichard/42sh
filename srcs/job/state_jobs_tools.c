@@ -1,31 +1,18 @@
 #include "shell.h"
 #include "job.h"
 
-void	update_job_state(pid_t process, t_job_state state)
+void	update_job_state(t_list *tmp, t_job_state state)
 {
-	t_list	*tmp;
-	t_list	*prev;
 	t_job	*job;
 
-	prev = 0;
-	tmp = g_jobs;
+	job = tmp->content;
+	job->state = state;
+	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
-		if (job->pid == process)
-		{
-			job->state = state;
-			break ;
-		}
-		if (job->pipe)
-		{
-			prev = tmp;
-			tmp = job->pipe;
-		}
-		else
-			tmp = tmp->next;
-		if (!tmp && prev)
-			tmp = prev->next;
+		job->state = state;
+		tmp = tmp->next;
 	}
 }
 

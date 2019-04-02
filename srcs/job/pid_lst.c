@@ -16,9 +16,13 @@ static char		*create_cmd_job(t_ast *elem, int addpipe)
 		elem = elem->back;
 	while (elem != NULL)
 	{
-		if ((actual = ft_join(elem->input, " ")) == NULL)
-			return (NULL);
+		actual = ft_join(elem->input, " ");
 		prev = output;
+		if (output)
+		{
+			prev = ft_strjoin(prev, " ");
+			ft_strdel(&output);
+		}
 		(prev == NULL && addpipe) ? prev = ft_strdup("| ") : 0;
 		output = ft_strjoin(prev, actual);
 		ft_strdel(&prev);
