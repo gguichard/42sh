@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/01 14:16:07 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/02 18:24:02 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	g_cmdline = cmdline;
 	cmdline->alloc = alloc;
 	term = get_var_value(alloc->vars, "TERM");
+	cmdline->stdin_dup = dup(STDIN_FILENO);
 	if (term == NULL || term[0] == '\0')
 		term = "xterm-256color";
 	if (tgetent(NULL, term) == -1)
@@ -48,8 +49,7 @@ int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	update_winsize(cmdline);
 	act.sa_handler = handle_sigwinch;
 	act.sa_flags = SA_RESTART;
-	sigemptyset(&act.sa_mask);
-	sigaddset(&act.sa_mask, SIGWINCH);
+	sigfillset(&act.sa_mask);
 	sigaction(SIGWINCH, &act, 0);
 	return (1);
 }

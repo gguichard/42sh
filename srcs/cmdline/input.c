@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 15:22:08 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/02 18:28:25 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_rstate		read_input(t_cmdline *cmdline, const char *prompt)
 	{
 		if (read(STDIN_FILENO, &input, 1) <= 0)
 		{
-			ft_printf("Read crashed\n");
 			cmdline->input.reading = RSTATE_EOT;
 			break ;
 		}

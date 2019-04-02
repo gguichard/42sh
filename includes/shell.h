@@ -96,11 +96,8 @@ int		save_history_entries(t_alloc *alloc, t_history *history);
 ************************************ TOOLS *************************************
 */
 
+
 int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
-void	sigs_wait_line(t_alloc *alloc);
-void	sig_reset(void);
-void	set_sigmask(int type);
-void	set_signals_handlers_for_read(void);
 
 void	del_lst_ast(t_ast **lst);
 void	del_alloc(t_alloc *alloc);
@@ -117,5 +114,6 @@ void	del_elem_ast(t_ast **lst);
 */
 
 t_list					*g_jobs;
+int						g_sig;
 
 #endif

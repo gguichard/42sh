@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 12:41:52 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/02 18:23:22 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct		s_cmdline
 	int				row;
 	int				saved_col;
 	int				konami_code;
+	int				stdin_dup;
 	t_history		history;
 	int				ac_flag;
 }					t_cmdline;

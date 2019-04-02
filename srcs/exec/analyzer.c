@@ -4,6 +4,7 @@
 #include "operator.h"
 #include "redirect_inf.h"
 #include "execution.h"
+#include "signals.h"
 
 static int	dispatch_logic(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
@@ -54,7 +55,7 @@ static int	dispatch_command(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 
 int			analyzer(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 {
-
+	sigs_wait_line(alloc);
 	if (elem != NULL)
 	{
 		if (elem->type == AST_CMD_SEP)

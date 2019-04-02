@@ -10,6 +10,7 @@
 #include "search_exec.h"
 #include "check_path.h"
 #include "execution.h"
+#include "signals.h"
 #include "builtins.h" // TODO: deplacer le prototype de wait_pid
 
 static char	*srch_exec(t_list *vars, t_ast *elem, int *hashable)
@@ -102,6 +103,7 @@ int			exec_input(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
 			exit(ret);
 		execute_cmd(alloc, elem, path_exec);
 	}
+	set_signals_handlers();
 	opt->fork = 0;
 	ft_strdel(&path_exec);
 	wait_pid(child, elem, opt, alloc);
