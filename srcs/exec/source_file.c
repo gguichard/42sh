@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 14:05:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 14:48:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 16:59:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "error.h"
+#include "check_path.h"
 #include "str_cmd_inf.h"
 #include "parser_lexer.h"
 
@@ -105,16 +106,10 @@ t_error		source_file(t_alloc *alloc, const char *path)
 void		source_rc_file(t_alloc *alloc)
 {
 	const char	*home_dir;
-	char		*tab[3];
 	char		*rc_path;
 
 	home_dir = get_home_directory(alloc->vars);
-	if (home_dir == NULL || home_dir[0] == '\0')
-		return ;
-	tab[0] = (char *)home_dir;
-	tab[1] = ".42shrc";
-	tab[2] = NULL;
-	rc_path = ft_join(tab, home_dir[ft_strlen(home_dir) - 1] == '/' ? "" : "/");
+	rc_path = join_path(home_dir, ".42shrc");
 	if (rc_path == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: warning: unable to load 42shrc file\n"
