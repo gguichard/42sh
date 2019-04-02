@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 12:07:42 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 19:34:25 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "check_path.h"
 #include "builtins.h"
 
-static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
+static char	*get_path_or_cwd(t_alloc *alloc, const char *name)
 {
 	t_var			*var;
 	const char		*login;
@@ -37,36 +37,34 @@ static char		*get_path_or_cwd(t_alloc *alloc, const char *name)
 	return (ft_strdup(var->value));
 }
 
-static char		*get_new_cur_path(t_alloc *alloc, const char *cur_path)
+static char	*get_new_cur_path(t_alloc *alloc, const char *cur_path)
 {
 	char	*pwd;
-	size_t	pwd_len;
-	size_t	cur_len;
 	char	*new_path;
 
 	if (cur_path[0] == '/')
 		new_path = ft_strdup(cur_path);
 	else
 	{
+		new_path = NULL;
 		pwd = get_path_or_cwd(alloc, "PWD");
-		pwd_len = (pwd == NULL) ? 0 : ft_strlen(pwd);
-		if (pwd_len > 0 && pwd[pwd_len - 1] == '/')
-			pwd_len -= 1;
-		cur_len = ft_strlen(cur_path);
-		new_path = (char *)malloc((pwd_len + cur_len + 2) * sizeof(char));
+		if (!ft_strequ(cur_path, ".")
+				&& !ft_strequ(cur_path, "..")
+				&& !ft_strnequ(cur_path, "./", 2)
+				&& !ft_strnequ(cur_path, "../", 3))
+			new_path = search_in_cd_path(alloc, cur_path, pwd);
 		if (new_path != NULL)
+			ft_printf("%s\n", new_path);
+		else
 		{
-			if (pwd != NULL)
-				ft_memcpy(new_path, pwd, pwd_len);
-			new_path[pwd_len] = '/';
-			ft_memcpy(new_path + pwd_len + 1, cur_path, cur_len + 1);
+			new_path = join_path(pwd, cur_path);
+			free(pwd);
 		}
-		free(pwd);
 	}
 	return (new_path);
 }
 
-static char		*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
+static char	*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
 {
 	char	*cur_path;
 	char	*tmp;
@@ -89,7 +87,7 @@ static char		*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
 	return (cur_path);
 }
 
-static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
+static int	change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 		, const char *operand)
 {
 	char		*pwd;
@@ -119,7 +117,7 @@ static int		change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 	return (0);
 }
 
-int				builtin_cd(t_ast *elem, t_alloc *alloc)
+int			builtin_cd(t_ast *elem, t_alloc *alloc)
 {
 	t_opts	opts;
 	int		ret;

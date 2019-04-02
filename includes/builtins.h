@@ -26,7 +26,12 @@ int		builtin_source(t_ast *elem, t_alloc *alloc);
 */
 
 void	set_dir_to_canonical_form(char *dir);
-int		is_builtin(t_alloc *alloc, const char *built_name);
+char	*search_in_cd_path(t_alloc *alloc, const char *path, const char *pwd);
+
 void	check_exit_cmd(t_ast *elem);
+int		retry_exit_job(int type);
+int		check_stopped_job(void);
+
+int		is_builtin(t_alloc *alloc, const char *built_name);
 
 #endif

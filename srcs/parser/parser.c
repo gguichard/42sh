@@ -9,7 +9,7 @@ t_ast	*set_new_elem(void)
 	t_ast	*new;
 
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
-		ft_exit_malloc();
+		return (0);
 	new->fd[0] = -1;
 	new->fd[1] = -1;
 	new->type = AST_NO_TYPE;
@@ -60,9 +60,12 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	else if (type == TK_CMD)
 		elem->type = AST_CMD;
 	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
-		ft_exit_malloc();
+		return ;
 	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
-		ft_exit_malloc();
+	{
+		ft_memdel((void **)&(elem->input));
+		return ;
+	}
 	elem->input[len] = NULL;
 }
 
@@ -81,7 +84,11 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 			break ;
 		else if (type != TK_PARAM)
 		{
-			elem = create_elem(lst_tk);
+			if (!(elem = create_elem(lst_tk)))
+			{
+				del_ast(&sort);
+				return (0);
+			}
 			sort_ast(elem, &sort);
 		}
 		else
@@ -113,7 +120,12 @@ t_ast	*parser(t_list *lst_tk)
 		}
 		else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
 		{
-			elem = create_elem(&lst_tk);
+			if (!(elem = create_elem(&lst_tk)))
+			{
+				del_ast(&sort);
+				del_ast(&branch);
+				return (0);
+			}
 			elem->left = sort;
 			sort->back = elem;
 			sort = elem;

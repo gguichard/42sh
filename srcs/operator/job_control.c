@@ -30,7 +30,7 @@ int		job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	{
 		opt->wait_hang = 1;
 		analyzer(alloc, elem->left, opt);
-		if (elem->right->type == AST_JOB)
+		if (elem->right && elem->right->type == AST_JOB)
 			elem = elem->right;
 		else
 			break;

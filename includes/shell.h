@@ -99,5 +99,6 @@ void		del_elem_ast(t_ast **lst);
 */
 
 t_list					*g_jobs;
+int						g_sig;
 
 #endif

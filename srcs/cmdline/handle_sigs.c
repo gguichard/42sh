@@ -6,10 +6,11 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 15:58:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 20:13:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 19:02:25 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include <term.h>
 #include "cmdline.h"
 

@@ -26,15 +26,17 @@ static int	get_ret_val(t_list *tmp)
 
 	stop = 0;
 	job = tmp->content;
-	ret = ret_status(job->status, job->pid, job);
-	if (WIFSTOPPED(job->status))
+	if (job->state < SIG)
+		ret = ret_status(job->status, job->pid, job);
+	if (job->state == STOPPED_PENDING)
 		stop = ret;
 	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
-		ret = ret_status(job->status, job->pid, job);
-		if (WIFSTOPPED(job->status))
+		if (job->state < SIG)
+			ret = ret_status(job->status, job->pid, job);
+		if (job->state == STOPPED_PENDING)
 			stop = ret;
 		tmp = tmp->next;
 	}
@@ -78,8 +80,5 @@ void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		redirect_term_controller(0, 1);
 	}
 	else
-	{
 		print_bg(child);
-		waitpid(child, &alloc->ret_val, WNOHANG);
-	}
 }

@@ -43,7 +43,8 @@ static pid_t	add_pid_pipe(t_ast *elem, int last_pipe_cmd, pid_t child
 		ret = setpgid(child, 0);
 		if (!wait_hang)
 			redirect_term_controller(child, 0);
-		first_cmd = add_pid_lst(child, elem->left, 0);
+		if (!(first_cmd = add_pid_lst(child, elem->left, 0)))
+			return (-1);
 	}
 	else if (last_pipe_cmd)
 	{

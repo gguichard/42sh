@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 20:08:47 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 14:45:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 16:58:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,15 @@
 #include <sys/mman.h>
 #include "libft.h"
 #include "shell.h"
+#include "check_path.h"
 #include "vars.h"
 
 char		*get_history_file_path(t_alloc *alloc)
 {
-	const char		*home_dir;
-	char			*tab[3];
+	const char	*home_dir;
 
 	home_dir = get_home_directory(alloc->vars);
-	if (home_dir == NULL || home_dir[0] == '\0')
-		return (NULL);
-	tab[0] = (char *)home_dir;
-	tab[1] = ".42sh_history";
-	tab[2] = NULL;
-	return (ft_join(tab, home_dir[ft_strlen(home_dir) - 1] == '/' ? "" : "/"));
+	return (join_path(home_dir, ".42sh_history"));
 }
 
 static int	read_history_last_entries(t_history *history, int fd

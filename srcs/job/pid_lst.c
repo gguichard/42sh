@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <signal.h>
 #include "libft.h"
 #include "shell.h"
 #include "error.h"
@@ -24,11 +25,7 @@ static char		*create_cmd_job(t_ast *elem, int addpipe)
 		ft_strdel(&actual);
 		if (output == NULL)
 			break ;
-		//fix pour l'instant delete le if en dessous, quand apres les assign, les cmd sront a gauche
-		if (elem->back && elem->back->type == AST_ASSIGN && elem->right)
-			elem = elem->right;
-		else
-			elem = elem->left;
+		elem = elem->left;
 	}
 	return (output);
 }
@@ -48,9 +45,10 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 	t_list	*node;
 
 	if (!create_job(&job, process, elem, addpipe)
-			|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
+		|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
 	{
-		ft_exit_malloc();
+		kill(process, SIGKILL);
+		ft_memdel((void **)&(job.cmd));
 		return (NULL);
 	}
 	ft_lstpush(&g_jobs, node);
@@ -65,9 +63,10 @@ int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, int addpipe)
 	if (setpgid(process, ((t_job *)attach->content)->gpid) != 0)
 		return (-1);
 	if (!create_job(&job, process, elem, addpipe)
-			|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
+		|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
 	{
-		ft_exit_malloc();
+		kill(process, SIGKILL);
+		ft_memdel((void **)&(job.cmd));
 		return (-1);
 	}
 	ft_lstpush(&((t_job *)attach->content)->pipe, node);
