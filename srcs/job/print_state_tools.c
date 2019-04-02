@@ -77,22 +77,18 @@ char	*job_cmd(t_job *job)
 	char	*actual;
 	t_list	*tmp;
 
-	if (job->pipe)
+	tmp = job->pipe;
+	pipe_cmd = ft_strdup(job->cmd);
+	while (tmp)
 	{
-		tmp = job->pipe;
-		pipe_cmd = ft_strdup(job->cmd);
-		while (tmp)
-		{
-			actual = ((t_job *)tmp->content)->cmd;
-			prev = pipe_cmd;
-			pipe_cmd = ft_strjoin(prev, actual);
-			ft_memdel((void **)&prev);
-			if (!pipe_cmd || !tmp->next)
-				break ;
-			tmp = tmp->next;
-		}
+		actual = ((t_job *)tmp->content)->cmd;
+		prev = ft_strjoin(pipe_cmd, " ");
+		ft_memdel((void **)&pipe_cmd);
+		pipe_cmd = ft_strjoin(prev, actual);
+		ft_memdel((void **)&prev);
+		if (!pipe_cmd || !tmp->next)
+			break ;
+		tmp = tmp->next;
 	}
-	else
-		pipe_cmd = ft_strdup(job->cmd);
 	return (pipe_cmd);
 }

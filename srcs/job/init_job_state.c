@@ -17,7 +17,6 @@ int		ret_status(int ret, pid_t process, t_job *job)
 		err = WSTOPSIG(ret) + 128;
 		job->state = STOPPED_PENDING;
 		job->status = ret;
-		ft_printf("coucou");
 	}
 	else if (WIFSIGNALED(ret))
 	{

@@ -10,7 +10,7 @@
 #include "builtins.h"
 #include "job.h"
 
-static void	lexer_parser(char *line, t_alloc *alloc)
+void	lexer_parser(const char *line, t_alloc *alloc)
 {
 	t_str_cmd_inf	scmd;
 	t_list			*lst_tk;
@@ -42,6 +42,7 @@ int		main(int argc, char **argv, char **environ)
 		ft_dprintf(STDERR_FILENO, "42sh: unable to init term\n");
 	else
 	{
+		source_rc_file(&alloc);
 		load_history_file_entries(&alloc, &alloc.cmdline.history);
 		while (1)
 		{

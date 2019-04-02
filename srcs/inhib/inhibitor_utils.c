@@ -4,73 +4,6 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos)
-{
-	size_t	len;
-
-	if (*pos == 0)
-		*pos = str_cmd->pos;
-	len = ft_strlen(*input + *pos);
-	ft_memmove((void*)(*input + *pos - 1),
-		(const void*)(*input + *pos), len);
-	(*input)[*pos + len - 1] = '\0';
-	if (scmd_cur_char(str_cmd) == '\n' && str_cmd->is_in_dbquote)
-	{
-		len = ft_strlen(*input + *pos);
-		ft_memmove((void*)(*input + *pos - 1),
-			(const void*)(*input + *pos), len);
-		(*input)[*pos + len - 1] = '\0';
-		if (*pos > 0)
-			*pos -= 1;
-	}
-	scmd_move_to_next_char(str_cmd);
-}
-
-//FONCTION D'ECHAPPEMENT POUR L'AUTOCOMPLETION
-//VERIFER SI L"ON SUPPRIME PAS QUE SUR \0
-void	remove_escaped_char_autocomplete(t_str_cmd_inf *str_cmd, char **input,
-		size_t *pos)
-{
-	size_t	len;
-
-	if (*pos == 0)
-		*pos = str_cmd->pos;
-	if (scmd_cur_char(str_cmd) != '\0')
-	{
-		len = ft_strlen(*input + *pos);
-		ft_memmove((void*)(*input + *pos - 1),
-			(const void*)(*input + *pos), len);
-		(*input)[*pos + len - 1] = '\0';
-		if (*pos > 0)
-			*pos -= 1;
-	}
-	scmd_move_to_next_char(str_cmd);
-}
-
-int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **input, size_t *pos)
-{
-	remove_escaped_char(str_cmd, input, pos);
-	str_cmd->pos -= 1;
-	while (scmd_cur_char(str_cmd) && str_cmd->is_in_quote == 1)
-	{
-		scmd_move_to_next_char(str_cmd);
-		*pos += 1;
-	}
-	str_cmd->pos -= 1;
-	if ((scmd_cur_char(str_cmd) == '\''
-			&& !scmd_cur_char_is_escaped(str_cmd))
-			|| (scmd_cur_char(str_cmd) == '\\' && !str_cmd->is_in_quote
-			&& !str_cmd->is_in_dbquote))
-	{
-		str_cmd->pos += 1;
-		*pos -= 1;
-		remove_escaped_char(str_cmd, input, pos);
-	}
-	else
-		str_cmd->pos += 1;
-	return (1);
-}
-
 int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array,
 		const char *str)
 {
@@ -86,18 +19,38 @@ int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array,
 	return (1);
 }
 
-void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input)
+int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos)
 {
+	size_t	i;
+
+	i = get_pos_in_array(array);
+	remove_escaped_char(str_cmd, &(array[i]), pos, 0);
+	*pos -= 1;
+	while (scmd_cur_char(str_cmd) && str_cmd->is_in_quote == 1)
+		*pos += scmd_move_to_next_char(str_cmd);
 	str_cmd->pos -= 1;
-	if ((scmd_cur_char(str_cmd) == '"' && !scmd_cur_char_is_escaped(str_cmd))
-			|| (scmd_cur_char(str_cmd) == '\\'
-			&& !scmd_cur_char_is_escaped(str_cmd) && !str_cmd->is_in_quote
+	if (scmd_cur_char(str_cmd) == '\''
+			|| (scmd_cur_char(str_cmd) == '\\' && !str_cmd->is_in_quote
 			&& !str_cmd->is_in_dbquote))
 	{
 		str_cmd->pos += 1;
-		remove_escaped_char(str_cmd, input, pos);
+		remove_escaped_char(str_cmd, &(array[i]), pos, 0);
+		*pos -= 1;
 	}
 	else
+	{
 		str_cmd->pos += 1;
+		*pos += 1;
+	}
+	return (1);
+}
 
+int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
+		size_t *pos, t_alloc *alloc)
+{
+	if (str_cmd->is_in_quote)
+		return (go_to_end_quote(str_cmd, array, pos));
+	else if (str_cmd->is_in_dbquote)
+		return (inhib_in_db(str_cmd, pos, array, alloc));
+	return (1);
 }
