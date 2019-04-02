@@ -71,7 +71,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		error_inhib_expand(str_cmd, array);
 		return (NULL);
 	}
-	do_inhib(str_cmd, array, &pos_array, alloc);
+	if (!do_inhib(str_cmd, array, &pos_array, alloc))
+		return(NULL);
 	scmd_clean(str_cmd);
 	free(str_cmd);
 	return (array);
