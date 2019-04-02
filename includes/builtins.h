@@ -27,5 +27,7 @@ void	set_dir_to_canonical_form(char *dir);
 int		is_builtin(t_alloc *alloc, const char *built_name);
 void	wait_pid(pid_t child, t_ast *elem, t_exec_opt *opt, t_alloc *alloc);
 void	check_exit_cmd(t_ast *elem);
+int		retry_exit_job(int type);
+int		check_stopped_job(void);
 
 #endif

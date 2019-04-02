@@ -46,7 +46,7 @@ void		display_simple_job(t_list *tmp, int index, t_opts *opts);
 void		print_bg(pid_t process);
 
 void		delete_jobs_terminated(t_list *tmp);
-void		terminate_all_jobs(void);
+void		terminate_all_jobs(int sig);
 
 char		*sig_str(int status);
 char		*last_sig_process(t_list *tmp);

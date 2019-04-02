@@ -5,7 +5,6 @@
 
 void	test(int sig)
 {
-	sig = 1;
 	printf("In Handler sig %d\n", sig);
 	exit(0);
 }

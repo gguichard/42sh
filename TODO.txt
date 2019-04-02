@@ -6,8 +6,9 @@ ADD:
 	$!
 	$$
 
-sig		exec	prompt
-1		kill	y
-2		n		n
-3		n		n
-4		y		y
+Test a regler:
+
+	$> cat
+	kill term
+
+	$! a faire
