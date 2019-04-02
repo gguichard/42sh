@@ -92,6 +92,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
 {
 	scmd_clean(str_cmd);
+	free(str_cmd);
 	ft_strtab_free(array);
 	return (0);
 }
