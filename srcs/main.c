@@ -25,7 +25,7 @@ void	lexer_parser(const char *line, t_alloc *alloc)
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 	scmd_clean(&scmd);
 	sigs_wait_line(alloc);
-	if (!(sort_ast = parser(&lst_tk)))
+	if (!(sort_ast = parser(lst_tk)))
 		return ;
 	ft_lstdel(&lst_tk, del_token);
 	sigs_wait_line(alloc);
@@ -33,7 +33,7 @@ void	lexer_parser(const char *line, t_alloc *alloc)
 	// 	read_sort_descent(sort_ast, 0);
 	check_exit_cmd(sort_ast);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
-	alloc->ret_val = analyzer(sort_ast, alloc, &exec_option);
+	alloc->ret_val = analyzer(alloc, sort_ast, &exec_opt);
 	del_ast(&sort_ast);
 }
 

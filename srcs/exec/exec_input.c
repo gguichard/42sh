@@ -71,8 +71,8 @@ void				execute_cmd(t_alloc *alloc, char **argv, char *path_exec)
 	if (tab_env == NULL)
 		exit(127);
 	sig_reset();
-	execve(path_exec, elem->input, tab_env);
-	ft_dprintf(STDERR_FILENO, "42sh: %s: not executable\n", elem->input[0]);
+	execve(path_exec, argv, tab_env);
+	ft_dprintf(STDERR_FILENO, "42sh: %s: not executable\n", argv[0]);
 	ft_strdel(&path_exec);
 	ft_strtab_free(tab_env);
 	exit(126);
@@ -104,8 +104,8 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	}
 	set_signals_handlers();
 	ft_strdel(&path_exec);
-	wait_pid(child, elem, opt, alloc);
-	if (opt->wait_hang == false)
+	wait_pid(child, alloc, elem, opt);
+	if (opt->wait_hang == 0)
 		return (ret_status(alloc->ret_val, child, 0));
 	return (0);
 }

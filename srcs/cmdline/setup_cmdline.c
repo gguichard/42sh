@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 19:02:37 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/02 19:39:07 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <term.h>
+#include <unistd.h>
 #include "shell.h"
 #include "vars.h"
 #include "cmdline.h"

@@ -1,3 +1,4 @@
+#include <signal.h>
 #include "shell.h"
 #include "builtins.h"
 #include "job.h"

@@ -120,7 +120,7 @@ t_ast	*parser(t_list *lst_tk)
 		}
 		else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
 		{
-			if (!(elem = create_elem(lst_tk)))
+			if (!(elem = create_elem(&lst_tk)))
 			{
 				del_ast(&sort);
 				del_ast(&branch);

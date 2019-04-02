@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include "libft.h"
 #include "shell.h"
 #include "job.h"

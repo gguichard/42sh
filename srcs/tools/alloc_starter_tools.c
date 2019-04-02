@@ -76,7 +76,6 @@ int						setup_alloc(t_alloc *alloc, int argc, char **argv
 	alloc->argc = argc;
 	alloc->argv = argv;
 	alloc->pid = getpid();
-	ft_printf("PID === %d\n", alloc->pid);
 	alloc->vars = parse_env(environ);
 	setup_def_vars(alloc);
 	alloc->builtins = g_builtins;
