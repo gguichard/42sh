@@ -31,6 +31,8 @@ int				scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str);
 */
 void			scmd_clean(t_str_cmd_inf *str_cmd_inf);
 
+void			scmd_delete_sub_str(t_str_cmd_inf *str_cmd_inf);
+
 int				scmd_reset(t_str_cmd_inf *str_cmd_inf, const char *new_str);
 
 /*

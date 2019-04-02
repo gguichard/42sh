@@ -10,7 +10,7 @@
 #include "builtins.h"
 #include "job.h"
 
-static void	lexer_parser(char *line, t_alloc *alloc)
+void	lexer_parser(const char *line, t_alloc *alloc)
 {
 	t_str_cmd_inf	scmd;
 	t_list			*lst_tk;
