@@ -6,14 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 17:51:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 19:17:36 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/02 14:37:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 #include "vars.h"
 
-char	*get_var_value(t_list *vars, const char *key)
+const char	*get_var_value(t_list *vars, const char *key)
 {
 	t_var	*var;
 
@@ -21,7 +21,7 @@ char	*get_var_value(t_list *vars, const char *key)
 	return (var == NULL ? "" : var->value);
 }
 
-char	*get_var_for_expand(t_alloc *alloc, const char *key)
+char		*get_var_for_expand(t_alloc *alloc, const char *key)
 {
 	t_var	*var;
 	int		tmp;
