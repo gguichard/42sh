@@ -47,7 +47,6 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array,
 		{
 			if (!do_expand(array, alloc, pos_array, str_cmd))
 				return (error_inhib_expand(str_cmd, *array));
-			ft_printf("char cmd: |%s|\n", scmd_cur_str(str_cmd));
 		}
 		else
 			*pos_array += scmd_move_to_next_char(str_cmd);

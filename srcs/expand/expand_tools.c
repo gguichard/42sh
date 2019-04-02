@@ -104,6 +104,7 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 	index = get_pos_in_array(*array);
 	if (!expand(&((*array)[index]), alloc, pos_array))
 		return (0);
+	ft_printf("INPUT: |%s|\n", (*array)[index]);
 	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
 	{
 		while ((*array)[index][save + len]

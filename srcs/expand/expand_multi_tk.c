@@ -28,6 +28,7 @@ char	**init_new_array(char **array, size_t save, size_t pos, size_t *len)
 	sub = NULL;
 	index = get_pos_in_array(array);
 	sub = ft_strsub(array[index], save, pos - save);
+	ft_printf("SUB: |%s|\n", sub);
 	new_array = ft_splitwhitespace(sub);
 	ft_memdel((void *)&sub);
 	*len = get_pos_in_array(new_array) + 1;
@@ -40,13 +41,11 @@ char	**init_new_array(char **array, size_t save, size_t pos, size_t *len)
 	return (new_array);
 }
 
-void	del_all_alloc(char **sub, char ***array, char ***new_array,
-		char **replace)
+void	del_all_alloc(char **sub, char ***array, char ***new_array)
 {
 	ft_memdel((void *)sub);
 	ft_strtab_free(*array);
 	ft_strtab_free(*new_array);
-	*array = replace;
 }
 
 int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
@@ -69,11 +68,12 @@ int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
 	replace_in_tab(&i, &replace, *array);
 	sub = ft_strsub((*array)[get_pos_in_array(*array)], 0, save);
 	replace[i++] = ft_strjoin(sub, new_array[0]);
-	while (new_array[x] && x < len - 1)
+	while (new_array[x] && i < len - 1)
 		replace[i++] = ft_strdup(new_array[x++]);
 	replace[i] = ft_strjoin(new_array[x]
 			, &((*array)[get_pos_in_array(*array)][*pos_array]));
 	(new_array[x]) ? *pos_array = ft_strlen(new_array[x]) : 0;
-	del_all_alloc(&sub, array, &new_array, replace);
+	del_all_alloc(&sub, array, &new_array);
+	*array = replace;
 	return (1);
 }
