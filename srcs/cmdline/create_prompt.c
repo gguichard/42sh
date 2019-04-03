@@ -4,6 +4,31 @@
 #include "vars.h"
 #include "cmdline.h"
 
+static char		*get_hostname(int shorten_it)
+{
+	char	*hostname;
+	long	hostname_max_len;
+	char	*dot_pos;
+
+	hostname_max_len = sysconf(_SC_HOST_NAME_MAX) + 1;
+	if (hostname_max_len < 256)
+		hostname_max_len = 256;
+	if ((hostname = (char*)malloc(hostname_max_len)) == NULL)
+		return (NULL);
+	if (gethostname(hostname, hostname_max_len) < 0)
+	{
+		free(hostname);
+		return (NULL);
+	}
+	if (shorten_it)
+	{
+		dot_pos = ft_strchr(hostname, '.');
+		if (dot_pos != NULL)
+			*dot_pos = '\0';
+	}
+	return (hostname);
+}
+
 static char		*shorten_home(char *str, t_list *vars)
 {
 	const char	*home;
@@ -30,6 +55,10 @@ static char		*get_replacement(char opt, t_list *vars)
 		return (ft_strdup(getlogin()));
 	else if (opt == 'a')
 		return (ft_strdup("\a"));
+	else if (opt == 'h')
+		return (get_hostname(1));
+	else if (opt == 'H')
+		return (get_hostname(0));
 	else
 		return (NULL);
 }
