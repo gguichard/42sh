@@ -80,8 +80,7 @@ void				check_for_user_ac(const char *word, t_ac_rdir_inf *acrd
 ** les informations de fichier contenues dans le  t_ac_rdir_inf.
 ** Si force_file_type est vrai et que l'autocompletion a un type, ce type sera
 ** force en tant que fichier.
-** Retourne 0 si l'autocompletion est vide (aucun suffix et aucun type).
-** Retourne 1 sinon.
+** Retourne 0 en cas d'erreur, 1 sinon.
 */
 int					build_ac_suff(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs
 		, int force_file_type);
