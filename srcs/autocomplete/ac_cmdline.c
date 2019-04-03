@@ -233,17 +233,20 @@ static const char		*find_last_home_user(const char *str)
 */
 
 static char				*inhibe_this_str_for_autocomplete(const char *str
-		, t_alloc *alloc)
+		, t_alloc *alloc, int *has_several_words)
 {
 	char	**str_tab;
 	char	**tmp_tab;
 	char	*new_str;
 
+	*has_several_words = 0;
 	new_str = NULL;
 	str_tab = inhib_expand_str(str, alloc);
 	tmp_tab = str_tab;
 	while (tmp_tab != NULL && *tmp_tab != NULL)
 	{
+		if (new_str != NULL)
+			*has_several_words = 1;
 		new_str = *tmp_tab;
 		++tmp_tab;
 	}
@@ -262,6 +265,7 @@ static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
 	const char		*tmp_start;
 	char			*inhibed_str;
 	t_ac_suff_inf	*acs_inf;
+	int				has_several_words;
 
 	real_start = (cur_tk->token == NULL ? "" : cur_tk->token);
 	tmp_start = NULL;
@@ -273,16 +277,19 @@ static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
 	}
 	if ((tmp_start = find_last_home_user(real_start)) != NULL)
 	{
-		inhibed_str = inhibe_this_str_for_autocomplete(tmp_start, alloc);
+		inhibed_str = inhibe_this_str_for_autocomplete(tmp_start, alloc
+				, &has_several_words);
 		acs_inf = autocomplete_user(inhibed_str == NULL ? "" : inhibed_str);
 		if (acs_inf != NULL && acs_inf->suff_type == ACS_TYPE_FILE)
 			acs_inf->suff_type = ACS_TYPE_DIR;
 	}
 	else
 	{
-		inhibed_str = inhibe_this_str_for_autocomplete(real_start, alloc);
+		inhibed_str = inhibe_this_str_for_autocomplete(real_start, alloc
+				, &has_several_words);
 		acs_inf = autocomplete_word(alloc->vars, (inhibed_str == NULL
-					? "" : inhibed_str), cur_tk->type == TK_CMD, alloc);
+					? "" : inhibed_str)
+				, cur_tk->type == TK_CMD && !has_several_words, alloc);
 	}
 	free(inhibed_str);
 	return (acs_inf);
