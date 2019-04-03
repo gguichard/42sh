@@ -18,7 +18,7 @@ void			lexer_parser(const char *line, t_alloc *alloc);
 ************************************ LEXER *************************************
 */
 
-void			expand_home_shortcut(char **s, t_list *vars);
+int				expand_home_shortcut(char **s, t_list *vars);
 
 /*
 ********************************* LEXER TOOLS **********************************

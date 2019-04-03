@@ -4,7 +4,7 @@
 #include "error.h"
 #include "vars.h"
 
-void	expand_home_shortcut(char **s, t_list *vars)
+int	expand_home_shortcut(char **s, t_list *vars)
 {
 	char	*dir;
 
@@ -28,5 +28,7 @@ void	expand_home_shortcut(char **s, t_list *vars)
 	{
 		ft_memdel((void **)&(*s));
 		(*s) = dir;
+		return (1);
 	}
+	return (0);
 }

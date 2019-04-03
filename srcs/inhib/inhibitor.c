@@ -86,9 +86,12 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	i = 0;
 	while (elem->input[i])
 	{
-		if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
-			return (0);
-		create_new_input(elem, &i, new_array);
+		if (!expand_home_shortcut(&(elem->input[i]), alloc->vars))
+		{
+			if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
+				return (0);
+			create_new_input(elem, &i, new_array);
+		}
 	}
 	if (ft_strtab_count(elem->input) == 1
 			&& ft_strequ(elem->input[0], "") == 1)
