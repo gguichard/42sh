@@ -69,17 +69,13 @@ char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
 
 void	create_new_input(t_ast *elem, int *i, char **new)
 {
-	int		len_new;
-	int		len_input;
+	size_t	len_new;
+	size_t	len_input;
 	char	**modify;
 
-	len_new = 0;
-	len_input = 0;
 	modify = NULL;
-	while (new[len_new])
-		len_new += 1;
-	while (elem->input[len_input])
-		len_input += 1;
+	len_new = ft_strtab_count(new);
+	len_input = ft_strtab_count(elem->input);
 	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
 		ft_exit_malloc();
 	modify = insert_new_tab(modify, i, new, elem);

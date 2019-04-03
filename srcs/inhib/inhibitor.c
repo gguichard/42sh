@@ -30,28 +30,28 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 	return (1);
 }
 
-int		do_inhib(t_str_cmd_inf *str_cmd, char **array, size_t *pos_array,
+int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array,
 		t_alloc *alloc)
 {
 	while (scmd_cur_char(str_cmd))
 	{
 		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
 		{
-			if (!(inhib_expand_in_quote(str_cmd, array, pos_array, alloc)))
-				return (error_inhib_expand(str_cmd, array));
+			if (!(inhib_expand_in_quote(str_cmd, *array, pos_array, alloc)))
+				return (error_inhib_expand(str_cmd, *array));
 		}
 		else if (scmd_cur_char_is_escaped(str_cmd))
-			remove_escaped_char(str_cmd, &array[get_pos_in_array(array)],
+			remove_escaped_char(str_cmd, &((*array)[get_pos_in_array(*array)]),
 				pos_array, 1);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			if (!do_expand(&array, alloc, pos_array, str_cmd))
-				return (error_inhib_expand(str_cmd, array));
+			if (!do_expand(array, alloc, pos_array, str_cmd))
+				return (error_inhib_expand(str_cmd, *array));
 		}
 		else
 			*pos_array += scmd_move_to_next_char(str_cmd);
 	}
-	remove_last_char(str_cmd, pos_array, &array[get_pos_in_array(array)]);
+	remove_last_char(str_cmd, pos_array, &((*array)[get_pos_in_array(*array)]));
 	return (1);
 }
 
@@ -71,8 +71,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		error_inhib_expand(str_cmd, array);
 		return (NULL);
 	}
-	if (!do_inhib(str_cmd, array, &pos_array, alloc))
-		return(NULL);
+	if (!do_inhib(str_cmd, &array, &pos_array, alloc))
+		return (NULL);
 	scmd_clean(str_cmd);
 	free(str_cmd);
 	return (array);
