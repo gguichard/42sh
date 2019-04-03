@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 16:17:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 14:23:41 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,17 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 	return (ERRC_INCOMPLETECMD);
 }
 
+static t_rstate	create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
+{
+	char		*prompt;
+	t_rstate	state;
+
+	prompt = get_prompt(cmdline, type);
+	state = read_input(cmdline, (prompt == NULL ? "> " : prompt));
+	free(prompt);
+	return (state);
+}
+
 static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 		, t_rstate *state)
 {
@@ -86,7 +97,7 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 	type = PROMPT_DEFAULT;
 	while (error == ERRC_INCOMPLETECMD)
 	{
-		*state = read_input(cmdline, get_prompt(cmdline, type));
+		*state = create_prompt_and_read_input(cmdline, type);
 		if (*state != RSTATE_END)
 			break ;
 		if ((alloc->full_input = join_command(cmdline, alloc->full_input))
