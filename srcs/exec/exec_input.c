@@ -106,6 +106,6 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	ft_strdel(&path_exec);
 	wait_pid(child, alloc, elem, opt);
 	if (opt->wait_hang == 0)
-		return (ret_status(alloc->ret_val, child, 0));
+		return (ret_status(alloc->ret_val, child, 0, opt));
 	return (0);
 }

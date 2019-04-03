@@ -34,11 +34,10 @@ static int	export_builtin_var(t_alloc *alloc, const char *key
 		return (0);
 	if ((var = get_var(alloc->vars, key)) != NULL)
 	{
-		if (value == NULL && var->tmp_value != NULL)
-		{
-			value = var->tmp_value;
-			var->tmp_value = NULL;
-		}
+		if (var->tmp_value != NULL)
+			ft_strdel(&var->tmp_value);
+		if (value == NULL)
+			value = var->value;
 		var->is_env = 1;
 	}
 	if (var == NULL || value != NULL)

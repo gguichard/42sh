@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/01 14:29:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 12:56:22 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,12 @@ int			unset_var(t_list **lst, const char *key)
 		var = (t_var *)curr->content;
 		if (ft_strequ(var->key, key))
 		{
-			if (var->tmp_value != NULL)
-				ft_strdel(&var->tmp_value);
+			if (var->is_env != 2 && var->tmp_value != NULL)
+			{
+				free(var->value);
+				var->value = var->tmp_value;
+				var->tmp_value = NULL;
+			}
 			else
 			{
 				if (prev != NULL)

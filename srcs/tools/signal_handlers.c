@@ -30,12 +30,12 @@ static void	handler_signals(int sig)
 {
 	if (sig == SIGTERM)
 		return (handler_sigterm());
+	g_sig = sig;
 	if (sig == SIGINT)
 	{
 		handle_end_of_text(g_cmdline);
 		return ;
 	}
-	g_sig = sig;
 	close(STDIN_FILENO);
 	if (sig == SIGHUP)
 		terminate_all_jobs(SIGHUP);

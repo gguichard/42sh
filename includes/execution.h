@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 14:43:12 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 15:02:22 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,16 @@ typedef struct	s_exec_opt
 	int			wait_hang;
 	t_list		*red_save;
 	int			from_builtin;
+	int			sigint;
 }				t_exec_opt;
 
 int				process_assigns(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
 
 int				do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt);
-pid_t			process_fork(t_alloc *alloc, t_ast *elem, int already_piped
+pid_t			process_pipe_fork(t_alloc *alloc, t_ast *elem, int already_piped
 		, int wait_hang);
 
-int				waiting_line(int wait_hang, t_list *tmp);
+int				waiting_line(int wait_hang, t_list *tmp, t_exec_opt *opt);
 void			wait_pid(pid_t child, t_alloc *alloc, t_ast *elem
 		, t_exec_opt *opt);
 
