@@ -45,8 +45,7 @@ static int	errors_arg_exit(t_ast *elem, int *status)
 
 static int	errors_exit(t_ast *elem, t_alloc *alloc, int *status)
 {
-	if (elem && elem->back && (elem->back->type == AST_PIPE
-		|| (elem->back->back && elem->back->back->type == AST_PIPE)))
+	if (alloc->ppid != getpid())
 	{
 		errors_arg_exit(elem, status);
 		exit(*status);

@@ -57,7 +57,7 @@ typedef struct			s_alloc
 	int					exit_rdy;
 	int					ret_val;
 	pid_t				last_bg;
-	pid_t				pid;
+	pid_t				ppid;
 	t_cmdline			cmdline;
 	char				*full_input;
 	t_ast				*ast;
