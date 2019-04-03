@@ -6,22 +6,37 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 20:55:19 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:45:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <unistd.h>
+#include <term.h>
 #include "cmdline.h"
 
-void	update_cmdline_at_offset(t_cmdline *cmdline)
+void	update_cmdline_at_offset(t_cmdline *cmdline, char caller
+		, int is_deletion)
 {
+	static char	*ce_tcap = NULL;
 	t_cursor	saved_cursor;
 
+	if (ce_tcap == NULL)
+		ce_tcap = tgetstr("ce", NULL);
 	if (cmdline->input.offset != cmdline->input.size)
 	{
 		saved_cursor = cmdline->cursor;
 		print_line_by_line(cmdline, cmdline->input.offset);
+		if (is_deletion && (caller == '\n' || cmdline->cursor.x == 0))
+		{
+			if (caller == '\n')
+			{
+				write(STDOUT_FILENO, "\n", 1);
+				cmdline->cursor.x = 0;
+				cmdline->cursor.y += 1;
+			}
+			tputs(ce_tcap, 1, t_putchar);
+		}
 		go_to_cursor_pos(cmdline, saved_cursor);
 	}
 }
