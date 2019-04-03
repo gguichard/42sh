@@ -60,5 +60,5 @@ int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		else
 			last_pipe_cmd = 1;
 	}
-	return (waiting_line(opt->wait_hang, 0));
+	return (waiting_line(opt->wait_hang, 0, opt));
 }

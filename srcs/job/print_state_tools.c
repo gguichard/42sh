@@ -44,12 +44,10 @@ char	*signal_stop_str(t_list *tmp)
 
 char	*job_state_str(t_list *tmp)
 {
-	t_job	*job;
-
 	if (check_job_state(tmp, STOPPED))
 		return ("Stopped");
-	else if ((job = check_job_state(tmp, SIG)))
-		return (last_sig_process(tmp));
+	else if (check_job_state(tmp, SIG) && last_sig_process(tmp, 0))
+		return (last_sig_process(tmp, 0));
 	else if (check_job_state(tmp, RUNNING_BG))
 		return ("Running");
 	else if (check_job_state(tmp, DONE))
