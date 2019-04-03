@@ -86,11 +86,6 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 	return (value);
 }
 
-//Recuperer la valeur de l'expand
-//Spliter si white space dans l'expand
-//1er mot join avec avant l'expand si il existe et que l'expand commence pas par un space
-//Dernier mot de l'expand join avec suite txt apres l'expand si fin expand ne fini pas par space
-
 int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 		t_str_cmd_inf *str_cmd)
 {
@@ -103,8 +98,7 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 	index = get_pos_in_array(*array);
 	if (!expand(&((*array)[index]), alloc, pos_array))
 		return (0);
-	ft_printf("INPUT: |%s|\n", (*array)[index]);
-	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
+	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote && *pos_array != save)
 	{
 		while ((*array)[index][save + len]
 				&& !ft_isspace((*array)[index][save + len])

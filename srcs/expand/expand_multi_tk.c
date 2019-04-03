@@ -54,7 +54,7 @@ int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
 	char	*sub;
 	char	**new_array;
 	char	**replace;
-	size_t 	i;
+	size_t	i;
 	size_t	x;
 
 	i = 0;
