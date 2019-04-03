@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 14:23:41 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/04 00:34:53 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,19 +124,21 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	if (state == RSTATE_END)
 		push_history_entry(&cmdline->history, alloc->full_input);
 	else if (state == RSTATE_ETX)
-		ft_strdel(&alloc->full_input);
-	else
+		alloc->ret_val = 1;
+	else if (state == RSTATE_EOT)
 	{
 		if (alloc->full_input == NULL)
 			builtin_exit(NULL, alloc);
 		else
-		{
-			ft_strdel(&alloc->full_input);
 			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");
-		}
 	}
 	cmdline->history.offset = NULL;
 	if (error != ERRC_NOERROR)
+	{
 		ft_strdel(&alloc->full_input);
+		if (error == ERRC_LEXERROR
+				|| (error == ERRC_INCOMPLETECMD && state == RSTATE_EOT))
+			alloc->ret_val = 258;
+	}
 	return (alloc->full_input);
 }
