@@ -49,7 +49,7 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 	}
 }
 
-static void	refresh_state(t_list *tmp)
+void		refresh_state(t_list *tmp, int print_state)
 {
 	t_job	*job;
 	int		print;
@@ -71,7 +71,8 @@ static void	refresh_state(t_list *tmp)
 			refresh_state_job(job, &print, &stop_print);
 			pipe = pipe->next;
 		}
-		print_refreshed_jobs(tmp, print, stop_print, index);
+		if (print_state)
+			print_refreshed_jobs(tmp, print, stop_print, index);
 		tmp = tmp->next;
 		index += 1;
 	}
@@ -84,6 +85,6 @@ void		refresh_jobs(void)
 	tmp = g_jobs;
 	if (!tmp)
 		return ;
-	refresh_state(tmp);
+	refresh_state(tmp, 1);
 	delete_jobs_terminated(tmp);
 }

@@ -8,3 +8,8 @@ TODO:
 		kill term
 
 		$! a faire
+
+		ls -R / | sleep 10 | ./segfault | cat > po | ls -z | ./bus_error
+		sleep 2 | ls -R / | wc -l &
+		ls | qw | sleep 2 | ls -z &
+		leaks exit signal

@@ -73,6 +73,7 @@ static int	display_jobs(t_opts *opts, int param)
 		index += 1;
 		tmp = tmp->next;
 	}
+	delete_jobs_terminated(g_jobs);
 	return (0);
 }
 
@@ -97,6 +98,6 @@ int			builtin_jobs(t_ast *elem, t_alloc *alloc)
 		ft_dprintf(STDERR_FILENO, "42sh: jobs: %s: no such job\n", elem->input[opts.index]);
 		return (1);
 	}
-	refresh_jobs();
+	refresh_state(g_jobs, 0);
 	return (display_jobs(&opts, param));
 }

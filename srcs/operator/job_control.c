@@ -15,7 +15,7 @@ void	print_bg(pid_t process)
 		job = tmp->content;
 		if (job->pid == process)
 		{
-			job->state = RUNNING_BG;
+			update_job_state(tmp, RUNNING_BG);
 			ft_printf("[%d] %d\n", index, process);
 			break ;
 		}
