@@ -4,6 +4,7 @@
 #include "redirect_inf.h"
 #include "execution.h"
 #include "inhibitor.h"
+#include "signals.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -54,6 +55,7 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
+	sigs_wait_line(alloc);
 	if (elem == NULL)
 	{
 		if (opt->red_save != NULL && !opt->from_builtin)

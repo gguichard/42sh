@@ -9,6 +9,8 @@
 #include "exectable.h"
 #include "check_path.h"
 #include "execution.h"
+#include "signals.h"
+// #include "builtins.h" // TODO: deplacer le prototype de wait_pid
 
 static char			*search_exec(t_list *vars, const char *name, int *hashable
 		, t_error *err)
@@ -68,6 +70,7 @@ void				execute_cmd(t_alloc *alloc, char **argv, char *path_exec)
 	tab_env = get_environ_from_list(alloc->vars);
 	if (tab_env == NULL)
 		exit(127);
+	sig_reset();
 	execve(path_exec, argv, tab_env);
 	ft_dprintf(STDERR_FILENO, "42sh: %s: not executable\n", argv[0]);
 	ft_strdel(&path_exec);
@@ -99,7 +102,10 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 			exit(ret);
 		execute_cmd(alloc, elem->input, path_exec);
 	}
+	set_signals_handlers();
 	ft_strdel(&path_exec);
 	wait_pid(child, alloc, elem, opt);
-	return (ret_status(alloc->ret_val, child, 0));
+	if (opt->wait_hang == 0)
+		return (ret_status(alloc->ret_val, child, 0));
+	return (0);
 }

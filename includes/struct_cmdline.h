@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 19:51:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 19:00:01 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct		s_cmdline
 	t_seq_keys		seq_keys;
 	int				saved_col;
 	int				konami_code;
+	int				stdin_dup;
 	t_history		history;
 	int				ac_flag;
 }					t_cmdline;

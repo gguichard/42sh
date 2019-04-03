@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 18:32:35 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/02 19:39:07 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <term.h>
+#include <unistd.h>
 #include "shell.h"
 #include "vars.h"
 #include "cmdline.h"
@@ -32,11 +33,13 @@ void	reset_cmdline(t_cmdline *cmdline, const char *prompt)
 
 int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	const char	*term;
+	struct sigaction	act;
+	const char			*term;
 
 	g_cmdline = cmdline;
 	cmdline->alloc = alloc;
 	term = get_var_value(alloc->vars, "TERM");
+	cmdline->stdin_dup = dup(STDIN_FILENO);
 	if (term == NULL || term[0] == '\0')
 		term = "xterm-256color";
 	if (tgetent(NULL, term) == -1)
@@ -44,6 +47,9 @@ int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
 	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
 	update_winsize(cmdline);
-	signal(SIGWINCH, handle_sigwinch);
+	act.sa_handler = handle_sigwinch;
+	act.sa_flags = SA_RESTART;
+	sigfillset(&act.sa_mask);
+	sigaction(SIGWINCH, &act, 0);
 	return (1);
 }

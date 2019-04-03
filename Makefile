@@ -50,17 +50,20 @@ $(PATH_EXEC)/redir_input.c \
 $(PATH_EXEC)/redir_output.c \
 $(PATH_EXEC)/redir_utils.c \
 $(PATH_EXEC)/redirections.c \
+$(PATH_EXEC)/source_file.c \
 $(PATH_EXEC)/var_assigns.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
 $(PATH_TOOLS)/clean_tools.c \
+$(PATH_TOOLS)/home_tools.c \
 $(PATH_TOOLS)/printer_ast.c \
 $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
 $(PATH_BUILT)/cd.c \
+$(PATH_BUILT)/cd_path.c \
 $(PATH_BUILT)/cd_utils.c \
 $(PATH_BUILT)/echo.c \
 $(PATH_BUILT)/exit.c \
@@ -83,8 +86,11 @@ $(PATH_BUILT)/test/file_tests_rights.c \
 $(PATH_BUILT)/test/string_tests.c \
 $(PATH_BUILT)/test/integer_tests.c \
 $(PATH_BUILT)/exec.c \
+$(PATH_BUILT)/source.c \
 $(PATH_TOOLS)/waitline_pipes.c \
 $(PATH_TOOLS)/clean_ast.c \
+$(PATH_TOOLS)/signal_management.c \
+$(PATH_TOOLS)/signal_handlers.c \
 $(PATH_HASHTABLE)/exectable.c \
 $(PATH_HASHTABLE)/aliastable.c \
 $(PATH_HASHTABLE)/hashtable.c \
@@ -92,6 +98,7 @@ $(PATH_HASHTABLE)/hashtable_delete.c \
 $(PATH_HASHTABLE)/hashtable_utils.c \
 $(PATH_PATH)/check_path.c \
 $(PATH_PATH)/convert_path_to_tab.c \
+$(PATH_PATH)/join_path.c \
 $(PATH_PATH)/search_in_path.c \
 $(PATH_TOKEN)/token_inf.c \
 $(PATH_TOKEN)/split_cmd_token.c \
@@ -153,7 +160,9 @@ $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
+$(PATH_EXPAND)/ft_splitwhitespace.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c
 

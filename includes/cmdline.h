@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/01 10:20:59 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:54:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
 void		print_only_cmdline(t_cmdline *cmdline);
 
-void		update_cmdline_at_offset(t_cmdline *cmdline);
+void		update_cmdline_at_offset(t_cmdline *cmdline, char caller
+		, int is_deletion);
 void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		add_char_to_input(t_cmdline *cmdline, char c);

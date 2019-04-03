@@ -15,6 +15,8 @@ static char	*sig_str_2(int signal)
 		return ("Segmentation fault: 11");
 	else if (signal == SIGSYS)
 		return ("Bad system call: 12");
+	else if (signal == SIGPIPE)
+		return ("Broken pipe: 13");
 	else if (signal == SIGALRM)
 		return ("Alarm clock: 14");
 	else if (signal == SIGTERM)

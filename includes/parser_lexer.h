@@ -12,6 +12,8 @@ typedef enum	e_recall_prompt
 	PR_OR
 }				t_recall_prompt;
 
+void			lexer_parser(const char *line, t_alloc *alloc);
+
 /*
 ************************************ LEXER *************************************
 */

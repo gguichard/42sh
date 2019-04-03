@@ -22,6 +22,8 @@ static const t_builtin	g_builtins[] = {
 	{"bg", builtin_bg},
 	{"test", builtin_test},
 	{"exec", builtin_exec},
+	{"source", builtin_source},
+	{".", builtin_source},
 	{NULL, NULL}
 };
 
@@ -73,6 +75,7 @@ int						setup_alloc(t_alloc *alloc, int argc, char **argv
 	ft_memset(alloc, 0, sizeof(t_alloc));
 	alloc->argc = argc;
 	alloc->argv = argv;
+	alloc->pid = getpid();
 	alloc->vars = parse_env(environ);
 	setup_def_vars(alloc);
 	alloc->builtins = g_builtins;

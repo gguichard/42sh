@@ -70,32 +70,35 @@ typedef struct			s_alloc
 *********************************** CMDLINE ************************************
 */
 
-int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
-char	*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
-char	*get_history_file_path(t_alloc *alloc);
-int		load_history_file_entries(t_alloc *alloc, t_history *history);
-int		save_history_entries(t_alloc *alloc, t_history *history);
+int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char		*get_history_file_path(t_alloc *alloc);
+int			load_history_file_entries(t_alloc *alloc, t_history *history);
+int			save_history_entries(t_alloc *alloc, t_history *history);
 
 /*
 ************************************ TOOLS *************************************
 */
 
-int		setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
+const char	*get_home_directory(t_list *vars);
 
-void	del_lst_ast(t_ast **lst);
-void	del_alloc(t_alloc *alloc);
+int			setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
+
+void		del_lst_ast(t_ast **lst);
+void		del_alloc(t_alloc *alloc);
 
 //TOOLS TO PRINT LST AST
-void	read_sort_descent(t_ast *sort, int active);
+void		read_sort_descent(t_ast *sort, int active);
 
 // CLEAN AST
-void	del_ast(t_ast **lst);
-void	del_elem_ast(t_ast **lst);
+void		del_ast(t_ast **lst);
+void		del_elem_ast(t_ast **lst);
 
 /*
 *********************************** GLOBALS ***********************************
 */
 
 t_list					*g_jobs;
+int						g_sig;
 
 #endif

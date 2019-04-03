@@ -1,6 +1,21 @@
 #include "shell.h"
 #include "job.h"
 
+void	update_job_state(t_list *tmp, t_job_state state)
+{
+	t_job	*job;
+
+	job = tmp->content;
+	job->state = state;
+	tmp = job->pipe;
+	while (tmp)
+	{
+		job = tmp->content;
+		job->state = state;
+		tmp = tmp->next;
+	}
+}
+
 t_job	*check_job_state(t_list *tmp, t_job_state state)
 {
 	t_job	*job;

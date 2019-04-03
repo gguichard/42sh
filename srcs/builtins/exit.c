@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include "libft.h"
 #include "shell.h"
 #include "job.h"
 #include "builtins.h"
+#include "signals.h"
 
-static int	retry_exit_job(int type)
+int			retry_exit_job(int type)
 {
 	static int	retry_job;
 
@@ -15,7 +17,7 @@ static int	retry_exit_job(int type)
 	return (0);
 }
 
-static int	check_stopped_job(void)
+int			check_stopped_job(void)
 {
 	t_list	*tmp;
 
@@ -51,37 +53,56 @@ void		check_exit_cmd(t_ast *elem)
 		retry_exit_job(0);
 }
 
-int			builtin_exit(t_ast *elem, t_alloc *alloc)
+int			errors_exit(t_ast *elem, int *status)
 {
-	int		status;
 	char	*endptr;
 
-	status = alloc->ret_val;
 	if (elem != NULL && elem->input[1] != NULL)
 	{
-		status = ft_strtol(elem->input[1], &endptr, 10);
+		*status = ft_strtol(elem->input[1], &endptr, 10);
 		if (*endptr != '\0')
 		{
-			status = 2;
+			*status = 2;
 			ft_dprintf(STDERR_FILENO, "42sh: exit: %s: "
 					"numeric argument required\n", elem->input[1]);
 		}
 	}
-	if (elem && elem->back && (elem->back->type == AST_PIPE || (elem->back->back && elem->back->back->type == AST_PIPE)))
-		exit(status);
+	if (elem && elem->back && (elem->back->type == AST_PIPE
+		|| (elem->back->back && elem->back->back->type == AST_PIPE)))
+		exit(*status);
 	if (check_stopped_job() && !retry_exit_job(-1))
 	{
 		ft_dprintf(STDERR_FILENO, "There are stopped jobs.\n");
 		retry_exit_job(1);
 		return (1);
 	}
-	ft_putstr("exit\n");
-	terminate_all_jobs();
+	return (0);
+}
+
+int			builtin_exit(t_ast *elem, t_alloc *alloc)
+{
+	int		status;
+
+	status = alloc->ret_val;
+	if (!g_sig || g_sig == 15)
+		ft_putstr("exit\n");
+	if (!g_sig)
+	{
+		if (errors_exit(elem, &status))
+			return (1);
+	}
+	sig_reset();
+	terminate_all_jobs(SIGTERM);
 	save_history_entries(alloc, &alloc->cmdline.history);
 	if (elem == NULL)
+	{
+		dup2(g_cmdline->stdin_dup, STDIN_FILENO);
 		reset_term(&alloc->cmdline);
+	}
 	// TODO: clean history
 	del_alloc(alloc);
+	if (g_sig && g_sig != 15)
+		kill(0, g_sig);
 	exit(status);
 	return (1);
 }

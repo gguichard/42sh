@@ -59,7 +59,7 @@ void		delete_jobs_terminated(t_list *tmp)
 	}
 }
 
-void		terminate_all_jobs(void)
+void		terminate_all_jobs(int sig)
 {
 	t_list	*tmp;
 	t_list	*pipe;
@@ -70,7 +70,7 @@ void		terminate_all_jobs(void)
 	while (tmp)
 	{
 		job = tmp->content;
-		kill(job->pid, SIGTERM);
+		kill(job->pid, sig);
 		waitpid(job->pid, 0, 0);
 		job->state = DONE;
 		if (job->pipe)
@@ -84,4 +84,5 @@ void		terminate_all_jobs(void)
 			tmp = pipe->next;
 	}
 	delete_jobs_terminated(g_jobs);
+	g_jobs = 0;
 }
