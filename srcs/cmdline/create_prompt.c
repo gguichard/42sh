@@ -58,6 +58,8 @@ static char		*get_replacement(char opt, t_list *vars)
 {
 	if (opt == 'a')
 		return (ft_strdup("\a"));
+	else if (opt == 'e')
+		return (ft_strdup("\033"));
 	else if (opt == 'H')
 		return (get_hostname(0));
 	else if (opt == 'h')
@@ -75,24 +77,25 @@ static char		*get_replacement(char opt, t_list *vars)
 static int		escape_char_at_inside_and_move(char **str, size_t *idx
 		, t_list *vars)
 {
-	char	*replacement;
+	char	*replaced;
 
 	if ((*str)[*idx] == '\\')
 	{
-		if ((replacement = get_replacement((*str)[*idx + 1], vars)) != NULL)
+		if ((*str)[*idx + 1] == '[' || (*str)[*idx + 1] == ']')
+			*idx += 2;
+		else if ((replaced = get_replacement((*str)[*idx + 1], vars)) != NULL)
 		{
-			if (!ft_strreplace_inside(str, *idx, 2, replacement))
+			if (!ft_strreplace_inside(str, *idx, 2, replaced))
 			{
-				free(replacement);
+				free(replaced);
 				return (0);
 			}
-			*idx += ft_strlen(replacement);
-			free(replacement);
+			*idx += ft_strlen(replaced);
+			free(replaced);
 		}
 		else
 		{
-			ft_memmove((*str + *idx), (*str + *idx + 1)
-					, ft_strlen(*str + *idx));
+			ft_memmove(*str + *idx, *str + *idx + 1, ft_strlen(*str + *idx));
 			++(*idx);
 		}
 	}
