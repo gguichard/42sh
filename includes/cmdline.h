@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 14:24:16 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/03 18:39:00 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void		reset_cmdline(t_cmdline *cmdline, const char *prompt);
 
 /*
 ** Alloue et retourne le prompt a afficher, retourne NULL en cas d'erreur.
+** Set tot_printed_char au nombre de chars printables.
 */
-char		*create_prompt(t_list *vars);
+char		*create_prompt(t_list *vars, size_t *tot_printable_char);
 
 /*
 ** TERM INIT/MISC.
