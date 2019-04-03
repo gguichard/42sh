@@ -2,10 +2,3 @@ TODO:
 
 	Multi tokens.
 		- Si quote non fermé faire multi tokens ou considerer comme dans quote ?!?
-	Test a regler:
-
-		$> cat
-		kill term
-
-		leaks exit signal
-		./job_test_files/sigint ; echo ok

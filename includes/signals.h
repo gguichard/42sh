@@ -8,6 +8,7 @@
 */
 
 void	set_signals_handlers(void);
+void	sig_set_all(void(*handler)(int));
 void	sig_reset(void);
 void	set_sigmask(int type);
 void	sigs_wait_line(t_alloc *alloc);

@@ -45,19 +45,18 @@ void		set_signals_handlers(void)
 {
 	struct sigaction	act;
 
-	set_sigmask(SIG_UNBLOCK);
 	sigfillset(&act.sa_mask);
 	act.sa_handler = handler_signals;
 	act.sa_flags = SA_RESTART;
-	action_sigs(&act);
-	act.sa_flags = 0;
 	sigaction(SIGTERM, &act, 0);
 	sigaction(SIGHUP, &act, 0);
 	sigaction(SIGINT, &act, 0);
 	act.sa_flags = 0;
+	action_sigs(&act);
 	act.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &act, 0);
 	sigaction(SIGTSTP, &act, 0);
 	sigaction(SIGTTOU, &act, 0);
 	sigaction(SIGTTIN, &act, 0);
+	set_sigmask(SIG_UNBLOCK);
 }
