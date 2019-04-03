@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 13:42:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 12:44:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 15:40:41 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,24 +90,30 @@ int			handle_autocomplete(t_cmdline *cmdline)
 		- (cmdline->input.size - cmdline->input.offset)] = '\0';
 	ret = scmd_init(&scmd, buffer);
 	free(buffer);
-	if (!ret || (acs_inf = autocomplete_cmdline(&scmd, cmdline->alloc)) == NULL)
+	if (!ret)
+		return (0);
+	else if ((acs_inf = autocomplete_cmdline(&scmd, cmdline->alloc)) == NULL)
 	{
-		if (ret)
-			scmd_clean(&scmd);
+		scmd_clean(&scmd);
 		return (0);
 	}
-	if (acs_inf->choices == NULL)
-		ret = 0;
-	if (acs_inf->suff != NULL)
-		ac_append_to_cmdline(cmdline, acs_inf, &scmd
-				, cmdline->input.offset == cmdline->input.size);
-	if (acs_inf->choices != NULL && cmdline->ac_flag)
+	ret = acs_inf->choices != NULL && (cmdline->ac_flag
+			|| (acs_inf->suff != NULL && acs_inf->suff[0] != '\0'));
+	if (!cmdline->ac_flag)
+		cmdline->ac_flag += (acs_inf->choices != NULL);
+	else
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		ac_print_list(acs_inf->choices, cmdline);
 		print_prompt_and_cmdline(cmdline);
 	}
-	cmdline->ac_flag += 1;
+	if (acs_inf->suff != NULL)
+	{
+		ac_append_to_cmdline(cmdline, acs_inf, &scmd
+				, cmdline->input.offset == cmdline->input.size);
+		if (acs_inf->suff[0] != '\0')
+			cmdline->ac_flag = 0;
+	}
 	delete_ac_suff_inf(acs_inf);
 	scmd_clean(&scmd);
 	return (ret);
