@@ -104,7 +104,8 @@ void					set_cur_token_cmd(t_token_inf *cur_tk_cmd
 	while (last_tk != NULL && last_tk->next != NULL)
 		last_tk = last_tk->next;
 	if (scmd_cur_char_is_in_nothing(scmd) && (scmd->pos == 0 || last_tk == NULL
-				|| scmd_char_at_is_of(scmd, scmd->pos - 1, WORD_SEP_CHARS)
+				|| (scmd_char_at_is_of(scmd, scmd->pos - 1, WORD_SEP_CHARS)
+					&& !scmd_char_at_is_escaped(scmd, scmd->pos - 1))
 				|| get_tk(last_tk)->type == TK_RED_OPE
 				|| get_tk(last_tk)->type == TK_CMD_SEP))
 		fill_cur_tk_with_new_token(cur_tk_cmd, scmd, alloc);
