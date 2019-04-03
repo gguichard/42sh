@@ -29,10 +29,11 @@ static char		*get_hostname(int shorten_it)
 	return (hostname);
 }
 
-static char		*shorten_home(char *str, t_list *vars)
+static char		*shorten_home(char *str, int only_last_dir, t_list *vars)
 {
 	const char	*home;
 	size_t		home_len;
+	char		*last_slash_pos;
 
 	home = get_var_value(vars, "HOME");
 	home_len = ft_strlen(home);
@@ -44,21 +45,29 @@ static char		*shorten_home(char *str, t_list *vars)
 		ft_memmove(str + 1, str + home_len, ft_strlen(str) - home_len + 1);
 		str[0] = '~';
 	}
+	if (only_last_dir)
+	{
+		last_slash_pos = ft_strrchr(str, '/');
+		if (last_slash_pos != NULL)
+			ft_memmove(str, last_slash_pos + 1, ft_strlen(last_slash_pos));
+	}
 	return (str);
 }
 
 static char		*get_replacement(char opt, t_list *vars)
 {
-	if (opt == 'w')
-		return (shorten_home(ft_strdup(get_var_value(vars, "PWD")), vars));
-	else if (opt == 'u')
-		return (ft_strdup(getlogin()));
-	else if (opt == 'a')
+	if (opt == 'a')
 		return (ft_strdup("\a"));
-	else if (opt == 'h')
-		return (get_hostname(1));
 	else if (opt == 'H')
 		return (get_hostname(0));
+	else if (opt == 'h')
+		return (get_hostname(1));
+	else if (opt == 'u')
+		return (ft_strdup(getlogin()));
+	else if (opt == 'W')
+		return (shorten_home(ft_strdup(get_var_value(vars, "PWD")), 1, vars));
+	else if (opt == 'w')
+		return (shorten_home(ft_strdup(get_var_value(vars, "PWD")), 0, vars));
 	else
 		return (NULL);
 }
