@@ -54,6 +54,7 @@ typedef struct			s_alloc
 {
 	int					argc;
 	char				**argv;
+	int					exit_rdy;
 	int					ret_val;
 	pid_t				last_bg;
 	pid_t				pid;

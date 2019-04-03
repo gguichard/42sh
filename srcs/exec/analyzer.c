@@ -47,6 +47,8 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	int	ret;
 
+	if (ft_strcmp(elem->input[0], "exit"))
+		alloc->exit_rdy = 0;
 	ret = try_builtin_execution(alloc, elem, opt);
 	if (ret == -1)
 		ret = exec_input(alloc, elem, opt);
