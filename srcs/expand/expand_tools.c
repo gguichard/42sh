@@ -17,11 +17,18 @@ int		check_expand_syntax(const char *str)
 	int i;
 
 	i = 0;
+	if (str[i] == '}')
+		return (0);
 	if (ft_isdigit(str[i]))
 	{
 		while (ft_isdigit(str[i]))
 			i += 1;
 		if (str[i] != '}')
+			return (0);
+	}
+	else if (str[i] == '!' || str[i] == '?' || str[i] == '$' || str[i] == '_')
+	{
+		if (str[i + 1] != '}')
 			return (0);
 	}
 	else
