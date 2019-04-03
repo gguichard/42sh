@@ -4,6 +4,7 @@
 # include <unistd.h>
 # include "libft.h"
 # include "shell.h"
+# include "execution.h"
 # include "options.h"
 
 typedef enum			e_job_state
@@ -35,7 +36,7 @@ t_list		*add_pid_lst(pid_t process, t_ast *elem, int addpipe);
 int			add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem
 		, int addpipe);
 
-int			ret_status(int ret, pid_t process, t_job *job);
+int			ret_status(int ret, pid_t process, t_job *job, t_exec_opt *opt);
 
 void		redirect_term_controller(pid_t new_controller, int type);
 
@@ -54,7 +55,7 @@ void		delete_jobs_terminated(t_list *tmp);
 void		terminate_all_jobs(int sig);
 
 char		*sig_str(int status);
-char		*last_sig_process(t_list *tmp);
+char		*last_sig_process(t_list *tmp, int foreground);
 int			last_pid_exit_status(t_job *job);
 char		*status_stop_str(int status);
 char		*signal_stop_str(t_list *tmp);
