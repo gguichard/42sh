@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 14:23:41 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/03 18:44:43 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ static t_rstate	create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
 	t_rstate	state;
 
 	prompt = get_prompt(cmdline, type);
-	state = read_input(cmdline, (prompt == NULL ? "> " : prompt));
+	state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
+			, ft_strlen(prompt));
 	free(prompt);
 	return (state);
 }

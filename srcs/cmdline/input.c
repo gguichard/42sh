@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:53:58 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 18:38:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,14 @@ static void		print_unterminated_line(t_cmdline *cmdline)
 	free(buffer);
 }
 
-t_rstate		read_input(t_cmdline *cmdline, const char *prompt)
+t_rstate		read_input(t_cmdline *cmdline, const char *prompt
+		, size_t offset)
 {
 	char		input;
 	const t_seq	*seq;
 
 	print_unterminated_line(cmdline);
-	reset_cmdline(cmdline, prompt);
+	reset_cmdline(cmdline, prompt, offset);
 	while (cmdline->input.reading == RSTATE_READING)
 	{
 		if (read(STDIN_FILENO, &input, 1) <= 0)
