@@ -2,6 +2,7 @@
 #include "shell.h"
 #include "execution.h"
 #include "job.h"
+#include "signals.h"
 
 static void	pipe_waits(t_list *lst, int wait_opt)
 {
@@ -21,6 +22,7 @@ static void	pipe_waits(t_list *lst, int wait_opt)
 static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 {
 	t_job	*job;
+	t_list	*main;
 	int		stop;
 	int		ret;
 
@@ -30,16 +32,17 @@ static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 		ret = ret_status(job->status, job->pid, job, opt);
 	if (job->state == STOPPED_PENDING)
 		stop = ret;
+	main = tmp;
 	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
 		if (job->state < SIG)
 			ret = ret_status(job->status, job->pid, job, opt);
-		if (job->state == STOPPED_PENDING)
-			stop = ret;
+		(job->state == STOPPED_PENDING) ? stop = ret : 0;
 		tmp = tmp->next;
 	}
+	print_nl_sigint(main);
 	if (!stop)
 		return (ret);
 	return (stop);

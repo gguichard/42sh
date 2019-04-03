@@ -60,3 +60,30 @@ void		set_signals_handlers(void)
 	sigaction(SIGTTIN, &act, 0);
 	set_sigmask(SIG_UNBLOCK);
 }
+
+void	print_nl_sigint(t_list *tmp)
+{
+	t_job	*job;
+	int		print;
+
+	print = 0;
+	if (!check_job_state(tmp, STOPPED_PENDING))
+	{
+		job = check_job_state(tmp, SIG);
+		if (job && job->status != SIGINT)
+			return ;
+		job = tmp->content;
+		if (job->state == SIG && job->status == SIGINT)
+			print = 1;
+		tmp = job->pipe;
+		while (tmp)
+		{
+			job = tmp->content;
+			if (job->state == SIG && job->status == SIGINT)
+				print = 1;
+			tmp = tmp->next;
+		}
+	}
+	if (print)
+		write(STDOUT_FILENO, "\n", 1);
+}

@@ -67,8 +67,8 @@ char	*last_sig_process(t_list *tmp, int foreground)
 			tmp = tmp->next;
 		}
 	}
-	if (last && WTERMSIG(last->status) != SIGPIPE
-		&& (WTERMSIG(last->status) != SIGINT || !foreground))
+	if (last && last->status != SIGPIPE
+		&& (last->status != SIGINT || !foreground))
 		return (sig_str(last->status));
 	return (0);
 }

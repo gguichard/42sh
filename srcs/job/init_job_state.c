@@ -6,6 +6,8 @@
 
 int		ret_status(int ret, pid_t process, t_job *job, t_exec_opt *opt)
 {
+	if (!job && WIFSIGNALED(ret) && WTERMSIG(ret) == SIGINT)
+		write(1, "\n", 1);
 	if (!job && !(job = get_job_pid(process)))
 		return (1);
 	if (WIFEXITED(ret))
@@ -24,10 +26,7 @@ int		ret_status(int ret, pid_t process, t_job *job, t_exec_opt *opt)
 		job->state = SIG;
 		job->status = WTERMSIG(ret);
 		if (job->status == SIGINT && opt)
-		{
-			(opt->sigint != 1) ? write(1, "\n", 1) : 0;
 			opt->sigint = 1;
-		}
 	}
 	return (job->status + 128);
 }
