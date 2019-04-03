@@ -53,12 +53,10 @@ static void				increase_shlvl(t_alloc *alloc)
 
 void					setup_def_vars(t_alloc *alloc)
 {
-	t_var	*var;
 	char	*cur_pwd;
 
 	increase_shlvl(alloc);
-	var = get_var(alloc->vars, "PWD");
-	if (var == NULL)
+	if (get_var(alloc->vars, "PWD") == NULL)
 	{
 		cur_pwd = getcwd(NULL, 0);
 		if (cur_pwd != NULL)
@@ -66,6 +64,10 @@ void					setup_def_vars(t_alloc *alloc)
 			create_var(&alloc->vars, "PWD", cur_pwd, 1);
 			free(cur_pwd);
 		}
+	}
+	if (get_var(alloc->vars, "PS1") == NULL)
+	{
+		create_var(&alloc->vars, "PS1", "> ", 0);
 	}
 }
 
