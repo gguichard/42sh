@@ -155,22 +155,18 @@ $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c
 
-OBJ_RULE	=	OBJECTS
 OBJ_DIR		=	.obj
 OBJ			=	$(SRC:.c=.o)
 DEP			=	$(OBJ:.o=.d)
 
 all: $(NAME)
 
-$(NAME): $(addprefix $(SRC_DIR)/,$(SRC))
+$(NAME): $(addprefix $(OBJ_DIR)/,$(OBJ))
 	$(MAKE) -C libft
-	$(MAKE) $(OBJ_RULE)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -o $@ $(addprefix $(OBJ_DIR)/,$(OBJ))
 	@echo "\n$(NAME):\t\t\t$(GREEN)[READY]\n\t\t¯\_(ツ)_/¯$(END)"
 
 -include $(addprefix $(OBJ_DIR)/,$(DEP))
-
-$(OBJ_RULE): $(addprefix $(OBJ_DIR)/,$(OBJ))
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -MMD -o $@ -c $<
