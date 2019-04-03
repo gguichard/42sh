@@ -127,7 +127,7 @@ char			*create_prompt(t_list *vars, size_t *tot_printable_char)
 	int		nb_new_printed_char;
 
 	if ((ps1 = ft_strdup(get_var_value(vars, "PS1"))) == NULL)
-		return (0);
+		return (NULL);
 	idx = 0;
 	is_in_no_print = 0;
 	*tot_printable_char = 0;
@@ -136,7 +136,7 @@ char			*create_prompt(t_list *vars, size_t *tot_printable_char)
 		if ((nb_new_printed_char = escape_char_at_inside_and_move(&ps1
 						, &idx, vars, &is_in_no_print)) < 0)
 			return (NULL);
-		tot_printable_char += nb_new_printed_char;
+		*tot_printable_char += nb_new_printed_char;
 	}
 	return (ps1);
 }
