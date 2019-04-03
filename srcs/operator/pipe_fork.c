@@ -39,16 +39,15 @@ static pid_t	add_pid_pipe(t_ast *elem, int last_pipe_cmd, pid_t child
 	int				is_first_pipe;
 	int				ret;
 
-	if (!(is_first_pipe = (elem->back == NULL || elem->back->type != AST_PIPE)))
-	{
+	is_first_pipe = (elem->back == NULL || elem->back->type != AST_PIPE);
+	if (!is_first_pipe || last_pipe_cmd)
 		ret = add_pid_lst_pipe(first_cmd, child
 				, (last_pipe_cmd ? elem->right : elem->left), 1);
-	}
 	else if ((ret = setpgid(child, 0)) == 0)
 	{
 		if (!wait_hang)
 			redirect_term_controller(child, 0);
-		if (!(first_cmd = add_pid_lst(child, elem->left, 0)))
+		if ((first_cmd = add_pid_lst(child, elem->left, 0)) == NULL)
 			return (-1);
 	}
 	if (last_pipe_cmd || ret == -1)

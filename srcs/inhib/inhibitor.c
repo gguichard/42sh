@@ -90,5 +90,8 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 			return (0);
 		create_new_input(elem, &i, new_array);
 	}
+	if (ft_strtab_count(elem->input) == 1
+			&& ft_strequ(elem->input[0], "") == 1)
+		return (0);
 	return (1);
 }

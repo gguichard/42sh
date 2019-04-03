@@ -7,7 +7,5 @@ TODO:
 		$> cat
 		kill term
 
-		$! a faire
-
 		leaks exit signal
 		./job_test_files/sigint ; echo ok

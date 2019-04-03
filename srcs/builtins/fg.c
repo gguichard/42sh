@@ -26,7 +26,7 @@ static int	bring_back_pid(t_list *tmp, int index)
 	tcsetpgrp(STDIN_FILENO, job->gpid);
 	killpg(job->gpid, SIGCONT);
 	if (job->pipe)
-		return (waiting_line(0, tmp, 0));
+		return (waiting_line(tmp, 0, 0, 0));
 	waitpid(job->pid, &job->status, WUNTRACED);
 	redirect_term_controller(0, 1);
 	return (ret_status(job->status, job->pid, job, 0));

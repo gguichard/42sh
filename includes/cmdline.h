@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:54:12 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 14:24:16 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,16 @@
 
 # define INPUT_SIZE_INCR 1024
 
+typedef struct s_list	t_list;
+
 t_cmdline	*g_cmdline;
 
 void		reset_cmdline(t_cmdline *cmdline, const char *prompt);
+
+/*
+** Alloue et retourne le prompt a afficher, retourne NULL en cas d'erreur.
+*/
+char		*create_prompt(t_list *vars);
 
 /*
 ** TERM INIT/MISC.
@@ -35,7 +42,6 @@ void		go_to_cursor_pos(t_cmdline *cmdline, t_cursor cursor);
 ** INPUT/OUTPUT.
 */
 
-
 void		print_line_by_line(t_cmdline *cmdline, int off_start);
 void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
@@ -47,7 +53,7 @@ void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		add_char_to_input(t_cmdline *cmdline, char c);
 
-const char	*get_prompt(t_cmdline *cmdline, t_prompt type);
+char		*get_prompt(t_cmdline *cmdline, t_prompt type);
 t_rstate	read_input(t_cmdline *cmdline, const char *prompt);
 char		*read_heredoc(t_cmdline *cmdline, const char *word);
 
@@ -61,8 +67,9 @@ void		handle_sequence(t_cmdline *cmdline, const t_seq *seq);
 const t_seq	*get_sequence(t_cmdline *cmdline, char c);
 
 /*
-** COMMON sequences.
+** COMMON SEQUENCES.
 */
+
 int			handle_end_of_text(t_cmdline *cmdline);
 
 int			handle_move_left(t_cmdline *cmdline);
@@ -84,6 +91,7 @@ int			handle_konami_code(t_cmdline *cmdline);
 /*
 ** INSERT MODE.
 */
+
 int			handle_backspace_key(t_cmdline *cmdline);
 int			handle_delete_key(t_cmdline *cmdline);
 int			handle_cmdline_end(t_cmdline *cmdline);
@@ -99,6 +107,7 @@ void		ac_print_list(t_list *lst, t_cmdline *cmdline);
 /*
 ** VISUAL MODE.
 */
+
 int			handle_toggle_visual(t_cmdline *cmdline);
 int			handle_cut_key(t_cmdline *cmdline);
 int			handle_copy_key(t_cmdline *cmdline);

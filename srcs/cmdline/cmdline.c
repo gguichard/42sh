@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:54:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 14:23:41 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 #include "cmdline.h"
 #include "error.h"
 
-static char		*join_command(t_cmdline *cmdline, char *full_input
-		, t_prompt type)
+static char		*join_command(t_cmdline *cmdline, char *full_input)
 {
 	char	*new_line;
 	char	*tmp[3];
@@ -39,7 +38,7 @@ static char		*join_command(t_cmdline *cmdline, char *full_input
 		tmp[0] = full_input;
 		tmp[1] = new_line;
 		tmp[2] = NULL;
-		new_line = ft_join(tmp, type == PROMPT_OPERATOR ? " " : "\n");
+		new_line = ft_join(tmp, "\n");
 		free(tmp[1]);
 	}
 	free(full_input);
@@ -74,6 +73,17 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 	return (ERRC_INCOMPLETECMD);
 }
 
+static t_rstate	create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
+{
+	char		*prompt;
+	t_rstate	state;
+
+	prompt = get_prompt(cmdline, type);
+	state = read_input(cmdline, (prompt == NULL ? "> " : prompt));
+	free(prompt);
+	return (state);
+}
+
 static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 		, t_rstate *state)
 {
@@ -87,10 +97,10 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 	type = PROMPT_DEFAULT;
 	while (error == ERRC_INCOMPLETECMD)
 	{
-		*state = read_input(cmdline, get_prompt(cmdline, type));
+		*state = create_prompt_and_read_input(cmdline, type);
 		if (*state != RSTATE_END)
 			break ;
-		if ((alloc->full_input = join_command(cmdline, alloc->full_input, type))
+		if ((alloc->full_input = join_command(cmdline, alloc->full_input))
 				== NULL || !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
 		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL

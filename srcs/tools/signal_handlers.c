@@ -15,11 +15,11 @@ static void	handler_sigterm(void)
 			return ;
 		tmp = tmp->next;
 	}
-	if (check_stopped_job() && !retry_exit_job(-1))
+	if (!g_cmdline->alloc->exit_rdy)
 	{
 		ft_dprintf(STDERR_FILENO, "exit\nThere are stopped jobs.\n");
 		print_prompt_and_cmdline(g_cmdline);
-		retry_exit_job(1);
+		g_cmdline->alloc->exit_rdy = 1;
 		return ;
 	}
 	g_sig = 15;
@@ -48,9 +48,9 @@ void		set_signals_handlers(void)
 	set_sigmask(SIG_UNBLOCK);
 	sigfillset(&act.sa_mask);
 	act.sa_handler = handler_signals;
-	act.sa_flags = 0;
-	action_sigs(&act);
 	act.sa_flags = SA_RESTART;
+	action_sigs(&act);
+	act.sa_flags = 0;
 	sigaction(SIGTERM, &act, 0);
 	sigaction(SIGHUP, &act, 0);
 	sigaction(SIGINT, &act, 0);

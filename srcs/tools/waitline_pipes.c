@@ -45,7 +45,7 @@ static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 	return (stop);
 }
 
-int		waiting_line(int wait_hang, t_list *tmp, t_exec_opt *opt)
+int		waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc, t_exec_opt *opt)
 {
 	if (!tmp)
 	{
@@ -63,6 +63,7 @@ int		waiting_line(int wait_hang, t_list *tmp, t_exec_opt *opt)
 	}
 	else
 	{
+		alloc->last_bg = ((t_job *)tmp->content)->pid;
 		print_bg(((t_job *)tmp->content)->pid);
 		return (0);
 	}
@@ -80,5 +81,8 @@ void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		redirect_term_controller(0, 1);
 	}
 	else
+	{
+		alloc->last_bg = child;
 		print_bg(child);
+	}
 }
