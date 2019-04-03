@@ -28,7 +28,6 @@ char	**init_new_array(char **array, size_t save, size_t pos, size_t *len)
 	sub = NULL;
 	index = get_pos_in_array(array);
 	sub = ft_strsub(array[index], save, pos - save);
-	ft_printf("SUB: |%s|\n", sub);
 	new_array = ft_splitwhitespace(sub);
 	ft_memdel((void *)&sub);
 	*len = get_pos_in_array(new_array) + 1;
