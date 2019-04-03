@@ -47,6 +47,8 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	int	ret;
 
+	if (!ft_strequ(elem->input[0], "exit"))
+		alloc->exit_rdy = 0;
 	ret = try_builtin_execution(alloc, elem, opt);
 	if (ret == -1)
 		ret = exec_input(alloc, elem, opt);
@@ -56,9 +58,9 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	sigs_wait_line(alloc);
-	if (elem == NULL)
+	if (elem == NULL || opt->sigint || g_sig == SIGINT)
 	{
-		if (opt->red_save != NULL && !opt->from_builtin)
+		if (elem == NULL && opt->red_save != NULL && !opt->from_builtin)
 			use_rc_on_shell(opt);
 		return (0);
 	}

@@ -18,7 +18,7 @@ static void	pipe_waits(t_list *lst, int wait_opt)
 	}
 }
 
-static int	get_ret_val(t_list *tmp)
+static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 {
 	t_job	*job;
 	int		stop;
@@ -27,7 +27,7 @@ static int	get_ret_val(t_list *tmp)
 	stop = 0;
 	job = tmp->content;
 	if (job->state < SIG)
-		ret = ret_status(job->status, job->pid, job);
+		ret = ret_status(job->status, job->pid, job, opt);
 	if (job->state == STOPPED_PENDING)
 		stop = ret;
 	tmp = job->pipe;
@@ -35,7 +35,7 @@ static int	get_ret_val(t_list *tmp)
 	{
 		job = tmp->content;
 		if (job->state < SIG)
-			ret = ret_status(job->status, job->pid, job);
+			ret = ret_status(job->status, job->pid, job, opt);
 		if (job->state == STOPPED_PENDING)
 			stop = ret;
 		tmp = tmp->next;
@@ -45,7 +45,7 @@ static int	get_ret_val(t_list *tmp)
 	return (stop);
 }
 
-int		waiting_line(int wait_hang, t_list *tmp)
+int		waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc, t_exec_opt *opt)
 {
 	if (!tmp)
 	{
@@ -63,10 +63,11 @@ int		waiting_line(int wait_hang, t_list *tmp)
 	}
 	else
 	{
+		alloc->last_bg = ((t_job *)tmp->content)->pid;
 		print_bg(((t_job *)tmp->content)->pid);
 		return (0);
 	}
-	return (get_ret_val(tmp));
+	return (get_ret_val(tmp, opt));
 }
 
 void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
@@ -80,5 +81,8 @@ void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		redirect_term_controller(0, 1);
 	}
 	else
+	{
+		alloc->last_bg = child;
 		print_bg(child);
+	}
 }

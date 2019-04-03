@@ -6,7 +6,7 @@
 
 int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **input
 	, t_alloc *alloc);
-int		do_inhib(t_str_cmd_inf *str_cmd, char **array, size_t *pos_array
+int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 	, t_alloc *alloc);
 char	**inhib_expand_str(const char *str, t_alloc *alloc);
 int		inhib_expand_tab(t_ast *elem, t_alloc *alloc);

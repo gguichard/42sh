@@ -9,7 +9,6 @@
 #include "split_cmd_token.h"
 #include "builtins.h"
 #include "job.h"
-// #include "error.h"
 #include "signals.h"
 
 void	lexer_parser(const char *line, t_alloc *alloc)
@@ -31,9 +30,10 @@ void	lexer_parser(const char *line, t_alloc *alloc)
 	sigs_wait_line(alloc);
 	// if (sort_ast)
 	// 	read_sort_descent(sort_ast, 0);
-	check_exit_cmd(sort_ast);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
 	alloc->ret_val = analyzer(alloc, sort_ast, &exec_opt);
+	if (g_sig == SIGINT)
+		g_sig = 0;
 	del_ast(&sort_ast);
 }
 
@@ -41,8 +41,8 @@ int		main(int argc, char **argv, char **environ)
 {
 	t_alloc	alloc;
 
-	g_jobs = NULL;
 	g_sig = 0;
+	g_jobs = NULL;
 	set_signals_handlers();
 	if (!setup_alloc(&alloc, argc, argv, environ))
 		ft_dprintf(STDERR_FILENO, "42sh: unable to setup environment\n");

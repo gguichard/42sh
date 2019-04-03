@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 13:42:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 12:44:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 15:41:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,21 @@ static void	ac_append_to_cmdline(t_cmdline *cmdline, t_ac_suff_inf *acs_inf
 		add_char_to_input(cmdline, '/');
 }
 
+static char	*get_full_input(char *full_input, char *buffer)
+{
+	char	*tmp[3];
+
+	if (full_input == NULL)
+		return (ft_strdup(buffer));
+	else
+	{
+		tmp[0] = full_input;
+		tmp[1] = buffer;
+		tmp[2] = NULL;
+		return (ft_join(tmp, "\n"));
+	}
+}
+
 int			handle_autocomplete(t_cmdline *cmdline)
 {
 	char			*buffer;
@@ -83,31 +98,37 @@ int			handle_autocomplete(t_cmdline *cmdline)
 	t_ac_suff_inf	*acs_inf;
 	t_str_cmd_inf	scmd;
 
-	buffer = ft_strjoin(cmdline->alloc->full_input, cmdline->input.buffer);
+	buffer = get_full_input(cmdline->alloc->full_input, cmdline->input.buffer);
 	if (buffer == NULL)
 		return (0);
 	buffer[ft_strlen(buffer)
 		- (cmdline->input.size - cmdline->input.offset)] = '\0';
 	ret = scmd_init(&scmd, buffer);
 	free(buffer);
-	if (!ret || (acs_inf = autocomplete_cmdline(&scmd, cmdline->alloc)) == NULL)
+	if (!ret)
+		return (0);
+	else if ((acs_inf = autocomplete_cmdline(&scmd, cmdline->alloc)) == NULL)
 	{
-		if (ret)
-			scmd_clean(&scmd);
+		scmd_clean(&scmd);
 		return (0);
 	}
-	if (acs_inf->choices == NULL)
-		ret = 0;
-	if (acs_inf->suff != NULL)
-		ac_append_to_cmdline(cmdline, acs_inf, &scmd
-				, cmdline->input.offset == cmdline->input.size);
-	if (acs_inf->choices != NULL && cmdline->ac_flag)
+	ret = acs_inf->choices != NULL && (cmdline->ac_flag
+			|| (acs_inf->suff != NULL && acs_inf->suff[0] != '\0'));
+	if (!cmdline->ac_flag)
+		cmdline->ac_flag += (acs_inf->choices != NULL);
+	else
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		ac_print_list(acs_inf->choices, cmdline);
 		print_prompt_and_cmdline(cmdline);
 	}
-	cmdline->ac_flag += 1;
+	if (acs_inf->suff != NULL)
+	{
+		ac_append_to_cmdline(cmdline, acs_inf, &scmd
+				, cmdline->input.offset == cmdline->input.size);
+		if (acs_inf->suff[0] != '\0')
+			cmdline->ac_flag = 0;
+	}
 	delete_ac_suff_inf(acs_inf);
 	scmd_clean(&scmd);
 	return (ret);

@@ -20,8 +20,7 @@
 #include "cmdline.h"
 #include "error.h"
 
-static char		*join_command(t_cmdline *cmdline, char *full_input
-		, t_prompt type)
+static char		*join_command(t_cmdline *cmdline, char *full_input)
 {
 	char	*new_line;
 	char	*tmp[3];
@@ -39,7 +38,7 @@ static char		*join_command(t_cmdline *cmdline, char *full_input
 		tmp[0] = full_input;
 		tmp[1] = new_line;
 		tmp[2] = NULL;
-		new_line = ft_join(tmp, type == PROMPT_OPERATOR ? " " : "\n");
+		new_line = ft_join(tmp, "\n");
 		free(tmp[1]);
 	}
 	free(full_input);
@@ -101,7 +100,7 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 		*state = create_prompt_and_read_input(cmdline, type);
 		if (*state != RSTATE_END)
 			break ;
-		if ((alloc->full_input = join_command(cmdline, alloc->full_input, type))
+		if ((alloc->full_input = join_command(cmdline, alloc->full_input))
 				== NULL || !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
 		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL

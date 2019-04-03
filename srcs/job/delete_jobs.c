@@ -33,6 +33,7 @@ static void	actualize_pipe_job_status(t_list **main, t_list *prev)
 	}
 	if (delete == 1)
 	{
+		job = (*main)->content;
 		if (job->pipe)
 			ft_lstdel(&(job->pipe), del_job_elem);
 		if (prev)

@@ -3,6 +3,20 @@
 #include "shell.h"
 #include "job.h"
 
+static void	refresh_stop_state(t_job *job, int *print, int status, int ret)
+{
+	if (job->state == STOPPED || job->state == STOPPED_PENDING)
+	{
+		if (ret > 0 && WIFCONTINUED(status))
+			job->state = RUNNING_BG;
+		if (ret > 0 && (WIFSIGNALED(status) || WIFEXITED(status)))
+		{
+			ret_status(status, job->pid, job, 0);
+			*print = 1;
+		}
+	}
+}
+
 static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 {
 	int		ret;
@@ -11,10 +25,10 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 	ret = 0;
 	status = 0;
 	if (job->state < SIG)
-		ret = waitpid(job->pid, &status, WNOHANG | WUNTRACED);
+		ret = waitpid(job->pid, &status, WNOHANG | WUNTRACED | WCONTINUED);
 	if (job->state == RUNNING_BG && ret > 0)
 	{
-		ret_status(status, job->pid, job);
+		ret_status(status, job->pid, job, 0);
 		if (job->state >= SIG)
 			*print = 1;
 		else if (job->state == STOPPED_PENDING)
@@ -23,30 +37,13 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 			job->state = STOPPED;
 		}
 	}
-	else if (job->state == STOPPED || job->state == STOPPED_PENDING)
+	else if (job->state == STOPPED_PENDING && (!ret || WIFSTOPPED(status)))
 	{
-		if (ret > 0 && (WIFSIGNALED(status) || WIFEXITED(status)))
-		{
-			ret_status(status, job->pid, job);
-			*print = 1;
-		}
-		else if (!ret || WIFSTOPPED(status))
-		{
-			if (job->state == STOPPED_PENDING)
-				*stop_print = 1;
-			job->state = STOPPED;
-		}
+		job->state = STOPPED;
+		*stop_print = 1;
 	}
-	if (job->state == STOPPED)
-	{
-		kill(job->pid, SIGSTOP);
-		ret = waitpid(job->pid, &status, WUNTRACED | WNOHANG);
-		if (ret > 0)
-		{
-			job->state = RUNNING_BG;
-			kill(job->pid, SIGCONT);
-		}
-	}
+	else
+		refresh_stop_state(job, print, status, ret);
 }
 
 void		refresh_state(t_list *tmp, int print_state)

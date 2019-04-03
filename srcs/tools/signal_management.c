@@ -36,6 +36,7 @@ void		sig_reset(void)
 	struct sigaction	act;
 
 	act.sa_flags = 0;
+	sigemptyset(&act.sa_mask);
 	act.sa_handler = SIG_DFL;
 	sigaction(SIGHUP, &act, 0);
 	sigaction(SIGINT, &act, 0);

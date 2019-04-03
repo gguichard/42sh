@@ -15,7 +15,7 @@ char		*get_var_for_expand(t_alloc *alloc, const char *key)
 	int		tmp;
 
 	var = NULL;
-	if (!key)
+	if (key == NULL)
 		return (0);
 	if (ft_isalpha(key[0]) || key[0] == '_')
 		var = get_var(alloc->vars, key);
@@ -23,15 +23,18 @@ char		*get_var_for_expand(t_alloc *alloc, const char *key)
 	{
 		if (ft_strequ(key, "?"))
 			return (ft_itoa(alloc->ret_val));
-		// if (ft_strequ(key, "!") && alloc->last_bg != -1)
-		// 	return (ft_itoa(alloc->last_bg));
+		if (ft_strequ(key, "!") && alloc->last_bg)
+			return (ft_itoa(alloc->last_bg));
 		if (ft_strequ(key, "$"))
-			return (ft_itoa(alloc->pid));
+			return (ft_itoa(alloc->ppid));
 		if (ft_isdigit(key[0]))
 		{
 			tmp = ft_atoi(key);
 			return (ft_strdup(alloc->argc <= tmp ? "" : alloc->argv[tmp]));
 		}
 	}
-	return (ft_strdup(var == NULL ? "" : var->value));
+	if (var == NULL || var->is_env == 2)
+		return (ft_strdup(""));
+	else
+		return (ft_strdup(var->tmp_value != NULL ? var->tmp_value : var->value));
 }
