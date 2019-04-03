@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:15:10 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:51:43 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,8 @@ t_rstate		read_input(t_cmdline *cmdline, const char *prompt)
 	while (cmdline->input.reading == RSTATE_READING)
 	{
 		if (read(STDIN_FILENO, &input, 1) <= 0)
-		{
 			cmdline->input.reading = RSTATE_EOT;
-			break ;
-		}
-		seq = get_sequence(cmdline, input);
-		if (seq != NULL)
+		else if ((seq = get_sequence(cmdline, input)) != NULL)
 			handle_sequence(cmdline, seq);
 		else if (cmdline->visual.toggle)
 			tputs(tgetstr("bl", NULL), 1, t_putchar);

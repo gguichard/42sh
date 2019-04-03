@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:36:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:45:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,9 @@
 void	update_cmdline_at_offset(t_cmdline *cmdline, char caller
 		, int is_deletion)
 {
-	static char	*cr_tcap = NULL;
-	static char	*do_tcap = NULL;
 	static char	*ce_tcap = NULL;
 	t_cursor	saved_cursor;
 
-	if (cr_tcap == NULL)
-		cr_tcap = tgetstr("cr", NULL);
-	if (do_tcap == NULL)
-		do_tcap = tgetstr("do", NULL);
 	if (ce_tcap == NULL)
 		ce_tcap = tgetstr("ce", NULL);
 	if (cmdline->input.offset != cmdline->input.size)
@@ -37,8 +31,7 @@ void	update_cmdline_at_offset(t_cmdline *cmdline, char caller
 		{
 			if (caller == '\n')
 			{
-				tputs(cr_tcap, 1, t_putchar);
-				tputs(do_tcap, 1, t_putchar);
+				write(STDOUT_FILENO, "\n", 1);
 				cmdline->cursor.x = 0;
 				cmdline->cursor.y += 1;
 			}

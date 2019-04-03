@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 22:06:22 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 20:20:47 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:48:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void		update_visual_select(t_cmdline *cmdline)
 		off_e = ft_max(cmdline->visual.start_offset, cmdline->input.offset);
 		if (old_off_e != -1 && old_off_e != off_e)
 			print_visual_unselect(cmdline, old_off_e, off_e);
-		if (off_s != off_e)
-			print_visual_select(cmdline, off_s, off_e);
+		(off_s != off_e) ? print_visual_select(cmdline, off_s, off_e) : 0;
 		old_off_s = off_s;
 		old_off_e = off_e;
 		go_to_cursor_pos(cmdline, saved_cursor);
