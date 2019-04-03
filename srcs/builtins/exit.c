@@ -74,7 +74,6 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	}
 	else if (g_sig == 15)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	sig_reset();
 	terminate_all_jobs(SIGTERM);
 	save_history_entries(alloc, &alloc->cmdline.history);
 	if (elem == NULL)
@@ -82,6 +81,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 		dup2(g_cmdline->stdin_dup, STDIN_FILENO);
 		reset_term(&alloc->cmdline);
 	}
+	sig_reset();
 	del_alloc(alloc);
 	if (g_sig && g_sig != 15)
 		kill(0, g_sig);

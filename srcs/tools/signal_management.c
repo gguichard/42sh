@@ -31,13 +31,13 @@ void	action_sigs(struct sigaction *act)
 	sigaction(SIGUSR2, act, 0);
 }
 
-void		sig_reset(void)
+void		sig_set_all(void(*handler)(int))
 {
 	struct sigaction	act;
 
 	act.sa_flags = 0;
 	sigemptyset(&act.sa_mask);
-	act.sa_handler = SIG_DFL;
+	act.sa_handler = handler;
 	sigaction(SIGHUP, &act, 0);
 	sigaction(SIGINT, &act, 0);
 	sigaction(SIGQUIT, &act, 0);
@@ -46,7 +46,13 @@ void		sig_reset(void)
 	sigaction(SIGTTIN, &act, 0);
 	sigaction(SIGTERM, &act, 0);
 	action_sigs(&act);
+}
+
+void		sig_reset(void)
+{
+	sig_set_all(SIG_IGN);
 	set_sigmask(SIG_UNBLOCK);
+	sig_set_all(SIG_DFL);
 }
 
 void		sigs_wait_line(t_alloc *alloc)
