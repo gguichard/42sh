@@ -90,6 +90,16 @@ static size_t	count_no_printable_chars(const char *str)
 	return (total);
 }
 
+/*
+** Retourne toujours 1.
+*/
+
+static int		remove_chars_from_str(char *str, size_t pos, size_t len)
+{
+	ft_memmove((str + pos), (str + pos + len), ft_strlen(str + pos + len) + 1);
+	return (1);
+}
+
 static int		escape_char_at_inside_and_move(char **str, size_t *idx
 		, t_list *vars, int *is_in_no_print)
 {
@@ -101,9 +111,9 @@ static int		escape_char_at_inside_and_move(char **str, size_t *idx
 	if ((*str)[*idx] == '\\')
 	{
 		if ((*str)[*idx + 1] == '[' && (*is_in_no_print = 1))
-			return ((*idx += 2) == 0);
+			return (!remove_chars_from_str(*str, *idx, 2));
 		else if ((*str)[*idx + 1] == ']' && !(*is_in_no_print = 0))
-			return ((*idx += 2) == 0);
+			return (!remove_chars_from_str(*str, *idx, 2));
 		else if ((replaced = get_replacement((*str)[*idx + 1], vars)) != NULL)
 		{
 			if (!ft_strreplace_inside(str, *idx, 2, replaced))
@@ -111,7 +121,7 @@ static int		escape_char_at_inside_and_move(char **str, size_t *idx
 			nb_chars_readed = ft_strlen(replaced);
 		}
 		else
-			ft_memmove(*str + *idx, *str + *idx + 1, ft_strlen(*str + *idx));
+			remove_chars_from_str(*str, *idx, 1);
 	}
 	*idx += nb_chars_readed;
 	nb_chars_readed -= count_no_printable_chars(replaced);
