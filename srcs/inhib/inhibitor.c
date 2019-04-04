@@ -100,6 +100,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		error_inhib_expand(str_cmd, array);
 		return (NULL);
 	}
+	check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
 	if (!do_inhib(str_cmd, &array, &pos_array, alloc))
 		return (NULL);
 	scmd_clean(str_cmd);
@@ -115,14 +116,9 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	i = 0;
 	while (elem->input[i])
 	{
-		// if (!expand_home_shortcut(&(elem->input[i]), alloc->vars))
-		// {
-			if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
-				return (0);
-			create_new_input(elem, &i, new_array);
-		// }
-		// else
-		// 	i += 1;
+		if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
+			return (0);
+		create_new_input(elem, &i, new_array);
 	}
 	if (ft_strtab_count(elem->input) == 1
 			&& ft_strequ(elem->input[0], "") == 1)

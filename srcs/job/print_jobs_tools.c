@@ -24,7 +24,7 @@ static char	*sig_str_2(int signal)
 	return ("Undefined Signal");
 }
 
-char	*sig_str(int status)
+char		*sig_str(int status)
 {
 	int	signal;
 
@@ -47,7 +47,7 @@ char	*sig_str(int status)
 		return (sig_str_2(signal));
 }
 
-char	*last_sig_process(t_list *tmp, int foreground)
+char		*last_sig_process(t_list *tmp, int foreground)
 {
 	t_job	*job;
 	t_job	*last;
@@ -73,7 +73,8 @@ char	*last_sig_process(t_list *tmp, int foreground)
 	return (0);
 }
 
-void	print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index)
+void		print_refreshed_jobs(t_list *tmp, int print
+								, int stop_print, int index)
 {
 	char	*cmd;
 

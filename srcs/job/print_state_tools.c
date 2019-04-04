@@ -24,7 +24,7 @@ char	*signal_stop_str(t_list *tmp)
 	stopped = 0;
 	job = tmp->content;
 	if (job->state == STOPPED && job->status != SIGTSTP)
-			return (status_stop_str(job->status));
+		return (status_stop_str(job->status));
 	else if (job->state == STOPPED && job->status == SIGTSTP)
 		stopped = 1;
 	tmp = job->pipe;
@@ -32,7 +32,7 @@ char	*signal_stop_str(t_list *tmp)
 	{
 		job = tmp->content;
 		if (job->state == STOPPED && job->status != SIGTSTP)
-				return (status_stop_str(job->status));
+			return (status_stop_str(job->status));
 		else if (job->state == STOPPED && job->status == SIGTSTP)
 			stopped = 1;
 		tmp = tmp->next;

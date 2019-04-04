@@ -48,7 +48,7 @@ void		refresh_jobs(void);
 void		print_refreshed_jobs(t_list *tmp, int print, int stop_print
 		, int index);
 int			last_job_status(t_job *job);
-void		display_simple_job(t_list *tmp, int index, t_opts *opts);
+void		display_simple_job(t_list *tmp, int index);
 void		print_bg(pid_t process);
 void		print_job(pid_t process, int after_signal);
 

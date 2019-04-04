@@ -13,6 +13,21 @@ static void	del_job_elem(void *content, size_t size)
 	ft_memdel((void **)&content);
 }
 
+static void	delete_job(t_list **main, t_list *prev)
+{
+	t_job	*job;
+
+	job = (*main)->content;
+	if (job->pipe)
+		ft_lstdel(&(job->pipe), del_job_elem);
+	if (prev)
+		prev->next = (*main)->next;
+	else
+		g_jobs = (*main)->next;
+	del_job_elem((*main)->content, (*main)->content_size);
+	ft_memdel((void **)main);
+}
+
 static void	actualize_pipe_job_status(t_list **main, t_list *prev)
 {
 	int		delete;
@@ -32,17 +47,7 @@ static void	actualize_pipe_job_status(t_list **main, t_list *prev)
 		tmp = tmp->next;
 	}
 	if (delete == 1)
-	{
-		job = (*main)->content;
-		if (job->pipe)
-			ft_lstdel(&(job->pipe), del_job_elem);
-		if (prev)
-			prev->next = (*main)->next;
-		else
-			g_jobs = (*main)->next;
-		del_job_elem((*main)->content, (*main)->content_size);
-		ft_memdel((void **)main);
-	}
+		delete_job(main, prev);
 }
 
 void		delete_jobs_terminated(t_list *tmp)

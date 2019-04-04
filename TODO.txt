@@ -4,3 +4,16 @@ TODO:
 		- Si quote non fermé faire multi tokens ou considerer comme dans quote ?!?
 
 		sleep 2 | ./segfault | ./sigpipe | ls &
+
+expand ~:
+
+si HOME=$TRUC
+
+cd  -> error HOME/$TRUC
+cd ~ -> $TRUC expand -> ne doit pas etre expand
+
+
+
+EXPAND:
+echo LOL $LOL LOL -> $LOL tk_remove
+echo LOL "$LOL" LOL -> not remove
