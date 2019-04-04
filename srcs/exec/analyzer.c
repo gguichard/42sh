@@ -85,8 +85,11 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 			use_rc_on_shell(opt);
 		return (0);
 	}
-	else if (!inhib_expand_tab(elem, alloc))
+	else if ((elem->type != AST_REDIR || !ft_strequ("<<", elem->input[0]))
+			&& !inhib_expand_tab(elem, alloc))
+	{
 		return (1);
+	}
 	else if (elem->type == AST_CMD_SEP)
 	{
 		alloc->ret_val = analyzer(alloc, elem->left, opt);

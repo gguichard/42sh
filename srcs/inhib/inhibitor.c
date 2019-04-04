@@ -5,14 +5,14 @@
 #include "str_cmd_inf.h"
 #include "error.h"
 
-void	inhib_only_str(char *str)
+int		inhib_only_str(char *str)
 {
 	t_str_cmd_inf	str_cmd;
 	size_t			pos;
 
 	pos = 0;
 	if (!str || !scmd_init(&str_cmd, str))
-		return ;
+		return (0);
 	while (scmd_cur_char(&str_cmd))
 		if (!scmd_cur_char_is_escaped(&str_cmd) && !str_cmd.is_in_dbquote
 				&& !str_cmd.is_in_quote && (scmd_cur_char(&str_cmd) == '"'
@@ -31,6 +31,7 @@ void	inhib_only_str(char *str)
 		else
 			pos += scmd_move_to_next_char(&str_cmd);
 	scmd_clean(&str_cmd);
+	return (1);
 }
 
 int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
