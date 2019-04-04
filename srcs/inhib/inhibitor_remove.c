@@ -16,7 +16,7 @@ void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos,
 		(const void*)(*input + *pos), len);
 	(*input)[*pos + len - 1] = '\0';
 	if (scmd_cur_char_is_escaped(str_cmd) == 1
-			&& scmd_cur_char(str_cmd) == '\n' && str_cmd->is_in_dbquote)
+			&& scmd_cur_char(str_cmd) == '\n' && !str_cmd->is_in_quote)
 	{
 		len = ft_strlen(*input + *pos);
 		ft_memmove((void*)(*input + *pos - 1),
