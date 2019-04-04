@@ -181,16 +181,22 @@ void test_inhib_expand()
 	ft_printf(" --- Test inhibition expand : ");
 	test_this_inhib_expand("str", (char*[]){"str", NULL});
 	test_this_inhib_expand("$EXISTEpas$EXISTE", (char*[]){"CECI", NULL});
-	test_this_inhib_expand("echo ${EXISTE}$", (char*[]){"echo CECI$", NULL});
-	test_this_inhib_expand("echo $EXISTE$", (char*[]){"echo CECI$", NULL});
+	test_this_inhib_expand("${EXISTE}$", (char*[]){"CECI$", NULL});
+	test_this_inhib_expand("$EXISTE$", (char*[]){"CECI$", NULL});
 	test_this_inhib_expand("$EXISTE=$EXISTE", (char*[]){"CECI=CECI", NULL});
 	test_this_inhib_expand("$EXISTE:$EXISTE", (char*[]){"CECI:CECI", NULL});
 	test_this_inhib_expand("$\"EXISTE\"", (char*[]){"$EXISTE", NULL});
 	test_this_inhib_expand("\"$EXISTE\"", (char*[]){"CECI", NULL});
 	test_this_inhib_expand("$\'EXISTE\'", (char*[]){"$EXISTE", NULL});
 	test_this_inhib_expand("\'$EXISTE\'", (char*[]){"$EXISTE", NULL});
-	test_this_inhib_expand("echo non$EXISTE$=$", (char*[]){"echo nonCECI$=$", NULL});
-	test_this_inhib_expand("echo ${EXISTE$EXISTE}", NULL);
+	test_this_inhib_expand("non$EXISTE$=$", (char*[]){"nonCECI$=$", NULL});
+	test_this_inhib_expand("${EXISTE$EXISTE}", NULL);
+	test_this_inhib_expand("${tout%%faux}", NULL);
+	test_this_inhib_expand("$ESTVIDE", NULL);
+	test_this_inhib_expand("$EXISTEPAS", NULL);
+	test_this_inhib_expand("$DEUXMOTS", (char*[]){"DEUX", "MOTS", NULL});
+	test_this_inhib_expand("truc${DEUXMOTS}machin", (char*[]){"trucDEUX", "MOTSmachin", NULL});
+	test_this_inhib_expand("truc\\ ${DEUXMOTS}\\ machin", (char*[]){"truc DEUX", "MOTS machin", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
@@ -206,6 +212,7 @@ int		main(int argc, char **argv, char **environ)
 	set_alias_if_valid(alloc.aliastable, "blankalias", "blankresult ", NULL);
 	create_var(&alloc.vars, "EXISTE", "CECI", 1);
 	create_var(&alloc.vars, "ESTVIDE", "", 1);
+	create_var(&alloc.vars, "DEUXMOTS", "DEUX MOTS", 1);
 	unset_var(&alloc.vars, "EXISTEPAS");
 	test_autocomplete();
 	ft_printf("\n");
