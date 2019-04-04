@@ -59,7 +59,8 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 	return (node);
 }
 
-int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, int addpipe)
+int				add_pid_lst_pipe(t_list *attach, pid_t process
+								, t_ast *elem, int addpipe)
 {
 	t_job	job;
 	t_list	*node;

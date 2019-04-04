@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "job.h"
 
-void	display_simple_job(t_list *tmp, int index, t_opts *opts)
+void	display_simple_job(t_list *tmp, int index)
 {
 	char	current;
 	t_job	*job;
@@ -9,8 +9,6 @@ void	display_simple_job(t_list *tmp, int index, t_opts *opts)
 	char	*cmd;
 
 	job = tmp->content;
-	if (opts && has_opt(opts, 'p'))
-		ft_printf("%d\n", job->gpid);
 	current = ' ';
 	if (!tmp->next)
 		current = '+';
@@ -21,9 +19,11 @@ void	display_simple_job(t_list *tmp, int index, t_opts *opts)
 	if (job->pipe && ft_strequ("SIGTSTP", signal_stop_str(tmp)))
 		ft_printf("[%d] %c %s %s\n", index, current, state, cmd);
 	else if (check_job_state(tmp, STOPPED))
-		ft_printf("[%d] %c %s(%s) %s\n", index, current, state, signal_stop_str(tmp), cmd);
-	else if (ft_strequ("Done", state) && last_job(job)->status)
-		ft_printf("[%d] %c %s(%d) %s\n", index, current, state, last_job(job)->status, cmd);
+		ft_printf("[%d] %c %s(%s) %s\n"
+			, index, current, state, signal_stop_str(tmp), cmd);
+	else if (ft_strequ("Exit", state))
+		ft_printf("[%d] %c %s(%d) %s\n"
+			, index, current, state, last_job(job)->status, cmd);
 	else
 		ft_printf("[%d] %c %s %s\n", index, current, state, cmd);
 	ft_memdel((void **)&cmd);

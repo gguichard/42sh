@@ -4,7 +4,7 @@
 #include "hashtable.h"
 #include "vars.h"
 
-void	del_lst_ast(t_ast **lst)
+static void	del_lst_ast(t_ast **lst)
 {
 	t_ast	*tmp;
 
@@ -16,7 +16,7 @@ void	del_lst_ast(t_ast **lst)
 	free(tmp);
 }
 
-void	del_alloc(t_alloc *alloc)
+void		del_alloc(t_alloc *alloc)
 {
 	if (alloc == NULL)
 		return ;

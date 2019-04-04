@@ -50,8 +50,10 @@ static void	display_option_job(t_list *tmp, t_opts *opts, int index)
 {
 	if (has_opt(opts, 'l'))
 		display_job_full(tmp, index);
+	else if (has_opt(opts, 'p'))
+		ft_printf("%d\n", ((t_job *)tmp->content)->gpid);
 	else
-		display_simple_job(tmp, index, opts);
+		display_simple_job(tmp, index);
 }
 
 static int	display_jobs(t_opts *opts, int param)

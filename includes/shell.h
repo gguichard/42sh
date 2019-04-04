@@ -7,6 +7,7 @@
 
 //for atom completion
 # include "../libft/includes/libft.h"
+# include "../libft/includes/get_next_line.h"
 # include "../libft/includes/printf.h"
 
 # include "libft.h"
@@ -76,6 +77,7 @@ char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
 char		*get_history_file_path(t_alloc *alloc);
 int			load_history_file_entries(t_alloc *alloc, t_history *history);
 int			save_history_entries(t_alloc *alloc, t_history *history);
+void		del_history_entries(t_history *history);
 
 /*
 ************************************ TOOLS *************************************
@@ -85,7 +87,6 @@ const char	*get_home_directory(t_list *vars);
 
 int			setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
 
-void		del_lst_ast(t_ast **lst);
 void		del_alloc(t_alloc *alloc);
 
 //TOOLS TO PRINT LST AST
