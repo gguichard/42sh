@@ -33,8 +33,7 @@ int		check_expand_syntax(const char *str)
 	}
 	else
 	{
-		while (ft_isalnum(str[i]) || str[i] == '!' || str[i] == '?'
-				|| str[i] == '$' || str[i] == '_')
+		while (ft_isalnum(str[i]) || str[i] == '_')
 			i += 1;
 		if (str[i] != '}')
 			return (0);
