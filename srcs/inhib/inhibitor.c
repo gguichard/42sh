@@ -5,6 +5,34 @@
 #include "str_cmd_inf.h"
 #include "error.h"
 
+void	inhib_only_str(char **str)
+{
+	t_str_cmd_inf	str_cmd;
+	size_t			pos;
+
+	pos = 0;
+	if (!str || !scmd_init(&str_cmd, *str))
+		return ;
+	while (scmd_cur_char(&str_cmd))
+		if (!scmd_cur_char_is_escaped(&str_cmd) && !str_cmd.is_in_dbquote
+				&& !str_cmd.is_in_quote && (scmd_cur_char(&str_cmd) == '"'
+				|| scmd_cur_char(&str_cmd) == '\''))
+			remove_escaped_char(&str_cmd, str, &pos, 1);
+		else if (scmd_cur_char_is_escaped(&str_cmd) && ((str_cmd.is_in_dbquote
+				&& scmd_cur_is_of(&str_cmd, DBQUOTE_SPE_CHAR) == 1)
+				|| (!str_cmd.is_in_quote && !str_cmd.is_in_dbquote)))
+			remove_escaped_char(&str_cmd, str, &pos, 1);
+		else if ((str_cmd.is_in_quote && (*str)[pos] == '\'')
+				|| (str_cmd.is_in_dbquote && (*str)[pos] == '"'))
+		{
+			pos += scmd_move_to_next_char(&str_cmd);
+			remove_escaped_char(&str_cmd, str, &pos, 0);
+		}
+		else
+			pos += scmd_move_to_next_char(&str_cmd);
+	scmd_clean(&str_cmd);
+}
+
 int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 			t_alloc *alloc)
 {
@@ -86,14 +114,14 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	i = 0;
 	while (elem->input[i])
 	{
-		if (!expand_home_shortcut(&(elem->input[i]), alloc->vars))
-		{
+		// if (!expand_home_shortcut(&(elem->input[i]), alloc->vars))
+		// {
 			if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
 				return (0);
 			create_new_input(elem, &i, new_array);
-		}
-		else
-			i += 1;
+		// }
+		// else
+		// 	i += 1;
 	}
 	if (ft_strtab_count(elem->input) == 1
 			&& ft_strequ(elem->input[0], "") == 1)

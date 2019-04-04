@@ -28,8 +28,6 @@ int		builtin_source(t_ast *elem, t_alloc *alloc);
 void	set_dir_to_canonical_form(char *dir);
 char	*search_in_cd_path(t_alloc *alloc, const char *path, const char *pwd);
 
-int		check_stopped_job(void);
-
 int		is_builtin(t_alloc *alloc, const char *built_name);
 
 #endif
