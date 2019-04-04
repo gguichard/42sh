@@ -31,7 +31,6 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	const char	*exp;
 	size_t		len;
 
-	exp = NULL;
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
