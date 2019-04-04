@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 17:48:24 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 19:05:28 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,19 @@ char		*read_heredoc(t_cmdline *cmdline, const char *word)
 	setup_term(cmdline);
 	while (1)
 	{
-		state = read_input(cmdline, get_prompt(cmdline, PROMPT_HEREDOC));
-		if (state != RSTATE_END)
-			break ;
-		if (ft_strequ(cmdline->input.buffer, word))
-			break ;
-		heredoc = join_heredoc(heredoc, cmdline->input.buffer);
-		if (heredoc == NULL)
-			break ;
+		setup_term(cmdline);
+		while (1)
+		{
+			state = read_input(cmdline, prompt, offset);
+			if (state == RSTATE_ETX)
+				continue ;
+			if (state != RSTATE_END || ft_strequ(cmdline->input.buffer, word))
+				break ;
+			heredoc = join_heredoc(heredoc, cmdline->input.buffer);
+			if (heredoc == NULL)
+				break ;
+		}
+		reset_term(cmdline);
 	}
 	reset_term(cmdline);
 	return (heredoc);
