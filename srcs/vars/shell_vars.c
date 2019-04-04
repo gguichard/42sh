@@ -9,6 +9,14 @@ const char	*get_var_value(t_list *vars, const char *key)
 	return (var == NULL ? "" : var->value);
 }
 
+const char	*get_var_value_or_null(t_list *vars, const char *key)
+{
+	t_var	*var;
+
+	var = get_var(vars, key);
+	return (var == NULL ? NULL : var->value);
+}
+
 char		*get_var_for_expand(t_alloc *alloc, const char *key)
 {
 	t_var	*var;
