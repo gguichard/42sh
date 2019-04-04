@@ -2,7 +2,7 @@
 #include "execution.h"
 #include "job.h"
 
-void	print_bg(pid_t process)
+void		print_bg(pid_t process)
 {
 	int		index;
 	t_job	*job;
@@ -24,12 +24,35 @@ void	print_bg(pid_t process)
 	}
 }
 
-int		job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
+static void	job_fork(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
+{
+	pid_t	child;
+
+	child = fork();
+	if (child == -1)
+		ft_dprintf(STDERR_FILENO, "42sh: fork: resource temporarily unavailable\n");
+	else if (child > 0)
+	{
+		setpgid(child, 0);
+		add_pid_lst(child, elem, 0);
+		print_bg(child);
+	}
+	else
+	{
+		opt->fork = 1;
+		analyzer(alloc, elem, opt);
+	}
+}
+
+int			job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	while (elem)
 	{
 		opt->wait_hang = 1;
-		analyzer(alloc, elem->left, opt);
+		if (elem->left && elem->left->type != AST_PIPE)
+			job_fork(alloc, elem->left, opt);
+		else
+			analyzer(alloc, elem->left, opt);
 		if (elem->right && elem->right->type == AST_JOB)
 			elem = elem->right;
 		else
