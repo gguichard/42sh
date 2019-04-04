@@ -27,31 +27,31 @@
 // 	}
 // 	return (NULL);
 // }
-//
-// int		expand_home_shortcut(char **s, t_list *vars)
-// {
-// 	char	*dir;
-// 	char	*tmp;
-//
-// 	dir = 0;
-// 	tmp = 0;
-// 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
-// 		dir = ft_strjoin(get_home_directory(vars), (*s) + 1);
-// 	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
-// 		dir = ft_strjoin(get_var_value(vars, "OLDPWD"), (*s) + 2);
-// 	else if (ft_strnequ("~+", *s, 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
-// 		dir = ft_strjoin(get_var_value(vars, "PWD"), (*s) + 2);
-// 	else if ((*s[0] == '~') && ft_isalnum(((*s)[1])))
-// 		dir = get_path_tild(&((*s)[1]));
-// 	if (dir)
-// 	{
-// 		ft_memdel((void **)&(*s));
-// 		(*s) = dir;
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-//
+
+int		expand_home_shortcut(char **s, t_list *vars)
+{
+	char	*dir;
+	char	*tmp;
+
+	dir = 0;
+	tmp = 0;
+	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
+		dir = ft_strjoin(get_home_directory(vars), (*s) + 1);
+	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
+		dir = ft_strjoin(get_var_value(vars, "OLDPWD"), (*s) + 2);
+	else if (ft_strnequ("~+", *s, 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
+		dir = ft_strjoin(get_var_value(vars, "PWD"), (*s) + 2);
+	// else if ((*s[0] == '~') && ft_isalnum(((*s)[1])))
+	// 	dir = get_path_tild(&((*s)[1]));
+	if (dir)
+	{
+		ft_memdel((void **)&(*s));
+		(*s) = dir;
+		return (1);
+	}
+	return (0);
+}
+
 // void	check_expand_home(char **s, t_list *vars, str_cmd_inf *str_cmd
 // 		, size_t *pos)
 // {
