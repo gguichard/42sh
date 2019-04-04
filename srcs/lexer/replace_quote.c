@@ -4,6 +4,7 @@
 #include "vars.h"
 #include "builtins.h"
 #include "pwd.h"
+#include "str_cmd_inf.h"
 
 char	*get_path_tild(const char *log_search)
 {
@@ -52,16 +53,19 @@ int		expand_home_shortcut(char **s, t_list *vars)
 	return (0);
 }
 
-void	check_expand_home(char **s, t_list *vars, str_cmd_inf *str_cmd
+void	check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 		, size_t *pos)
 {
+	size_t	len;
+
+	len = ft_strlen(*s);
 	if ((*s)[0] != '~')
 		return ;
-	// scmd_move_to_next_char(str_cmd);
-	// if ((*s)[1] == '/' || (*s)[1] == '-' || (*s)[1] == '+' || (*s)[1] == '-')
-		// scmd_move_to_next_char(str_cmd);
-	// if ((*s)[2] && (*s)[2] == '/')
-	// 	scmd_move_to_next_char(str_cmd);
-	// expand_home_shortcut(s, vars);
-	// if
+	scmd_move_to_next_char(str_cmd);
+	if ((*s)[1] == '/' || (*s)[1] == '-' || (*s)[1] == '+' || (*s)[1] == '-')
+		scmd_move_to_next_char(str_cmd);
+	if ((*s)[2] && (*s)[2] == '/')
+		scmd_move_to_next_char(str_cmd);
+	expand_home_shortcut(s, vars);
+	*pos = ft_strlen(*s) - len;
 }
