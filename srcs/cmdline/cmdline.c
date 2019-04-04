@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 10:06:11 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 10:12:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 		ft_strdel(&alloc->full_input);
 		if (error == ERRC_LEXERROR
 				|| (error == ERRC_INCOMPLETECMD && state == RSTATE_EOT))
-			alloc->ret_val = 258;
+			alloc->ret_val = 2;
 	}
 	return (alloc->full_input);
 }
