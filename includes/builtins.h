@@ -32,4 +32,6 @@ int		check_stopped_job(void);
 
 int		is_builtin(t_alloc *alloc, const char *built_name);
 
+char	*get_path_or_cwd(t_list *vars, const char *name);
+
 #endif

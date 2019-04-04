@@ -3,6 +3,7 @@
 #include "parser_lexer.h"
 #include "error.h"
 #include "vars.h"
+#include "builtins.h"
 
 int	expand_home_shortcut(char **s, t_list *vars)
 {
@@ -11,7 +12,7 @@ int	expand_home_shortcut(char **s, t_list *vars)
 	dir = 0;
 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
 	{
-		dir = ft_strjoin(get_var_value(vars, "HOME")
+		dir = ft_strjoin(get_path_or_cwd(vars, "HOME")
 				, ((*s)[1] == '/') ? (*s) + 1 : 0);
 	}
 	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
