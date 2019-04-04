@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 15:11:51 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/04 15:50:36 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		add_char_to_input(t_cmdline *cmdline, char c);
 
 char		*get_prompt(t_cmdline *cmdline, t_prompt type, size_t *offset);
 t_rstate	read_input(t_cmdline *cmdline, const char *prompt, size_t offset);
-char		*prompt_heredoc(t_cmdline *cmdline, const char *word);
+char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word);
 
 int			t_putchar(int c);
 
