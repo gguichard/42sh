@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 20:20:40 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 19:34:25 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 09:46:14 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@
 #include "check_path.h"
 #include "builtins.h"
 
-static char	*get_path_or_cwd(t_alloc *alloc, const char *name)
+char		*get_path_or_cwd(t_list *vars, const char *name)
 {
 	t_var			*var;
 	const char		*login;
 
-	var = get_var(alloc->vars, name);
+	var = get_var(vars, name);
 	if (var == NULL)
 	{
 		if (ft_strequ(name, "HOME") && (login = getlogin()) != NULL)
@@ -47,7 +47,7 @@ static char	*get_new_cur_path(t_alloc *alloc, const char *cur_path)
 	else
 	{
 		new_path = NULL;
-		pwd = get_path_or_cwd(alloc, "PWD");
+		pwd = get_path_or_cwd(alloc->vars, "PWD");
 		if (!ft_strequ(cur_path, ".")
 				&& !ft_strequ(cur_path, "..")
 				&& !ft_strnequ(cur_path, "./", 2)
@@ -71,9 +71,9 @@ static char	*get_cur_path(t_alloc *alloc, t_opts *opts, const char *operand)
 
 	cur_path = NULL;
 	if (operand == NULL)
-		cur_path = get_path_or_cwd(alloc, "HOME");
+		cur_path = get_path_or_cwd(alloc->vars, "HOME");
 	else if (ft_strequ(operand, "-"))
-		cur_path = get_path_or_cwd(alloc, "OLDPWD");
+		cur_path = get_path_or_cwd(alloc->vars, "OLDPWD");
 	else
 		cur_path = ft_strdup(operand);
 	if (cur_path != NULL)
@@ -106,7 +106,7 @@ static int	change_dir(t_alloc *alloc, t_opts *opts, const char *cur_path
 				, error_to_str(error));
 		return (1);
 	}
-	pwd = get_path_or_cwd(alloc, "PWD");
+	pwd = get_path_or_cwd(alloc->vars, "PWD");
 	if (pwd != NULL)
 		update_var(&alloc->vars, "OLDPWD", pwd);
 	free(pwd);
