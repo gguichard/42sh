@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 10:12:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 15:16:44 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static char		*join_command(t_cmdline *cmdline, char *full_input)
 	char	*new_line;
 	char	*tmp[3];
 
-	new_line = ft_strdup(cmdline->input.buffer);
+	new_line = (cmdline->input_str) ? ft_strdup(cmdline->input_str)
+		: ft_strdup(cmdline->input.buffer);
+	if (cmdline->input_str)
+		ft_strdel(&cmdline->input_str);
 	if (new_line == NULL)
 		return (NULL);
 	if (!expand_history_events(&cmdline->history, &new_line))
@@ -76,9 +79,11 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 static t_rstate	create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
 {
 	char		*prompt;
-	size_t		offset;
 	t_rstate	state;
+	size_t		offset;
 
+	if (!isatty(STDIN_FILENO))
+		return (non_interact_input(cmdline));
 	prompt = get_prompt(cmdline, type, &offset);
 	state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
 			, (prompt == NULL ? 2 : offset));

@@ -52,7 +52,9 @@ char	*job_state_str(t_list *tmp)
 		return ("Running");
 	else if ((job = last_job(tmp->content))->state == SIG)
 		return (sig_str(job->status));
-	else if ((last_job(tmp->content))->state == DONE)
+	else if ((job = last_job(tmp->content))->state == DONE && job->status)
+		return ("Exit");
+	else if (job->state == DONE)
 		return ("Done");
 	return ("undefined");
 }
