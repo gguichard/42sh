@@ -64,16 +64,29 @@ void	test_this_autocomplete(char *strbase, char *result_needed
 
 void	test_autocomplete()
 {
+	printf(" --- Test autocompletion : ");
+	//classique
 	test_this_autocomplete("ech", "o", ACS_TYPE_FILE);
+	test_this_autocomplete("dos", "sier", ACS_TYPE_DIR);
+	test_this_autocomplete("dossier/", "executable", ACS_TYPE_FILE);
+	test_this_autocomplete("lol dos", "sier", ACS_TYPE_NOTHING);
+	test_this_autocomplete("lol dossier/", "", ACS_TYPE_NOTHING);
+	test_this_autocomplete("dossier_", "", ACS_TYPE_NOTHING);
+	test_this_autocomplete("lol dossier_", "lolfake", ACS_TYPE_FILE);
+	//echappement
 	test_this_autocomplete("ec\\h", "o", ACS_TYPE_FILE);
 	test_this_autocomplete("ech\\", "o", ACS_TYPE_FILE);
+	test_this_autocomplete("lol\\ dos", "", ACS_TYPE_NOTHING);
+	//newline
 	test_this_autocomplete("ech\\\n", "o", ACS_TYPE_FILE);
 	test_this_autocomplete("ech\n", "", ACS_TYPE_NOTHING);
 	test_this_autocomplete("e\nch", "", ACS_TYPE_NOTHING);
+	//quote
 	test_this_autocomplete("ech\'\n", "", ACS_TYPE_NOTHING);
 	test_this_autocomplete("\'ech\n", "", ACS_TYPE_NOTHING);
 	test_this_autocomplete("ech\'\\\n", "", ACS_TYPE_NOTHING);
 	test_this_autocomplete("\'ech\\\n", "", ACS_TYPE_NOTHING);
+	//double quote
 	test_this_autocomplete("ech\"\n", "", ACS_TYPE_NOTHING);
 	test_this_autocomplete("\"ech\n", "", ACS_TYPE_NOTHING);
 	test_this_autocomplete("ech\"\\\n", "o", ACS_TYPE_FILE);
