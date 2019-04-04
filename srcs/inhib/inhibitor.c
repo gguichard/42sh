@@ -118,7 +118,7 @@ void	delete_line_tab(char ***array, int i)
 
 	len = ft_strtab_count(*array);
 	if (len == 1)
-		ft_strtab_free(*array);
+		*array = ft_strtab_free(*array);
 	else if (len - 1 == (size_t)i)
 		ft_strdel(&(*(array[i])));
 	else
@@ -150,11 +150,11 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	while (elem->input[i])
 	{
 		if (ft_strequ(elem->input[i], "") == 1)
-		{
 			delete_line_tab(&(elem->input), i);
-		}
 		else
 			i += 1;
+		if (!elem->input)
+			return (0);
 	}
 	if (ft_strtab_count(elem->input) == 0 || !(elem->input[0]))
 		return (0);
