@@ -77,6 +77,7 @@ int						setup_alloc(t_alloc *alloc, int argc, char **argv
 	ft_memset(alloc, 0, sizeof(t_alloc));
 	alloc->argc = argc;
 	alloc->argv = argv;
+	alloc->exit_rdy = 1;
 	alloc->ppid = getpid();
 	alloc->vars = parse_env(environ);
 	setup_def_vars(alloc);

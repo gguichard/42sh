@@ -37,10 +37,12 @@ static void	job_fork(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	else if (child > 0)
 	{
 		if (setpgid(child, 0) == -1)
-			ft_dprintf(STDERR_FILENO
-				, "42sh: child setpgid: operation not permitted\n");
-		add_pid_lst(child, elem, 0);
-		print_bg(child);
+			kill_zombie_boy(child);
+		else
+		{
+			add_pid_lst(child, elem, 0);
+			print_bg(child);
+		}
 	}
 	else
 	{
