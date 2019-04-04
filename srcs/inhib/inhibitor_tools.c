@@ -35,9 +35,8 @@ void	update_pos_index(t_str_cmd_inf *str_cmd)
 	}
 	else if (scmd_cur_char(str_cmd) == '{')
 	{
-		while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
-				&& scmd_cur_char(str_cmd)
-				&& scmd_cur_char(str_cmd) != '}')
+
+		while (scmd_cur_char(str_cmd) && scmd_cur_char(str_cmd) != '}')
 			scmd_move_to_next_char(str_cmd);
 		scmd_move_to_next_char(str_cmd);
 	}
