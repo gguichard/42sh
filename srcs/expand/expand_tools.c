@@ -26,7 +26,7 @@ int		check_expand_syntax(const char *str)
 		if (str[i] != '}')
 			return (0);
 	}
-	else if (str[i] == '!' || str[i] == '?' || str[i] == '$' || str[i] == '_')
+	else if (str[i] == '!' || str[i] == '?' || str[i] == '$')
 	{
 		if (str[i + 1] != '}')
 			return (0);
