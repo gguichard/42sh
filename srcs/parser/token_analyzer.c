@@ -27,16 +27,16 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 	return (PR_ERROR);
 }
 
-static int				check_red_ope(t_list **lst_tk, int prompt_heredoc)
+static int				check_red_ope(t_list **lst_tk, int prompt_hdoc)
 {
 	char	*tok;
 
 	if (ft_strequ(get_tk(*lst_tk)->token, "<<") && (*lst_tk)->next != NULL
 			&& get_tk((*lst_tk)->next)->type == TK_RED_ROPT_FILE
-			&& prompt_heredoc)
+			&& prompt_hdoc)
 	{
 		tok = get_tk((*lst_tk)->next)->token;
-		get_tk((*lst_tk)->next)->token = read_heredoc(g_cmdline, tok);
+		get_tk((*lst_tk)->next)->token = prompt_heredoc(g_cmdline, tok);
 		free(tok);
 	}
 	*lst_tk = (*lst_tk)->next;

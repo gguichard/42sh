@@ -31,15 +31,11 @@ void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos,
 
 void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input)
 {
+	if (*pos == 0)
+		return ;
 	str_cmd->pos -= 1;
 	*pos -= 1;
-	if ((scmd_cur_char(str_cmd) == '"' && (*input)[*pos] == '"'
-			&& !scmd_cur_char_is_escaped(str_cmd))
-			|| (scmd_cur_char(str_cmd) == '\'' && (*input)[*pos] == '\''
-			&& !scmd_cur_char_is_escaped(str_cmd))
-			|| (scmd_cur_char(str_cmd) == '\\'
-			&& !scmd_cur_char_is_escaped(str_cmd) && !str_cmd->is_in_quote
-			&& !str_cmd->is_in_dbquote))
+	if (scmd_cur_char(str_cmd) == '\\' && !scmd_cur_char_is_escaped(str_cmd))
 	{
 		*pos += 1;
 		remove_escaped_char(str_cmd, input, pos, 1);
