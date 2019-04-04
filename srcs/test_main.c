@@ -51,15 +51,20 @@ void	test_this_autocomplete(char *strbase, char *result_needed
 	t_ac_suff_inf *acs;
 
 	ft_printf("Test ac « %s » :\n", strbase);
-	scmd_init(&scmd, strbase);
+	if (!scmd_init(&scmd, strbase))
+	{
+		ft_printf("ERREUR scmd_init.");
+		return;
+	}
 	acs = autocomplete_cmdline(&scmd, &alloc);
-	ft_printf("(str) Attendu : « %s », resultat : « %s »\n", result_needed, acs->suff);
-	ft_printf("(typ) Attendu : « %d », resultat : « %d »\n", type_needed, acs->suff_type);
-	if (ft_strequ(result_needed, acs->suff) && type_needed == acs->suff_type)
+	ft_printf("(str) Attendu : « %s », resultat : « %s »\n", result_needed, (acs != NULL ? acs->suff : "ERREUR"));
+	ft_printf("(typ) Attendu : « %d », resultat : « %d »\n", type_needed, (acs != NULL ? acs->suff_type : -1));
+	if (acs != NULL && ft_strequ(result_needed, acs->suff) && type_needed == acs->suff_type)
 		ft_printf("\033[1;32mOK !\033[0m\n");
 	else
 		ft_printf("\033[1;31mFAUX !\033[0m\n");
-	delete_ac_suff_inf(acs);
+	if (acs != NULL)
+		delete_ac_suff_inf(acs);
 	scmd_clean(&scmd);
 }
 
@@ -100,7 +105,11 @@ void	test_this_alias(char *strbase, char *result_needed)
 	t_list			*tk_lst;
 
 	ft_printf("Test alias « %s » :\n", strbase);
-	scmd_init(&scmd, strbase);
+	if (!scmd_init(&scmd, strbase))
+	{
+		ft_printf("ERREUR scmd_init.");
+		return;
+	}
 	tk_lst = split_cmd_token(&scmd, alloc.aliastable);
 	ft_printf("(str) Attendu : « %s », resultat : « %s »\n", result_needed, scmd.str);
 	if (ft_strequ(result_needed, scmd.str))
