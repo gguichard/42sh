@@ -7,7 +7,7 @@
 #include "builtins.h"
 #include "signals.h"
 
-int			check_stopped_job(void)
+static int	check_stopped_job(void)
 {
 	t_list	*tmp;
 
@@ -76,6 +76,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	terminate_all_jobs(g_sig == SIGHUP ? SIGHUP : SIGTERM);
 	save_history_entries(alloc, &alloc->cmdline.history);
+	del_history_entries(&alloc->cmdline.history);
 	if (elem == NULL)
 	{
 		dup2(g_cmdline->stdin_dup, STDIN_FILENO);
