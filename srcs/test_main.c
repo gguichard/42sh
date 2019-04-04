@@ -113,12 +113,24 @@ void	test_this_alias(char *strbase, char *result_needed)
 void	test_alias()
 {
 	ft_printf(" --- Test expand alias : ");
+	//classique
 	test_this_alias("basicalias", "basicresult");
 	test_this_alias("blankalias", "blankresult ");
 	test_this_alias("basicalias basicalias", "basicresult basicalias");
 	test_this_alias("blankalias basicalias", "blankresult  basicresult");
 	test_this_alias("blankalias blankalias", "blankresult  blankresult ");
 	test_this_alias("blankalias basicalias blankalias", "blankresult  basicresult blankalias");
+	//echappement
+	test_this_alias("\'basicalias\'", "\'basicalias\'");
+	test_this_alias("\'\'basicalias", "\'\'basicalias");
+	test_this_alias("\\basicalias", "\\basicalias");
+	test_this_alias("\"basicalias\"", "\"basicalias\"");
+	test_this_alias("basic\\alias", "basic\\alias");
+	test_this_alias("basi\"ca\"lias", "basi\"ca\"lias");
+	//recur
+	test_this_alias("aliasrec", "aliasrec ; aliasrec ; aliasrec ; aliasrec");
+	test_this_alias("autrealiasrec", "autrealiasrec ; autrealiasrec ; autrealiasrec ; autrealiasrec");
+	test_this_alias("encoreautrealiasrec", "autrealiasrec ; autrealiasrec ; autrealiasrec ; autrealiasrec autrealiasrec");
 }
 
 int		main(int argc, char **argv, char **environ)
