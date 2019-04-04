@@ -37,8 +37,6 @@ static void	handler_signals(int sig)
 		return ;
 	}
 	close(STDIN_FILENO);
-	if (sig == SIGHUP)
-		terminate_all_jobs(SIGHUP);
 }
 
 void		set_signals_handlers(void)
