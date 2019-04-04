@@ -17,7 +17,11 @@ int		inhib_only_str(char *str)
 		if (!scmd_cur_char_is_escaped(&str_cmd) && !str_cmd.is_in_dbquote
 				&& !str_cmd.is_in_quote && (scmd_cur_char(&str_cmd) == '"'
 				|| scmd_cur_char(&str_cmd) == '\''))
+		{
+			str_cmd.pos += 1;
+			pos += 1;
 			remove_escaped_char(&str_cmd, &str, &pos, 1);
+		}
 		else if (scmd_cur_char_is_escaped(&str_cmd) && ((str_cmd.is_in_dbquote
 				&& scmd_cur_is_of(&str_cmd, DBQUOTE_SPE_CHAR) == 1)
 				|| (!str_cmd.is_in_quote && !str_cmd.is_in_dbquote)))
@@ -108,6 +112,28 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	return (array);
 }
 
+void	delete_line_tab(char ***array, int i)
+{
+	size_t	len;
+
+	len = ft_strtab_count(*array);
+	if (len == 1)
+		ft_strtab_free(*array);
+	else if (len - 1 == (size_t)i)
+		ft_strdel(&(*(array[i])));
+	else
+	{
+		ft_strdel(&((*array)[i]));
+		i += 1;
+		while ((*array)[i])
+		{
+			(*array)[i - 1] = (*array)[i];
+			i += 1;
+		}
+		(*array)[i - 1] = (*array)[i];
+	}
+}
+
 int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 {
 	int		i;
@@ -120,8 +146,17 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 			return (0);
 		create_new_input(elem, &i, new_array);
 	}
-	if (ft_strtab_count(elem->input) == 1
-			&& ft_strequ(elem->input[0], "") == 1)
+	i = 0;
+	while (elem->input[i])
+	{
+		if (ft_strequ(elem->input[i], "") == 1)
+		{
+			delete_line_tab(&(elem->input), i);
+		}
+		else
+			i += 1;
+	}
+	if (ft_strtab_count(elem->input) == 0 || !(elem->input[0]))
 		return (0);
 	return (1);
 }

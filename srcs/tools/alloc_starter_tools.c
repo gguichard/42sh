@@ -65,10 +65,10 @@ void					setup_def_vars(t_alloc *alloc)
 			free(cur_pwd);
 		}
 	}
+	if (get_var(alloc->vars, "_") == NULL)
+		create_var(&alloc->vars, "_", alloc->argv[0], 1);
 	if (get_var(alloc->vars, "PS1") == NULL)
-	{
 		create_var(&alloc->vars, "PS1", "> ", 0);
-	}
 }
 
 int						setup_alloc(t_alloc *alloc, int argc, char **argv
