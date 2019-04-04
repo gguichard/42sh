@@ -13,6 +13,7 @@
 #include "job.h"
 #include "signals.h"
 #include "vars.h"
+#include "inhibitor.h"
 
 static t_alloc	alloc;
 
@@ -133,6 +134,65 @@ void	test_alias()
 	test_this_alias("encoreautrealiasrec", "autrealiasrec ; autrealiasrec ; autrealiasrec ; autrealiasrec autrealiasrec");
 }
 
+void	print_str_tab(char **strtab)
+{
+	if (strtab == NULL)
+		ft_printf("NULL");
+	else
+	{
+		ft_printf("[");
+		while (*strtab != NULL)
+		{
+			ft_printf(" ‘%s’", *strtab);
+			++strtab;
+		}
+		ft_printf(" ]");
+	}
+}
+
+void	test_this_inhib_expand(char *strbase, char **result_needed)
+{
+	char	**head = inhib_expand_str(strbase, &alloc);
+	char	**str_tab = head;
+
+	ft_printf("Test inhib/exp « %s » :\n", strbase);
+	ft_printf("(tab) Attendu : « ");
+	print_str_tab(result_needed);
+	ft_printf(" », resultat : « ");
+	print_str_tab(str_tab);
+	ft_printf(" »\n");
+	while (str_tab != NULL && result_needed != NULL && *str_tab != NULL && *result_needed != NULL)
+	{
+		if (!ft_strequ(*str_tab, *result_needed))
+			break;
+		++str_tab;
+		++result_needed;
+	}
+	if ((result_needed == NULL && str_tab == NULL)
+			|| (result_needed != NULL && str_tab != NULL && *str_tab == NULL && *result_needed == NULL))
+		ft_printf("\033[1;32mOK !\033[0m\n");
+	else
+		ft_printf("\033[1;31mFAUX !\033[0m\n");
+	ft_strtab_free(head);
+}
+
+void test_inhib_expand()
+{
+	ft_printf(" --- Test inhibition expand : ");
+	test_this_inhib_expand("str", (char*[]){"str", NULL});
+	test_this_inhib_expand("$EXISTEpas$EXISTE", (char*[]){"CECI", NULL});
+	test_this_inhib_expand("echo ${EXISTE}$", (char*[]){"echo CECI$", NULL});
+	test_this_inhib_expand("echo $EXISTE$", (char*[]){"echo CECI$", NULL});
+	test_this_inhib_expand("$EXISTE=$EXISTE", (char*[]){"CECI=CECI", NULL});
+	test_this_inhib_expand("$EXISTE:$EXISTE", (char*[]){"CECI:CECI", NULL});
+	test_this_inhib_expand("$\"EXISTE\"", (char*[]){"$EXISTE", NULL});
+	test_this_inhib_expand("\"$EXISTE\"", (char*[]){"CECI", NULL});
+	test_this_inhib_expand("$\'EXISTE\'", (char*[]){"$EXISTE", NULL});
+	test_this_inhib_expand("\'$EXISTE\'", (char*[]){"$EXISTE", NULL});
+	test_this_inhib_expand("echo non$EXISTE$=$", (char*[]){"echo nonCECI$=$", NULL});
+	test_this_inhib_expand("echo ${EXISTE$EXISTE}", NULL);
+}
+
 int		main(int argc, char **argv, char **environ)
 {
 	(void)argc;
@@ -144,9 +204,14 @@ int		main(int argc, char **argv, char **environ)
 	set_alias_if_valid(alloc.aliastable, "encoreautrealiasrec", "autrealiasrec autrealiasrec", NULL);
 	set_alias_if_valid(alloc.aliastable, "basicalias", "basicresult", NULL);
 	set_alias_if_valid(alloc.aliastable, "blankalias", "blankresult ", NULL);
+	create_var(&alloc.vars, "EXISTE", "CECI", 1);
+	create_var(&alloc.vars, "ESTVIDE", "", 1);
+	unset_var(&alloc.vars, "EXISTEPAS");
 	test_autocomplete();
 	ft_printf("\n");
 	test_alias();
+	ft_printf("\n");
+	test_inhib_expand();
 	del_alloc(&alloc);
 	return (0);
 }
