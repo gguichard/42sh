@@ -112,7 +112,7 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 			len += 1;
 		if (len + save != *pos_array)
 		{
-			if (!(expand_var_to_tab(array, len, pos_array, save)))
+		if (!(expand_var_to_tab(array, len, pos_array, save)))
 				return (0);
 		}
 	}
