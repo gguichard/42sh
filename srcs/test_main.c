@@ -199,8 +199,11 @@ void test_inhib_expand()
 	test_this_inhib_expand("$\'EXISTE\'", (char*[]){"$EXISTE", NULL});
 	test_this_inhib_expand("\'$EXISTE\'", (char*[]){"$EXISTE", NULL});
 	test_this_inhib_expand("non$EXISTE$=$", (char*[]){"nonCECI$=$", NULL});
-	test_this_inhib_expand("${EXISTE$EXISTE}", NULL);
-	test_this_inhib_expand("${tout%%faux}", NULL);
+	test_this_inhib_expand("lol${EXISTE$EXISTE}lol", NULL);
+	test_this_inhib_expand("lol${tout%faux}lol", NULL);
+	test_this_inhib_expand("lol${\"faux\"}lol", NULL);
+	test_this_inhib_expand("lol${\"fa}ux\"}lol", NULL);
+	test_this_inhib_expand("lol${bonjour\"faux\"salut}lol", NULL);
 	test_this_inhib_expand("$ESTVIDE", NULL);
 	test_this_inhib_expand("$EXISTEPAS", NULL);
 	test_this_inhib_expand("$DEUXMOTS", (char*[]){"DEUX", "MOTS", NULL});
