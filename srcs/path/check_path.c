@@ -74,7 +74,7 @@ t_error		check_file_rights(const char *path, int file_type, int rights)
 		return (ERRC_UNEXPECTED);
 	if ((path_size = ft_strlen(path_cpy)) < 1)
 		return (del_then_ret_err(path_cpy, ERRC_NOERROR));
-	if ((end_with_slash = (path_cpy[path_size - 1] == '/')))
+	if ((end_with_slash = (path_cpy[path_size - 1] == '/')) && path_size > 1)
 		path_cpy[path_size - 1] = '\0';
 	if ((check_cd_ret = check_dir_of_file_rights(path_cpy, X_OK))
 			!= ERRC_NOERROR)

@@ -4,6 +4,8 @@
 #include "redirect_inf.h"
 #include "execution.h"
 #include "inhibitor.h"
+#include "signals.h"
+#include "vars.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -46,45 +48,53 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	int	ret;
 
+	if (!ft_strequ(elem->input[0], "exit"))
+		alloc->exit_rdy = 0;
 	ret = try_builtin_execution(alloc, elem, opt);
 	if (ret == -1)
 		ret = exec_input(alloc, elem, opt);
+	update_var(&alloc->vars, "_"
+		, elem->input[ft_strtab_count(elem->input) - 1]);
 	return (ret);
 }
 
-static int	dispatch_assign(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
+static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	process_assigns(alloc, elem);
-	return (analyzer(alloc, elem->left, opt));
-}
-
-int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
-{
-	if (elem == NULL)
-	{
-		if (opt->red_save != NULL && !opt->from_builtin)
-			use_rc_on_shell(opt);
-		return (0);
-	}
-	else if (!inhib_expand_tab(elem, alloc))
-		return (1);
-	else if (elem->type == AST_CMD_SEP)
-	{
-		alloc->ret_val = analyzer(alloc, elem->left, opt);
-		return (analyzer(alloc, elem->right, opt));
-	}
-	else if (elem->type == AST_JOB)
+	if (elem->type == AST_JOB)
 		return (job_control(alloc, elem, opt));
 	else if (elem->type == AST_LOGIC)
 		return (dispatch_logic(alloc, elem, opt));
 	else if (elem->type == AST_PIPE)
 		return (do_pipe(alloc, elem, opt));
 	else if (elem->type == AST_ASSIGN)
-		return (dispatch_assign(alloc, elem, opt));
+		return (process_assigns(alloc, elem, opt));
 	else if (elem->type == AST_CMD)
 		return (dispatch_command(alloc, elem, opt));
 	else if (elem->type == AST_REDIR)
 		return (dispatch_redirection(alloc, elem, opt));
 	else
 		return (1);
+}
+
+int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
+{
+	sigs_wait_line(alloc);
+	if (elem == NULL || opt->sigint || g_sig == SIGINT)
+	{
+		if (elem == NULL && opt->red_save != NULL && !opt->from_builtin)
+			use_rc_on_shell(opt);
+		return (0);
+	}
+	else if ((elem->type != AST_REDIR || !ft_strequ("<<", elem->input[0]))
+			&& !inhib_expand_tab(elem, alloc))
+	{
+		return (1);
+	}
+	else if (elem->type == AST_CMD_SEP)
+	{
+		alloc->ret_val = analyzer(alloc, elem->left, opt);
+		return (analyzer(alloc, elem->right, opt));
+	}
+	else
+		return (assign_analyzer(alloc, elem, opt));
 }

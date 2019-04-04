@@ -17,11 +17,11 @@ static int	unset_builtin_var(t_alloc *alloc, const char *key)
 
 int			builtin_unset(t_ast *elem, t_alloc *alloc)
 {
-	int	idx;
 	int	ret;
+	int	idx;
 
-	idx = 1;
 	ret = 0;
+	idx = 1;
 	while (elem->input[idx] != NULL)
 	{
 		if (!unset_builtin_var(alloc, elem->input[idx]))

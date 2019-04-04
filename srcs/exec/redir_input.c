@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 15:05:09 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 15:50:07 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 
 int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
-	int	fildes[2];
-	int	ret;
+	int		fildes[2];
+	int		ret;
 
 	if (pipe(fildes) == -1)
 	{

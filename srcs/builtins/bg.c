@@ -61,16 +61,18 @@ int			builtin_bg(t_ast *elem, t_alloc *alloc)
 	int		index;
 	t_list	*tmp;
 
-	(void)alloc;
 	index = 1;
 	tmp = g_jobs;
 	if (get_indexed_job(elem, &tmp, &index) == 1)
 		return (1);
 	if (tmp && check_job_state(tmp, RUNNING_BG))
 	{
+		if (elem->input[1])
+			index = ft_atoi(elem->input[1]);
 		ft_dprintf(STDERR_FILENO, "42sh: bg: job %d already in background\n", index);
 		return (0);
 	}
+	alloc->last_bg = ((t_job *)tmp->content)->pid;
 	bring_to_bg_process(elem, tmp, index);
 	return (0);
 }

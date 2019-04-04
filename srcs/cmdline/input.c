@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/28 11:22:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 18:38:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ static void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 		if (c != '\n')
 			write(STDOUT_FILENO, "\n", 1);
 		cmdline->cursor.x = 0;
-		if ((cmdline->cursor.y + 1) < cmdline->winsize.ws_row)
-			cmdline->cursor.y += 1;
-		cmdline->row += 1;
+		cmdline->cursor.y += 1;
 	}
-	update_cmdline_at_offset(cmdline);
+	update_cmdline_at_offset(cmdline, c, 0);
 }
 
 void			add_char_to_input(t_cmdline *cmdline, char c)
@@ -48,23 +46,42 @@ void			add_char_to_input(t_cmdline *cmdline, char c)
 	write_char_in_cmdline(cmdline, c);
 }
 
-t_rstate		read_input(t_cmdline *cmdline, const char *prompt)
+static void		print_unterminated_line(t_cmdline *cmdline)
+{
+	size_t	buff_len;
+	char	*buffer;
+
+	buff_len = cmdline->winsize.ws_col - 1;
+	buffer = (char *)malloc(buff_len * sizeof(char));
+	if (buffer == NULL)
+		return ;
+	ft_memset(buffer, ' ', buff_len);
+	tputs(tgetstr("mr", NULL), 1, t_putchar);
+	write(STDOUT_FILENO, "%", 1);
+	tputs(tgetstr("me", NULL), 1, t_putchar);
+	write(STDOUT_FILENO, buffer, buff_len);
+	tputs(tgetstr("cr", NULL), 1, t_putchar);
+	tputs(tgetstr("ce", NULL), 1, t_putchar);
+	free(buffer);
+}
+
+t_rstate		read_input(t_cmdline *cmdline, const char *prompt
+		, size_t offset)
 {
 	char		input;
 	const t_seq	*seq;
 
-	reset_cmdline(cmdline, prompt);
+	print_unterminated_line(cmdline);
+	reset_cmdline(cmdline, prompt, offset);
 	while (cmdline->input.reading == RSTATE_READING)
 	{
 		if (read(STDIN_FILENO, &input, 1) <= 0)
-		{
 			cmdline->input.reading = RSTATE_EOT;
-			break ;
-		}
-		seq = get_sequence(cmdline, input);
-		if (seq != NULL)
+		else if ((seq = get_sequence(cmdline, input)) != NULL)
 			handle_sequence(cmdline, seq);
-		else if (!cmdline->visual.toggle)
+		else if (cmdline->visual.toggle)
+			tputs(tgetstr("bl", NULL), 1, t_putchar);
+		else
 		{
 			cmdline->saved_col = -1;
 			if (ft_isprint(input))

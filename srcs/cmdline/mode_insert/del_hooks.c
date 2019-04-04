@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/12 16:26:49 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:44:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:14:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,18 @@
 
 static void	del_char_on_cursor(t_cmdline *cmdline)
 {
+	static char	*ce_tcap = NULL;
+	char		caller;
+
+	if (ce_tcap == NULL)
+		ce_tcap = tgetstr("ce", NULL);
+	caller = cmdline->input.buffer[cmdline->input.offset];
 	ft_memcpy(cmdline->input.buffer + cmdline->input.offset
 			, cmdline->input.buffer + cmdline->input.offset + 1
 			, (cmdline->input.size - cmdline->input.offset));
 	cmdline->input.size -= 1;
-	clear_after_cursor(cmdline->cursor, cmdline->winsize);
-	update_cmdline_at_offset(cmdline);
+	tputs(ce_tcap, 1, t_putchar);
+	update_cmdline_at_offset(cmdline, caller, 1);
 }
 
 int			handle_backspace_key(t_cmdline *cmdline)

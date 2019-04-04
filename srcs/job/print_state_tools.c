@@ -5,13 +5,13 @@
 
 char	*status_stop_str(int status)
 {
-	if (WSTOPSIG(status) == SIGTSTP)
+	if (status == SIGTSTP)
 		return ("SIGTSTP");
-	else if (WSTOPSIG(status) == SIGSTOP)
+	else if (status == SIGSTOP)
 		return ("SIGSTOP");
-	else if (WSTOPSIG(status) == SIGTTIN)
+	else if (status == SIGTTIN)
 		return ("SIGTTIN");
-	else if (WSTOPSIG(status) == SIGTTOU)
+	else if (status == SIGTTOU)
 		return ("SIGTTOU");
 	return ("undefined");
 }
@@ -23,17 +23,17 @@ char	*signal_stop_str(t_list *tmp)
 
 	stopped = 0;
 	job = tmp->content;
-	if (job->state == STOPPED && WSTOPSIG(job->status) != SIGTSTP)
-			return (status_stop_str(job->status));
-	else if (job->state == STOPPED && WSTOPSIG(job->status) == SIGTSTP)
+	if (job->state == STOPPED && job->status != SIGTSTP)
+		return (status_stop_str(job->status));
+	else if (job->state == STOPPED && job->status == SIGTSTP)
 		stopped = 1;
 	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
-		if (job->state == STOPPED && WSTOPSIG(job->status) != SIGTSTP)
-				return (status_stop_str(job->status));
-		else if (job->state == STOPPED && WSTOPSIG(job->status) == SIGTSTP)
+		if (job->state == STOPPED && job->status != SIGTSTP)
+			return (status_stop_str(job->status));
+		else if (job->state == STOPPED && job->status == SIGTSTP)
 			stopped = 1;
 		tmp = tmp->next;
 	}
@@ -48,11 +48,13 @@ char	*job_state_str(t_list *tmp)
 
 	if (check_job_state(tmp, STOPPED))
 		return ("Stopped");
-	else if ((job = check_job_state(tmp, SIG)))
-		return (last_sig_process(tmp));
 	else if (check_job_state(tmp, RUNNING_BG))
 		return ("Running");
-	else if (check_job_state(tmp, DONE))
+	else if ((job = last_job(tmp->content))->state == SIG)
+		return (sig_str(job->status));
+	else if ((job = last_job(tmp->content))->state == DONE && job->status)
+		return ("Exit");
+	else if (job->state == DONE)
 		return ("Done");
 	return ("undefined");
 }
@@ -77,22 +79,18 @@ char	*job_cmd(t_job *job)
 	char	*actual;
 	t_list	*tmp;
 
-	if (job->pipe)
+	tmp = job->pipe;
+	pipe_cmd = ft_strdup(job->cmd);
+	while (tmp)
 	{
-		tmp = job->pipe;
-		pipe_cmd = ft_strdup(job->cmd);
-		while (tmp)
-		{
-			actual = ((t_job *)tmp->content)->cmd;
-			prev = pipe_cmd;
-			pipe_cmd = ft_strjoin(prev, actual);
-			ft_memdel((void **)&prev);
-			if (!pipe_cmd || !tmp->next)
-				break ;
-			tmp = tmp->next;
-		}
+		actual = ((t_job *)tmp->content)->cmd;
+		prev = ft_strjoin(pipe_cmd, " ");
+		ft_memdel((void **)&pipe_cmd);
+		pipe_cmd = ft_strjoin(prev, actual);
+		ft_memdel((void **)&prev);
+		if (!pipe_cmd || !tmp->next)
+			break ;
+		tmp = tmp->next;
 	}
-	else
-		pipe_cmd = ft_strdup(job->cmd);
 	return (pipe_cmd);
 }

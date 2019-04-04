@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <unistd.h>
-#include "printf.h"
+#include "libft.h"
 #include "shell.h"
 #include "builtins.h"
 #include "exectable.h"
 #include "aliastable.h"
-#include "search_exec.h"
+#include "check_path.h"
 
 static int	search_type(t_alloc *alloc, const char *elem)
 {
@@ -23,7 +23,8 @@ static int	search_type(t_alloc *alloc, const char *elem)
 	else if (ft_strchr(elem, '/') != NULL && access(elem, F_OK | X_OK) == 0)
 		ret = ft_printf("%s is %s\n", elem, elem);
 	else if (ft_strchr(elem, '/') == NULL
-			&& (freed_path = search_exec(alloc->vars, elem, &error)) != NULL)
+			&& (freed_path = search_in_path(alloc->vars, elem, X_OK
+					, &error)) != NULL)
 	{
 		ret = ft_printf("%s is %s\n", elem, freed_path);
 		free(freed_path);

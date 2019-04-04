@@ -21,6 +21,9 @@ static const t_builtin	g_builtins[] = {
 	{"fg", builtin_fg},
 	{"bg", builtin_bg},
 	{"test", builtin_test},
+	{"exec", builtin_exec},
+	{"source", builtin_source},
+	{".", builtin_source},
 	{NULL, NULL}
 };
 
@@ -50,12 +53,10 @@ static void				increase_shlvl(t_alloc *alloc)
 
 void					setup_def_vars(t_alloc *alloc)
 {
-	t_var	*var;
 	char	*cur_pwd;
 
 	increase_shlvl(alloc);
-	var = get_var(alloc->vars, "PWD");
-	if (var == NULL)
+	if (get_var(alloc->vars, "PWD") == NULL)
 	{
 		cur_pwd = getcwd(NULL, 0);
 		if (cur_pwd != NULL)
@@ -64,6 +65,10 @@ void					setup_def_vars(t_alloc *alloc)
 			free(cur_pwd);
 		}
 	}
+	if (get_var(alloc->vars, "_") == NULL)
+		create_var(&alloc->vars, "_", alloc->argv[0], 1);
+	if (get_var(alloc->vars, "PS1") == NULL)
+		create_var(&alloc->vars, "PS1", "> ", 0);
 }
 
 int						setup_alloc(t_alloc *alloc, int argc, char **argv
@@ -72,6 +77,7 @@ int						setup_alloc(t_alloc *alloc, int argc, char **argv
 	ft_memset(alloc, 0, sizeof(t_alloc));
 	alloc->argc = argc;
 	alloc->argv = argv;
+	alloc->ppid = getpid();
 	alloc->vars = parse_env(environ);
 	setup_def_vars(alloc);
 	alloc->builtins = g_builtins;

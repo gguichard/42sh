@@ -4,7 +4,14 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-int		expand_var(char **str, t_alloc *alloc, const char *exp,
+static int	is_special_char(char c)
+{
+	if (c == '_' || c == '?' || c == '!' || c == '$')
+		return (1);
+	return (0);
+}
+
+int			expand_var(char **str, t_alloc *alloc, const char *exp,
 		size_t *len)
 {
 	if (ft_strncmp(exp, "${", 2) == 0)
@@ -18,21 +25,19 @@ int		expand_var(char **str, t_alloc *alloc, const char *exp,
 	return (1);
 }
 
-int		expand(char **input, t_alloc *alloc, size_t *pos)
+int			expand(char **input, t_alloc *alloc, size_t *pos)
 {
 	char		*str;
 	const char	*exp;
 	size_t		len;
 
-	exp = NULL;
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
-	if ((*input)[*pos + 1] == '{' && str)
+	if (str && (*input)[*pos + 1] == '{')
 		ft_strreplace_inside(input, *pos, len + 3, str);
-	else if (!ft_isalnum(exp[1]) && exp[1] != '_' && exp[1] != '?'
-			&& exp[1] != '!' && exp[1] != '\'' && exp[1] != '"' && exp[1] != '$')
+	else if (str && !ft_isalnum(exp[1]) && is_special_char(exp[1]) == 0)
 	{
 		*pos += 1;
 		return (1);

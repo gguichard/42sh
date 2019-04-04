@@ -6,18 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 19:05:28 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 19:06:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdlib.h>
 #include "libft.h"
-#include "shell.h"
-#include "job.h"
-#include "parser_lexer.h"
-#include "builtins.h"
 #include "cmdline.h"
+#include "inhibitor.h"
 
 static char	*join_heredoc(char *heredoc, char *part)
 {
@@ -32,16 +28,17 @@ static char	*join_heredoc(char *heredoc, char *part)
 	return (ret);
 }
 
-char		*read_heredoc(t_cmdline *cmdline, const char *word)
+static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 {
+	char		*prompt;
+	size_t		offset;
 	char		*heredoc;
 	t_rstate	state;
 
-	heredoc = ft_strdup("");
-	if (heredoc == NULL)
+	if ((prompt = get_prompt(cmdline, PROMPT_HEREDOC, &offset)) == NULL)
 		return (NULL);
-	setup_term(cmdline);
-	while (1)
+	heredoc = ft_strdup("");
+	if (heredoc != NULL)
 	{
 		setup_term(cmdline);
 		while (1)
@@ -57,36 +54,33 @@ char		*read_heredoc(t_cmdline *cmdline, const char *word)
 		}
 		reset_term(cmdline);
 	}
-	reset_term(cmdline);
+	free(prompt);
 	return (heredoc);
 }
 
-int			heredoc(t_ast *elem, t_alloc *alloc, t_exec_opt *opt)
+char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word)
 {
-	pid_t	pid;
-	int		fildes[2];
+	char	*word;
 	char	*heredoc;
+	size_t	len;
 
-	// TODO: skip prochains heredoc
-	if (!opt->fork)
+	word = ft_strdup(redir_word);
+	if (word == NULL)
+		return (NULL);
+	if (!inhib_only_str(word))
 	{
-		pid = fork();
-		if (pid == -1)
-			return (2);
-		else if (pid > 0)
-		{
-			wait_pid(pid, elem->left, opt, alloc);
-			return (ret_status(alloc->ret_val, pid, 0));
-		}
+		free(word);
+		return (NULL);
 	}
-	opt->fork = true;
-	if (pipe(fildes) != -1)
+	heredoc = read_heredoc(cmdline, word);
+	if (heredoc != NULL && heredoc[0] != '\0')
 	{
-		dup2(fildes[0], STDIN_FILENO);
-		heredoc = "test de heredoc\n";
-		write(fildes[1], heredoc, ft_strlen(heredoc));
-		close(fildes[1]);
-		close(fildes[0]);
+		len = ft_strlen(heredoc);
+		ft_memcpy(heredoc, heredoc + 1, len - 1);
+		heredoc[len - 1] = '\n';
+		if (ft_strequ(redir_word, word))
+			; // TODO: expand heredoc
 	}
-	return (analyzer(elem->left, alloc, opt));
+	free(word);
+	return (heredoc);
 }

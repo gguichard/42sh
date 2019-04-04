@@ -18,13 +18,16 @@ int		builtin_jobs(t_ast *elem, t_alloc *alloc);
 int		builtin_fg(t_ast *elem, t_alloc *alloc);
 int		builtin_bg(t_ast *elem, t_alloc *alloc);
 int		builtin_test(t_ast *elem, t_alloc *alloc);
+int		builtin_exec(t_ast *elem, t_alloc *alloc);
+int		builtin_source(t_ast *elem, t_alloc *alloc);
 
 /*
 ************************************ TOOLS *************************************
 */
 
 void	set_dir_to_canonical_form(char *dir);
+char	*search_in_cd_path(t_alloc *alloc, const char *path, const char *pwd);
+
 int		is_builtin(t_alloc *alloc, const char *built_name);
-void	check_exit_cmd(t_ast *elem);
 
 #endif

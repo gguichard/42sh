@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 14:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/29 17:54:35 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 16:56:21 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ t_list		*parse_env(char **environ)
 
 static char	*env_key_equal_value(t_var *var)
 {
-	size_t	key_len;
-	size_t	val_len;
-	char	*pair;
+	size_t		key_len;
+	size_t		val_len;
+	char		*pair;
 
 	key_len = ft_strlen(var->key);
 	val_len = ft_strlen(var->value);
@@ -74,7 +74,7 @@ char		**get_environ_from_list(t_list *env)
 		while (env != NULL)
 		{
 			var = (t_var *)env->content;
-			if (var->is_env && var->value != NULL)
+			if (var->value != NULL && var->is_env)
 			{
 				environ[index] = env_key_equal_value(var);
 				if (environ[index] == NULL)

@@ -33,7 +33,13 @@ static int	export_builtin_var(t_alloc *alloc, const char *key
 	if (!is_var_valid_identifier(key))
 		return (0);
 	if ((var = get_var(alloc->vars, key)) != NULL)
+	{
+		if (var->tmp_value != NULL)
+			ft_strdel(&var->tmp_value);
+		if (value == NULL)
+			value = var->value;
 		var->is_env = 1;
+	}
 	if (var == NULL || value != NULL)
 		update_var(&alloc->vars, key, value);
 	if (value != NULL && ft_strequ(key, "PATH"))
@@ -75,7 +81,7 @@ int			builtin_export(t_ast *elem, t_alloc *alloc)
 				, opts.error);
 		return (1);
 	}
-	if (has_opt(&opts, 'p') && elem->input[opts.index] == NULL)
+	if (elem->input[opts.index] == NULL)
 	{
 		display_env_vars(alloc->vars);
 		return (0);

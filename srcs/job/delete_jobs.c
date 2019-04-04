@@ -13,6 +13,21 @@ static void	del_job_elem(void *content, size_t size)
 	ft_memdel((void **)&content);
 }
 
+static void	delete_job(t_list **main, t_list *prev)
+{
+	t_job	*job;
+
+	job = (*main)->content;
+	if (job->pipe)
+		ft_lstdel(&(job->pipe), del_job_elem);
+	if (prev)
+		prev->next = (*main)->next;
+	else
+		g_jobs = (*main)->next;
+	del_job_elem((*main)->content, (*main)->content_size);
+	ft_memdel((void **)main);
+}
+
 static void	actualize_pipe_job_status(t_list **main, t_list *prev)
 {
 	int		delete;
@@ -32,16 +47,7 @@ static void	actualize_pipe_job_status(t_list **main, t_list *prev)
 		tmp = tmp->next;
 	}
 	if (delete == 1)
-	{
-		if (job->pipe)
-			ft_lstdel(&(job->pipe), del_job_elem);
-		if (prev)
-			prev->next = (*main)->next;
-		else
-			g_jobs = (*main)->next;
-		del_job_elem((*main)->content, (*main)->content_size);
-		ft_memdel((void **)main);
-	}
+		delete_job(main, prev);
 }
 
 void		delete_jobs_terminated(t_list *tmp)
@@ -59,7 +65,7 @@ void		delete_jobs_terminated(t_list *tmp)
 	}
 }
 
-void		terminate_all_jobs(void)
+void		terminate_all_jobs(int sig)
 {
 	t_list	*tmp;
 	t_list	*pipe;
@@ -70,7 +76,7 @@ void		terminate_all_jobs(void)
 	while (tmp)
 	{
 		job = tmp->content;
-		kill(job->pid, SIGTERM);
+		kill(job->pid, sig);
 		waitpid(job->pid, 0, 0);
 		job->state = DONE;
 		if (job->pipe)
@@ -84,4 +90,5 @@ void		terminate_all_jobs(void)
 			tmp = pipe->next;
 	}
 	delete_jobs_terminated(g_jobs);
+	g_jobs = 0;
 }

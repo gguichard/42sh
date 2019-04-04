@@ -8,9 +8,5 @@ void	redirect_term_controller(pid_t new_controller, int type)
 	if (type == 0)
 		tcsetpgrp(STDIN_FILENO, getpgid(new_controller));
 	else if (type == 1)
-	{
-		signal(SIGTTOU, SIG_IGN);
 		tcsetpgrp(STDIN_FILENO, getpgid(0));
-		signal(SIGTTOU, SIG_DFL);
-	}
 }

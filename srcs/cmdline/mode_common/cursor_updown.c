@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 12:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/20 10:53:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/30 18:36:55 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,12 @@ int			handle_cursor_up(t_cmdline *cmdline)
 
 	if (cmdline->saved_col == -1)
 		cmdline->saved_col = cmdline->cursor.x;
-	if (cmdline->row == 0 || cmdline->cursor.y == 0)
+	if (cmdline->cursor.y == 0)
 		return (0);
 	offset = cmdline->input.offset - cmdline->cursor.x - 1;
 	rightest_col = get_rightmost_column(cmdline, offset);
 	col = ft_min(rightest_col, cmdline->saved_col);
-	cmdline->row -= 1;
-	if ((cmdline->cursor.y - 1) == 0 && cmdline->row != 0)
-		col = ft_max(cmdline->prompt.big_offset, col);
-	if (cmdline->row != 0 || col > cmdline->prompt.offset)
+	if ((cmdline->cursor.y - 1) != 0 || col > cmdline->prompt.offset)
 		offset = offset - (rightest_col - col);
 	else
 	{
@@ -37,48 +34,46 @@ int			handle_cursor_up(t_cmdline *cmdline)
 		offset = 0;
 	}
 	cmdline->input.offset = offset;
-	cmdline->cursor = (t_cursor){col, cmdline->cursor.y - 1};
-	go_to_cursor_pos(cmdline->cursor);
+	go_to_cursor_pos(cmdline, (t_cursor){col, cmdline->cursor.y - 1});
 	return (1);
 }
 
-static int	cursor_down_offset(t_cmdline *cmdline, int row, int col)
+static int	cursor_down_offset(t_cmdline *cmdline, int col)
 {
+	int	row;
 	int	offset;
 
+	row = cmdline->cursor.y;
 	offset = cmdline->input.offset;
 	while (offset < cmdline->input.size
-			&& (row != (cmdline->row + 1) || col < cmdline->saved_col))
+			&& (row != (cmdline->cursor.y + 1) || col < cmdline->saved_col))
 	{
 		if (cmdline->input.buffer[offset] != '\n'
 				&& (col + 1) < cmdline->winsize.ws_col)
 			col++;
 		else
 		{
-			if (row != cmdline->row)
+			if (row != cmdline->cursor.y)
 				break ;
 			col = 0;
 			row++;
 		}
 		offset++;
 	}
-	if (row == cmdline->row)
-		return (0);
+	if (row == cmdline->cursor.y)
+		return (-1);
 	cmdline->input.offset = offset;
-	cmdline->cursor.x = col;
-	return (1);
+	return (col);
 }
 
 int			handle_cursor_down(t_cmdline *cmdline)
 {
-	if ((cmdline->cursor.y + 1) == cmdline->winsize.ws_row)
-		return (0);
+	int	ret;
+
 	if (cmdline->saved_col == -1)
 		cmdline->saved_col = cmdline->cursor.x;
-	if (!cursor_down_offset(cmdline, cmdline->row, cmdline->cursor.x))
+	if ((ret = cursor_down_offset(cmdline, cmdline->cursor.x)) == -1)
 		return (0);
-	cmdline->row += 1;
-	cmdline->cursor.y += 1;
-	go_to_cursor_pos(cmdline->cursor);
+	go_to_cursor_pos(cmdline, (t_cursor){ret, cmdline->cursor.y + 1});
 	return (1);
 }

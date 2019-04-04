@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "shell.h"
 #include "split_cmd_token.h"
+#include "inhibitor.h"
 #include "str_cmd_inf.h"
 #include "token_inf.h"
 #include "autocomplete.h"
@@ -12,6 +13,9 @@
 //TODO GERER LES INIBITEURS DE CHAR AVANT D'APPELER AUTOCOMPLETE
 //TODO
 //TODO EXPAND LES ENV VAR AVANT DE TENTER L'AUTOCOMPLETION (SAUF SI VAR ACTUELLE)
+//TODO
+//TODO GERER LE MULTILIGNE GENRE ECH\<newline>O LLLLLLLLLLLOOOOOOOOOOOOOLLLLLLLLLL
+//TODO ET AUSSI LE « LS "<newline><tab> »
 //TODO
 
 static void				fill_cur_tk_with_new_token(t_token_inf *cur_tk
@@ -100,7 +104,8 @@ void					set_cur_token_cmd(t_token_inf *cur_tk_cmd
 	while (last_tk != NULL && last_tk->next != NULL)
 		last_tk = last_tk->next;
 	if (scmd_cur_char_is_in_nothing(scmd) && (scmd->pos == 0 || last_tk == NULL
-				|| scmd_char_at_is_of(scmd, scmd->pos - 1, WORD_SEP_CHARS)
+				|| (scmd_char_at_is_of(scmd, scmd->pos - 1, WORD_SEP_CHARS)
+					&& !scmd_char_at_is_escaped(scmd, scmd->pos - 1))
 				|| get_tk(last_tk)->type == TK_RED_OPE
 				|| get_tk(last_tk)->type == TK_CMD_SEP))
 		fill_cur_tk_with_new_token(cur_tk_cmd, scmd, alloc);
@@ -223,32 +228,71 @@ static const char		*find_last_home_user(const char *str)
 		return (NULL);
 }
 
+/*
+** Alloue et retourne une nouvelle string representant la version inhibe de
+** str. Retourne NULL en cas d'erreur.
+*/
+
+static char				*inhibe_this_str_for_autocomplete(const char *str
+		, t_alloc *alloc, int *has_several_words)
+{
+	char	**str_tab;
+	char	**tmp_tab;
+	char	*new_str;
+
+	*has_several_words = 0;
+	new_str = NULL;
+	str_tab = inhib_expand_str(str, alloc);
+	tmp_tab = str_tab;
+	while (tmp_tab != NULL && *tmp_tab != NULL)
+	{
+		if (new_str != NULL)
+			*has_several_words = 1;
+		new_str = *tmp_tab;
+		++tmp_tab;
+	}
+	if (new_str == NULL)
+		new_str = ft_strdup(str);
+	else
+		new_str = ft_strdup(new_str);
+	ft_strtab_free(str_tab);
+	return (new_str);
+}
+
 static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
 		, t_alloc *alloc)
 {
 	const char		*real_start;
 	const char		*tmp_start;
+	char			*inhibed_str;
 	t_ac_suff_inf	*acs_inf;
+	int				has_several_words;
 
 	real_start = (cur_tk->token == NULL ? "" : cur_tk->token);
 	tmp_start = NULL;
 	if (cur_tk->type != TK_RED_ROPT_FILE)
 	{
+		//TODO MIEUX GERER L'INHIB A CAUSE DE CA PSK IL PEUT Y AVOIR DES TOKENS D'IHNIB PLUS TOT
 		if((tmp_start = find_last_assign_start(real_start)) != NULL)
 			real_start = tmp_start;
 	}
 	if ((tmp_start = find_last_home_user(real_start)) != NULL)
 	{
-		real_start = tmp_start;
-		acs_inf = autocomplete_user(real_start);
+		inhibed_str = inhibe_this_str_for_autocomplete(tmp_start, alloc
+				, &has_several_words);
+		acs_inf = autocomplete_user(inhibed_str == NULL ? "" : inhibed_str);
 		if (acs_inf != NULL && acs_inf->suff_type == ACS_TYPE_FILE)
 			acs_inf->suff_type = ACS_TYPE_DIR;
 	}
 	else
 	{
-		acs_inf = autocomplete_word(alloc->vars, real_start
-				, cur_tk->type == TK_CMD, alloc);
+		inhibed_str = inhibe_this_str_for_autocomplete(real_start, alloc
+				, &has_several_words);
+		acs_inf = autocomplete_word(alloc->vars, (inhibed_str == NULL
+					? "" : inhibed_str)
+				, cur_tk->type == TK_CMD && !has_several_words, alloc);
 	}
+	free(inhibed_str);
 	return (acs_inf);
 }
 

@@ -35,9 +35,8 @@ void	update_pos_index(t_str_cmd_inf *str_cmd)
 	}
 	else if (scmd_cur_char(str_cmd) == '{')
 	{
-		while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
-				&& scmd_cur_char(str_cmd)
-				&& scmd_cur_char(str_cmd) != '}')
+
+		while (scmd_cur_char(str_cmd) && scmd_cur_char(str_cmd) != '}')
 			scmd_move_to_next_char(str_cmd);
 		scmd_move_to_next_char(str_cmd);
 	}
@@ -69,28 +68,26 @@ char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
 
 void	create_new_input(t_ast *elem, int *i, char **new)
 {
-	int		len_new;
-	int		len_input;
+	size_t	len_new;
+	size_t	len_input;
 	char	**modify;
 
-	len_new = 0;
-	len_input = 0;
 	modify = NULL;
-	while (new[len_new])
-		len_new += 1;
-	while (elem->input[len_input])
-		len_input += 1;
+	len_new = ft_strtab_count(new);
+	len_input = ft_strtab_count(elem->input);
 	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
 		ft_exit_malloc();
 	modify = insert_new_tab(modify, i, new, elem);
 	ft_strtab_free(elem->input);
+	ft_strtab_free(new);
 	elem->input = modify;
 	*i += len_new;
 }
 
-char	**error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
+int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
 {
 	scmd_clean(str_cmd);
+	free(str_cmd);
 	ft_strtab_free(array);
-	return (NULL);
+	return (0);
 }

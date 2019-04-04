@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 22:06:22 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/22 16:38:32 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/03 10:48:54 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,19 @@
 
 static void	print_visual_select(t_cmdline *cmdline, int off_s, int off_e)
 {
+	static char	*mr_tcap = NULL;
+	static char	*me_tcap = NULL;
+
+	if (mr_tcap == NULL)
+		mr_tcap = tgetstr("mr", NULL);
+	if (me_tcap == NULL)
+		me_tcap = tgetstr("me", NULL);
 	go_to_offset(cmdline, off_s);
 	if (cmdline->visual.toggle)
-		tputs(tgetstr("mr", NULL), 1, t_putchar);
+		tputs(mr_tcap, 1, t_putchar);
 	print_cmdline_str(cmdline, cmdline->input.buffer + off_s, off_e - off_s);
 	if (cmdline->visual.toggle)
-		tputs(tgetstr("me", NULL), 1, t_putchar);
+		tputs(me_tcap, 1, t_putchar);
 }
 
 static void	print_visual_unselect(t_cmdline *cmdline, int old_off, int off)
@@ -44,6 +51,7 @@ void		update_visual_select(t_cmdline *cmdline)
 	static int	old_off_e = -1;
 	int			off_s;
 	int			off_e;
+	t_cursor	saved_cursor;
 
 	if (!cmdline->visual.toggle)
 	{
@@ -52,16 +60,16 @@ void		update_visual_select(t_cmdline *cmdline)
 	}
 	else
 	{
+		saved_cursor = cmdline->cursor;
 		off_s = ft_min(cmdline->visual.start_offset, cmdline->input.offset);
 		if (old_off_s != -1 && old_off_s != off_s)
 			print_visual_unselect(cmdline, old_off_s, off_s);
 		off_e = ft_max(cmdline->visual.start_offset, cmdline->input.offset);
 		if (old_off_e != -1 && old_off_e != off_e)
 			print_visual_unselect(cmdline, old_off_e, off_e);
-		if (off_s != off_e)
-			print_visual_select(cmdline, off_s, off_e);
+		(off_s != off_e) ? print_visual_select(cmdline, off_s, off_e) : 0;
 		old_off_s = off_s;
 		old_off_e = off_e;
-		go_to_cursor_pos(cmdline->cursor);
+		go_to_cursor_pos(cmdline, saved_cursor);
 	}
 }

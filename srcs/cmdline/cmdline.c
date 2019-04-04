@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 12:23:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 15:16:44 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@
 #include "cmdline.h"
 #include "error.h"
 
-static char		*join_command(t_cmdline *cmdline, char *full_input
-		, t_prompt type)
+static char		*join_command(t_cmdline *cmdline, char *full_input)
 {
 	char	*new_line;
 	char	*tmp[3];
 
-	new_line = ft_strdup(cmdline->input.buffer);
+	new_line = (cmdline->input_str) ? ft_strdup(cmdline->input_str)
+		: ft_strdup(cmdline->input.buffer);
+	if (cmdline->input_str)
+		ft_strdel(&cmdline->input_str);
 	if (new_line == NULL)
 		return (NULL);
 	if (!expand_history_events(&cmdline->history, &new_line))
@@ -39,7 +41,7 @@ static char		*join_command(t_cmdline *cmdline, char *full_input
 		tmp[0] = full_input;
 		tmp[1] = new_line;
 		tmp[2] = NULL;
-		new_line = ft_join(tmp, type == PROMPT_OPERATOR ? " " : "\n");
+		new_line = ft_join(tmp, "\n");
 		free(tmp[1]);
 	}
 	free(full_input);
@@ -74,6 +76,21 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 	return (ERRC_INCOMPLETECMD);
 }
 
+static t_rstate	create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
+{
+	char		*prompt;
+	t_rstate	state;
+	size_t		offset;
+
+	if (!isatty(STDIN_FILENO))
+		return (non_interact_input(cmdline));
+	prompt = get_prompt(cmdline, type, &offset);
+	state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
+			, (prompt == NULL ? 2 : offset));
+	free(prompt);
+	return (state);
+}
+
 static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 		, t_rstate *state)
 {
@@ -87,15 +104,14 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 	type = PROMPT_DEFAULT;
 	while (error == ERRC_INCOMPLETECMD)
 	{
-		*state = read_input(cmdline, get_prompt(cmdline, type));
+		*state = create_prompt_and_read_input(cmdline, type);
 		if (*state != RSTATE_END)
 			break ;
-		alloc->full_input = join_command(cmdline, alloc->full_input, type);
-		if (alloc->full_input == NULL
-				|| !scmd_init(&scmd_inf, alloc->full_input))
+		if ((alloc->full_input = join_command(cmdline, alloc->full_input))
+				== NULL || !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
 		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
-				|| (analyser_ret = token_analyser(tokens)) == PR_ERROR)
+				|| (analyser_ret = token_analyser(tokens, 0)) == PR_ERROR)
 			error = (tokens == NULL ? ERRC_UNEXPECTED : ERRC_LEXERROR);
 		else
 			error = change_prompt_type(&scmd_inf, analyser_ret, &type);
@@ -115,19 +131,21 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	if (state == RSTATE_END)
 		push_history_entry(&cmdline->history, alloc->full_input);
 	else if (state == RSTATE_ETX)
-		ft_strdel(&alloc->full_input);
-	else
+		alloc->ret_val = 1;
+	else if (state == RSTATE_EOT)
 	{
 		if (alloc->full_input == NULL)
 			builtin_exit(NULL, alloc);
 		else
-		{
-			ft_strdel(&alloc->full_input);
 			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");
-		}
 	}
 	cmdline->history.offset = NULL;
 	if (error != ERRC_NOERROR)
+	{
 		ft_strdel(&alloc->full_input);
+		if (error == ERRC_LEXERROR
+				|| (error == ERRC_INCOMPLETECMD && state == RSTATE_EOT))
+			alloc->ret_val = 2;
+	}
 	return (alloc->full_input);
 }

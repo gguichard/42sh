@@ -1,5 +1,5 @@
+#include <unistd.h>
 #include <stdlib.h>
-#include <signal.h>
 #include "shell.h"
 #include "execution.h"
 #include "job.h"
@@ -18,40 +18,23 @@ static void	close_pipe(t_ast *elem, int last_pipe_cmd)
 	}
 }
 
-static void	kill_fg_pgid(void)
+static int	setup_pipe_inout(t_ast *elem, int last_pipe_cmd)
 {
-	t_list	*tmp;
-	t_job	*job;
-
-	tmp = g_jobs;
-	while (tmp != NULL)
+	if (!last_pipe_cmd && elem->fd[0] == -1 && elem->fd[1] == -1)
 	{
-		job = tmp->content;
-		if (job->state == RUNNING_FG)
+		if (pipe(elem->fd) == -1)
 		{
-			kill(job->pid, SIGINT);
-			waitpid(job->pid, NULL, WNOHANG);
-			job->state = DONE;
-			if (job->pipe)
-				tmp = job->pipe;
-			else
-				tmp = tmp->next;
+			ft_dprintf(STDERR_FILENO
+					, "42sh: pipe: resource temporarily unavailable\n");
+			return (0);
 		}
-	}
-}
-
-static void	setup_pipe_inout(t_ast *elem, int last_pipe_cmd)
-{
-	if (!last_pipe_cmd
-			&& elem->fd[0] == -1 && elem->fd[1] == -1
-			&& pipe(elem->fd) == 0)
-	{
 		elem->left->fd[1] = elem->fd[1];
 		if (elem->right->type != AST_PIPE)
 			elem->right->fd[0] = elem->fd[0];
 		else
 			elem->right->left->fd[0] = elem->fd[0];
 	}
+	return (1);
 }
 
 int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
@@ -60,16 +43,16 @@ int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	pid_t	last_child;
 
 	last_pipe_cmd = 0;
-	while (elem != NULL)
+	while (elem != NULL && elem->right != NULL
+			&& (elem->right->type != AST_PIPE || elem->right->left != NULL))
 	{
-		setup_pipe_inout(elem, last_pipe_cmd);
-		if ((last_child = process_fork(alloc, elem, last_pipe_cmd
-						, opt->wait_hang)) == -1)
-		{
-			kill_fg_pgid();
-			return (1);
-		}
+		if (!setup_pipe_inout(elem, last_pipe_cmd))
+			break ;
+		last_child = process_pipe_fork(alloc, elem, last_pipe_cmd
+				, opt->wait_hang);
 		close_pipe(elem, last_pipe_cmd);
+		if (last_child == -1)
+			break ;
 		if (elem->right->type == AST_PIPE)
 			elem = elem->right;
 		else if (last_pipe_cmd)
@@ -77,5 +60,5 @@ int			do_pipe(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		else
 			last_pipe_cmd = 1;
 	}
-	return (waiting_line(opt->wait_hang, 0));
+	return (waiting_line(0, opt->wait_hang, alloc, opt));
 }

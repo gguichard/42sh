@@ -1,36 +1,19 @@
-refresh state dedans on display ce qui faut puis delete
-	RUNNING_BG
-		-check waitpid
-		-status RUNNING = ballec
-		-status DONE = display
-		-status STOP = display stop
-		-status SIG = DONE
-	STOPPED && STOPPED_PENDING
-		-check waitpid
-		-status RUNNING =  display bg
-		-status SIG = DONE
-		-status DONE = display end
-		-status new STOP = change state doesnt work on bash
-	DONE
-		-delete
-	SIG
-		-delete
-	DELETE
-		-tout le job est DONE / SIG
-
-
-
-job display signaux need juste quand cest un process normal
-need refresh state before job builtin
-quand ring back avec fg need display sig normal
-
-
-find a way pour check si un process a repris
-
 TODO:
 
- IMPLEMENTER INHIB ET EXPAND POUR LE HEREDOC
+	Multi tokens.
+		- Si quote non fermé faire multi tokens ou considerer comme dans quote ?!?
 
-ADD:
-	$!
-	$$
+		sleep 2 | ./segfault | ./sigpipe | ls &
+
+expand ~:
+
+si HOME=$TRUC
+
+cd  -> error HOME/$TRUC
+cd ~ -> $TRUC expand -> ne doit pas etre expand
+
+
+
+EXPAND:
+echo LOL $LOL LOL -> $LOL tk_remove
+echo LOL "$LOL" LOL -> not remove

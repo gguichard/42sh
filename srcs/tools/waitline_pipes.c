@@ -2,6 +2,7 @@
 #include "shell.h"
 #include "execution.h"
 #include "job.h"
+#include "signals.h"
 
 static void	pipe_waits(t_list *lst, int wait_opt)
 {
@@ -18,32 +19,36 @@ static void	pipe_waits(t_list *lst, int wait_opt)
 	}
 }
 
-static int	get_ret_val(t_list *tmp)
+static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 {
 	t_job	*job;
+	t_list	*main;
 	int		stop;
 	int		ret;
 
 	stop = 0;
 	job = tmp->content;
-	ret = ret_status(job->status, job->pid, job);
-	if (WIFSTOPPED(job->status))
+	if (job->state < SIG)
+		ret = ret_status(job->status, job->pid, job, opt);
+	if (job->state == STOPPED_PENDING)
 		stop = ret;
+	main = tmp;
 	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
-		ret = ret_status(job->status, job->pid, job);
-		if (WIFSTOPPED(job->status))
-			stop = ret;
+		if (job->state < SIG)
+			ret = ret_status(job->status, job->pid, job, opt);
+		(job->state == STOPPED_PENDING) ? stop = ret : 0;
 		tmp = tmp->next;
 	}
+	print_nl_sigint(main);
 	if (!stop)
 		return (ret);
 	return (stop);
 }
 
-int		waiting_line(int wait_hang, t_list *tmp)
+int		waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc, t_exec_opt *opt)
 {
 	if (!tmp)
 	{
@@ -61,10 +66,11 @@ int		waiting_line(int wait_hang, t_list *tmp)
 	}
 	else
 	{
+		alloc->last_bg = ((t_job *)tmp->content)->pid;
 		print_bg(((t_job *)tmp->content)->pid);
 		return (0);
 	}
-	return (get_ret_val(tmp));
+	return (get_ret_val(tmp, opt));
 }
 
 void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
@@ -79,7 +85,7 @@ void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	}
 	else
 	{
+		alloc->last_bg = child;
 		print_bg(child);
-		waitpid(child, &alloc->ret_val, WNOHANG);
 	}
 }

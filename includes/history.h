@@ -6,16 +6,27 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 10:08:33 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/26 15:00:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/03/31 15:57:35 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HISTORY_H
 # define HISTORY_H
 
+# include "string.h"
+
 # define MAX_HISTORY_LINES 500
 
 typedef struct s_history_entry	t_history_entry;
+
+typedef struct		s_hist_expand_inf
+{
+	char			**input;
+	size_t			offset;
+	int				is_in_quote;
+	int				is_in_dbquote;
+	int				has_been_expanded;
+}					t_hist_expand_inf;
 
 typedef struct		s_history
 {
@@ -38,8 +49,8 @@ void				push_history_entry(t_history *history, const char *content);
 const char			*peek_history_prev(t_history *history);
 const char			*peek_history_next(t_history *history);
 
-int					replace_event(t_history *history, char **input
-		, size_t *offset, char *event);
+int					replace_event(t_history *history, t_hist_expand_inf *exp_inf
+		, char *event);
 int					expand_history_events(t_history *history, char **input);
 
 #endif

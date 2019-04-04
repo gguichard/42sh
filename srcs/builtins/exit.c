@@ -1,19 +1,11 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include "libft.h"
 #include "shell.h"
 #include "job.h"
 #include "builtins.h"
-
-static int	retry_exit_job(int type)
-{
-	static int	retry_job;
-
-	if (type == -1)
-		return (retry_job);
-	retry_job = type;
-	return (0);
-}
+#include "signals.h"
 
 static int	check_stopped_job(void)
 {
@@ -29,56 +21,71 @@ static int	check_stopped_job(void)
 	return (0);
 }
 
-static void	parkour_ast_for_exit(t_ast *elem, int *del)
+static int	errors_arg_exit(t_ast *elem, int *status)
 {
-	if (!elem || elem->type == AST_PIPE)
-		return ;
-	if (elem->left)
-		check_exit_cmd(elem->left);
-	if (elem->right)
-		check_exit_cmd(elem->right);
-	if (!ft_strcmp(elem->input[0], "exit"))
-		*del = 0;
+	char	*endptr;
+
+	if (elem != NULL && elem->input[1] != NULL && elem->input[2] != NULL)
+	{
+		ft_putstr_fd("42sh: exit: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
+	else if (elem != NULL && elem->input[1] != NULL)
+	{
+		*status = ft_strtol(elem->input[1], &endptr, 10);
+		if (*endptr != '\0')
+		{
+			*status = 2;
+			ft_dprintf(STDERR_FILENO, "42sh: exit: %s: "
+					"numeric argument required\n", elem->input[1]);
+		}
+	}
+	return (0);
 }
 
-void		check_exit_cmd(t_ast *elem)
+static int	errors_exit(t_ast *elem, t_alloc *alloc, int *status)
 {
-	int		del;
-
-	del = 1;
-	parkour_ast_for_exit(elem, &del);
-	if (del)
-		retry_exit_job(0);
+	if (alloc->ppid != getpid())
+	{
+		errors_arg_exit(elem, status);
+		exit(*status);
+	}
+	ft_putstr_fd("exit\n", STDERR_FILENO);
+	if (errors_arg_exit(elem, status))
+		return (1);
+	if (check_stopped_job() && !alloc->exit_rdy)
+	{
+		ft_putstr_fd("There are stopped jobs.\n", STDERR_FILENO);
+		alloc->exit_rdy = 1;
+		return (1);
+	}
+	return (0);
 }
 
 int			builtin_exit(t_ast *elem, t_alloc *alloc)
 {
 	int		status;
-	char	*endptr;
 
 	status = alloc->ret_val;
-	if (check_stopped_job() && !retry_exit_job(-1))
+	if (!g_sig && isatty(STDIN_FILENO))
 	{
-		ft_dprintf(STDERR_FILENO, "There are stopped jobs.\n");
-		retry_exit_job(1);
-		return (1);
+		if (errors_exit(elem, alloc, &status))
+			return (1);
 	}
-	if (elem != NULL && elem->input[1] != NULL)
-	{
-		status = ft_strtol(elem->input[1], &endptr, 10);
-		if (*endptr != '\0')
-		{
-			status = 2;
-			ft_dprintf(STDERR_FILENO, "42sh: exit: %s: "
-					"numeric argument required\n", elem->input[1]);
-		}
-	}
-	ft_putstr("exit\n");
-	terminate_all_jobs();
+	else if (g_sig == 15)
+		ft_putstr_fd("exit\n", STDERR_FILENO);
+	terminate_all_jobs(g_sig == SIGHUP ? SIGHUP : SIGTERM);
 	save_history_entries(alloc, &alloc->cmdline.history);
-	// TODO: clean history
-	reset_term(&alloc->cmdline);
+	del_history_entries(&alloc->cmdline.history);
+	if (elem == NULL)
+	{
+		dup2(g_cmdline->stdin_dup, STDIN_FILENO);
+		reset_term(&alloc->cmdline);
+	}
+	sig_reset();
 	del_alloc(alloc);
+	if (g_sig && g_sig != 15)
+		kill(0, g_sig);
 	exit(status);
 	return (1);
 }
