@@ -6,7 +6,7 @@
 
 static int	is_special_char(char c)
 {
-	if (c == '_' || c == '?' || c == '!' || c == '\'' || c == '"' || c == '$')
+	if (c == '_' || c == '?' || c == '!' || c == '$')
 		return (1);
 	return (0);
 }
@@ -35,7 +35,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
-	if (str && (*input)[*pos + 1] == '{' && str)
+	if (str && (*input)[*pos + 1] == '{')
 		ft_strreplace_inside(input, *pos, len + 3, str);
 	else if (str && !ft_isalnum(exp[1]) && is_special_char(exp[1]) == 0)
 	{
