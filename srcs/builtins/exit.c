@@ -67,7 +67,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	int		status;
 
 	status = alloc->ret_val;
-	if (!g_sig)
+	if (!g_sig && isatty(STDIN_FILENO))
 	{
 		if (errors_exit(elem, alloc, &status))
 			return (1);

@@ -32,10 +32,13 @@ static void	job_fork(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 	child = fork();
 	if (child == -1)
-		ft_dprintf(STDERR_FILENO, "42sh: fork: resource temporarily unavailable\n");
+		ft_dprintf(STDERR_FILENO
+			, "42sh: fork: resource temporarily unavailable\n");
 	else if (child > 0)
 	{
-		setpgid(child, 0);
+		if (setpgid(child, 0) == -1)
+			ft_dprintf(STDERR_FILENO
+				, "42sh: child setpgid: operation not permitted\n");
 		add_pid_lst(child, elem, 0);
 		print_bg(child);
 	}
@@ -59,7 +62,7 @@ int			job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		if (elem->right && elem->right->type == AST_JOB)
 			elem = elem->right;
 		else
-			break;
+			break ;
 	}
 	if (elem->right)
 	{

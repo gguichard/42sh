@@ -22,7 +22,7 @@ void	display_simple_job(t_list *tmp, int index, t_opts *opts)
 		ft_printf("[%d] %c %s %s\n", index, current, state, cmd);
 	else if (check_job_state(tmp, STOPPED))
 		ft_printf("[%d] %c %s(%s) %s\n", index, current, state, signal_stop_str(tmp), cmd);
-	else if (ft_strequ("Done", state) && last_job(job)->status)
+	else if (ft_strequ("Exit", state))
 		ft_printf("[%d] %c %s(%d) %s\n", index, current, state, last_job(job)->status, cmd);
 	else
 		ft_printf("[%d] %c %s %s\n", index, current, state, cmd);
