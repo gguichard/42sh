@@ -11,6 +11,8 @@ void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos,
 
 	if (*pos == 0)
 		*pos = str_cmd->pos;
+	if (str_cmd->pos == 0)
+		*pos = 1;
 	len = ft_strlen(*input + *pos);
 	ft_memmove((void*)(*input + *pos - 1),
 		(const void*)(*input + *pos), len);
