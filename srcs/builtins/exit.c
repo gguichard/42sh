@@ -74,7 +74,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 	}
 	else if (g_sig == 15)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-	terminate_all_jobs(SIGTERM);
+	terminate_all_jobs(g_sig == SIGHUP ? SIGHUP : SIGTERM);
 	save_history_entries(alloc, &alloc->cmdline.history);
 	if (elem == NULL)
 	{

@@ -83,8 +83,9 @@ void	print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index)
 	else if (!print && check_job_state(tmp, SIG) && !job_state_done(tmp))
 	{
 		cmd = last_sig_process(tmp, 1);
-		if (cmd)
-			ft_dprintf(2, "%s\n", cmd);
+		if (cmd && (((t_job *)tmp->content)->pipe == NULL
+			|| last_job(tmp->content)->state == SIG))
+			ft_printf("%s\n", cmd);
 	}
 	else if (print && !job_state_done(tmp))
 		print_job(((t_job *)tmp->content)->pid, 0);

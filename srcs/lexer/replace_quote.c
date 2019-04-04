@@ -1,7 +1,6 @@
 #include "libft.h"
 #include "shell.h"
 #include "parser_lexer.h"
-#include "error.h"
 #include "vars.h"
 
 int	expand_home_shortcut(char **s, t_list *vars)
@@ -11,7 +10,7 @@ int	expand_home_shortcut(char **s, t_list *vars)
 	dir = 0;
 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
 	{
-		dir = ft_strjoin(get_var_value(vars, "HOME")
+		dir = ft_strjoin(get_home_directory(vars)
 				, ((*s)[1] == '/') ? (*s) + 1 : 0);
 	}
 	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))

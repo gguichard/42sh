@@ -2,7 +2,7 @@
 #include "shell.h"
 #include "job.h"
 
-int		last_pid_exit_status(t_job *job)
+t_job		*last_job(t_job *job)
 {
 	t_list	*tmp;
 
@@ -14,7 +14,7 @@ int		last_pid_exit_status(t_job *job)
 		tmp = tmp->next;
 		job = tmp->content;
 	}
-	return (job->status);
+	return (job);
 }
 
 t_job		*get_job_pid(pid_t process)
