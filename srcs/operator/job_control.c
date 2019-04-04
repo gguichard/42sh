@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "shell.h"
 #include "execution.h"
 #include "job.h"
@@ -27,6 +28,7 @@ void		print_bg(pid_t process)
 static void	job_fork(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	pid_t	child;
+	int		ret;
 
 	child = fork();
 	if (child == -1)
@@ -40,7 +42,8 @@ static void	job_fork(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	else
 	{
 		opt->fork = 1;
-		analyzer(alloc, elem, opt);
+		ret = analyzer(alloc, elem, opt);
+		exit(ret);
 	}
 }
 
