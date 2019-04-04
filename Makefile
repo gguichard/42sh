@@ -1,5 +1,5 @@
 
-NAME	=	42sh
+NAME	=	tests
 
 END		=	\x1b[0m
 GREEN	=	\x1b[32m
@@ -30,7 +30,7 @@ PATH_JOB		=	job
 
 SRC_DIR	=	srcs
 SRC 	=	\
-main.c		\
+test_main.c		\
 $(PATH_ERROR)/error_malloc.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
