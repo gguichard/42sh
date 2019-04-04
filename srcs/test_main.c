@@ -70,7 +70,7 @@ void	test_this_autocomplete(char *strbase, char *result_needed
 
 void	test_autocomplete()
 {
-	ft_printf(" --- Test autocompletion : ");
+	ft_printf(" --- Test autocompletion :\n");
 	//classique
 	test_this_autocomplete("ech", "o", ACS_TYPE_FILE);
 	test_this_autocomplete("dos", "sier", ACS_TYPE_DIR);
@@ -122,7 +122,7 @@ void	test_this_alias(char *strbase, char *result_needed)
 
 void	test_alias()
 {
-	ft_printf(" --- Test expand alias : ");
+	ft_printf(" --- Test expand alias :\n");
 	//classique
 	test_this_alias("basicalias", "basicresult");
 	test_this_alias("blankalias", "blankresult ");
@@ -187,7 +187,7 @@ void	test_this_inhib_expand(char *strbase, char **result_needed)
 
 void test_inhib_expand()
 {
-	ft_printf(" --- Test inhibition expand : ");
+	ft_printf(" --- Test inhibition expand :\n");
 	test_this_inhib_expand("str", (char*[]){"str", NULL});
 	test_this_inhib_expand("$EXISTEpas$EXISTE", (char*[]){"CECI", NULL});
 	test_this_inhib_expand("${EXISTE}$", (char*[]){"CECI$", NULL});
