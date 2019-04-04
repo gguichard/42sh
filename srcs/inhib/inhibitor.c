@@ -17,7 +17,11 @@ int		inhib_only_str(char *str)
 		if (!scmd_cur_char_is_escaped(&str_cmd) && !str_cmd.is_in_dbquote
 				&& !str_cmd.is_in_quote && (scmd_cur_char(&str_cmd) == '"'
 				|| scmd_cur_char(&str_cmd) == '\''))
+		{
+			str_cmd.pos += 1;
+			pos += 1;
 			remove_escaped_char(&str_cmd, &str, &pos, 1);
+		}
 		else if (scmd_cur_char_is_escaped(&str_cmd) && ((str_cmd.is_in_dbquote
 				&& scmd_cur_is_of(&str_cmd, DBQUOTE_SPE_CHAR) == 1)
 				|| (!str_cmd.is_in_quote && !str_cmd.is_in_dbquote)))
