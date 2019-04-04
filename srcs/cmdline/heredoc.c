@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 17:06:07 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 19:25:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,19 @@ static char	*join_heredoc(char *heredoc, char *part)
 
 static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 {
-	char		*prompt;
-	size_t		offset;
 	char		*heredoc;
 	t_rstate	state;
 
-	if ((prompt = get_prompt(cmdline, PROMPT_HEREDOC, &offset)) == NULL)
-		return (NULL);
 	heredoc = ft_strdup("");
 	if (heredoc != NULL)
 	{
 		setup_term(cmdline);
 		while (1)
 		{
-			if ((state = read_input(cmdline, prompt, offset)) != RSTATE_END)
-				break ;
-			if (ft_strequ(cmdline->input.buffer, word))
+			state = create_prompt_and_read_input(cmdline, PROMPT_HEREDOC);
+			if (state == RSTATE_ETX)
+				continue ;
+			if (state != RSTATE_END || ft_strequ(cmdline->input.buffer, word))
 				break ;
 			heredoc = join_heredoc(heredoc, cmdline->input.buffer);
 			if (heredoc == NULL)
@@ -53,7 +50,6 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 		}
 		reset_term(cmdline);
 	}
-	free(prompt);
 	return (heredoc);
 }
 
