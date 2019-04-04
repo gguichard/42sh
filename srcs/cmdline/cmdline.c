@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 19:27:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 00:08:39 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,11 @@
 #include "cmdline.h"
 #include "error.h"
 
-static char		*join_command(t_cmdline *cmdline, char *full_input)
+static char		*join_command(t_cmdline *cmdline, char *full_input
+		, char *new_line)
 {
-	char	*new_line;
 	char	*tmp[3];
 
-	new_line = (cmdline->input_str) ? ft_strdup(cmdline->input_str)
-		: ft_strdup(cmdline->input.buffer);
-	if (cmdline->input_str)
-		ft_strdel(&cmdline->input_str);
 	if (new_line == NULL)
 		return (NULL);
 	if (!expand_history_events(&cmdline->history, &new_line))
@@ -76,19 +72,19 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 	return (ERRC_INCOMPLETECMD);
 }
 
-t_rstate		create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
+char			*create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type
+	, t_rstate *state)
 {
 	char		*prompt;
-	t_rstate	state;
 	size_t		offset;
 
 	if (!isatty(STDIN_FILENO))
-		return (non_interact_input(cmdline));
+		return (non_interact_input(cmdline, state));
 	prompt = get_prompt(cmdline, type, &offset);
-	state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
+	*state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
 			, (prompt == NULL ? 2 : offset));
 	free(prompt);
-	return (state);
+	return (ft_strdup(cmdline->input.buffer));
 }
 
 static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
@@ -96,6 +92,7 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 {
 	t_error			error;
 	t_prompt		type;
+	char			*new_line;
 	t_str_cmd_inf	scmd_inf;
 	t_list			*tokens;
 	t_recall_prompt	analyser_ret;
@@ -104,11 +101,11 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 	type = PROMPT_DEFAULT;
 	while (error == ERRC_INCOMPLETECMD)
 	{
-		*state = create_prompt_and_read_input(cmdline, type);
+		new_line = create_prompt_and_read_input(cmdline, type, state);
 		if (*state != RSTATE_END)
 			break ;
-		if ((alloc->full_input = join_command(cmdline, alloc->full_input))
-				== NULL || !scmd_init(&scmd_inf, alloc->full_input))
+		if ((alloc->full_input = join_command(cmdline, alloc->full_input
+						, new_line)) == NULL || !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
 		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
 				|| (analyser_ret = token_analyser(tokens, 0)) == PR_ERROR)
