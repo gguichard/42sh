@@ -7,6 +7,7 @@
 
 //for atom completion
 # include "../libft/includes/libft.h"
+# include "../libft/includes/get_next_line.h"
 # include "../libft/includes/printf.h"
 
 # include "libft.h"
