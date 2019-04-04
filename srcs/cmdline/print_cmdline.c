@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 17:32:21 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 10:04:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,6 @@ void	update_cmdline_at_offset(t_cmdline *cmdline, char caller
 	}
 }
 
-size_t	count_only_printable_chars(const char *str)
-{
-	size_t	total;
-
-	total = 0;
-	while (*str != '\0')
-	{
-		if (ft_isprint(*str))
-			total++;
-		str++;
-	}
-	return (total);
-}
-
 void	print_prompt_and_cmdline(t_cmdline *cmdline)
 {
 	size_t	total;
@@ -64,9 +50,8 @@ void	print_prompt_and_cmdline(t_cmdline *cmdline)
 		total += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
 	if (write(STDOUT_FILENO, cmdline->prompt.str
 				, ft_strlen(cmdline->prompt.str)) != -1)
-		total += count_only_printable_chars(cmdline->prompt.str);
+		total += cmdline->prompt.offset;
 	cmdline->cursor.x = total % ft_max(cmdline->winsize.ws_col, 1);
 	cmdline->cursor.y = 0;
-	cmdline->prompt.offset = cmdline->cursor.x;
 	print_only_cmdline(cmdline);
 }

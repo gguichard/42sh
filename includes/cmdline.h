@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 14:24:16 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/03 19:03:28 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ typedef struct s_list	t_list;
 
 t_cmdline	*g_cmdline;
 
-void		reset_cmdline(t_cmdline *cmdline, const char *prompt);
+void		reset_cmdline(t_cmdline *cmdline, const char *prompt
+		, size_t offset);
 
 /*
 ** Alloue et retourne le prompt a afficher, retourne NULL en cas d'erreur.
+** Set tot_printed_char au nombre de chars printables.
 */
-char		*create_prompt(t_list *vars);
+char		*create_prompt(t_list *vars, size_t *tot_printable_char);
 
 /*
 ** TERM INIT/MISC.
@@ -53,9 +55,9 @@ void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		add_char_to_input(t_cmdline *cmdline, char c);
 
-char		*get_prompt(t_cmdline *cmdline, t_prompt type);
-t_rstate	read_input(t_cmdline *cmdline, const char *prompt);
-char		*read_heredoc(t_cmdline *cmdline, const char *word);
+char		*get_prompt(t_cmdline *cmdline, t_prompt type, size_t *offset);
+t_rstate	read_input(t_cmdline *cmdline, const char *prompt, size_t offset);
+char		*prompt_heredoc(t_cmdline *cmdline, const char *word);
 
 int			t_putchar(int c);
 

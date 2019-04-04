@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 00:34:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 10:06:11 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 static t_rstate	create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
 {
 	char		*prompt;
+	size_t		offset;
 	t_rstate	state;
 
-	prompt = get_prompt(cmdline, type);
-	state = read_input(cmdline, (prompt == NULL ? "> " : prompt));
+	prompt = get_prompt(cmdline, type, &offset);
+	state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
+			, (prompt == NULL ? 2 : offset));
 	free(prompt);
 	return (state);
 }
