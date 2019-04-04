@@ -71,6 +71,6 @@ void		print_job(pid_t process, int after_signal)
 		}
 		if (after_signal)
 			write(STDOUT_FILENO, "\n", 1);
-		display_simple_job(tmp, index, 0);
+		display_simple_job(tmp, index);
 	}
 }
