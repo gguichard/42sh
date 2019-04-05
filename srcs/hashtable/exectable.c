@@ -17,7 +17,8 @@ t_hashtable		*make_exectable(void)
 {
 	t_hashtable		*new_exectable;
 
-	new_exectable = make_def_hashtable();
+	if ((new_exectable = make_def_hashtable()) == NULL)
+		return (NULL);
 	new_exectable->del_hashentry_val_fun = del_execentry_val_fun;
 	return (new_exectable);
 }
