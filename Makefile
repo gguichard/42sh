@@ -41,6 +41,7 @@ $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
+$(PATH_PARSER)/ast_creation.c \
 $(PATH_PARSER)/token_analyzer.c \
 $(PATH_PARSER)/redirect_inf.c \
 $(PATH_EXEC)/analyzer.c \

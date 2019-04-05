@@ -3,6 +3,7 @@
 
 # include "shell.h"
 # include "str_cmd_inf.h"
+
 typedef enum	e_recall_prompt
 {
 	PR_SUCCESS,
@@ -39,6 +40,9 @@ t_ast			*parser(t_list *lst_tk);
 */
 
 t_recall_prompt	token_analyser(t_list *lst_tk, int prompt_heredoc);
+int				link_branch(t_ast **elem, t_ast **branch, t_ast **sort
+				, t_list **lst_tk);
+t_ast			*create_ast_branch(t_list **lst_tk);
 
 
 /*
