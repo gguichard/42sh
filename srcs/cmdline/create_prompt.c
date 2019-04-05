@@ -35,6 +35,8 @@ static char		*shorten_home(char *str, int only_last_dir, t_list *vars)
 	size_t		home_len;
 	char		*last_slash_pos;
 
+	if (str == NULL)
+		return (NULL);
 	home = get_var_value(vars, "HOME");
 	home_len = ft_strlen(home);
 	if (home[home_len - 1] == '/')
@@ -145,7 +147,10 @@ char			*create_prompt(t_list *vars, size_t *tot_printable_char)
 	{
 		if ((nb_new_printed_char = escape_char_at_inside_and_move(&ps1
 						, &idx, vars, &is_in_no_print)) < 0)
+		{
+			free(ps1);
 			return (NULL);
+		}
 		*tot_printable_char += nb_new_printed_char;
 	}
 	return (ps1);

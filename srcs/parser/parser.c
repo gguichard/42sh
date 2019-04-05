@@ -110,28 +110,30 @@ t_ast	*parser(t_list *lst_tk)
 		return (NULL);
 	while (lst_tk != NULL)
 	{
-		branch = create_ast_branch(&lst_tk);
-		if (!sort)
-			sort = branch;
-		if (sort && sort->type == AST_CMD_SEP && !sort->right)
+		if ((branch = create_ast_branch(&lst_tk)))
 		{
-			sort->right = branch;
-			branch->back = sort;
-		}
-		else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
-		{
-			if (!(elem = create_elem(&lst_tk)))
+			if (!sort)
+				sort = branch;
+			if (sort->type == AST_CMD_SEP && !sort->right)
 			{
-				del_ast(&sort);
-				del_ast(&branch);
-				return (0);
+				sort->right = branch;
+				branch->back = sort;
 			}
-			elem->left = sort;
-			sort->back = elem;
-			sort = elem;
-		}
-		else if (lst_tk != NULL)
+			else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
+			{
+				if (!(elem = create_elem(&lst_tk)))
+				{
+					del_ast(&sort);
+					del_ast(&branch);
+					return (0);
+				}
+				elem->left = sort;
+				sort->back = elem;
+				sort = elem;
+			}
+			else if (lst_tk != NULL)
 			lst_tk = lst_tk->next;
+		}
 	}
 	return (sort);
 }

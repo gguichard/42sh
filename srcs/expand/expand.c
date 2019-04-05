@@ -41,6 +41,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 		ft_strreplace_inside(input, *pos, len + 3, str);
 	else if (str && !ft_isalnum(exp[1]) && is_special_char(exp, 1) == 0)
 	{
+		free(str);
 		*pos += 1;
 		return (1);
 	}
@@ -49,7 +50,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	if (str)
 	{
 		*pos += ft_strlen(str);
-		ft_memdel((void **)&str);
+		free(str);
 	}
 	return (1);
 }

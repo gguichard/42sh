@@ -88,30 +88,6 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array,
 	return (1);
 }
 
-char	**inhib_expand_str(const char *str, t_alloc *alloc)
-{
-	size_t			pos_array;
-	t_str_cmd_inf	*str_cmd;
-	char			**array;
-
-	pos_array = 0;
-	str_cmd = NULL;
-	array = NULL;
-	if (!str)
-		return (NULL);
-	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
-	{
-		error_inhib_expand(str_cmd, array);
-		return (NULL);
-	}
-	check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
-	if (!do_inhib(str_cmd, &array, &pos_array, alloc))
-		return (NULL);
-	scmd_clean(str_cmd);
-	free(str_cmd);
-	return (array);
-}
-
 void	delete_line_tab(char ***array, int i)
 {
 	size_t	len;
@@ -134,6 +110,41 @@ void	delete_line_tab(char ***array, int i)
 	}
 }
 
+char	**inhib_expand_str(const char *str, t_alloc *alloc)
+{
+	size_t			pos_array;
+	t_str_cmd_inf	*str_cmd;
+	char			**array;
+
+	pos_array = 0;
+	str_cmd = NULL;
+	array = NULL;
+	if (!str)
+		return (NULL);
+	if (!(initialize_inhib_expand(&str_cmd, &array, str)))
+	{
+		error_inhib_expand(str_cmd, array);
+		return (NULL);
+	}
+	check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
+	if (!do_inhib(str_cmd, &array, &pos_array, alloc))
+		return (NULL);
+	scmd_clean(str_cmd);
+	free(str_cmd);
+	pos_array = 0;
+	while (array && array[pos_array])
+		if (ft_strequ(array[pos_array], "") == 1)
+			delete_line_tab(&(array), pos_array);
+		else
+			pos_array += 1;
+	if (!array)
+	{
+		array = (char **)malloc((sizeof(char *) * 1));
+		array[0] = NULL;
+	}
+	return (array);
+}
+
 int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 {
 	int		i;
@@ -144,17 +155,13 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	{
 		if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
 			return (0);
-		create_new_input(elem, &i, new_array);
-	}
-	i = 0;
-	while (elem->input[i])
-	{
-		if (ft_strequ(elem->input[i], "") == 1)
-			delete_line_tab(&(elem->input), i);
+		if (new_array[0])
+			create_new_input(elem, &i, new_array);
 		else
-			i += 1;
-		if (!elem->input)
-			return (0);
+		{
+			ft_strtab_free(new_array);
+			delete_line_tab(&(elem->input), i);
+		}
 	}
 	if (ft_strtab_count(elem->input) == 0 || !(elem->input[0]))
 		return (0);
