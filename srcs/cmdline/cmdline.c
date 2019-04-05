@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 12:14:31 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 14:20:29 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,10 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 	{
 		new_line = create_prompt_and_read_input(cmdline, type, state);
 		if (*state != RSTATE_END)
+		{
+			free(new_line);
 			break ;
+		}
 		if ((alloc->full_input = join_command(cmdline, alloc->full_input
 						, new_line)) == NULL || !scmd_init(&scmd_inf, alloc->full_input))
 			return (ERRC_UNEXPECTED);
