@@ -205,8 +205,8 @@ void test_inhib_expand()
 	test_this_inhib_expand("lol${\"faux\"}lol", NULL);
 	test_this_inhib_expand("lol${\"fa}ux\"}lol", NULL);
 	test_this_inhib_expand("lol${bonjour\"faux\"salut}lol", NULL);
-	test_this_inhib_expand("$ESTVIDE", NULL);
-	test_this_inhib_expand("$EXISTEPAS", NULL);
+	test_this_inhib_expand("$ESTVIDE", (char*[]){NULL});
+	test_this_inhib_expand("$EXISTEPAS", (char*[]){NULL});
 	test_this_inhib_expand("$DEUXMOTS", (char*[]){"DEUX", "MOTS", NULL});
 	test_this_inhib_expand("truc${DEUXMOTS}machin", (char*[]){"trucDEUX", "MOTSmachin", NULL});
 	test_this_inhib_expand("truc\\ ${DEUXMOTS}\\ machin", (char*[]){"truc DEUX", "MOTS machin", NULL});
