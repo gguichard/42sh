@@ -151,7 +151,7 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 	char	**new_array;
 
 	i = 0;
-	while (elem->input[i])
+	while (elem->input && elem->input[i])
 	{
 		if (!(new_array = inhib_expand_str(elem->input[i], alloc)))
 			return (0);
@@ -163,7 +163,7 @@ int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 			delete_line_tab(&(elem->input), i);
 		}
 	}
-	if (ft_strtab_count(elem->input) == 0 || !(elem->input[0]))
+	if (!(elem->input) || !(elem->input[0]))
 		return (0);
 	return (1);
 }
