@@ -245,6 +245,8 @@ void test_inhib_expand()
 	//inhib + expand
 	test_this_inhib_expand("\"$DEUXMOTS\"", (char*[]){"DEUX MOTS", NULL});
 	test_this_inhib_expand("\"$DEUXMOTS", (char*[]){"DEUX MOTS", NULL});
+	test_this_inhib_expand("\"$TROISMOTS\"", (char*[]){"TROIS\tMOTS  \t  VOILA", NULL});
+	test_this_inhib_expand("\"$TROISMOTS", (char*[]){"TROIS\tMOTS  \t  VOILA", NULL});
 	test_this_inhib_expand("\'$DEUXMOTS\'", (char*[]){"$DEUXMOTS", NULL});
 	test_this_inhib_expand("\\$DEUXMOTS", (char*[]){"$DEUXMOTS", NULL});
 	test_this_inhib_expand("\'$DEUXMOTS", (char*[]){"$DEUXMOTS", NULL});
