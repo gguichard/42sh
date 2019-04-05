@@ -156,7 +156,8 @@ static void				update_last_var_inf(t_str_cmd_inf *scmd
 	}
 }
 
-static const char		*find_last_var_start(const char *str, int *is_in_bracket)
+static const char		*find_last_var_start(const char *str
+		, int *is_in_bracket)
 {
 	t_str_cmd_inf	scmd;
 	const char		*last_var_start;
@@ -273,7 +274,7 @@ static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
 	if (cur_tk->type != TK_RED_ROPT_FILE)
 	{
 		//TODO MIEUX GERER L'INHIB A CAUSE DE CA PSK IL PEUT Y AVOIR DES TOKENS D'IHNIB PLUS TOT
-		if((tmp_start = find_last_assign_start(real_start)) != NULL)
+		if ((tmp_start = find_last_assign_start(real_start)) != NULL)
 			real_start = tmp_start;
 	}
 	if ((tmp_start = find_last_home_user(real_start)) != NULL)
