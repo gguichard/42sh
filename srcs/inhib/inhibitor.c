@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 17:59:40 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/05 23:34:29 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		error_inhib_expand(str_cmd, array);
 		return (NULL);
 	}
-	// check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
+	check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
 	if (!do_inhib(str_cmd, &array, &pos_array, alloc))
 		return (NULL);
 	scmd_clean(str_cmd);

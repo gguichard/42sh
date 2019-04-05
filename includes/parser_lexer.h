@@ -57,6 +57,6 @@ t_ast			*fill_assign(t_list **lst_tk, t_ast *elem);
 t_ast			*fill_cmd_sep(t_list **lst_tk, t_ast *elem);
 t_ast			*create_elem(t_list **lst_tk);
 t_ast			*set_new_elem(void);
-void			init_input(t_ast *elem, int len, t_list *lst_tk);
+int				init_input(t_ast *elem, int len, t_list *lst_tk);
 
 #endif

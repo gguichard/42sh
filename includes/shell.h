@@ -94,7 +94,7 @@ void		read_sort_descent(t_ast *sort, int active);
 
 // CLEAN AST
 void		del_ast(t_ast **lst);
-void		del_elem_ast(t_ast **lst);
+void		*del_elem_ast(t_ast **lst);
 
 /*
 *********************************** GLOBALS ***********************************

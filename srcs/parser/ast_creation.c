@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 19:57:05 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 20:58:40 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/06 00:18:31 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_ast	*create_ast_branch(t_list **lst_tk)
 			if (!(elem = create_elem(lst_tk)))
 			{
 				del_ast(&sort);
-				return (0);
+				return (NULL);
 			}
 			sort_ast(elem, &sort);
 		}
