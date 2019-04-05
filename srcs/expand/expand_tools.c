@@ -119,7 +119,6 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 	}
 	else if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
 	{
-		ft_printf("array[pos]: |%s|\n", (*array)[*pos_array]);
 		if (ft_strequ((*array)[*pos_array], "") == 1)
 			delete_line_tab(array, *pos_array);
 	}
