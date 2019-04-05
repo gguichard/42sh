@@ -29,17 +29,27 @@ static char	*read_pipe(int fd)
 static void	wait_sub_shell(pid_t child, t_alloc *alloc)
 {
 	t_list				*tmp;
+	int					ret;
 	t_list				*prev;
 
-	proc = add_pid_lst(child, 0, 0);
+	tmp = add_pid_lst(child, 0, 0);
 	((t_job *)tmp->content)->state = SUB_CMD;
-	waitpid(child, &alloc->ret_val, WUNTRACED);
+	waitpid(child, &ret, WUNTRACED);
+	if (WIFEXITED(ret))
+		alloc->ret_val = WEXITSTATUS(ret);
+	else if (WIFSTOPPED(ret))
+		alloc->ret_val = WSTOPSIG(ret) + 128;
+	else if (WIFSIGNALED(ret))
+		alloc->ret_val = WTERMSIG(ret) + 128;
 	prev = g_jobs;
-	while (prev && prev->next != tmp)
+	while (prev->next && prev->next != tmp)
 		prev = prev->next;
+	if (prev == tmp)
+		g_jobs = NULL;
 	ft_memdel((void **)&(tmp->content));
 	ft_memdel((void **)&tmp);
-	prev->next = NULL;
+	if (g_jobs)
+		prev->next = NULL;
 }
 
 char		*sub_cmd_exec(t_alloc *alloc, char *cmd)
