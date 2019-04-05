@@ -43,6 +43,13 @@ void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input)
 		remove_escaped_char(str_cmd, input, pos, 1);
 		*pos -= 1;
 	}
+	else if ((scmd_cur_char(str_cmd) == '\'' && (*input)[*pos] == '\'')
+			|| (scmd_cur_char(str_cmd) == '"' && (*input)[*pos] == '"'))
+	{
+		*pos += 1;
+		remove_escaped_char(str_cmd, input, pos, 1);
+		*pos -= 1;
+	}
 	str_cmd->pos += 1;
 }
 
