@@ -6,14 +6,16 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 22:38:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 17:12:21 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
+#include "shell.h"
 #include "cmdline.h"
 #include "inhibitor.h"
+#include "expand.h"
 
 static char	*join_heredoc(char *heredoc, char *part)
 {
@@ -56,6 +58,19 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 	return (heredoc);
 }
 
+static void	expand_heredoc(t_alloc *alloc, char **heredoc)
+{
+	size_t	offset;
+	char	*tmp;
+
+	offset = 0;
+	while ((tmp = ft_strchr(*heredoc, '$')) != NULL)
+	{
+		offset = (size_t)(tmp - *heredoc);
+		expand(heredoc, alloc, &offset);
+	}
+}
+
 char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word)
 {
 	char	*word;
@@ -77,7 +92,7 @@ char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word)
 		ft_memcpy(heredoc, heredoc + 1, len - 1);
 		heredoc[len - 1] = '\n';
 		if (ft_strequ(redir_word, word))
-			; // TODO: expand heredoc
+			expand_heredoc(cmdline->alloc, &heredoc);
 	}
 	free(word);
 	return (heredoc);
