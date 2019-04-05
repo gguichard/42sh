@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 19:04:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 14:29:20 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 	size_t		offset;
 	char		*heredoc;
 	t_rstate	state;
+	int			i = 0;
 
 	if ((prompt = get_prompt(cmdline, PROMPT_HEREDOC, &offset)) == NULL)
 		return (NULL);
@@ -40,11 +41,13 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 	if (heredoc != NULL)
 	{
 		setup_term(cmdline);
-		while (1)
+		while (i < 100)
 		{
-			if ((state = read_input(cmdline, prompt, offset)) != RSTATE_END)
-				break ;
-			if (ft_strequ(cmdline->input.buffer, word))
+			i += 1;
+			state = create_prompt_and_read_input(cmdline, PROMPT_HEREDOC);
+			if (state == RSTATE_ETX)
+				continue ;
+			if (state != RSTATE_END || ft_strequ(cmdline->input.buffer, word))
 				break ;
 			heredoc = join_heredoc(heredoc, cmdline->input.buffer);
 			if (heredoc == NULL)

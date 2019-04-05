@@ -40,6 +40,8 @@ static int		create_job(t_job *job, pid_t process, t_ast *elem, int addpipe)
 	job->pid = process;
 	job->gpid = getpgid(process);
 	job->state = RUNNING_FG;
+	if (!elem)
+		return (1);
 	return ((job->cmd = create_cmd_job(elem, addpipe)) != NULL);
 }
 

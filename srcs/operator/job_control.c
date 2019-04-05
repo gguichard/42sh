@@ -64,10 +64,8 @@ int			job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		else
 			break ;
 	}
+	opt->wait_hang = 0;
 	if (elem->right)
-	{
-		opt->wait_hang = 0;
 		return (analyzer(alloc, elem->right, opt));
-	}
 	return (0);
 }

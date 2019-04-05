@@ -28,18 +28,22 @@ static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	t_redirect_inf	redirect_inf;
+	// t_redirect_inf	redirect_inf;
 	int				ret;
 
-	if (!fill_redirect_inf(&redirect_inf, elem->input))
-		return (1);
-	process_redir(&redirect_inf);
 	ret = 0;
-	if (!setup_redirection(&redirect_inf, opt))
-		ret = 1;
-	clean_redirect(&redirect_inf);
-	if (ret == 0)
-		ret = analyzer(alloc, elem->left, opt);
+	(void)alloc;
+	(void)elem;
+	(void)opt;
+	// if (!fill_redirect_inf(&redirect_inf, elem->input))
+	// 	return (1);
+	// process_redir(&redirect_inf);
+	// ret = 0;
+	// if (!setup_redirection(&redirect_inf, opt))
+	// 	ret = 1;
+	// clean_redirect(&redirect_inf);
+	// if (ret == 0)
+	// 	ret = analyzer(alloc, elem->left, opt);
 	return (ret);
 }
 
@@ -49,9 +53,13 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 	if (!ft_strequ(elem->input[0], "exit"))
 		alloc->exit_rdy = 0;
-	ret = try_builtin_execution(alloc, elem, opt);
-	if (ret == -1)
-		ret = exec_input(alloc, elem, opt);
+	(void)opt;
+	ret = 0;
+	// ret = try_builtin_execution(alloc, elem, opt);
+	// if (ret == -1)
+	// 	ret = exec_input(alloc, elem, opt);
+	update_var(&alloc->vars, "_"
+		, elem->input[ft_strtab_count(elem->input) - 1]);
 	return (ret);
 }
 

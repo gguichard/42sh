@@ -26,7 +26,7 @@ static void	handler_sigterm(void)
 	close(STDIN_FILENO);
 }
 
-static void	handler_signals(int sig)
+void	handler_signals(int sig)
 {
 	if (sig == SIGTERM)
 		return (handler_sigterm());
@@ -39,24 +39,32 @@ static void	handler_signals(int sig)
 	close(STDIN_FILENO);
 }
 
+// void	handler_subcmd(int sig)
+// {
+// 	t_list	*tmp;
+//
+// 	tmp = g_jobs;
+//
+// }
+
 void		set_signals_handlers(void)
 {
-	struct sigaction	act;
-
-	sigfillset(&act.sa_mask);
-	act.sa_handler = handler_signals;
-	act.sa_flags = SA_RESTART;
-	sigaction(SIGTERM, &act, 0);
-	sigaction(SIGHUP, &act, 0);
-	sigaction(SIGINT, &act, 0);
-	act.sa_flags = 0;
-	action_sigs(&act);
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, 0);
-	sigaction(SIGTSTP, &act, 0);
-	sigaction(SIGTTOU, &act, 0);
-	sigaction(SIGTTIN, &act, 0);
-	set_sigmask(SIG_UNBLOCK);
+	// struct sigaction	act;
+	//
+	// sigfillset(&act.sa_mask);
+	// act.sa_handler = handler_signals;
+	// act.sa_flags = SA_RESTART;
+	// sigaction(SIGTERM, &act, 0);
+	// sigaction(SIGHUP, &act, 0);
+	// sigaction(SIGINT, &act, 0);
+	// act.sa_flags = 0;
+	// action_sigs(&act);
+	// act.sa_handler = SIG_IGN;
+	// sigaction(SIGQUIT, &act, 0);
+	// sigaction(SIGTSTP, &act, 0);
+	// sigaction(SIGTTOU, &act, 0);
+	// sigaction(SIGTTIN, &act, 0);
+	// set_sigmask(SIG_UNBLOCK);
 }
 
 void	print_nl_sigint(t_list *tmp)

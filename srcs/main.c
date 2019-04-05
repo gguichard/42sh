@@ -43,6 +43,7 @@ int		main(int argc, char **argv, char **environ)
 
 	g_sig = 0;
 	g_jobs = NULL;
+	signal(SIGTTOU, SIG_IGN);
 	set_signals_handlers();
 	if (!setup_alloc(&alloc, argc, argv, environ))
 		ft_dprintf(STDERR_FILENO, "42sh: unable to setup environment\n");
@@ -60,7 +61,7 @@ int		main(int argc, char **argv, char **environ)
 			reset_term(&alloc.cmdline);
 			if (alloc.full_input != NULL)
 			{
-				set_sigmask(SIG_BLOCK);
+				// set_sigmask(SIG_BLOCK);
 				lexer_parser(alloc.full_input, &alloc);
 				ft_strdel(&alloc.full_input);
 				set_signals_handlers();
