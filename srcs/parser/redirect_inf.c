@@ -109,7 +109,7 @@ int				fill_redirect_inf(t_redirect_inf *red_inf
 	ended_with_ampersand = 0;
 	process_ope_redirect(red_inf, token_tab[idx], &ended_with_ampersand);
 	++idx;
-	if (token_tab[idx] == NULL)
+	if (token_tab[idx] == NULL || token_tab[idx + 1] != NULL)
 		return (0);
 	if (!process_ropt_redirect(red_inf, token_tab[idx], ended_with_ampersand))
 		return (0);

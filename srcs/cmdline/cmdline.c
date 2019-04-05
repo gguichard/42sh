@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 22:53:49 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/05 15:45:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,30 @@
 #include "cmdline.h"
 #include "error.h"
 
-static char		*join_command(t_cmdline *cmdline, char *full_input)
+static char		*join_command(t_cmdline *cmdline, char *full_input
+		, char *new_line)
 {
-	char	*new_line;
 	char	*tmp[3];
 
-	new_line = (cmdline->input_str) ? ft_strdup(cmdline->input_str)
-		: ft_strdup(cmdline->input.buffer);
-	if (cmdline->input_str)
-		ft_strdel(&cmdline->input_str);
 	if (new_line == NULL)
-		return (NULL);
-	if (!expand_history_events(&cmdline->history, &new_line))
+		return (full_input);
+	else if (!expand_history_events(&cmdline->history, &new_line))
+		ft_strdel(&full_input);
+	else
 	{
-		free(new_line);
-		return (NULL);
+		if (full_input == NULL)
+			return (new_line);
+		else
+		{
+			tmp[0] = full_input;
+			tmp[1] = new_line;
+			tmp[2] = NULL;
+			full_input = ft_join(tmp, "\n");
+			free(tmp[0]);
+		}
 	}
-	if (full_input != NULL)
-	{
-		tmp[0] = full_input;
-		tmp[1] = new_line;
-		tmp[2] = NULL;
-		new_line = ft_join(tmp, "\n");
-		free(tmp[1]);
-	}
-	free(full_input);
-	return (new_line);
+	free(new_line);
+	return (full_input);
 }
 
 static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
@@ -76,47 +74,53 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 	return (ERRC_INCOMPLETECMD);
 }
 
-t_rstate		create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type)
-{
-	char		*prompt;
-	t_rstate	state;
-	size_t		offset;
-
-	if (!isatty(STDIN_FILENO))
-		return (non_interact_input(cmdline));
-	prompt = get_prompt(cmdline, type, &offset);
-	state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
-			, (prompt == NULL ? 2 : offset));
-	free(prompt);
-	return (state);
-}
-
-static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
-		, t_rstate *state)
+static t_error	analyse_full_input(t_alloc *alloc, t_prompt *type)
 {
 	t_error			error;
-	t_prompt		type;
 	t_str_cmd_inf	scmd_inf;
 	t_list			*tokens;
 	t_recall_prompt	analyser_ret;
+
+	if (!scmd_init(&scmd_inf, alloc->full_input))
+		return (ERRC_UNEXPECTED);
+	tokens = split_cmd_token(&scmd_inf, alloc->aliastable);
+	if (tokens == NULL)
+		error = ERRC_UNEXPECTED;
+	else
+	{
+		analyser_ret = token_analyser(tokens, 0);
+		if (analyser_ret == PR_ERROR)
+			error = ERRC_LEXERROR;
+		else
+			error = change_prompt_type(&scmd_inf, analyser_ret, type);
+	}
+	ft_lstdel(&tokens, del_token);
+	scmd_clean(&scmd_inf);
+	return (error);
+}
+
+static t_error	read_complete_command(t_alloc *alloc, t_cmdline *cmdline
+		, t_rstate *state)
+{
+	t_error		error;
+	t_prompt	type;
+	char		*new_line;
 
 	error = ERRC_INCOMPLETECMD;
 	type = PROMPT_DEFAULT;
 	while (error == ERRC_INCOMPLETECMD)
 	{
-		*state = create_prompt_and_read_input(cmdline, type);
+		new_line = create_prompt_and_read_input(cmdline, type, state);
 		if (*state != RSTATE_END)
+		{
+			free(new_line);
 			break ;
-		if ((alloc->full_input = join_command(cmdline, alloc->full_input))
-				== NULL || !scmd_init(&scmd_inf, alloc->full_input))
-			return (ERRC_UNEXPECTED);
-		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
-				|| (analyser_ret = token_analyser(tokens, 0)) == PR_ERROR)
-			error = (tokens == NULL ? ERRC_UNEXPECTED : ERRC_LEXERROR);
+		}
+		alloc->full_input = join_command(cmdline, alloc->full_input, new_line);
+		if (alloc->full_input == NULL)
+			error = ERRC_UNEXPECTED;
 		else
-			error = change_prompt_type(&scmd_inf, analyser_ret, &type);
-		ft_lstdel(&tokens, del_token);
-		scmd_clean(&scmd_inf);
+			error = analyse_full_input(alloc, &type);
 	}
 	return (error);
 }
@@ -127,7 +131,7 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	t_error		error;
 
 	state = RSTATE_END;
-	error = read_complete_command(cmdline, alloc, &state);
+	error = read_complete_command(alloc, cmdline, &state);
 	if (state == RSTATE_END)
 		push_history_entry(&cmdline->history, alloc->full_input);
 	else if (state == RSTATE_ETX)

@@ -10,7 +10,7 @@ size_t	get_pos_in_array(char **array)
 	size_t	i;
 
 	i = 0;
-	if (!(*array))
+	if (!array || !(*array))
 		return (i);
 	while (array[i])
 		i += 1;

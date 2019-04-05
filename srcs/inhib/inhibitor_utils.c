@@ -13,7 +13,7 @@ int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array,
 		return (0);
 	if (!scmd_init(*str_cmd, str))
 		return (0);
-	if (!((*array)[0] = ft_strdup((*str_cmd)->str)))
+	if (!((*array)[0] = ft_strdup(str)))
 		return (0);
 	(*array)[1] = NULL;
 	return (1);
