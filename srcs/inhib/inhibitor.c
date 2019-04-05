@@ -131,12 +131,6 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		return (NULL);
 	scmd_clean(str_cmd);
 	free(str_cmd);
-	pos_array = 0;
-	while (array && array[pos_array])
-		if (ft_strequ(array[pos_array], "") == 1)
-			delete_line_tab(&(array), pos_array);
-		else
-			pos_array += 1;
 	if (!array)
 	{
 		array = (char **)malloc((sizeof(char *) * 1));
