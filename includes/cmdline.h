@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 22:35:36 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 15:45:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ char		*create_prompt(t_list *vars, size_t *tot_printable_char);
 
 char		*create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type
 		, t_rstate *state);
-char		*non_interact_input(t_cmdline *cmdline, t_rstate *state);
 
 /*
 ** TERM INIT/MISC.
