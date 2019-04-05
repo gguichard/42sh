@@ -147,6 +147,7 @@ $(PATH_AUTOCOMPL)/ac_suff_utils.c \
 $(PATH_AUTOCOMPL)/utils.c \
 $(PATH_VARS)/env.c \
 $(PATH_VARS)/shell_vars.c \
+$(PATH_VARS)/unset_var_utils.c \
 $(PATH_VARS)/var_utils.c \
 $(PATH_VARS)/vars.c \
 $(PATH_JOB)/job_utils.c \
