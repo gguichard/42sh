@@ -188,6 +188,7 @@ void	test_this_inhib_expand(char *strbase, char **result_needed)
 void test_inhib_expand()
 {
 	ft_printf(" --- Test inhibition expand :\n");
+	//expand
 	test_this_inhib_expand("str", (char*[]){"str", NULL});
 	test_this_inhib_expand("$EXISTEpas$EXISTE", (char*[]){"CECI", NULL});
 	test_this_inhib_expand("${EXISTE}$", (char*[]){"CECI$", NULL});
@@ -209,6 +210,19 @@ void test_inhib_expand()
 	test_this_inhib_expand("$DEUXMOTS", (char*[]){"DEUX", "MOTS", NULL});
 	test_this_inhib_expand("truc${DEUXMOTS}machin", (char*[]){"trucDEUX", "MOTSmachin", NULL});
 	test_this_inhib_expand("truc\\ ${DEUXMOTS}\\ machin", (char*[]){"truc DEUX", "MOTS machin", NULL});
+	//inhib
+	test_this_inhib_expand("\"bonjour\"", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("\"bonjour les gens\"", (char*[]){"bonjour les gens", NULL});
+	test_this_inhib_expand("\"\"bonjour", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("bonjour\"\"bonjour", (char*[]){"bonjourbonjour", NULL});
+	test_this_inhib_expand("bonjour\"\"", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("\"\"", (char*[]){"", NULL});
+	test_this_inhib_expand("bonjour\"", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("\"bonjour", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("bonjour les gens\"", (char*[]){"bonjour les gens", NULL});
+	test_this_inhib_expand("\"bonjour les gens", (char*[]){"bonjour les gens", NULL});
+	test_this_inhib_expand("bonjour\"bonjour", (char*[]){"bonjourbonjour", NULL});
+	test_this_inhib_expand("\"", (char*[]){"", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
