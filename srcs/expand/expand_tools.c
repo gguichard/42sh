@@ -33,8 +33,7 @@ int		check_expand_syntax(const char *str)
 	}
 	else
 	{
-		while (ft_isalnum(str[i]) || str[i] == '!' || str[i] == '?'
-				|| str[i] == '$' || str[i] == '_')
+		while (ft_isalnum(str[i]) || str[i] == '_')
 			i += 1;
 		if (str[i] != '}')
 			return (0);
@@ -116,6 +115,13 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 			if (!(expand_var_to_tab(array, len, pos_array, save)))
 				return (0);
 		}
+
+	}
+	else if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
+	{
+		ft_printf("array[pos]: |%s|\n", (*array)[*pos_array]);
+		if (ft_strequ((*array)[*pos_array], "") == 1)
+			delete_line_tab(array, *pos_array);
 	}
 	scmd_move_to_next_char(str_cmd);
 	update_pos_index(str_cmd);

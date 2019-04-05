@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 15:11:51 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/04 22:35:36 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ void		reset_cmdline(t_cmdline *cmdline, const char *prompt
 */
 char		*create_prompt(t_list *vars, size_t *tot_printable_char);
 
+char		*create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type
+		, t_rstate *state);
+char		*non_interact_input(t_cmdline *cmdline, t_rstate *state);
+
 /*
 ** TERM INIT/MISC.
 */
@@ -44,7 +48,6 @@ void		go_to_cursor_pos(t_cmdline *cmdline, t_cursor cursor);
 ** INPUT/OUTPUT.
 */
 
-t_rstate	non_interact_input(t_cmdline *cmdline);
 void		print_line_by_line(t_cmdline *cmdline, int off_start);
 void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
 		, size_t len);
@@ -58,7 +61,7 @@ void		add_char_to_input(t_cmdline *cmdline, char c);
 
 char		*get_prompt(t_cmdline *cmdline, t_prompt type, size_t *offset);
 t_rstate	read_input(t_cmdline *cmdline, const char *prompt, size_t offset);
-char		*prompt_heredoc(t_cmdline *cmdline, const char *word);
+char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word);
 
 int			t_putchar(int c);
 

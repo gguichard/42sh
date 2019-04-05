@@ -2,7 +2,7 @@
 # define PARSER_LEXER_H
 
 # include "shell.h"
-
+# include "str_cmd_inf.h"
 typedef enum	e_recall_prompt
 {
 	PR_SUCCESS,
@@ -19,6 +19,8 @@ void			lexer_parser(const char *line, t_alloc *alloc);
 */
 
 int				expand_home_shortcut(char **s, t_list *vars);
+void			check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
+				, size_t *pos);
 
 /*
 ********************************* LEXER TOOLS **********************************

@@ -55,6 +55,7 @@ void		print_job(pid_t process, int after_signal);
 
 void		delete_jobs_terminated(t_list *tmp);
 void		terminate_all_jobs(int sig);
+void		kill_zombie_boy(pid_t boy);
 
 char		*sig_str(int status);
 char		*last_sig_process(t_list *tmp, int foreground);
