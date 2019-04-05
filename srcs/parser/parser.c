@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 18:02:51 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 20:56:45 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/06 00:27:33 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_ast	*set_new_elem(void)
 	t_ast	*new;
 
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
-		return (0);
+		return (NULL);
 	new->fd[0] = -1;
 	new->fd[1] = -1;
 	new->type = AST_NO_TYPE;
@@ -32,6 +32,7 @@ t_ast	*set_new_elem(void)
 	return (new);
 }
 
+//Verifier si type correct
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
 	static char	*ope[11] = {
@@ -58,7 +59,7 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 		elem->type = AST_CMD_SEP;
 }
 
-void	init_input(t_ast *elem, int len, t_list *lst_tk)
+int		init_input(t_ast *elem, int len, t_list *lst_tk)
 {
 	t_token_type	type;
 
@@ -72,13 +73,14 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	else if (type == TK_CMD)
 		elem->type = AST_CMD;
 	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
-		return ;
+		return (0);
 	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
 	{
 		ft_memdel((void **)&(elem->input));
-		return ;
+		return (0);
 	}
 	elem->input[len] = NULL;
+	return (1);
 }
 
 t_ast	*parser(t_list *lst_tk)
