@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   var_assigns.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 19:42:08 by gguichar          #+#    #+#             */
+/*   Updated: 2019/04/05 20:05:31 by gguichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "shell.h"
 #include "execution.h"
@@ -43,35 +55,42 @@ static void	assign_local_vars(t_alloc *alloc, t_ast *elem, int is_tmp)
 	}
 }
 
+static void	reset_tmp_var(t_alloc *alloc, t_list *cur, t_list *next
+		, t_list **prev)
+{
+	t_var	*var;
+
+	var = (t_var *)cur->content;
+	if (var->is_env != 2 && var->tmp_value == NULL)
+		*prev = cur;
+	else if (var->is_env != 2)
+	{
+		free(var->value);
+		var->value = var->tmp_value;
+		var->tmp_value = NULL;
+	}
+	else
+	{
+		ft_lstdelone(&cur, free_var);
+		if (prev == NULL)
+			alloc->vars = next;
+		else
+			(*prev)->next = next;
+	}
+}
+
 static void	reset_tmp_vars(t_alloc *alloc)
 {
 	t_list	*cur;
 	t_list	*prev;
 	t_list	*next;
-	t_var	*var;
 
 	cur = alloc->vars;
 	prev = NULL;
 	while (cur != NULL)
 	{
 		next = cur->next;
-		var = (t_var *)cur->content;
-		if (var->is_env != 2 && var->tmp_value == NULL)
-			prev = cur;
-		else if (var->is_env != 2)
-		{
-			free(var->value);
-			var->value = var->tmp_value;
-			var->tmp_value = NULL;
-		}
-		else
-		{
-			ft_lstdelone(&cur, free_var);
-			if (prev == NULL)
-				alloc->vars = next;
-			else
-				prev->next = next;
-		}
+		reset_tmp_var(alloc, cur, next, &prev);
 		cur = next;
 	}
 }

@@ -97,7 +97,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		error_inhib_expand(str_cmd, array);
 		return (NULL);
 	}
-	check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
+	// check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
 	if (!do_inhib(str_cmd, &array, &pos_array, alloc))
 		return (NULL);
 	scmd_clean(str_cmd);
