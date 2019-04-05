@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 15:50:07 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 20:00:37 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 	int	ropt_fd;
 	int	ret;
 
-	lopt_fd = redirect_inf->lopt_fd;
-	if (lopt_fd == FD_DEFAULT)
+	if ((lopt_fd = redirect_inf->lopt_fd) == FD_DEFAULT)
 		lopt_fd = 0;
 	if (redirect_inf->close_ropt_fd)
 	{
@@ -51,7 +50,7 @@ int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 	ropt_fd = get_redirect_input_fd(redirect_inf);
 	if (ropt_fd < 0)
 		return (0);
-	ret = (lopt_fd == ropt_fd);
+	ret = 1;
 	if (lopt_fd != ropt_fd)
 	{
 		ret = dup2_with_rc(opt, ropt_fd, lopt_fd);

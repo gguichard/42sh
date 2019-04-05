@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 13:51:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 14:46:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 19:45:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,14 @@ static int	redirect_file(t_redirect_inf *redirect_inf)
 					, error_to_str(error));
 		}
 	}
-	if (fd != -1)
-		close(fd);
-	return (fd != -1);
+	return (fd != -1 && close(fd) == 0);
 }
 
-void		setup_redirection(t_redirect_inf *redirect_inf)
+int			setup_redirection(t_redirect_inf *redirect_inf)
 {
 	if (redirect_inf->red_type != RD_LL)
-		redirect_file(redirect_inf);
+		return (redirect_file(redirect_inf));
+	return (1);
 }
 
 int			process_redirection(t_redirect_inf *redirect_inf, t_exec_opt *opt)
