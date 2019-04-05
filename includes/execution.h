@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 17:32:59 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/05 15:05:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int				redirect_output(t_redirect_inf *redirect_inf, t_exec_opt *opt);
 int				redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt);
 int				redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt);
 
-void			process_redir(t_redirect_inf *redirect_inf);
-int				setup_redirection(t_redirect_inf *redirect_inf
+void			setup_redirection(t_redirect_inf *redirect_inf);
+int				process_redirection(t_redirect_inf *redirect_inf
 		, t_exec_opt *opt);
 
 t_error			source_file(t_alloc *alloc, const char *path);

@@ -35,7 +35,6 @@ void	update_pos_index(t_str_cmd_inf *str_cmd)
 	}
 	else if (scmd_cur_char(str_cmd) == '{')
 	{
-
 		while (scmd_cur_char(str_cmd) && scmd_cur_char(str_cmd) != '}')
 			scmd_move_to_next_char(str_cmd);
 		scmd_move_to_next_char(str_cmd);
@@ -99,8 +98,12 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 
 int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
 {
-	scmd_clean(str_cmd);
-	free(str_cmd);
-	ft_strtab_free(array);
+	if (str_cmd)
+	{
+		scmd_clean(str_cmd);
+		free(str_cmd);
+	}
+	if (array)
+		ft_strtab_free(array);
 	return (0);
 }
