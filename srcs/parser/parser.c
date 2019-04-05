@@ -113,7 +113,7 @@ t_ast	*parser(t_list *lst_tk)
 		branch = create_ast_branch(&lst_tk);
 		if (!sort)
 			sort = branch;
-		if (sort->type == AST_CMD_SEP && !sort->right)
+		if (sort && sort->type == AST_CMD_SEP && !sort->right)
 		{
 			sort->right = branch;
 			branch->back = sort;
