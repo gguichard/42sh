@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 14:20:29 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/05 16:56:38 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,30 +74,37 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 	return (ERRC_INCOMPLETECMD);
 }
 
-char			*create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type
-		, t_rstate *state)
-{
-	char		*prompt;
-	size_t		offset;
-
-	if (!isatty(STDIN_FILENO))
-		return (non_interact_input(cmdline, state));
-	prompt = get_prompt(cmdline, type, &offset);
-	*state = read_input(cmdline, (prompt == NULL ? "> " : prompt)
-			, (prompt == NULL ? 2 : offset));
-	free(prompt);
-	return (ft_strdup(cmdline->input.buffer));
-}
-
-static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
-		, t_rstate *state)
+static t_error	analyse_full_input(t_alloc *alloc, t_prompt *type)
 {
 	t_error			error;
-	t_prompt		type;
-	char			*new_line;
 	t_str_cmd_inf	scmd_inf;
 	t_list			*tokens;
 	t_recall_prompt	analyser_ret;
+
+	if (!scmd_init(&scmd_inf, alloc->full_input))
+		return (ERRC_UNEXPECTED);
+	tokens = split_cmd_token(&scmd_inf, alloc->aliastable);
+	if (tokens == NULL)
+		error = ERRC_UNEXPECTED;
+	else
+	{
+		analyser_ret = token_analyser(tokens, 0);
+		if (analyser_ret == PR_ERROR)
+			error = ERRC_LEXERROR;
+		else
+			error = change_prompt_type(&scmd_inf, analyser_ret, type);
+	}
+	ft_lstdel(&tokens, del_token);
+	scmd_clean(&scmd_inf);
+	return (error);
+}
+
+static t_error	read_complete_command(t_alloc *alloc, t_cmdline *cmdline
+		, t_rstate *state)
+{
+	t_error		error;
+	t_prompt	type;
+	char		*new_line;
 
 	error = ERRC_INCOMPLETECMD;
 	type = PROMPT_DEFAULT;
@@ -109,16 +116,11 @@ static t_error	read_complete_command(t_cmdline *cmdline, t_alloc *alloc
 			free(new_line);
 			break ;
 		}
-		if ((alloc->full_input = join_command(cmdline, alloc->full_input
-						, new_line)) == NULL || !scmd_init(&scmd_inf, alloc->full_input))
-			return (ERRC_UNEXPECTED);
-		if ((tokens = split_cmd_token(&scmd_inf, alloc->aliastable)) == NULL
-				|| (analyser_ret = token_analyser(tokens, 0)) == PR_ERROR)
-			error = (tokens == NULL ? ERRC_UNEXPECTED : ERRC_LEXERROR);
+		alloc->full_input = join_command(cmdline, alloc->full_input, new_line);
+		if (alloc->full_input == NULL)
+			error = ERRC_UNEXPECTED;
 		else
-			error = change_prompt_type(&scmd_inf, analyser_ret, &type);
-		ft_lstdel(&tokens, del_token);
-		scmd_clean(&scmd_inf);
+			error = analyse_full_input(alloc, &type);
 	}
 	return (error);
 }
@@ -129,7 +131,7 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	t_error		error;
 
 	state = RSTATE_END;
-	error = read_complete_command(cmdline, alloc, &state);
+	error = read_complete_command(alloc, cmdline, &state);
 	if (state == RSTATE_END)
 		push_history_entry(&cmdline->history, alloc->full_input);
 	else if (state == RSTATE_ETX)
