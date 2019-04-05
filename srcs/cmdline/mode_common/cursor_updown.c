@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 12:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/30 18:36:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 23:43:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 int			handle_cursor_up(t_cmdline *cmdline)
 {
-	int	offset;
-	int	rightest_col;
-	int	col;
+	size_t	offset;
+	int		rightest_col;
+	int		col;
 
 	if (cmdline->saved_col == -1)
 		cmdline->saved_col = cmdline->cursor.x;
@@ -26,11 +26,11 @@ int			handle_cursor_up(t_cmdline *cmdline)
 	offset = cmdline->input.offset - cmdline->cursor.x - 1;
 	rightest_col = get_rightmost_column(cmdline, offset);
 	col = ft_min(rightest_col, cmdline->saved_col);
-	if ((cmdline->cursor.y - 1) != 0 || col > cmdline->prompt.offset)
+	if ((cmdline->cursor.y - 1) != 0 || col > get_prompt_offset(cmdline))
 		offset = offset - (rightest_col - col);
 	else
 	{
-		col = cmdline->prompt.offset;
+		col = get_prompt_offset(cmdline);
 		offset = 0;
 	}
 	cmdline->input.offset = offset;
@@ -40,8 +40,8 @@ int			handle_cursor_up(t_cmdline *cmdline)
 
 static int	cursor_down_offset(t_cmdline *cmdline, int col)
 {
-	int	row;
-	int	offset;
+	int		row;
+	size_t	offset;
 
 	row = cmdline->cursor.y;
 	offset = cmdline->input.offset;

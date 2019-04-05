@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 10:04:49 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 23:44:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include <unistd.h>
 #include <term.h>
 #include "cmdline.h"
+
+int		get_prompt_offset(t_cmdline *cmdline)
+{
+	size_t	total;
+
+	total = cmdline->prompt.offset;
+	if (cmdline->visual.toggle)
+		total += ft_strlen(VISUAL_STRING);
+	total %= ft_max(cmdline->winsize.ws_col, 1);
+	return ((int)total);
+}
 
 void	update_cmdline_at_offset(t_cmdline *cmdline, char caller
 		, int is_deletion)
@@ -43,15 +54,10 @@ void	update_cmdline_at_offset(t_cmdline *cmdline, char caller
 
 void	print_prompt_and_cmdline(t_cmdline *cmdline)
 {
-	size_t	total;
-
-	total = 0;
 	if (cmdline->visual.toggle)
-		total += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
-	if (write(STDOUT_FILENO, cmdline->prompt.str
-				, ft_strlen(cmdline->prompt.str)) != -1)
-		total += cmdline->prompt.offset;
-	cmdline->cursor.x = total % ft_max(cmdline->winsize.ws_col, 1);
+		write(STDOUT_FILENO, VISUAL_STRING, ft_strlen(VISUAL_STRING));
+	write(STDOUT_FILENO, cmdline->prompt.str, ft_strlen(cmdline->prompt.str));
+	cmdline->cursor.x = get_prompt_offset(cmdline);
 	cmdline->cursor.y = 0;
 	print_only_cmdline(cmdline);
 }

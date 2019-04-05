@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 19:50:30 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:37:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 23:42:14 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void		print_line_by_line(t_cmdline *cmdline, int off_start)
 {
 	const char	*buffer;
 	const char	*eol;
-	int			buff_len;
-	int			offset;
+	size_t		buff_len;
+	size_t		offset;
 
 	buffer = cmdline->input.buffer + off_start;
 	buff_len = cmdline->input.size - off_start;
@@ -98,7 +98,7 @@ void		print_line_by_line(t_cmdline *cmdline, int off_start)
 void		print_only_cmdline(t_cmdline *cmdline)
 {
 	t_cursor	start_cursor;
-	int			offset;
+	size_t		offset;
 
 	start_cursor = cmdline->cursor;
 	print_line_by_line(cmdline, 0);
