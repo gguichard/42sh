@@ -98,6 +98,7 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	else if (child == 0 && (opt->fork = 1) == 1)
 	{
+		update_var(&alloc->vars, "_", path_exec);
 		if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 			exit(ret);
 		execute_cmd(alloc, elem->input, path_exec);

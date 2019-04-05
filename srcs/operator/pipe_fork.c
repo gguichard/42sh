@@ -54,8 +54,7 @@ static pid_t	add_pid_pipe(t_ast *elem, int last_pipe_cmd, pid_t child
 		first_cmd = NULL;
 	if (ret == -1)
 	{
-		ft_dprintf(STDERR_FILENO
-				, "42sh: child setpgid: operation not permitted\n");
+		kill_zombie_boy(child);
 		return (-1);
 	}
 	return (child);

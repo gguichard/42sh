@@ -5,6 +5,7 @@
 #include "execution.h"
 #include "inhibitor.h"
 #include "signals.h"
+#include "vars.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -52,6 +53,8 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	ret = try_builtin_execution(alloc, elem, opt);
 	if (ret == -1)
 		ret = exec_input(alloc, elem, opt);
+	update_var(&alloc->vars, "_"
+		, elem->input[ft_strtab_count(elem->input) - 1]);
 	return (ret);
 }
 
@@ -82,8 +85,11 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 			use_rc_on_shell(opt);
 		return (0);
 	}
-	else if (!inhib_expand_tab(elem, alloc))
+	else if ((elem->type != AST_REDIR || !ft_strequ("<<", elem->input[0]))
+			&& !inhib_expand_tab(elem, alloc))
+	{
 		return (1);
+	}
 	else if (elem->type == AST_CMD_SEP)
 	{
 		alloc->ret_val = analyzer(alloc, elem->left, opt);
