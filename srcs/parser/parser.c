@@ -134,6 +134,8 @@ t_ast	*parser(t_list *lst_tk)
 			else if (lst_tk != NULL)
 			lst_tk = lst_tk->next;
 		}
+		else
+			lst_tk = lst_tk->next;
 	}
 	return (sort);
 }
