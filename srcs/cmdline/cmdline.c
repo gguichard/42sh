@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 00:08:39 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 12:13:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,24 @@ static char		*join_command(t_cmdline *cmdline, char *full_input
 	char	*tmp[3];
 
 	if (new_line == NULL)
-		return (NULL);
-	if (!expand_history_events(&cmdline->history, &new_line))
+		return (full_input);
+	else if (!expand_history_events(&cmdline->history, &new_line))
+		ft_strdel(&full_input);
+	else
 	{
-		free(new_line);
-		return (NULL);
+		if (full_input == NULL)
+			return (new_line);
+		else
+		{
+			tmp[0] = full_input;
+			tmp[1] = new_line;
+			tmp[2] = NULL;
+			full_input = ft_join(tmp, "\n");
+			free(tmp[0]);
+		}
 	}
-	if (full_input != NULL)
-	{
-		tmp[0] = full_input;
-		tmp[1] = new_line;
-		tmp[2] = NULL;
-		new_line = ft_join(tmp, "\n");
-		free(tmp[1]);
-	}
-	free(full_input);
-	return (new_line);
+	free(new_line);
+	return (full_input);
 }
 
 static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
@@ -73,7 +75,7 @@ static t_error	change_prompt_type(t_str_cmd_inf *scmd_inf, t_recall_prompt ret
 }
 
 char			*create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type
-	, t_rstate *state)
+		, t_rstate *state)
 {
 	char		*prompt;
 	size_t		offset;
