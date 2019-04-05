@@ -223,6 +223,22 @@ void test_inhib_expand()
 	test_this_inhib_expand("\"bonjour les gens", (char*[]){"bonjour les gens", NULL});
 	test_this_inhib_expand("bonjour\"bonjour", (char*[]){"bonjourbonjour", NULL});
 	test_this_inhib_expand("\"", (char*[]){"", NULL});
+	test_this_inhib_expand("\'bonjour\'", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("\'bonjour les gens\'", (char*[]){"bonjour les gens", NULL});
+	test_this_inhib_expand("\'\'bonjour", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("bonjour\'\'bonjour", (char*[]){"bonjourbonjour", NULL});
+	test_this_inhib_expand("bonjour\'\'", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("\'\'", (char*[]){"", NULL});
+	test_this_inhib_expand("bonjour\'", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("\'bonjour", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("bonjour les gens\'", (char*[]){"bonjour les gens", NULL});
+	test_this_inhib_expand("\'bonjour les gens", (char*[]){"bonjour les gens", NULL});
+	test_this_inhib_expand("bonjour\'bonjour", (char*[]){"bonjourbonjour", NULL});
+	test_this_inhib_expand("\'", (char*[]){"", NULL});
+	test_this_inhib_expand("\"\\b\\$on\'jo\\\'ur_ok\\\"lol", (char*[]){"\\b$on\'jo\\\'ur_ok\"lol", NULL});
+	test_this_inhib_expand("\'\\b\\$onjour", (char*[]){"\\b\\$onjour", NULL});
+	test_this_inhib_expand("\"bon\\\"jo\\\\\"ur", (char*[]){"bon\"jo\\ur", NULL});
+	test_this_inhib_expand("\'bon\\\\jo\\\'ur", (char*[]){"bon\\\\jo\\ur", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
