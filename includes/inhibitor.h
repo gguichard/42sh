@@ -31,5 +31,6 @@ void	update_pos_index(t_str_cmd_inf *str_cmd);
 char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);
 void	create_new_input(t_ast *elem, int *i, char **new);
 int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array);
+void	delete_line_tab(char ***array, int i);
 
 #endif

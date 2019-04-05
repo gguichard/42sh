@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 14:41:55 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/04 22:41:12 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ typedef struct		s_cmdline
 	int				stdin_dup;
 	t_history		history;
 	int				ac_flag;
-	char			*input_str;
 }					t_cmdline;
 
 typedef struct		s_seq
