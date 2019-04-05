@@ -210,6 +210,9 @@ void test_inhib_expand()
 	test_this_inhib_expand("$DEUXMOTS", (char*[]){"DEUX", "MOTS", NULL});
 	test_this_inhib_expand("truc${DEUXMOTS}machin", (char*[]){"trucDEUX", "MOTSmachin", NULL});
 	test_this_inhib_expand("truc\\ ${DEUXMOTS}\\ machin", (char*[]){"truc DEUX", "MOTS machin", NULL});
+	test_this_inhib_expand("$TROISMOTS", (char*[]){"TROIS", "MOTS", "VOILA", NULL});
+	test_this_inhib_expand("truc${TROISMOTS}machin", (char*[]){"trucTROIS", "MOTS", "VOILAmachin", NULL});
+	test_this_inhib_expand("truc\\ ${TROISMOTS}\\ machin", (char*[]){"truc TROIS", "MOTS", "VOILA machin", NULL});
 	//inhib
 	test_this_inhib_expand("\"bonjour\"", (char*[]){"bonjour", NULL});
 	test_this_inhib_expand("\"bonjour les gens\"", (char*[]){"bonjour les gens", NULL});
@@ -239,6 +242,18 @@ void test_inhib_expand()
 	test_this_inhib_expand("\'\\b\\$onjour", (char*[]){"\\b\\$onjour", NULL});
 	test_this_inhib_expand("\"bon\\\"jo\\\\\"ur", (char*[]){"bon\"jo\\ur", NULL});
 	test_this_inhib_expand("\'bon\\\\jo\\\'ur", (char*[]){"bon\\\\jo\\ur", NULL});
+	//inhib + expand
+	test_this_inhib_expand("\"$DEUXMOTS\"", (char*[]){"DEUX MOTS", NULL});
+	test_this_inhib_expand("\"$DEUXMOTS", (char*[]){"DEUX MOTS", NULL});
+	test_this_inhib_expand("\'$DEUXMOTS\'", (char*[]){"$DEUXMOTS", NULL});
+	test_this_inhib_expand("\\$DEUXMOTS", (char*[]){"$DEUXMOTS", NULL});
+	test_this_inhib_expand("\'$DEUXMOTS", (char*[]){"$DEUXMOTS", NULL});
+	test_this_inhib_expand("\"$DEUX\"MOTS", (char*[]){"MOTS", NULL});
+	test_this_inhib_expand("\"$TROIS\"MOTS", (char*[]){"_3_MOTS", NULL});
+	test_this_inhib_expand("\'$DEUX\'MOTS", (char*[]){"$DEUXMOTS", NULL});
+	test_this_inhib_expand("\'$TROIS\'MOTS", (char*[]){"$TROISMOTS", NULL});
+	test_this_inhib_expand("\\$TROIS\\MOTS", (char*[]){"$TROISMOTS", NULL});
+	test_this_inhib_expand("$TROIS\\MOTS", (char*[]){"_3_MOTS", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
@@ -255,6 +270,9 @@ int		main(int argc, char **argv, char **environ)
 	create_var(&alloc.vars, "EXISTE", "CECI", 1);
 	create_var(&alloc.vars, "ESTVIDE", "", 1);
 	create_var(&alloc.vars, "DEUXMOTS", "DEUX MOTS", 1);
+	create_var(&alloc.vars, "TROISMOTS", "TROIS\tMOTS  \t  VOILA", 1);
+	create_var(&alloc.vars, "DEUX", "", 1);
+	create_var(&alloc.vars, "TROIS", "_3_", 1);
 	unset_var(&alloc.vars, "EXISTEPAS");
 	test_autocomplete();
 	ft_printf("\n");
