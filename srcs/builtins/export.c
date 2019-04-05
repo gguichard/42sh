@@ -81,7 +81,7 @@ int			builtin_export(t_ast *elem, t_alloc *alloc)
 				, opts.error);
 		return (1);
 	}
-	if (has_opt(&opts, 'p') && elem->input[opts.index] == NULL)
+	if (elem->input[opts.index] == NULL)
 	{
 		display_env_vars(alloc->vars);
 		return (0);

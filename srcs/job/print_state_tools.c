@@ -24,7 +24,7 @@ char	*signal_stop_str(t_list *tmp)
 	stopped = 0;
 	job = tmp->content;
 	if (job->state == STOPPED && job->status != SIGTSTP)
-			return (status_stop_str(job->status));
+		return (status_stop_str(job->status));
 	else if (job->state == STOPPED && job->status == SIGTSTP)
 		stopped = 1;
 	tmp = job->pipe;
@@ -32,7 +32,7 @@ char	*signal_stop_str(t_list *tmp)
 	{
 		job = tmp->content;
 		if (job->state == STOPPED && job->status != SIGTSTP)
-				return (status_stop_str(job->status));
+			return (status_stop_str(job->status));
 		else if (job->state == STOPPED && job->status == SIGTSTP)
 			stopped = 1;
 		tmp = tmp->next;
@@ -44,13 +44,17 @@ char	*signal_stop_str(t_list *tmp)
 
 char	*job_state_str(t_list *tmp)
 {
+	t_job	*job;
+
 	if (check_job_state(tmp, STOPPED))
 		return ("Stopped");
-	else if (check_job_state(tmp, SIG) && last_sig_process(tmp, 0))
-		return (last_sig_process(tmp, 0));
 	else if (check_job_state(tmp, RUNNING_BG))
 		return ("Running");
-	else if (check_job_state(tmp, DONE))
+	else if ((job = last_job(tmp->content))->state == SIG)
+		return (sig_str(job->status));
+	else if ((job = last_job(tmp->content))->state == DONE && job->status)
+		return ("Exit");
+	else if (job->state == DONE)
 		return ("Done");
 	return ("undefined");
 }

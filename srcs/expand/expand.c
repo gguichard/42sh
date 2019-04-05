@@ -4,9 +4,11 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-static int	is_special_char(char c)
+static int	is_special_char(const char *s, int i)
 {
-	if (c == '_' || c == '?' || c == '!' || c == '\'' || c == '"' || c == '$')
+	if (s[i] == '_' || s[i] == '?' || s[i] == '!' || s[i] == '$')
+		return (1);
+	if ((s[i] == '\'' && s[i + 1] == '\'') || (s[i] == '"' && s[i + 1] == '"'))
 		return (1);
 	return (0);
 }
@@ -31,14 +33,13 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 	const char	*exp;
 	size_t		len;
 
-	exp = NULL;
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
 	if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
-	if (str && (*input)[*pos + 1] == '{' && str)
+	if (str && (*input)[*pos + 1] == '{')
 		ft_strreplace_inside(input, *pos, len + 3, str);
-	else if (str && !ft_isalnum(exp[1]) && is_special_char(exp[1]) == 0)
+	else if (str && !ft_isalnum(exp[1]) && is_special_char(exp, 1) == 0)
 	{
 		*pos += 1;
 		return (1);

@@ -5,5 +5,6 @@
 
 int main()
 {
-	kill(getpid(), SIGINT);
+	sleep(5);
+	kill(getpid(), SIGSEGV);
 }

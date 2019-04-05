@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/23 20:08:47 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 16:58:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 14:01:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,21 @@ int			save_history_entries(t_alloc *alloc, t_history *history)
 	}
 	free(file_path);
 	return (fd != -1);
+}
+
+void		del_history_entries(t_history *history)
+{
+	t_history_entry	*entry;
+	t_history_entry	*next;
+
+	entry = history->front;
+	while (entry != NULL)
+	{
+		next = entry->next;
+		free(entry->content);
+		free(entry);
+		entry = next;
+	}
+	free(history->buffer);
+	ft_memset(history, 0, sizeof(t_history));
 }

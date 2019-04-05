@@ -105,6 +105,7 @@ $(PATH_TOKEN)/split_cmd_token.c \
 $(PATH_TOKEN)/split_cmd_token_add.c \
 $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
+$(PATH_CMDLINE)/create_prompt.c \
 $(PATH_CMDLINE)/cursor_utils.c \
 $(PATH_CMDLINE)/handle_sigs.c \
 $(PATH_CMDLINE)/heredoc.c \
@@ -113,6 +114,7 @@ $(PATH_CMDLINE)/history_events.c \
 $(PATH_CMDLINE)/history_expand.c \
 $(PATH_CMDLINE)/history_utils.c \
 $(PATH_CMDLINE)/input.c \
+$(PATH_CMDLINE)/n_interact_input.c \
 $(PATH_CMDLINE)/print_cmdline.c \
 $(PATH_CMDLINE)/print_cmdline_utils.c \
 $(PATH_CMDLINE)/prompt.c \

@@ -24,7 +24,7 @@ static char	*sig_str_2(int signal)
 	return ("Undefined Signal");
 }
 
-char	*sig_str(int status)
+char		*sig_str(int status)
 {
 	int	signal;
 
@@ -47,7 +47,7 @@ char	*sig_str(int status)
 		return (sig_str_2(signal));
 }
 
-char	*last_sig_process(t_list *tmp, int foreground)
+char		*last_sig_process(t_list *tmp, int foreground)
 {
 	t_job	*job;
 	t_job	*last;
@@ -67,13 +67,14 @@ char	*last_sig_process(t_list *tmp, int foreground)
 			tmp = tmp->next;
 		}
 	}
-	if (last && WTERMSIG(last->status) != SIGPIPE
-		&& (WTERMSIG(last->status) != SIGINT || !foreground))
+	if (last && last->status != SIGPIPE
+		&& (last->status != SIGINT || !foreground))
 		return (sig_str(last->status));
 	return (0);
 }
 
-void	print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index)
+void		print_refreshed_jobs(t_list *tmp, int print
+								, int stop_print, int index)
 {
 	char	*cmd;
 
@@ -83,8 +84,9 @@ void	print_refreshed_jobs(t_list *tmp, int print, int stop_print, int index)
 	else if (!print && check_job_state(tmp, SIG) && !job_state_done(tmp))
 	{
 		cmd = last_sig_process(tmp, 1);
-		if (cmd)
-			ft_dprintf(2, "%s\n", cmd);
+		if (cmd && (((t_job *)tmp->content)->pipe == NULL
+			|| last_job(tmp->content)->state == SIG))
+			ft_printf("%s\n", cmd);
 	}
 	else if (print && !job_state_done(tmp))
 		print_job(((t_job *)tmp->content)->pid, 0);

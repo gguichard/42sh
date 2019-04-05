@@ -9,6 +9,14 @@ const char	*get_var_value(t_list *vars, const char *key)
 	return (var == NULL ? "" : var->value);
 }
 
+const char	*get_var_value_or_null(t_list *vars, const char *key)
+{
+	t_var	*var;
+
+	var = get_var(vars, key);
+	return (var == NULL ? NULL : var->value);
+}
+
 char		*get_var_for_expand(t_alloc *alloc, const char *key)
 {
 	t_var	*var;
@@ -23,10 +31,10 @@ char		*get_var_for_expand(t_alloc *alloc, const char *key)
 	{
 		if (ft_strequ(key, "?"))
 			return (ft_itoa(alloc->ret_val));
-		// if (ft_strequ(key, "!") && alloc->last_bg != -1)
-		// 	return (ft_itoa(alloc->last_bg));
+		if (ft_strequ(key, "!") && alloc->last_bg)
+			return (ft_itoa(alloc->last_bg));
 		if (ft_strequ(key, "$"))
-			return (ft_itoa(alloc->pid));
+			return (ft_itoa(alloc->ppid));
 		if (ft_isdigit(key[0]))
 		{
 			tmp = ft_atoi(key);

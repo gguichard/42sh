@@ -47,16 +47,18 @@ void		refresh_state(t_list *tmp, int print_state);
 void		refresh_jobs(void);
 void		print_refreshed_jobs(t_list *tmp, int print, int stop_print
 		, int index);
-void		print_job(pid_t process, int after_signal);
-void		display_simple_job(t_list *tmp, int index, t_opts *opts);
+int			last_job_status(t_job *job);
+void		display_simple_job(t_list *tmp, int index);
 void		print_bg(pid_t process);
+void		print_job(pid_t process, int after_signal);
 
 void		delete_jobs_terminated(t_list *tmp);
 void		terminate_all_jobs(int sig);
+void		kill_zombie_boy(pid_t boy);
 
 char		*sig_str(int status);
 char		*last_sig_process(t_list *tmp, int foreground);
-int			last_pid_exit_status(t_job *job);
+t_job		*last_job(t_job *job);
 char		*status_stop_str(int status);
 char		*signal_stop_str(t_list *tmp);
 char		*job_state_str(t_list *tmp);

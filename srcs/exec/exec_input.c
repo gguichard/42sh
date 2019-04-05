@@ -10,7 +10,6 @@
 #include "check_path.h"
 #include "execution.h"
 #include "signals.h"
-// #include "builtins.h" // TODO: deplacer le prototype de wait_pid
 
 static char			*search_exec(t_list *vars, const char *name, int *hashable
 		, t_error *err)
@@ -44,6 +43,7 @@ char				*exec_path(t_alloc *alloc, const char *name, int *hashable
 	*err = ERRC_NOERROR;
 	path_exec = NULL;
 	alias = NULL;
+	*hashable = 0;
 	if (!ft_strchr(name, '/'))
 	{
 		if ((alias = get_exec_path(alloc->exectable, name, 1)) != NULL)
@@ -70,7 +70,8 @@ void				execute_cmd(t_alloc *alloc, char **argv, char *path_exec)
 	tab_env = get_environ_from_list(alloc->vars);
 	if (tab_env == NULL)
 		exit(127);
-	sig_reset();
+	sig_set_all(SIG_DFL);
+	set_sigmask(SIG_UNBLOCK);
 	execve(path_exec, argv, tab_env);
 	ft_dprintf(STDERR_FILENO, "42sh: %s: not executable\n", argv[0]);
 	ft_strdel(&path_exec);
@@ -86,7 +87,6 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	pid_t	child;
 	int		ret;
 
-	hashable = 0;
 	if ((path_exec = exec_path(alloc, elem->input[0], &hashable, &err)) == NULL)
 	{
 		exec_file_error(err, elem->input[0]);
@@ -98,6 +98,7 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	else if (child == 0 && (opt->fork = 1) == 1)
 	{
+		update_var(&alloc->vars, "_", path_exec);
 		if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 			exit(ret);
 		execute_cmd(alloc, elem->input, path_exec);
@@ -105,7 +106,5 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	set_signals_handlers();
 	ft_strdel(&path_exec);
 	wait_pid(child, alloc, elem, opt);
-	if (opt->wait_hang == 0)
-		return (ret_status(alloc->ret_val, child, 0, opt));
-	return (0);
+	return (!opt->wait_hang ? ret_status(alloc->ret_val, child, 0, opt) : 0);
 }

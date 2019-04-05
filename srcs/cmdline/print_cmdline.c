@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/17 00:13:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 10:45:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 10:04:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ void	print_prompt_and_cmdline(t_cmdline *cmdline)
 	total = 0;
 	if (cmdline->visual.toggle)
 		total += ft_max(write(STDOUT_FILENO, "(visual) ", 9), 0);
-	total += ft_max(write(STDOUT_FILENO, cmdline->prompt.str
-				, ft_strlen(cmdline->prompt.str)), 0);
+	if (write(STDOUT_FILENO, cmdline->prompt.str
+				, ft_strlen(cmdline->prompt.str)) != -1)
+		total += cmdline->prompt.offset;
 	cmdline->cursor.x = total % ft_max(cmdline->winsize.ws_col, 1);
 	cmdline->cursor.y = 0;
-	cmdline->prompt.offset = cmdline->cursor.x;
 	print_only_cmdline(cmdline);
 }

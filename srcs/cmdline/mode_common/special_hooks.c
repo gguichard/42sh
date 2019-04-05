@@ -6,12 +6,11 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 01:22:49 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 13:46:10 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/04 00:31:28 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "shell.h"
 #include "cmdline.h"
 
 int	handle_end_of_text(t_cmdline *cmdline)
@@ -22,6 +21,5 @@ int	handle_end_of_text(t_cmdline *cmdline)
 	handle_end_key(cmdline);
 	write(STDOUT_FILENO, "\n", 1);
 	cmdline->input.reading = RSTATE_ETX;
-	cmdline->alloc->ret_val = 1;
 	return (1);
 }

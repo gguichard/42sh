@@ -59,13 +59,17 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 	return (node);
 }
 
-int				add_pid_lst_pipe(t_list *attach, pid_t process, t_ast *elem, int addpipe)
+int				add_pid_lst_pipe(t_list *attach, pid_t process
+								, t_ast *elem, int addpipe)
 {
 	t_job	job;
 	t_list	*node;
 
 	if (setpgid(process, ((t_job *)attach->content)->gpid) != 0)
+	{
+		kill_zombie_boy(process);
 		return (-1);
+	}
 	if (!create_job(&job, process, elem, addpipe)
 		|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
 	{
