@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdlib.h>
 #include "shell.h"
 #include "parser_lexer.h"
@@ -32,11 +33,16 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	t_redirect_inf	redirect_inf;
 	int				ret;
 
-	if (!fill_redirect_inf(&redirect_inf, elem->input))
+	if (!ft_strequ("<<", elem->input[0]) && !inhib_expand_tab(elem, alloc))
 		return (1);
-	process_redir(&redirect_inf);
+	if (!fill_redirect_inf(&redirect_inf, elem->input))
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: ambiguous redirect\n");
+		return (1);
+	}
+	setup_redirection(&redirect_inf);
 	ret = 0;
-	if (!setup_redirection(&redirect_inf, opt))
+	if (!process_redirection(&redirect_inf, opt))
 		ret = 1;
 	clean_redirect(&redirect_inf);
 	if (ret == 0)
@@ -60,6 +66,8 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
+	if (elem->type != AST_REDIR && !inhib_expand_tab(elem, alloc))
+		return (1);
 	if (elem->type == AST_JOB)
 		return (job_control(alloc, elem, opt));
 	else if (elem->type == AST_LOGIC)
@@ -85,16 +93,11 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 			use_rc_on_shell(opt);
 		return (0);
 	}
-	else if ((elem->type != AST_REDIR || !ft_strequ("<<", elem->input[0]))
-			&& !inhib_expand_tab(elem, alloc))
-	{
-		return (1);
-	}
-	else if (elem->type == AST_CMD_SEP)
+	if (elem->type != AST_CMD_SEP)
+		return (assign_analyzer(alloc, elem, opt));
+	else
 	{
 		alloc->ret_val = analyzer(alloc, elem->left, opt);
 		return (analyzer(alloc, elem->right, opt));
 	}
-	else
-		return (assign_analyzer(alloc, elem, opt));
 }
