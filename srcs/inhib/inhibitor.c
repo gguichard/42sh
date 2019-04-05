@@ -120,7 +120,7 @@ void	delete_line_tab(char ***array, int i)
 	if (len == 1)
 		*array = ft_strtab_free(*array);
 	else if (len - 1 == (size_t)i)
-		ft_strdel(&(*(array[i])));
+		ft_strdel(&((*array)[i]));
 	else
 	{
 		ft_strdel(&((*array)[i]));
