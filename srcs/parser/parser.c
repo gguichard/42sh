@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 18:02:51 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 19:57:56 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/05 20:56:45 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,10 @@ t_ast	*parser(t_list *lst_tk)
 	if (token_analyser(lst_tk, 1) == PR_ERROR)
 		return (NULL);
 	while (lst_tk != NULL)
-		if ((branch = create_ast_branch(&lst_tk)))
-		{
-			if (!link_branch(&elem, &branch, &sort, &lst_tk))
-				return (NULL);
-		}
-		else
+	{
+		branch = create_ast_branch(&lst_tk);
+		if (!link_branch(&elem, &branch, &sort, &lst_tk))
 			lst_tk = lst_tk->next;
+	}
 	return (sort);
 }

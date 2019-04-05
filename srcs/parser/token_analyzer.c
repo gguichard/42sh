@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 18:05:44 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 20:22:23 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/05 21:02:47 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,49 +69,16 @@ static int				check_lred_opt(t_list **lst_tk)
 	return (check_red_ope(lst_tk, 0));
 }
 
-// t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
-// {
-// 	t_token_type	type;
-//
-// 	if (!lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP)
-// 		return (syntax_error(get_tk(lst_tk)));
-// 	while (!lst_tk && get_tk(lst_tk)->type == TK_ASSIGN)
-// 		lst_tk = lst_tk->next;
-// 	// while (!lst_tk && !(lst_tk->next) && (type = get_tk(lst_tk)->type))
-// 	while (!lst_tk && !(lst_tk->next))
-// 	{
-// 		type = get_tk(lst_tk)->type;
-// 		if (type != TK_CMD_SEP && ft_strequ(get_tk(lst_tk)->token, ";"))
-// 			break ;
-// 		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
-// 			return (syntax_error(get_tk(lst_tk->next)));
-// 		else if (type == TK_RED_LOPT_FD && !check_lred_opt(&lst_tk))
-// 			return (syntax_error(get_tk(lst_tk)));
-// 		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk, prompt_heredoc))
-// 			return (syntax_error(get_tk(lst_tk)));
-// 		lst_tk = lst_tk->next;
-// 	}
-// 	if (!lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP
-// 			&& !ft_strequ(get_tk(lst_tk)->token, ";")
-// 			&& !ft_strequ(get_tk(lst_tk)->token, "&"))
-// 		return (recall_prompt_type(lst_tk));
-// 	else if (!lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
-// 		return (syntax_error(NULL));
-// 	return ((!lst_tk) ? PR_SUCCESS : token_analyser(lst_tk->next, prompt_heredoc));
-// }
-
-
 t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 {
 	t_token_type	type;
 
-	if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
+	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP)
 		return (syntax_error(get_tk(lst_tk)));
-	while (lst_tk != NULL && get_tk(lst_tk)->type == TK_ASSIGN)
+	while (lst_tk && get_tk(lst_tk)->type == TK_ASSIGN)
 		lst_tk = lst_tk->next;
-	while (lst_tk != NULL && lst_tk->next != NULL)
+	while (lst_tk && lst_tk->next && (type = get_tk(lst_tk)->type))
 	{
-		type = get_tk(lst_tk)->type;
 		if (type != TK_CMD_SEP && ft_strequ(get_tk(lst_tk)->token, ";"))
 			break ;
 		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
@@ -122,13 +89,11 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 			return (syntax_error(get_tk(lst_tk)));
 		lst_tk = lst_tk->next;
 	}
-	if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP
+	if (lst_tk && get_tk(lst_tk)->type == TK_CMD_SEP
 			&& !ft_strequ(get_tk(lst_tk)->token, ";")
 			&& !ft_strequ(get_tk(lst_tk)->token, "&"))
 		return (recall_prompt_type(lst_tk));
-	else if (lst_tk != NULL && lst_tk->next == NULL
-			&& get_tk(lst_tk)->type == TK_RED_OPE)
+	else if (lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
 		return (syntax_error(NULL));
-	return (lst_tk == NULL
-			? PR_SUCCESS : token_analyser(lst_tk->next, prompt_heredoc));
+	return (lst_tk ? token_analyser(lst_tk->next, prompt_heredoc) : PR_SUCCESS);
 }

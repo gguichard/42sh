@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 19:57:05 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 19:57:54 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/05 20:58:40 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		link_branch(t_ast **elem, t_ast **branch, t_ast **sort
 {
 	if (!(*sort))
 		*sort = *branch;
-	if ((*sort)->type == AST_CMD_SEP && !(*sort)->right)
+	if (*sort && (*sort)->type == AST_CMD_SEP && !(*sort)->right)
 	{
 		(*sort)->right = *branch;
 		(*branch)->back = *sort;
