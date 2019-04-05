@@ -66,8 +66,10 @@ t_ast	*fill_ope(t_list **lst_tk, t_ast *elem)
 	*lst_tk = (*lst_tk)->next;
 	while (i < len)
 	{
-		if (!(elem->input[i] = ft_strdup(get_tk(*lst_tk)->token)))
+		if (get_tk(*lst_tk)->token == NULL
+				|| !(elem->input[i] = ft_strdup(get_tk(*lst_tk)->token)))
 		{
+			elem->input[i] = NULL;
 			del_elem_ast(&elem);
 			return (0);
 		}

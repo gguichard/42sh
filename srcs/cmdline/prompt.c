@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:47:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 15:45:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 17:54:26 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static char	*non_interact_input(t_cmdline *cmdline, t_rstate *state)
 
 	(void)cmdline;
 	ret = get_next_line(STDIN_FILENO, &str);
+	if (ret == 0 && str == NULL)
+		str = ft_strdup("");
 	*state = (ret <= 0 ? RSTATE_EOT : RSTATE_END);
 	return (str);
 }
