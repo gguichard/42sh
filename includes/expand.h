@@ -5,7 +5,8 @@
 # include "vars.h"
 
 int		expand_var(char **str, t_alloc *alloc, const char *exp, size_t *len);
-int		expand(char **input, t_alloc *alloc, size_t *pos);
+int		expand(char **input, t_alloc *alloc, size_t *pos, t_str_cmd_inf *str_cmd);
+char	*sub_cmd_exec(t_alloc *alloc, char *cmd);
 
 /*
 ************************************ TOOLS *************************************

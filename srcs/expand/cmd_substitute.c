@@ -1,0 +1,68 @@
+#include <unistd.h>
+#include <stdlib.h>
+#include "shell.h"
+#include "job.h"
+#include "parser_lexer.h"
+
+static char	*read_pipe(int fd)
+{
+	char	buffer[4097];
+	char	*output;
+	char	*prev;
+	ssize_t	len;
+
+	output = NULL;
+	while ((len = read(fd, buffer, 4096)) > 0)
+	{
+		buffer[len] = '\0';
+		prev = output;
+		output = ft_strjoin_free(prev, buffer);
+	}
+	if (!output)
+		return (NULL);
+	len = ft_strlen(output);
+	while (len > 0 && output[--len] == '\n')
+		output[len] = '\0';
+	return (output);
+}
+
+static void	wait_sub_shell(pid_t child, t_alloc *alloc)
+{
+	t_list				*tmp;
+	t_list				*prev;
+
+	proc = add_pid_lst(child, 0, 0);
+	((t_job *)tmp->content)->state = SUB_CMD;
+	waitpid(child, &alloc->ret_val, WUNTRACED);
+	prev = g_jobs;
+	while (prev && prev->next != tmp)
+		prev = prev->next;
+	ft_memdel((void **)&(tmp->content));
+	ft_memdel((void **)&tmp);
+	prev->next = NULL;
+}
+
+char		*sub_cmd_exec(t_alloc *alloc, char *cmd)
+{
+	pid_t	child;
+	int		fd[2];
+	char	*value;
+
+	if (pipe(fd) == -1)
+		return (NULL);
+	else if ((child = fork()) == -1)
+		return (NULL);
+	if (child == 0)
+	{
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+		lexer_parser(cmd, alloc, 1);
+		exit(alloc->ret_val);
+	}
+	close(fd[1]);
+	wait_sub_shell(child, alloc);
+	value = read_pipe(fd[0]);
+	close(fd[0]);
+	return (value);
+}

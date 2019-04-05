@@ -12,7 +12,7 @@
 #include "job.h"
 #include "signals.h"
 
-void	lexer_parser(const char *line, t_alloc *alloc)
+void	lexer_parser(const char *line, t_alloc *alloc, int fork)
 {
 	t_str_cmd_inf	scmd;
 	t_list			*lst_tk;
@@ -32,6 +32,7 @@ void	lexer_parser(const char *line, t_alloc *alloc)
 	// if (sort_ast)
 	// 	read_sort_descent(sort_ast, 0);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
+	exec_opt.fork = fork;
 	alloc->ret_val = analyzer(alloc, sort_ast, &exec_opt);
 	if (g_sig == SIGINT)
 		g_sig = 0;
@@ -63,7 +64,7 @@ int		main(int argc, char **argv, char **environ)
 			if (alloc.full_input != NULL)
 			{
 				// set_sigmask(SIG_BLOCK);
-				lexer_parser(alloc.full_input, &alloc);
+				lexer_parser(alloc.full_input, &alloc, 0);
 				ft_strdel(&alloc.full_input);
 				set_signals_handlers();
 			}
