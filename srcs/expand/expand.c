@@ -39,9 +39,11 @@ static int	sub_cmd_expand(t_alloc *alloc, char **input
 	x = 0;
 	while (scmd_cur_char(str_cmd))
 	{
-		was_in_subcmd = (str_cmd->sub_str_cmd != NULL && str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD);
+		was_in_subcmd = (str_cmd->sub_str_cmd != NULL
+			&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD);
 		x += scmd_move_to_next_char(str_cmd);
-		if (was_in_subcmd && !((str_cmd->sub_str_cmd != NULL && str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)))
+		if (was_in_subcmd && !((str_cmd->sub_str_cmd != NULL
+			&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)))
 			break ;
 	}
 	cmd = ft_strsub(*input, *pos + 2, x - 3);
@@ -52,7 +54,7 @@ static int	sub_cmd_expand(t_alloc *alloc, char **input
 		*pos += ft_strlen(value);
 	ft_strdel(&value);
 	str_cmd->pos -= 1;
-	return (1);
+	return ((g_sig == SIGINT) ? 0 : 1);
 }
 
 int			expand(char **input, t_alloc *alloc, size_t *pos, t_str_cmd_inf *str_cmd)
