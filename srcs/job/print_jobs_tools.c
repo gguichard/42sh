@@ -5,13 +5,7 @@
 
 static char	*sig_str_2(int signal)
 {
-	if (signal == SIGFPE)
-		return ("Floating point exception: 8");
-	else if (signal == SIGKILL)
-		return ("Killed: 9");
-	else if (signal == SIGBUS)
-		return ("Bus error: 10");
-	else if (signal == SIGSEGV)
+	if (signal == SIGSEGV)
 		return ("Segmentation fault: 11");
 	else if (signal == SIGSYS)
 		return ("Bad system call: 12");
@@ -21,6 +15,18 @@ static char	*sig_str_2(int signal)
 		return ("Alarm clock: 14");
 	else if (signal == SIGTERM)
 		return ("Terminated: 15");
+	else if (signal == SIGXCPU)
+			return ("Cputime limit exceeded: 24");
+	else if (signal == SIGXFSZ)
+			return ("Filesize limit exceeded: 25");
+	else if (signal == SIGVTALRM)
+			return ("Virtual timer expired: 26");
+	else if (signal == SIGPROF)
+			return ("Profiling timer expired: 27");
+	else if (signal == SIGUSR1)
+			return ("User defined signal 1: 30");
+	else if (signal == SIGUSR2)
+			return ("User defined signal 2: 31");
 	return ("Undefined Signal");
 }
 
@@ -43,6 +49,12 @@ char		*sig_str(int status)
 		return ("Abort trap: 6");
 	else if (signal == SIGEMT)
 		return ("EMT trap: 7");
+	else if (signal == SIGFPE)
+		return ("Floating point exception: 8");
+	else if (signal == SIGKILL)
+		return ("Killed: 9");
+	else if (signal == SIGBUS)
+		return ("Bus error: 10");
 	else
 		return (sig_str_2(signal));
 }
