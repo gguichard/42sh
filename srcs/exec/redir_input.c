@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 20:00:37 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 17:46:59 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,20 @@ int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 
 int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
-	int		fildes[2];
-	int		ret;
+	int	fildes[2];
+	int	ret;
 
 	if (pipe(fildes) == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: heredoc: pipe error\n");
+		return (0);
+	}
+	else if (fcntl(fildes[0], F_SETFL, O_NONBLOCK) == -1
+			|| fcntl(fildes[1], F_SETFL, O_NONBLOCK) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: pipe: unable to set nonblock\n");
+		close(fildes[0]);
+		close(fildes[1]);
 		return (0);
 	}
 	ret = dup2_with_rc(opt, fildes[0], STDIN_FILENO);
