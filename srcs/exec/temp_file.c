@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 18:57:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:53:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 22:56:53 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ char				*get_tempfile_path(t_alloc *alloc, const char *file_prefix)
 	char					*tempfile_path;
 	int						fd;
 
-	temp_dir = get_temp_dir(alloc->vars);
-	if (temp_dir == NULL)
+	if ((temp_dir = get_temp_dir(alloc->vars)) == NULL)
 		return (NULL);
 	tempfile_path = (char *)malloc((PATH_MAX + 1) * sizeof(char));
 	if (tempfile_path == NULL)
@@ -90,7 +89,7 @@ char				*get_tempfile_path(t_alloc *alloc, const char *file_prefix)
 			^ (unsigned long)ntemp_files++;
 		if (!constuct_tempfile_path(tempfile_path, temp_dir, file_prefix
 					, file_num))
-			return (NULL);
+			return (ft_memdel((void **)&tempfile_path));
 		fd = open(tempfile_path, O_RDONLY);
 		if (fd == -1)
 			break;
