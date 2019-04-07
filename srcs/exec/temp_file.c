@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 18:57:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:39:13 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 22:53:13 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 static const char	*get_temp_dir(t_list *vars)
 {
-	static const char	*paths[] = {"/temp", "/var/temp", "/usr/temp"};
+	static const char	*paths[] = {"/tmp", "/var/tmp", "/usr/tmp"};
 	const char			*temp_dir;
 	size_t				idx;
 
