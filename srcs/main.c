@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/06 13:32:56 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 02:12:25 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ void		lexer_parser(const char *line, t_alloc *alloc)
 	scmd_clean(&scmd);
 	sigs_wait_line(alloc);
 	if (!(sort_ast = parser(lst_tk)))
+	{
+		ft_lstdel(&lst_tk, del_token);
+		alloc->ret_val = 1;
 		return ;
+	}
 	ft_lstdel(&lst_tk, del_token);
 	sigs_wait_line(alloc);
 	// if (sort_ast)

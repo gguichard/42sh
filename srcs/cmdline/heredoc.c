@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 18:05:26 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 02:21:38 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*join_heredoc(char *heredoc, char *new_line)
 	char	*tab[3];
 	char	*ret;
 
-	tab[0] = heredoc;
+	tab[0] = (heredoc == NULL ? "" : heredoc);
 	tab[1] = new_line;
 	tab[2] = NULL;
 	ret = ft_join(tab, "\n");
@@ -31,40 +31,31 @@ static char	*join_heredoc(char *heredoc, char *new_line)
 	return (ret);
 }
 
-static char	*read_heredoc_line(t_cmdline *cmdline, const char *word)
-{
-	t_rstate	state;
-	char		*new_line;
-
-	new_line = create_prompt_and_read_input(cmdline, PROMPT_HEREDOC, &state);
-	if (new_line == NULL)
-		return (NULL);
-	if (state != RSTATE_END || ft_strequ(new_line, word))
-		ft_strdel(&new_line);
-	return (new_line);
-}
-
 static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 {
 	char		*heredoc;
 	char		*new_line;
+	t_rstate	state;
 
 	heredoc = ft_strdup("");
-	if (heredoc != NULL)
+	if (heredoc == NULL)
+		return (NULL);
+	setup_term(cmdline);
+	while (1)
 	{
-		setup_term(cmdline);
-		while (1)
+		new_line = create_prompt_and_read_input(cmdline, PROMPT_HEREDOC
+				, &state);
+		if (state == RSTATE_ETX)
+			ft_strdel(&heredoc);
+		if (state != RSTATE_END || ft_strequ(new_line, word))
 		{
-			new_line = read_heredoc_line(cmdline, word);
-			if (new_line == NULL)
-				break ;
-			heredoc = join_heredoc(heredoc, new_line);
 			free(new_line);
-			if (heredoc == NULL)
-				break ;
+			break ;
 		}
-		reset_term(cmdline);
+		heredoc = join_heredoc(heredoc, new_line);
+		free(new_line);
 	}
+	reset_term(cmdline);
 	return (heredoc);
 }
 
@@ -92,7 +83,7 @@ char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word)
 	word = ft_strdup(redir_word);
 	if (word == NULL)
 		return (NULL);
-	if (!inhib_only_str(word))
+	else if (!inhib_only_str(word))
 	{
 		free(word);
 		return (NULL);

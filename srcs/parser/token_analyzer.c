@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 18:05:44 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 21:02:47 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/07 02:10:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,17 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 
 static int				check_red_ope(t_list **lst_tk, int prompt_hdoc)
 {
-	char	*tok;
+	char	*heredoc;
 
 	if (ft_strequ(get_tk(*lst_tk)->token, "<<") && (*lst_tk)->next != NULL
 			&& get_tk((*lst_tk)->next)->type == TK_RED_ROPT_FILE
 			&& prompt_hdoc)
 	{
-		tok = get_tk((*lst_tk)->next)->token;
-		get_tk((*lst_tk)->next)->token = prompt_heredoc(g_cmdline, tok);
-		free(tok);
+		heredoc = prompt_heredoc(g_cmdline, get_tk((*lst_tk)->next)->token);
+		if (heredoc == NULL)
+			return (0);
+		free(get_tk((*lst_tk)->next)->token);
+		get_tk((*lst_tk)->next)->token = heredoc;
 	}
 	*lst_tk = (*lst_tk)->next;
 	if ((*lst_tk) == NULL || (get_tk(*lst_tk)->type != TK_RED_ROPT_FILE
