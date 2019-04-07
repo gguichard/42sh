@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include <limits.h>
 #include "shell.h"
 #include "vars.h"
@@ -53,9 +54,17 @@ static void				increase_shlvl(t_alloc *alloc)
 
 void					setup_def_vars(t_alloc *alloc)
 {
+	char	*ppid;
 	char	*cur_pwd;
 
 	increase_shlvl(alloc);
+	unset_var(&alloc->vars, "PPID");
+	ppid = ft_ulltoa(getppid());
+	if (ppid != NULL)
+	{
+		create_var(&alloc->vars, "PPID", ppid, 0);
+		free(ppid);
+	}
 	if (get_var(alloc->vars, "PWD") == NULL)
 	{
 		cur_pwd = getcwd(NULL, 0);
