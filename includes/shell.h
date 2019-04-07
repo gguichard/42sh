@@ -96,6 +96,8 @@ void		read_sort_descent(t_ast *sort, int active);
 void		del_ast(t_ast **lst);
 void		*del_elem_ast(t_ast **lst);
 
+char		*get_tempfile_path(t_alloc *alloc, const char *file_prefix);
+
 /*
 *********************************** GLOBALS ***********************************
 */
