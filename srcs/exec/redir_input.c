@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:47:36 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 22:52:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int			redirect_input(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 
 int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
-	int		fd;
-	int		ret;
+	int	fd;
+	int	ret;
 
 	fd = open(redirect_inf->ropt_file, O_RDONLY);
 	unlink(redirect_inf->ropt_file);
