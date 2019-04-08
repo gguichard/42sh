@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 16:41:55 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 12:56:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 20:14:19 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,34 +86,21 @@ int			update_var(t_list **lst, const char *key, const char *value)
 int			unset_var(t_list **lst, const char *key)
 {
 	t_list	*prev;
-	t_list	*curr;
+	t_list	*cur;
 	t_var	*var;
 
 	prev = NULL;
-	curr = *lst;
-	while (curr != NULL)
+	cur = *lst;
+	while (cur != NULL)
 	{
-		var = (t_var *)curr->content;
+		var = (t_var *)cur->content;
 		if (ft_strequ(var->key, key))
 		{
-			if (var->is_env != 2 && var->tmp_value != NULL)
-			{
-				free(var->value);
-				var->value = var->tmp_value;
-				var->tmp_value = NULL;
-			}
-			else
-			{
-				if (prev != NULL)
-					prev->next = curr->next;
-				else
-					*lst = curr->next;
-				ft_lstdelone(&curr, &free_var);
-			}
+			unset_var_with_var(var, lst, cur, prev);
 			return (1);
 		}
-		prev = curr;
-		curr = curr->next;
+		prev = cur;
+		cur = cur->next;
 	}
 	return (0);
 }

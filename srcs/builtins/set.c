@@ -1,13 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 21:06:40 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/05 21:06:41 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include "libft.h"
 #include <unistd.h>
 #include "shell.h"
 #include "vars.h"
 #include "builtins.h"
-
-// BUILTINS SET POSIX NORME BUT NO OPTIONS
-// JUST DISPLAY ALL VARIABLES
-// IF ARGUMENTS RETURN ERROR WITH USAGE
 
 int	builtin_set(t_ast *elem, t_alloc *alloc)
 {

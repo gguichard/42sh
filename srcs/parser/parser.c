@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 18:02:51 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/06 00:27:33 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "shell.h"
 #include "parser_lexer.h"
@@ -9,7 +21,7 @@ t_ast	*set_new_elem(void)
 	t_ast	*new;
 
 	if (!(new = (t_ast *)malloc(sizeof(t_ast))))
-		return (0);
+		return (NULL);
 	new->fd[0] = -1;
 	new->fd[1] = -1;
 	new->type = AST_NO_TYPE;
@@ -20,6 +32,7 @@ t_ast	*set_new_elem(void)
 	return (new);
 }
 
+//Verifier si type correct
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
 	static char	*ope[11] = {
@@ -46,7 +59,7 @@ void	set_type(t_ast *elem, t_list *lst_tk)
 		elem->type = AST_CMD_SEP;
 }
 
-void	init_input(t_ast *elem, int len, t_list *lst_tk)
+int		init_input(t_ast *elem, int len, t_list *lst_tk)
 {
 	t_token_type	type;
 
@@ -60,41 +73,14 @@ void	init_input(t_ast *elem, int len, t_list *lst_tk)
 	else if (type == TK_CMD)
 		elem->type = AST_CMD;
 	if (!(elem->input = (char**)malloc(sizeof(char*) * (len + 1))))
-		return ;
+		return (0);
 	if (!(elem->input[0] = ft_strdup(get_tk(lst_tk)->token)))
 	{
 		ft_memdel((void **)&(elem->input));
-		return ;
+		return (0);
 	}
 	elem->input[len] = NULL;
-}
-
-t_ast	*create_ast_branch(t_list **lst_tk)
-{
-	t_ast			*sort;
-	t_ast			*elem;
-	t_token_type	type;
-
-	sort = NULL;
-	elem = NULL;
-	while (*lst_tk)
-	{
-		type = get_tk(*lst_tk)->type;
-		if (type == TK_CMD_SEP && ft_strcmp(get_tk(*lst_tk)->token, ";") == 0)
-			break ;
-		else if (type != TK_PARAM)
-		{
-			if (!(elem = create_elem(lst_tk)))
-			{
-				del_ast(&sort);
-				return (0);
-			}
-			sort_ast(elem, &sort);
-		}
-		else
-			*lst_tk = (*lst_tk)->next;
-	}
-	return (sort);
+	return (1);
 }
 
 t_ast	*parser(t_list *lst_tk)
@@ -110,31 +96,8 @@ t_ast	*parser(t_list *lst_tk)
 		return (NULL);
 	while (lst_tk != NULL)
 	{
-		if ((branch = create_ast_branch(&lst_tk)))
-		{
-			if (!sort)
-				sort = branch;
-			if (sort->type == AST_CMD_SEP && !sort->right)
-			{
-				sort->right = branch;
-				branch->back = sort;
-			}
-			else if (lst_tk != NULL && get_tk(lst_tk)->type == TK_CMD_SEP)
-			{
-				if (!(elem = create_elem(&lst_tk)))
-				{
-					del_ast(&sort);
-					del_ast(&branch);
-					return (0);
-				}
-				elem->left = sort;
-				sort->back = elem;
-				sort = elem;
-			}
-			else if (lst_tk != NULL)
-			lst_tk = lst_tk->next;
-		}
-		else
+		branch = create_ast_branch(&lst_tk);
+		if (!link_branch(&elem, &branch, &sort, &lst_tk))
 			lst_tk = lst_tk->next;
 	}
 	return (sort);

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 15:45:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/06 16:14:00 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "struct_cmdline.h"
 
 # define INPUT_SIZE_INCR 1024
+# define VISUAL_STRING "(visual) "
 
 typedef struct s_list	t_list;
 
@@ -47,13 +48,12 @@ void		go_to_cursor_pos(t_cmdline *cmdline, t_cursor cursor);
 ** INPUT/OUTPUT.
 */
 
-void		print_line_by_line(t_cmdline *cmdline, int off_start);
-void		print_cmdline_str(t_cmdline *cmdline, const char *buffer
-		, size_t len);
-void		print_only_cmdline(t_cmdline *cmdline);
+void		print_line_by_line(t_cmdline *cmdline, const char *buffer
+		, size_t buff_size, int refresh_needed);
 
 void		update_cmdline_at_offset(t_cmdline *cmdline, char caller
 		, int is_deletion);
+
 void		print_prompt_and_cmdline(t_cmdline *cmdline);
 
 void		add_char_to_input(t_cmdline *cmdline, char c);
@@ -122,6 +122,8 @@ int			handle_paste_before_key(t_cmdline *cmdline);
 /*
 ** UTILS.
 */
+
+int			get_prompt_offset(t_cmdline *cmdline);
 
 int			get_rightmost_column(t_cmdline *cmdline, int offset);
 void		go_to_offset(t_cmdline *cmdline, int offset);

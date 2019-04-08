@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 10:15:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/07 16:56:32 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,28 @@
 
 static void		write_char_in_cmdline(t_cmdline *cmdline, char c)
 {
+	static char	*ce_tcap = NULL;
 	static char	*cr_tcap = NULL;
 	static char	*do_tcap = NULL;
 
+	if (ce_tcap == NULL)
+		ce_tcap = tgetstr("ce", NULL);
 	if (cr_tcap == NULL)
 		cr_tcap = tgetstr("cr", NULL);
 	if (do_tcap == NULL)
 		do_tcap = tgetstr("do", NULL);
+	if (c == '\n')
+		tputs(ce_tcap, 1, t_putchar);
 	write(STDOUT_FILENO, &c, 1);
-	if ((cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
+	if (c != '\n' && (cmdline->cursor.x + 1) < cmdline->winsize.ws_col)
 		cmdline->cursor.x += 1;
 	else
 	{
 		cmdline->cursor.x = 0;
 		cmdline->cursor.y += 1;
 		tputs(cr_tcap, 1, t_putchar);
-		tputs(do_tcap, 1, t_putchar);
+		if (c != '\n')
+			tputs(do_tcap, 1, t_putchar);
 	}
 	update_cmdline_at_offset(cmdline, c, 0);
 }

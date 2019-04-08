@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 17:53:02 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 11:35:06 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 20:14:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ t_var			*get_var(t_list *lst, const char *key);
 int				create_var(t_list **lst, const char *key, const char *value
 		, int is_env);
 int				update_var(t_list **lst, const char *key, const char *value);
+void			unset_var_with_var(t_var *var, t_list **lst, t_list *cur
+		, t_list *prev);
 int				unset_var(t_list **lst, const char *key);
 
 const char		*get_var_value(t_list *vars, const char *key);

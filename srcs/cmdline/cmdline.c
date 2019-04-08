@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 15:45:31 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/06 13:34:48 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 
 	state = RSTATE_END;
 	error = read_complete_command(alloc, cmdline, &state);
-	if (state == RSTATE_END)
+	if (alloc->full_input != NULL)
 		push_history_entry(&cmdline->history, alloc->full_input);
-	else if (state == RSTATE_ETX)
+	if (state == RSTATE_ETX)
 		alloc->ret_val = 1;
 	else if (state == RSTATE_EOT)
 	{

@@ -70,8 +70,6 @@ void				execute_cmd(t_alloc *alloc, char **argv, char *path_exec)
 	tab_env = get_environ_from_list(alloc->vars);
 	if (tab_env == NULL)
 		exit(127);
-	sig_set_all(SIG_DFL);
-	set_sigmask(SIG_UNBLOCK);
 	execve(path_exec, argv, tab_env);
 	ft_dprintf(STDERR_FILENO, "42sh: %s: not executable\n", argv[0]);
 	ft_strdel(&path_exec);
@@ -99,6 +97,8 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	else if (child == 0 && (opt->fork = 1) == 1)
 	{
 		update_var(&alloc->vars, "_", path_exec);
+		sig_set_all(SIG_DFL);
+		set_sigmask(SIG_UNBLOCK);
 		if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 			exit(ret);
 		execute_cmd(alloc, elem->input, path_exec);

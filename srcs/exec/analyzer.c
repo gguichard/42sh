@@ -40,9 +40,9 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		ft_dprintf(STDERR_FILENO, "42sh: ambiguous redirect\n");
 		return (1);
 	}
-	setup_redirection(&redirect_inf);
 	ret = 0;
-	if (!process_redirection(&redirect_inf, opt))
+	if (!setup_redirection(alloc, &redirect_inf)
+			|| !process_redirection(&redirect_inf, opt))
 		ret = 1;
 	clean_redirect(&redirect_inf);
 	if (ret == 0)
@@ -60,7 +60,7 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	if (ret == -1)
 		ret = exec_input(alloc, elem, opt);
 	update_var(&alloc->vars, "_"
-		, elem->input[ft_strtab_count(elem->input) - 1]);
+			, elem->input[ft_strtab_count(elem->input) - 1]);
 	return (ret);
 }
 
