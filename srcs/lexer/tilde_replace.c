@@ -6,10 +6,11 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 00:01:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:36:19 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <pwd.h>
 #include "libft.h"
 #include "shell.h"
@@ -17,7 +18,7 @@
 #include "parser_lexer.h"
 #include "vars.h"
 
-static char	*get_path_tild(const char *log_search)
+static char	*get_path_tilde(const char *log_search)
 {
 	size_t			i;
 	char			*login;
@@ -56,7 +57,7 @@ int			expand_home_shortcut(char **s, t_list *vars)
 				|| (*s)[2] == ':'))
 		dir = ft_strjoin(get_var_value(vars, "PWD"), (*s) + 2);
 	else if ((*s)[0] == '~' && ft_isalnum(((*s)[1])))
-		dir = get_path_tild(&((*s)[1]));
+		dir = get_path_tilde(&((*s)[1]));
 	if (dir)
 	{
 		ft_memdel((void **)&(*s));
