@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:28:39 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 13:28:40 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 15:15:38 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ static void	refresh_state_job(t_job *job, int *print, int *stop_print)
 	ret = 0;
 	status = 0;
 	if (job->state < SIG)
-	{
 		ret = waitpid(job->pid, &status, WNOHANG | WUNTRACED | WCONTINUED);
-	}
 	if (job->state == RUNNING_BG && ret > 0)
 	{
 		ret_status(status, job->pid, job, 0);

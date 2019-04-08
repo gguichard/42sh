@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:28:20 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 13:28:21 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 15:17:54 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ static char	*sig_str_2(int signal)
 	else if (signal == SIGTERM)
 		return ("Terminated: 15");
 	else if (signal == SIGXCPU)
-			return ("Cputime limit exceeded: 24");
+		return ("Cputime limit exceeded: 24");
 	else if (signal == SIGXFSZ)
-			return ("Filesize limit exceeded: 25");
+		return ("Filesize limit exceeded: 25");
 	else if (signal == SIGVTALRM)
-			return ("Virtual timer expired: 26");
+		return ("Virtual timer expired: 26");
 	else if (signal == SIGPROF)
-			return ("Profiling timer expired: 27");
+		return ("Profiling timer expired: 27");
 	else if (signal == SIGUSR1)
-			return ("User defined signal 1: 30");
+		return ("User defined signal 1: 30");
 	else if (signal == SIGUSR2)
-			return ("User defined signal 2: 31");
+		return ("User defined signal 2: 31");
 	return ("Undefined Signal");
 }
 
