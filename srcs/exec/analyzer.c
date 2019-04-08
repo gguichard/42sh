@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:24:31 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:35:54 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,6 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	sigs_wait_line(alloc);
 	if (elem == NULL || opt->sigint || g_sig == SIGINT)
 	{
-		if (g_sig == SIGINT)
-			g_sig = 0;
 		if (elem == NULL && opt->red_save != NULL && !opt->from_builtin)
 			use_rc_on_shell(opt);
 		return (0);
