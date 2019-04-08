@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   replace_quote.c                                    :+:      :+:    :+:   */
+/*   tilde_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 14:16:37 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:01:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pwd.h>
 #include "libft.h"
 #include "shell.h"
+#include "str_cmd_inf.h"
 #include "parser_lexer.h"
 #include "vars.h"
-#include "builtins.h"
-#include "pwd.h"
-#include "str_cmd_inf.h"
 
-char	*get_path_tild(const char *log_search)
+static char	*get_path_tild(const char *log_search)
 {
 	size_t			i;
 	char			*login;
@@ -27,7 +26,7 @@ char	*get_path_tild(const char *log_search)
 	i = 0;
 	login = NULL;
 	pass = NULL;
-	while (log_search[i] && log_search[i] != '/')
+	while (log_search[i] && log_search[i] != '/' && log_search[i] != ':')
 		i += 1;
 	login = ft_strsub(log_search, 0, i);
 	pass = getpwnam(login);
@@ -41,7 +40,7 @@ char	*get_path_tild(const char *log_search)
 	return (NULL);
 }
 
-int		expand_home_shortcut(char **s, t_list *vars)
+int			expand_home_shortcut(char **s, t_list *vars)
 {
 	char	*dir;
 	char	*tmp;
@@ -51,10 +50,10 @@ int		expand_home_shortcut(char **s, t_list *vars)
 	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0' || (*s)[1] == ':'))
 		dir = ft_strjoin(get_home_directory(vars), (*s) + 1);
 	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'
-			|| (*s)[2] == ':'))
+				|| (*s)[2] == ':'))
 		dir = ft_strjoin(get_var_value(vars, "OLDPWD"), (*s) + 2);
 	else if (ft_strnequ("~+", *s, 2) && ((*s)[2] == '/' || (*s)[2] == '\0'
-			|| (*s)[2] == ':'))
+				|| (*s)[2] == ':'))
 		dir = ft_strjoin(get_var_value(vars, "PWD"), (*s) + 2);
 	else if ((*s)[0] == '~' && ft_isalnum(((*s)[1])))
 		dir = get_path_tild(&((*s)[1]));
@@ -67,7 +66,7 @@ int		expand_home_shortcut(char **s, t_list *vars)
 	return (0);
 }
 
-void	check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
+void		check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 		, size_t *pos)
 {
 	size_t	len;
