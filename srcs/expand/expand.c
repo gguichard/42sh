@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:48:21 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 17:34:07 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:43:49 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ static int	subcmd_expand(t_alloc *alloc, char **input, size_t *pos)
 		was_in_subcmd = (scmd_inf.sub_str_cmd != NULL
 				&& scmd_inf.sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD);
 		len += scmd_move_to_next_char(&scmd_inf);
-		if (was_in_subcmd
-				&& (scmd_inf.sub_str_cmd == NULL
-					|| scmd_inf.sub_str_cmd->cur_str_cmd_type
-					!= SCMD_TYPE_SUBCMD))
+		if (was_in_subcmd && (!scmd_inf.sub_str_cmd
+				|| scmd_inf.sub_str_cmd->cur_str_cmd_type != SCMD_TYPE_SUBCMD))
 			break ;
 	}
 	scmd_clean(&scmd_inf);

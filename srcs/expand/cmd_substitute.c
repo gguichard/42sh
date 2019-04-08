@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:35:09 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 17:24:43 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:42:10 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ static char	*read_subcmd_file(int fd)
 	(g_sig == SIGINT) ? ft_strdel(&output) : 0;
 	if (output == NULL)
 		return (NULL);
-	/*len = ft_strlen(output);
+	len = ft_strlen(output);
 	while (len > 0 && output[--len] == '\n')
-		output[len] = '\0';*/
+		output[len] = '\0';
 	return (output);
 }
 
