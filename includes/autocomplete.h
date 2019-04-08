@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:02:04 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 14:05:57 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/08 15:48:57 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include "shell.h"
 # include "str_cmd_inf.h"
 # include "token_inf.h"
+
+typedef struct s_hashtable	t_hashtable;
+typedef struct s_builtin	t_builtin;
 
 typedef enum		e_dir_type
 {
