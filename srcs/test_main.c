@@ -262,6 +262,22 @@ void test_inhib_expand()
 	test_this_inhib_expand("\'$TROIS\'MOTS", (char*[]){"$TROISMOTS", NULL});
 	test_this_inhib_expand("\\$TROIS\\MOTS", (char*[]){"$TROISMOTS", NULL});
 	test_this_inhib_expand("$TROIS\\MOTS", (char*[]){"_3_MOTS", NULL});
+	//inhib + expand avance
+	test_this_inhib_expand("bonj\"\\", (char*[]){"bonj", NULL});
+	test_this_inhib_expand("bonj\"our\\", (char*[]){"bonjour", NULL});
+	test_this_inhib_expand("bonj\"our\'", (char*[]){"bonjour\'", NULL});
+	test_this_inhib_expand("bonj\"our\'\\", (char*[]){"bonjour\'", NULL});
+	test_this_inhib_expand("bonj\"our\\\'", (char*[]){"bonjour\\\'", NULL});
+	test_this_inhib_expand("bonj\'\\", (char*[]){"bonj\\", NULL});
+	test_this_inhib_expand("bonj\'our\\", (char*[]){"bonjour\\", NULL});
+	test_this_inhib_expand("bonj\'our\"", (char*[]){"bonjour\"", NULL});
+	test_this_inhib_expand("bonj\'our\"\\", (char*[]){"bonjour\"\\", NULL});
+	test_this_inhib_expand("bonj\'our\\\"", (char*[]){"bonjour\\\"", NULL});
+	test_this_inhib_expand("\"$DEUXMOTS\"\'ok", (char*[]){"DEUX MOTSok", NULL});
+	test_this_inhib_expand("\"$DEUXMOTS\"\"\'ok", (char*[]){"DEUX MOTS\'ok", NULL});
+	test_this_inhib_expand("$DEUXMOTS\"\'ok", (char*[]){"DEUX", "MOTS\'ok", NULL});
+	test_this_inhib_expand("$DEUXMOTS\'ok", (char*[]){"DEUX", "MOTSok", NULL});
+	test_this_inhib_expand("$DEUXMOTS\"ok", (char*[]){"DEUX", "MOTSok", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
