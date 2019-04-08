@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 23:34:29 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 11:45:15 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		return (NULL);
 	scmd_clean(str_cmd);
 	free(str_cmd);
-	if (!array)
-	{
-		array = (char **)malloc((sizeof(char *) * 1));
+	if (!array && (array = (char **)malloc((sizeof(char *) * 1))))
 		array[0] = NULL;
-	}
 	return (array);
 }
 

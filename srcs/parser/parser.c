@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 18:02:51 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/06 00:27:33 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 11:37:07 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ t_ast	*set_new_elem(void)
 	return (new);
 }
 
-//Verifier si type correct
 void	set_type(t_ast *elem, t_list *lst_tk)
 {
 	static char	*ope[11] = {
