@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:52 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 15:27:18 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 15:28:35 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void		execute_cmd(t_alloc *alloc, char **argv, char *path_exec)
 {
 	char	**tab_env;
 
-	sig_set_all(SIG_DFL);
-	set_sigmask(SIG_UNBLOCK);
 	tab_env = get_environ_from_list(alloc->vars);
 	if (tab_env == NULL)
 		exit(127);
