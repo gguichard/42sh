@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 11:43:02 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 11:43:46 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	shell_loop(t_alloc *alloc)
 		if (alloc->full_input != NULL)
 		{
 			set_sigmask(SIG_BLOCK);
-			lexer_parser(alloc->full_input, alloc);
+			lexer_parser(alloc->full_input, alloc, 0);
 			ft_strdel(&alloc->full_input);
 			set_signals_handlers();
 		}
