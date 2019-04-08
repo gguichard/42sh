@@ -177,7 +177,8 @@ $(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
-$(PATH_INHIB)/inhibitor_tools.c
+$(PATH_INHIB)/inhibitor_tools.c \
+$(PATH_INHIB)/inhibitor_update_pos.c
 
 OBJ_DIR		=	.obj
 OBJ			=	$(SRC:.c=.o)
