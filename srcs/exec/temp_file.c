@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/07 18:57:10 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:56:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 09:58:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ static const char	*get_temp_dir(t_list *vars)
 	const char			*temp_dir;
 	size_t				idx;
 
-	temp_dir = get_var_value(vars, "TMPDIR");
-	if (check_dir_rights(temp_dir, W_OK) != ERRC_NOERROR)
+	temp_dir = get_var_value_or_null(vars, "TMPDIR");
+	if (temp_dir == NULL || check_dir_rights(temp_dir, W_OK) != ERRC_NOERROR)
 	{
 		temp_dir = NULL;
 		idx = 0;
-		while (temp_dir == NULL && idx < sizeof(paths))
+		while (temp_dir == NULL && idx < 3)
 		{
 			if (check_dir_rights(paths[idx], W_OK) == ERRC_NOERROR)
 				temp_dir = paths[idx];
@@ -56,14 +56,15 @@ static int			constuct_tempfile_path(char *buffer, const char *temp_dir
 	temp_dir_len = ft_strlen(temp_dir);
 	file_prefix_len = ft_strlen(file_prefix);
 	file_id_len = ft_strlen(file_id);
-	if ((temp_dir_len + file_id_len + file_prefix_len) > PATH_MAX)
+	if ((temp_dir_len + file_id_len + file_prefix_len + 1) > PATH_MAX)
 	{
 		free(file_id);
 		return (0);
 	}
 	ft_memcpy(buffer, temp_dir, temp_dir_len);
-	ft_memcpy(buffer + temp_dir_len, file_prefix, file_prefix_len);
-	ft_memcpy(buffer + temp_dir_len + file_prefix_len, file_id
+	buffer[temp_dir_len] = '/';
+	ft_memcpy(buffer + temp_dir_len + 1, file_prefix, file_prefix_len);
+	ft_memcpy(buffer + temp_dir_len + file_prefix_len + 1, file_id
 			, file_id_len + 1);
 	free(file_id);
 	return (1);
@@ -92,7 +93,7 @@ char				*get_tempfile_path(t_alloc *alloc, const char *file_prefix)
 			return (ft_memdel((void **)&tempfile_path));
 		fd = open(tempfile_path, O_RDONLY);
 		if (fd == -1)
-			break;
+			break ;
 		close(fd);
 	}
 	return (tempfile_path);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hash.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 13:29:45 by fwerner           #+#    #+#             */
+/*   Updated: 2019/04/08 13:29:46 by fwerner          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include "options.h"
@@ -83,11 +95,10 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_list *vars
 			}
 			free(exec_path);
 		}
-		else
+		else if ((has_error = 1))
 		{
 			ft_dprintf(STDERR_FILENO, "42sh: hash: %s: not found\n"
 					, *exec_name_tab);
-			has_error = 1;
 		}
 		++exec_name_tab;
 	}
