@@ -104,7 +104,9 @@ $(PATH_PATH)/join_path.c \
 $(PATH_PATH)/search_in_path.c \
 $(PATH_TOKEN)/token_inf.c \
 $(PATH_TOKEN)/split_cmd_token.c \
+$(PATH_TOKEN)/split_cmd_token_internal.c \
 $(PATH_TOKEN)/split_cmd_token_add.c \
+$(PATH_TOKEN)/split_cmd_token_add_alias_utils.c \
 $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/create_prompt.c \

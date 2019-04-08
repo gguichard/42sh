@@ -41,6 +41,13 @@ int				cur_token_is_number(t_split_cmd_inf *sp_cmd);
 
 int				is_a_spe_char(char c);
 
+t_list			*internal_split_cmd_token(t_split_cmd_inf *sp_cmd);
+
+/*
+** Retourne 1 si un expand a eu lieu.
+*/
+int				expand_alias(t_split_cmd_inf *sp_cmd);
+
 int				add_cur_token_to_lst(t_split_cmd_inf *sp_cmd);
 
 int				add_whole_token_to_lst(t_split_cmd_inf *sp_cmd
