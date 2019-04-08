@@ -83,11 +83,10 @@ static int	add_execs_to_hashtable(char **exec_name_tab, t_list *vars
 			}
 			free(exec_path);
 		}
-		else
+		else if ((has_error = 1))
 		{
 			ft_dprintf(STDERR_FILENO, "42sh: hash: %s: not found\n"
 					, *exec_name_tab);
-			has_error = 1;
 		}
 		++exec_name_tab;
 	}
