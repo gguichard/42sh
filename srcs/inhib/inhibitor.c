@@ -45,7 +45,7 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 			remove_escaped_char(str_cmd, &(array[index]), pos, 1);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			if (!expand(&(array[index]), alloc, pos))
+			if (!expand(&(array[index]), alloc, pos, str_cmd))
 				return (0);
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index(str_cmd);

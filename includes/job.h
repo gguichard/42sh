@@ -14,7 +14,8 @@ typedef enum			e_job_state
 	STOPPED,
 	STOPPED_PENDING,
 	SIG,
-	DONE
+	DONE,
+	SUB_CMD
 }						t_job_state;
 
 

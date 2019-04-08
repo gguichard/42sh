@@ -32,7 +32,7 @@ size_t	get_pos_in_array(char **array)
 void	update_pos_index(t_str_cmd_inf *str_cmd)
 {
 	if (scmd_cur_char(str_cmd) == '?' || scmd_cur_char(str_cmd) == '!'
-			|| scmd_cur_char(str_cmd) == '$')
+			|| scmd_cur_char(str_cmd) == '$' || scmd_cur_char(str_cmd) == ')')
 	{
 		scmd_move_to_next_char(str_cmd);
 		return ;
