@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:50:15 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 18:01:21 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:15:30 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos
 void	remove_last_char(t_str_cmd_inf *str_cmd, size_t *pos, char **input);
 void	remove_last_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos
 	, size_t index);
+int		remove_only_escaped_newline(char **str);
 int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array
 	, const char *str);
 int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos);
