@@ -7,17 +7,6 @@
 #include "token_inf.h"
 #include "autocomplete.h"
 
-//TODO
-//TODO GERER LE BACKSLASH EN FIN DE COMMANDE ?!@#$%^&*!?@>$%<^>&$#>&*!@?
-//TODO
-//TODO GERER LES INIBITEURS DE CHAR AVANT D'APPELER AUTOCOMPLETE
-//TODO
-//TODO EXPAND LES ENV VAR AVANT DE TENTER L'AUTOCOMPLETION (SAUF SI VAR ACTUELLE)
-//TODO
-//TODO GERER LE MULTILIGNE GENRE ECH\<newline>O LLLLLLLLLLLOOOOOOOOOOOOOLLLLLLLLLL
-//TODO ET AUSSI LE « LS "<newline><tab> »
-//TODO
-
 static void				fill_cur_tk_with_new_token(t_token_inf *cur_tk
 		, t_str_cmd_inf *scmd, t_alloc *alloc)
 {
@@ -178,9 +167,6 @@ static const char		*find_last_var_start(const char *str
 	return (last_var_start);
 }
 
-//NE PAS GERER LES INIHIENVBETIRS ICI
-//MAIS IHIBER CE QUI A APRES L'ASSIGN QUAND MEME APRES, EN PRENANT EN COMPOTE
-//LES IBHINNFHETEIX PRECEDENTS
 static const char		*find_last_assign_start(const char *str)
 {
 	size_t		idx;
@@ -260,23 +246,14 @@ static char				*inhibe_this_str_for_autocomplete(const char *str
 	return (new_str);
 }
 
-static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
-		, t_alloc *alloc)
+static t_ac_suff_inf	*autocomplete_cmdline_not_var_assign(t_token_inf *cur_tk
+		, t_alloc *alloc, const char *real_start)
 {
-	const char		*real_start;
-	const char		*tmp_start;
 	char			*inhibed_str;
+	const char		*tmp_start;
 	t_ac_suff_inf	*acs_inf;
 	int				has_several_words;
 
-	real_start = (cur_tk->token == NULL ? "" : cur_tk->token);
-	tmp_start = NULL;
-	if (cur_tk->type != TK_RED_ROPT_FILE)
-	{
-		//TODO MIEUX GERER L'INHIB A CAUSE DE CA PSK IL PEUT Y AVOIR DES TOKENS D'IHNIB PLUS TOT
-		if ((tmp_start = find_last_assign_start(real_start)) != NULL)
-			real_start = tmp_start;
-	}
 	if ((tmp_start = find_last_home_user(real_start)) != NULL)
 	{
 		inhibed_str = inhibe_this_str_for_autocomplete(tmp_start, alloc
@@ -295,6 +272,22 @@ static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
 	}
 	free(inhibed_str);
 	return (acs_inf);
+}
+
+static t_ac_suff_inf	*autocomplete_cmdline_not_var(t_token_inf *cur_tk
+		, t_alloc *alloc)
+{
+	const char		*real_start;
+	const char		*tmp_start;
+
+	real_start = (cur_tk->token == NULL ? "" : cur_tk->token);
+	tmp_start = NULL;
+	if (cur_tk->type != TK_RED_ROPT_FILE)
+	{
+		if ((tmp_start = find_last_assign_start(real_start)) != NULL)
+			real_start = tmp_start;
+	}
+	return (autocomplete_cmdline_not_var_assign(cur_tk, alloc, real_start));
 }
 
 t_ac_suff_inf			*autocomplete_cmdline(t_str_cmd_inf *scmd
