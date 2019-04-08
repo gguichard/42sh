@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 16:26:52 by gguichar          #+#    #+#             */
+/*   Updated: 2019/04/08 16:30:30 by gguichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SHELL_H
 # define SHELL_H
 
@@ -31,6 +43,8 @@
 ********************************** STRUCTURES **********************************
 */
 
+typedef struct s_alloc	t_alloc;
+
 typedef struct			s_ast
 {
 	int					type;
@@ -41,17 +55,13 @@ typedef struct			s_ast
 	struct s_ast		*right;
 }						t_ast;
 
-struct					s_alloc;
-
-typedef int				(*t_built_fun)(t_ast *, struct s_alloc *);
-
 typedef struct			s_builtin
 {
 	const char			*name;
-	t_built_fun			built_fun;
+	int					(*built_fun)(t_ast *, t_alloc *);
 }						t_builtin;
 
-typedef struct			s_alloc
+struct					s_alloc
 {
 	int					argc;
 	char				**argv;
@@ -66,35 +76,26 @@ typedef struct			s_alloc
 	const t_builtin		*builtins;
 	t_hashtable			*exectable;
 	t_hashtable			*aliastable;
-}						t_alloc;
-
-/*
-*********************************** CMDLINE ************************************
-*/
-
-int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
-char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
-char		*get_history_file_path(t_alloc *alloc);
-int			load_history_file_entries(t_alloc *alloc, t_history *history);
-int			save_history_entries(t_alloc *alloc, t_history *history);
-void		del_history_entries(t_history *history);
+};
 
 /*
 ************************************ TOOLS *************************************
 */
 
-const char	*get_home_directory(t_list *vars);
+const char				*get_home_directory(t_list *vars);
 
-int			setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
+int						setup_alloc(t_alloc *alloc, int argc, char **argv
+		, char **environ);
 
-void		del_alloc(t_alloc *alloc);
-void		del_ast(t_ast **lst);
-void		*del_elem_ast(t_ast **lst);
+void					del_alloc(t_alloc *alloc);
+void					del_ast(t_ast **lst);
+void					*del_elem_ast(t_ast **lst);
 
-char		*get_tempfile_path(t_alloc *alloc, const char *file_prefix);
+char					*get_tempfile_path(t_alloc *alloc
+		, const char *file_prefix);
 
 /*
-*********************************** GLOBALS ***********************************
+********************************** GLOBALES ***********************************
 */
 
 t_list					*g_jobs;
