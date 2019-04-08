@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inhibitor_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 17:49:12 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/05 17:58:40 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
@@ -53,4 +65,50 @@ int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
 	else if (str_cmd->is_in_dbquote)
 		return (inhib_in_db(str_cmd, pos, array, alloc));
 	return (1);
+}
+
+void	delete_line_tab(char ***array, int i)
+{
+	size_t	len;
+
+	len = ft_strtab_count(*array);
+	if (len == 1)
+		*array = ft_strtab_free(*array);
+	else if (len - 1 == (size_t)i)
+		ft_strdel(&((*array)[i]));
+	else
+	{
+		ft_strdel(&((*array)[i]));
+		i += 1;
+		while ((*array)[i])
+		{
+			(*array)[i - 1] = (*array)[i];
+			i += 1;
+		}
+		(*array)[i - 1] = (*array)[i];
+	}
+}
+
+void	do_only_inhib(t_str_cmd_inf *str_cmd, char **str, size_t *pos)
+{
+	if (!scmd_cur_char_is_escaped(str_cmd) && !str_cmd->is_in_dbquote
+			&& !str_cmd->is_in_quote && (scmd_cur_char(str_cmd) == '"'
+			|| scmd_cur_char(str_cmd) == '\''))
+	{
+		str_cmd->pos += 1;
+		*pos += 1;
+		remove_escaped_char(str_cmd, str, pos, 1);
+	}
+	else if (scmd_cur_char_is_escaped(str_cmd) && ((str_cmd->is_in_dbquote
+			&& scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 1)
+			|| (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)))
+		remove_escaped_char(str_cmd, str, pos, 1);
+	else if ((str_cmd->is_in_quote && (*str)[*pos] == '\'')
+			|| (str_cmd->is_in_dbquote && (*str)[*pos] == '"'))
+	{
+		*pos += scmd_move_to_next_char(str_cmd);
+		remove_escaped_char(str_cmd, str, pos, 0);
+	}
+	else
+		*pos += scmd_move_to_next_char(str_cmd);
 }

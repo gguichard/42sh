@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
+/*   Updated: 2019/04/08 11:43:02 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -12,7 +24,7 @@
 #include "job.h"
 #include "signals.h"
 
-void	lexer_parser(const char *line, t_alloc *alloc, int fork)
+void		lexer_parser(const char *line, t_alloc *alloc, int fork)
 {
 	t_str_cmd_inf	scmd;
 	t_list			*lst_tk;
@@ -26,7 +38,11 @@ void	lexer_parser(const char *line, t_alloc *alloc, int fork)
 	scmd_clean(&scmd);
 	sigs_wait_line(alloc);
 	if (!(sort_ast = parser(lst_tk)))
+	{
+		ft_lstdel(&lst_tk, del_token);
+		alloc->ret_val = 1;
 		return ;
+	}
 	ft_lstdel(&lst_tk, del_token);
 	sigs_wait_line(alloc);
 	// if (sort_ast)
@@ -39,7 +55,25 @@ void	lexer_parser(const char *line, t_alloc *alloc, int fork)
 	del_ast(&sort_ast);
 }
 
-int		main(int argc, char **argv, char **environ)
+static void	shell_loop(t_alloc *alloc)
+{
+	while (1)
+	{
+		refresh_jobs();
+		setup_term(&alloc->cmdline);
+		read_cmdline(alloc, &alloc->cmdline);
+		reset_term(&alloc->cmdline);
+		if (alloc->full_input != NULL)
+		{
+			set_sigmask(SIG_BLOCK);
+			lexer_parser(alloc->full_input, alloc);
+			ft_strdel(&alloc->full_input);
+			set_signals_handlers();
+		}
+	}
+}
+
+int			main(int argc, char **argv, char **environ)
 {
 	t_alloc	alloc;
 
@@ -54,20 +88,7 @@ int		main(int argc, char **argv, char **environ)
 	{
 		source_rc_file(&alloc);
 		load_history_file_entries(&alloc, &alloc.cmdline.history);
-		while (1)
-		{
-			refresh_jobs();
-			setup_term(&alloc.cmdline);
-			read_cmdline(&alloc, &alloc.cmdline);
-			reset_term(&alloc.cmdline);
-			if (alloc.full_input != NULL)
-			{
-				set_sigmask(SIG_BLOCK);
-				lexer_parser(alloc.full_input, &alloc, 0);
-				ft_strdel(&alloc.full_input);
-				set_signals_handlers();
-			}
-		}
+		shell_loop(&alloc);
 	}
 	terminate_all_jobs(SIGTERM);
 	del_alloc(&alloc);

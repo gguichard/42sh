@@ -56,6 +56,18 @@ static char		*shorten_home(char *str, int only_last_dir, t_list *vars)
 	return (str);
 }
 
+static char		*get_login(t_list *vars)
+{
+	const char	*value;
+
+	value = get_var_value_or_null(vars, "LOGNAME");
+	if (value == NULL)
+		value = getlogin();
+	if (value == NULL)
+		return (NULL);
+	return (ft_strdup(value));
+}
+
 static char		*get_replacement(char opt, t_list *vars)
 {
 	if (opt == 'a')
@@ -67,7 +79,7 @@ static char		*get_replacement(char opt, t_list *vars)
 	else if (opt == 'h')
 		return (get_hostname(1));
 	else if (opt == 'u')
-		return (ft_strdup(getlogin()));
+		return (get_login(vars));
 	else if (opt == 'W')
 		return (shorten_home(ft_strdup(get_var_value(vars, "PWD")), 1, vars));
 	else if (opt == 'w')

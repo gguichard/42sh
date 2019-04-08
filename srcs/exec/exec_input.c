@@ -99,6 +99,8 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		sig_set_all(SIG_DFL);
 		set_sigmask(SIG_UNBLOCK);
 		update_var(&alloc->vars, "_", path_exec);
+		sig_set_all(SIG_DFL);
+		set_sigmask(SIG_UNBLOCK);
 		if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 			exit(ret);
 		execute_cmd(alloc, elem->input, path_exec);

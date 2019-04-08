@@ -65,6 +65,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos, t_str_cmd_inf *str_cmd)
 
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
+	*pos = ft_strlen(*input) - ft_strlen(exp);
 	if (exp[1] == '(')
 		return (sub_cmd_expand(alloc, input, pos, str_cmd));
 	else if (!expand_var(&str, alloc, *input + *pos, &len))
@@ -77,7 +78,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos, t_str_cmd_inf *str_cmd)
 		*pos += 1;
 		return (1);
 	}
-	else
+	else if (str)
 		ft_strreplace_inside(input, *pos, len + 1, str);
 	if (str)
 	{

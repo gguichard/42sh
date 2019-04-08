@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_tools.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 23:41:38 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/06 00:33:02 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "shell.h"
 #include "parser_lexer.h"
@@ -20,25 +32,14 @@ int		check_expand_syntax(const char *str)
 	if (str[i] == '}')
 		return (0);
 	if (ft_isdigit(str[i]))
-	{
 		while (ft_isdigit(str[i]))
 			i += 1;
-		if (str[i] != '}')
-			return (0);
-	}
 	else if (str[i] == '!' || str[i] == '?' || str[i] == '$')
-	{
-		if (str[i + 1] != '}')
-			return (0);
-	}
+			return (str[i + 1] != '}') ? 0 : 1;
 	else
-	{
 		while (ft_isalnum(str[i]) || str[i] == '_')
 			i += 1;
-		if (str[i] != '}')
-			return (0);
-	}
-	return (1);
+	return ((str[i] != '}') ? 0 : 1);
 }
 
 void	insert_var_input(char *str, char **input, int type, size_t start)
@@ -92,8 +93,8 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 	return (value);
 }
 
-int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
-		t_str_cmd_inf *str_cmd)
+int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array
+	, t_str_cmd_inf *str_cmd)
 {
 	size_t	save;
 	size_t	index;
@@ -110,18 +111,13 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array,
 				&& !ft_isspace((*array)[index][save + len])
 				&& save + len <= *pos_array)
 			len += 1;
-		if (len + save != *pos_array)
-		{
-			if (!(expand_var_to_tab(array, len, pos_array, save)))
-				return (0);
-		}
-
+		if (len + save != *pos_array
+				&& !(expand_var_to_tab(array, len, pos_array, save)))
+			return (0);
 	}
-	else if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote)
-	{
-		if (ft_strequ((*array)[*pos_array], "") == 1)
-			delete_line_tab(array, *pos_array);
-	}
+	else if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote
+			&& ft_strequ((*array)[*pos_array], "") == 1)
+		delete_line_tab(array, *pos_array);
 	scmd_move_to_next_char(str_cmd);
 	update_pos_index(str_cmd);
 	return (1);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inhibitor_tools.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 17:44:38 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/05 17:48:43 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
@@ -35,7 +47,6 @@ void	update_pos_index(t_str_cmd_inf *str_cmd)
 	}
 	else if (scmd_cur_char(str_cmd) == '{')
 	{
-
 		while (scmd_cur_char(str_cmd) && scmd_cur_char(str_cmd) != '}')
 			scmd_move_to_next_char(str_cmd);
 		scmd_move_to_next_char(str_cmd);
@@ -52,16 +63,16 @@ char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
 	while (x < *i)
 	{
 		if (!(modify[x] = ft_strdup(elem->input[x])))
-			ft_exit_malloc();
+			return (ft_strtab_free(modify));
 		x += 1;
 	}
 	while (new[y])
 		if (!(modify[x++] = ft_strdup(new[y++])))
-			ft_exit_malloc();
+			return (ft_strtab_free(modify));
 	y = *i + 1;
 	while (elem->input[y])
 		if (!(modify[x++] = ft_strdup(elem->input[y++])))
-			ft_exit_malloc();
+			return (ft_strtab_free(modify));
 	modify[x] = NULL;
 	return (modify);
 }
@@ -76,7 +87,11 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 	len_new = ft_strtab_count(new);
 	len_input = ft_strtab_count(elem->input);
 	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
-		ft_exit_malloc();
+	{
+		ft_strtab_free(elem->input);
+		ft_strtab_free(new);
+		return ;
+	}
 	modify = insert_new_tab(modify, i, new, elem);
 	ft_strtab_free(elem->input);
 	ft_strtab_free(new);
@@ -86,8 +101,12 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 
 int		error_inhib_expand(t_str_cmd_inf *str_cmd, char **array)
 {
-	scmd_clean(str_cmd);
-	free(str_cmd);
-	ft_strtab_free(array);
+	if (str_cmd)
+	{
+		scmd_clean(str_cmd);
+		free(str_cmd);
+	}
+	if (array)
+		ft_strtab_free(array);
 	return (0);
 }

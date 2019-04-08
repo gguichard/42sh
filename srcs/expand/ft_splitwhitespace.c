@@ -1,5 +1,16 @@
-#include <stdlib.h>
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_splitwhitespace.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 23:44:07 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/08 11:42:30 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "shell.h"
 #include "expand.h"
 
 static size_t	ft_word_len(char const *s)

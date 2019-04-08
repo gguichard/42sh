@@ -6,13 +6,14 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/14 11:27:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 22:41:12 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/05 23:43:20 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_CMDLINE_H
 # define STRUCT_CMDLINE_H
 
+# include <string.h>
 # include <termios.h>
 # include <sys/ioctl.h>
 # include "history.h"
@@ -53,23 +54,23 @@ typedef struct		s_cursor
 struct				s_input
 {
 	char			buffer[8192];
-	int				capacity;
-	int				size;
-	int				offset;
+	size_t			size;
+	size_t			offset;
+	size_t			capacity;
 	t_rstate		reading;
 };
 
 typedef struct		s_seq_keys
 {
 	char			buffer[128];
-	int				size;
-	int				offset;
+	size_t			size;
+	size_t			offset;
 }					t_seq_keys;
 
 struct				s_prompt
 {
 	const char		*str;
-	int				offset;
+	size_t			offset;
 };
 
 struct				s_visual
