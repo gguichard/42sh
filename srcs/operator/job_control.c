@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   job_control.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 13:29:03 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 13:29:03 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include "shell.h"
 #include "execution.h"
@@ -66,10 +78,8 @@ int			job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		else
 			break ;
 	}
+	opt->wait_hang = 0;
 	if (elem->right)
-	{
-		opt->wait_hang = 0;
 		return (analyzer(alloc, elem->right, opt));
-	}
 	return (0);
 }

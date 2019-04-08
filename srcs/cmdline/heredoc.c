@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 02:21:38 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 12:02:49 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	expand_heredoc(t_alloc *alloc, char **heredoc)
 	while ((tmp = ft_strchr(*heredoc + offset, '$')) != NULL)
 	{
 		offset = (size_t)(tmp - *heredoc);
-		if (!expand(heredoc, alloc, &offset))
+		if (!expand(heredoc, alloc, &offset, NULL))
 			return (0);
 	}
 	return (1);
