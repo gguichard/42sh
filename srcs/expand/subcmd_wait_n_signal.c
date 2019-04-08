@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:41:21 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 17:10:20 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 17:35:16 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static void	del_subshell_job(t_list *sub_shell)
 		prev = prev->next;
 	if (prev == sub_shell)
 		g_jobs = NULL;
-	ft_memdel((void **)&(tmp->content));
-	ft_memdel((void **)&tmp);
+	ft_memdel((void **)&(sub_shell->content));
+	ft_memdel((void **)&sub_shell);
 	if (g_jobs)
 		prev->next = NULL;
 }
