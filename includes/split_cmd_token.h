@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:03:28 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 14:03:29 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 00:13:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int				add_whole_token_to_lst(t_split_cmd_inf *sp_cmd
 		, const char *token_str, t_token_type token_type);
 
 t_list			*split_cmd_token_with_lst(t_str_cmd_inf *str_cmd_inf
-		, t_hashtable *aliastable, t_list *cur_forbidden_aliases,
-		size_t cur_alias_recur_lvl);
+		, t_hashtable *aliastable, t_list *cur_forbidden_aliases
+		, size_t cur_alias_recur_lvl);
 
 t_list			*split_cmd_token_without_last_alias(t_str_cmd_inf *str_cmd_inf
 		, t_hashtable *aliastable);

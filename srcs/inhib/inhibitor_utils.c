@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:49:12 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 17:33:55 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:14:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 
-int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array,
-		const char *str)
+int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array
+		, const char *str)
 {
 	if (!(*array = (char **)malloc(sizeof(char *) * 2)))
 		return (0);
@@ -59,8 +59,8 @@ int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos)
 	return (1);
 }
 
-int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array,
-		size_t *pos, t_alloc *alloc)
+int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array
+		, size_t *pos, t_alloc *alloc)
 {
 	if (str_cmd->is_in_quote)
 		return (go_to_end_quote(str_cmd, array, pos));
