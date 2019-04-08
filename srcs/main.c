@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:17:03 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 16:17:52 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 	sigs_wait_line(alloc);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
 	exec_opt.fork = fork;
-	ret = analyzer(alloc, sort_ast, &exec_opt);
+	ret = analyzer(alloc, alloc->ast, &exec_opt);
 	del_ast(&alloc->ast);
 	return (ret);
 }
