@@ -46,6 +46,43 @@ typedef struct		s_ac_suff_inf
 }					t_ac_suff_inf;
 
 /*
+** PUBLIC
+*/
+
+/*
+** Free le contenu de l'ac_suff_inf passe en parametre puis free la structure
+** en elle-meme.
+** Renvoie toujours NULL.
+*/
+void				*delete_ac_suff_inf(t_ac_suff_inf *acs);
+
+t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc);
+
+/*
+** PRIVATE
+*/
+
+/*
+** Remplie le t_ac_suff_inf avec les informations pour autocompleter le word
+** passe en parametre, si is_a_cmd est vrai le suffix ne peut etre qu'un
+** executable ou un dossier.
+*/
+void				autocomplete_from_wordpath(const char *word, int is_a_cmd
+		, t_dir_type dir_type, t_ac_suff_inf *acs);
+
+/*
+** Alloue et retourne une string contenant la concatenation de path + / + file.
+*/
+char				*build_path_to_file(const char *path, const char *file);
+
+/*
+** Remplie le t_ac_suff_inf avec les informations pour autocompleter une
+** commande builtin, alias, ou se trouvant dans le path.
+*/
+void				autocomplete_cmd(const char *word, char **path_tab
+		, t_alloc *alloc, t_ac_suff_inf *acs);
+
+/*
 ** Renvoie le nombre de premiers caracteres identiques entre les deux strings.
 */
 size_t				count_same_char(const char *str1, const char *str2);
@@ -108,13 +145,6 @@ void				autocomplete_with_infs(t_ac_rdir_inf *acrd
 int					init_ac_suff_inf(t_ac_suff_inf *acs);
 
 /*
-** Free le contenu de l'ac_suff_inf passe en parametre puis free la structure
-** en elle-meme.
-** Renvoie toujours NULL.
-*/
-void				*delete_ac_suff_inf(t_ac_suff_inf *acs);
-
-/*
 ** Malloc et retourne une structure contenant une chaine de caractere a ajouter
 ** a word pour arriver au plus grand prefix commun des mots possibles, une
 ** chaine vide s'il n'y en a pas et NULL s'il y a eu une erreur.
@@ -129,8 +159,6 @@ t_ac_suff_inf		*autocomplete_word(t_list *var_lst, const char *word
 t_ac_suff_inf		*autocomplete_var(t_list *var_lst, const char *word);
 
 t_ac_suff_inf		*autocomplete_user(const char *word);
-
-t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc);
 
 /*
 ** Retourne 1 si le fichier present dans le t_ac_rdir_inf peut etre une

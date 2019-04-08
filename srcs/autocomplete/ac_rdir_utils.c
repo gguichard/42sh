@@ -19,7 +19,7 @@ int		valid_file_for_ac(t_ac_rdir_inf *acrd)
 		}
 		if (acrd->dir_type == DTYPE_IS_A_DIR)
 		{
-			if(!S_ISDIR(acrd->stat_buf.st_mode))
+			if (!S_ISDIR(acrd->stat_buf.st_mode))
 				return (0);
 		}
 		if (acrd->dir_type == DTYPE_NOT_A_DIR)
