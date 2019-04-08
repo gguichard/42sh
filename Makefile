@@ -31,7 +31,6 @@ PATH_JOB		=	job
 SRC_DIR	=	srcs
 SRC 	=	\
 main.c		\
-$(PATH_ERROR)/error_malloc.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
 $(PATH_LEXER)/replace_quote.c \
