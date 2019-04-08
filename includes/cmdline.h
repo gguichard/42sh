@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/06 16:14:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:15:23 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ t_cmdline	*g_cmdline;
 
 void		reset_cmdline(t_cmdline *cmdline, const char *prompt
 		, size_t offset);
+
+char		*get_replacement(char opt, t_list *vars);
 
 /*
 ** Alloue et retourne le prompt a afficher, retourne NULL en cas d'erreur.
