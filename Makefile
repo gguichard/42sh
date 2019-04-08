@@ -41,6 +41,7 @@ $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
+$(PATH_PARSER)/ast_creation.c \
 $(PATH_PARSER)/token_analyzer.c \
 $(PATH_PARSER)/redirect_inf.c \
 $(PATH_EXEC)/analyzer.c \
@@ -51,6 +52,7 @@ $(PATH_EXEC)/redir_output.c \
 $(PATH_EXEC)/redir_utils.c \
 $(PATH_EXEC)/redirections.c \
 $(PATH_EXEC)/source_file.c \
+$(PATH_EXEC)/temp_file.c \
 $(PATH_EXEC)/var_assigns.c \
 $(PATH_OPERATOR)/job_control.c \
 $(PATH_OPERATOR)/pipe.c \
@@ -147,6 +149,7 @@ $(PATH_AUTOCOMPL)/ac_suff_utils.c \
 $(PATH_AUTOCOMPL)/utils.c \
 $(PATH_VARS)/env.c \
 $(PATH_VARS)/shell_vars.c \
+$(PATH_VARS)/unset_var_utils.c \
 $(PATH_VARS)/var_utils.c \
 $(PATH_VARS)/vars.c \
 $(PATH_JOB)/job_utils.c \

@@ -3,8 +3,12 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int main()
+int main(int ac, char **av)
 {
-	sleep(5);
-	kill(getpid(), SIGSEGV);
+	if (ac != 2)
+	{
+		printf("usage : cmd [signal number]\n");
+		return (0);
+	}
+	kill(getpid(), atoi(av[1]));
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inhibitor_tools.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/05 17:44:38 by tcollard          #+#    #+#             */
+/*   Updated: 2019/04/05 17:48:43 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
@@ -51,25 +63,16 @@ char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)
 	while (x < *i)
 	{
 		if (!(modify[x] = ft_strdup(elem->input[x])))
-		{
-			ft_strtab_free(modify);
-			return (NULL);
-		}
+			return (ft_strtab_free(modify));
 		x += 1;
 	}
 	while (new[y])
 		if (!(modify[x++] = ft_strdup(new[y++])))
-		{
-			ft_strtab_free(modify);
-			return (NULL);
-		}
+			return (ft_strtab_free(modify));
 	y = *i + 1;
 	while (elem->input[y])
 		if (!(modify[x++] = ft_strdup(elem->input[y++])))
-		{
-			ft_strtab_free(modify);
-			return (NULL);
-		}
+			return (ft_strtab_free(modify));
 	modify[x] = NULL;
 	return (modify);
 }
