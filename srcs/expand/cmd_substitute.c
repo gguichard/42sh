@@ -33,7 +33,8 @@ static void	wait_sub_shell(pid_t child, t_alloc *alloc)
 	int					ret;
 	t_list				*prev;
 
-	tmp = add_pid_lst(child, 0, 0);
+	if (!(tmp = add_pid_lst(child, 0, 0)))
+		return ;
 	((t_job *)tmp->content)->state = SUB_CMD;
 	waitpid(child, &ret, WUNTRACED);
 	if (WIFEXITED(ret))
@@ -41,10 +42,7 @@ static void	wait_sub_shell(pid_t child, t_alloc *alloc)
 	else if (WIFSTOPPED(ret))
 		alloc->ret_val = WSTOPSIG(ret) + 128;
 	else if (WIFSIGNALED(ret))
-	{
 		alloc->ret_val = WTERMSIG(ret) + 128;
-		(WTERMSIG(ret) == SIGINT) ? write(1, "\n", 1) : 0;
-	}
 	prev = g_jobs;
 	while (prev->next && prev->next != tmp)
 		prev = prev->next;
@@ -66,6 +64,7 @@ static void	handler_subcmd(int sig)
 	if (!tmp)
 		return ;
 	kill(((t_job *)tmp->content)->pid, sig);
+	write(1, "\n", 1);
 	g_sig = sig;
 }
 

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 20:36:38 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 23:15:28 by jonascohen       ###   ########.fr       */
+/*   Updated: 2019/04/08 13:38:26 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 static void	handler_builtin(int sig)
 {
 	g_sig = sig;
+	write(1, "\n", 1);
 }
 
 static void	sig_builtin(void)
