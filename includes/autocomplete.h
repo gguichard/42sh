@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   autocomplete.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 14:02:04 by fwerner           #+#    #+#             */
+/*   Updated: 2019/04/08 14:05:57 by fwerner          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef AUTOCOMPLETE_H
 # define AUTOCOMPLETE_H
 
@@ -33,7 +45,7 @@ typedef struct		s_ac_rdir_inf
 	size_t			file_word_len;
 	struct stat		stat_buf;
 	int				need_to_be_cmd;
-	t_dir_type		dir_type;;
+	t_dir_type		dir_type;
 	int				force_exec_type;
 }					t_ac_rdir_inf;
 
