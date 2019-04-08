@@ -6,12 +6,13 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 15:33:10 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:01:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include "shell.h"
+#include "cmdline.h"
 #include "signals.h"
 #include "job.h"
 #include "builtins.h"
@@ -46,6 +47,8 @@ static void	handler_signals(int sig)
 	if (sig == SIGINT)
 	{
 		handle_end_of_text(g_cmdline);
+		reset_cmdline(g_cmdline, g_cmdline->prompt.str
+				, g_cmdline->prompt.offset);
 		return ;
 	}
 	close(STDIN_FILENO);

@@ -88,11 +88,6 @@ const char	*get_home_directory(t_list *vars);
 int			setup_alloc(t_alloc *alloc, int argc, char **argv, char **environ);
 
 void		del_alloc(t_alloc *alloc);
-
-//TOOLS TO PRINT LST AST
-void		read_sort_descent(t_ast *sort, int active);
-
-// CLEAN AST
 void		del_ast(t_ast **lst);
 void		*del_elem_ast(t_ast **lst);
 
