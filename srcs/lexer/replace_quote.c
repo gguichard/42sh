@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 23:45:53 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:16:37 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,15 @@ int		expand_home_shortcut(char **s, t_list *vars)
 
 	dir = 0;
 	tmp = 0;
-	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0'))
+	if ((*s)[0] == '~' && ((*s)[1] == '/' || (*s)[1] == '\0' || (*s)[1] == ':'))
 		dir = ft_strjoin(get_home_directory(vars), (*s) + 1);
-	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
+	else if (ft_strnequ(*s, "~-", 2) && ((*s)[2] == '/' || (*s)[2] == '\0'
+			|| (*s)[2] == ':'))
 		dir = ft_strjoin(get_var_value(vars, "OLDPWD"), (*s) + 2);
-	else if (ft_strnequ("~+", *s, 2) && ((*s)[2] == '/' || (*s)[2] == '\0'))
+	else if (ft_strnequ("~+", *s, 2) && ((*s)[2] == '/' || (*s)[2] == '\0'
+			|| (*s)[2] == ':'))
 		dir = ft_strjoin(get_var_value(vars, "PWD"), (*s) + 2);
-	else if ((*s[0] == '~') && ft_isalnum(((*s)[1])))
+	else if ((*s)[0] == '~' && ft_isalnum(((*s)[1])))
 		dir = get_path_tild(&((*s)[1]));
 	if (dir)
 	{
@@ -79,5 +81,5 @@ void	check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 	if ((*s)[2] && (*s)[2] == '/')
 		scmd_move_to_next_char(str_cmd);
 	expand_home_shortcut(s, vars);
-	*pos = ft_strlen(*s) - len;
+	*pos = ft_strlen(*s) - len + 1;
 }
