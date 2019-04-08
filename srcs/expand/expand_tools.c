@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:41:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/06 00:33:02 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:49:47 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		check_expand_syntax(const char *str)
 		while (ft_isdigit(str[i]))
 			i += 1;
 	else if (str[i] == '!' || str[i] == '?' || str[i] == '$')
-			return (str[i + 1] != '}') ? 0 : 1;
+		return ((str[i + 1] != '}') ? 0 : 1);
 	else
 		while (ft_isalnum(str[i]) || str[i] == '_')
 			i += 1;

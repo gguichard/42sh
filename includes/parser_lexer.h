@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_lexer.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 15:02:12 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 15:02:29 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_LEXER_H
 # define PARSER_LEXER_H
 
@@ -13,7 +25,7 @@ typedef enum	e_recall_prompt
 	PR_OR
 }				t_recall_prompt;
 
-void			lexer_parser(const char *line, t_alloc *alloc, int fork);
+int				lexer_parser(const char *line, t_alloc *alloc, int fork);
 
 /*
 ************************************ LEXER *************************************
@@ -43,7 +55,6 @@ t_recall_prompt	token_analyser(t_list *lst_tk, int prompt_heredoc);
 int				link_branch(t_ast **elem, t_ast **branch, t_ast **sort
 				, t_list **lst_tk);
 t_ast			*create_ast_branch(t_list **lst_tk);
-
 
 /*
 *********************************** AST TOOLS **********************************

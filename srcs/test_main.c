@@ -18,15 +18,16 @@
 static t_alloc	alloc;
 
 //JE SAIS PAS POURAUOI C'EST LA MAIS JE LAISSE
-void		lexer_parser(const char *line, t_alloc *alloc, int fork)
+int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 {
 	t_str_cmd_inf	scmd;
 	t_list			*lst_tk;
 	t_ast			*sort_ast;
 	t_exec_opt		exec_opt;
+	int				ret;
 
 	if (!scmd_init(&scmd, line))
-		return ;
+		return (1);
 	sigs_wait_line(alloc);
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 	scmd_clean(&scmd);
@@ -34,8 +35,7 @@ void		lexer_parser(const char *line, t_alloc *alloc, int fork)
 	if (!(sort_ast = parser(lst_tk)))
 	{
 		ft_lstdel(&lst_tk, del_token);
-		alloc->ret_val = 1;
-		return ;
+		return (1);
 	}
 	ft_lstdel(&lst_tk, del_token);
 	sigs_wait_line(alloc);
@@ -43,10 +43,11 @@ void		lexer_parser(const char *line, t_alloc *alloc, int fork)
 	// 	read_sort_descent(sort_ast, 0);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
 	exec_opt.fork = fork;
-	alloc->ret_val = analyzer(alloc, sort_ast, &exec_opt);
+	ret = analyzer(alloc, sort_ast, &exec_opt);
 	if (g_sig == SIGINT)
 		g_sig = 0;
 	del_ast(&sort_ast);
+	return (ret);
 }
 
 void	test_this_autocomplete(char *strbase, char *result_needed

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/20 20:50:37 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/21 14:02:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 15:31:22 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static int	test_builtin_check_int(int *ptr, const char *operand)
 	if (operand[0] != '\0')
 	{
 		value = ft_strtol(operand, &endptr, 10);
+		while (*endptr == ' ')
+			endptr++;
 		if (*endptr == '\0' && value >= INT_MIN && value <= INT_MAX)
 		{
 			*ptr = (int)value;

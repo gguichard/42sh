@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 11:39:59 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 14:25:04 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "split_cmd_token.h"
 #include "str_cmd_inf.h"
 #include "builtins.h"
+#include "inhibitor.h"
 #include "cmdline.h"
 #include "error.h"
 
@@ -133,7 +134,10 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	state = RSTATE_END;
 	error = read_complete_command(alloc, cmdline, &state);
 	if (alloc->full_input != NULL)
+	{
+		remove_only_escaped_newline(&alloc->full_input);
 		push_history_entry(&cmdline->history, alloc->full_input);
+	}
 	if (state == RSTATE_ETX)
 		alloc->ret_val = 1;
 	else if (state == RSTATE_EOT)

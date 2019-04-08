@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:26:58 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 13:27:00 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 14:35:39 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static int	get_indexed_job(t_ast *elem, t_list **tmp, int *index)
 		if (!elem->input[1])
 			ft_dprintf(STDERR_FILENO, "42sh: bg: no current job\n");
 		else
-			ft_dprintf(STDERR_FILENO, "42sh: bg: job not found: %s\n", elem->input[1]);
+			ft_dprintf(STDERR_FILENO, "42sh: bg: job not found: %s\n"
+						, elem->input[1]);
 		return (1);
 	}
 	return (0);
@@ -81,7 +82,8 @@ int			builtin_bg(t_ast *elem, t_alloc *alloc)
 	{
 		if (elem->input[1])
 			index = ft_atoi(elem->input[1]);
-		ft_dprintf(STDERR_FILENO, "42sh: bg: job %d already in background\n", index);
+		ft_dprintf(STDERR_FILENO, "42sh: bg: job %d already in background\n"
+								, index);
 		return (0);
 	}
 	alloc->last_bg = ((t_job *)tmp->content)->pid;
