@@ -61,19 +61,16 @@ int			expand(char **input, t_alloc *alloc, size_t *pos
 		, t_str_cmd_inf *str_cmd)
 {
 	char		*str;
-	const char	*exp;
 	size_t		len;
 
 	str = NULL;
-	exp = ft_strchr(*input + *pos, '$');
-	*pos = ft_strlen(*input) - ft_strlen(exp);
-	if (exp[1] == '(')
+	if ((*input)[*pos + 1] == '(')
 		return (subcmd_expand(alloc, input, pos, str_cmd));
 	else if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
 	if (str && (*input)[*pos + 1] == '{')
 		ft_strreplace_inside(input, *pos, len + 3, str);
-	else if (str && !ft_isalnum(exp[1]) && is_special_char(exp, 1) == 0)
+	else if (str && !ft_isalnum((*input)[*pos + 1]) && is_special_char(*input + *pos, 1) == 0)
 	{
 		free(str);
 		*pos += 1;
