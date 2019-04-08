@@ -35,7 +35,7 @@ int			expand(char **input, t_alloc *alloc, size_t *pos)
 
 	str = NULL;
 	exp = ft_strchr(*input + *pos, '$');
-	*pos = ft_strlen(*input) - ft_strlen(exp);
+	*pos = ft_strlen(*input) - ft_strlen(*input + *pos);
 	if (!expand_var(&str, alloc, exp, &len))
 		return (0);
 	if (str && (*input)[*pos + 1] == '{')
