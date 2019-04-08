@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 14:15:23 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/08 15:50:00 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 # define INPUT_SIZE_INCR 1024
 # define VISUAL_STRING "(visual) "
 
-typedef struct s_list	t_list;
+typedef struct s_str_cmd_inf	t_str_cmd_inf;
+typedef struct s_ac_suff_inf	t_ac_suff_inf;
+typedef struct s_list			t_list;
 
 t_cmdline	*g_cmdline;
 
@@ -107,6 +109,8 @@ int			handle_clear(t_cmdline *cmdline);
 int			handle_bell(t_cmdline *cmdline);
 int			handle_history_prev(t_cmdline *cmdline);
 int			handle_history_next(t_cmdline *cmdline);
+void		ac_append_to_cmdline(t_cmdline *cmdline, t_ac_suff_inf *acs_inf
+		, t_str_cmd_inf *scmd, int at_end_of_line);
 int			handle_autocomplete(t_cmdline *cmdline);
 
 void		ac_print_list(t_list *lst, t_cmdline *cmdline);
