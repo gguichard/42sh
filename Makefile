@@ -104,7 +104,9 @@ $(PATH_PATH)/join_path.c \
 $(PATH_PATH)/search_in_path.c \
 $(PATH_TOKEN)/token_inf.c \
 $(PATH_TOKEN)/split_cmd_token.c \
+$(PATH_TOKEN)/split_cmd_token_internal.c \
 $(PATH_TOKEN)/split_cmd_token_add.c \
+$(PATH_TOKEN)/split_cmd_token_add_alias_utils.c \
 $(PATH_TOKEN)/split_cmd_token_utils.c \
 $(PATH_CMDLINE)/cmdline.c \
 $(PATH_CMDLINE)/create_prompt.c \
@@ -142,8 +144,11 @@ $(PATH_CMDLINE)/mode_visual/copy_paste_clipboard.c \
 $(PATH_CMDLINE)/mode_visual/select_utils.c \
 $(PATH_CMDLINE)/mode_visual/visual_utils.c \
 $(PATH_AUTOCOMPL)/autocomplete.c \
+$(PATH_AUTOCOMPL)/autocomplete_utils.c \
 $(PATH_AUTOCOMPL)/ac_check_for.c \
 $(PATH_AUTOCOMPL)/ac_cmdline.c \
+$(PATH_AUTOCOMPL)/ac_cmdline_tk.c \
+$(PATH_AUTOCOMPL)/ac_cmdline_find.c \
 $(PATH_AUTOCOMPL)/ac_rdir_utils.c \
 $(PATH_AUTOCOMPL)/ac_suff_utils.c \
 $(PATH_AUTOCOMPL)/utils.c \

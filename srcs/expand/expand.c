@@ -13,8 +13,8 @@ static int	is_special_char(const char *s, int i)
 	return (0);
 }
 
-int			expand_var(char **str, t_alloc *alloc, const char *exp,
-		size_t *len)
+int			expand_var(char **str, t_alloc *alloc, const char *exp
+		, size_t *len)
 {
 	if (ft_strncmp(exp, "${", 2) == 0)
 	{
@@ -28,8 +28,8 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp,
 }
 
 
-static int	sub_cmd_expand(t_alloc *alloc, char **input
-					, size_t *pos, t_str_cmd_inf *str_cmd)
+static int	subcmd_expand(t_alloc *alloc, char **input
+		, size_t *pos, t_str_cmd_inf *str_cmd)
 {
 	char	*value;
 	char	*cmd;
@@ -40,14 +40,14 @@ static int	sub_cmd_expand(t_alloc *alloc, char **input
 	while (scmd_cur_char(str_cmd))
 	{
 		was_in_subcmd = (str_cmd->sub_str_cmd != NULL
-			&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD);
+				&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD);
 		x += scmd_move_to_next_char(str_cmd);
 		if (was_in_subcmd && !((str_cmd->sub_str_cmd != NULL
-			&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)))
+						&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)))
 			break ;
 	}
 	cmd = ft_strsub(*input, *pos + 2, x - 3);
-	value = sub_cmd_exec(alloc, cmd);
+	value = subcmd_exec(alloc, cmd);
 	ft_strdel(&cmd);
 	ft_strreplace_inside(input, *pos, x, (value == NULL ? "" : value));
 	if (value != NULL)
@@ -57,14 +57,15 @@ static int	sub_cmd_expand(t_alloc *alloc, char **input
 	return ((g_sig == SIGINT) ? 0 : 1);
 }
 
-int			expand(char **input, t_alloc *alloc, size_t *pos, t_str_cmd_inf *str_cmd)
+int			expand(char **input, t_alloc *alloc, size_t *pos
+		, t_str_cmd_inf *str_cmd)
 {
 	char		*str;
 	size_t		len;
 
 	str = NULL;
 	if ((*input)[*pos + 1] == '(')
-		return (sub_cmd_expand(alloc, input, pos, str_cmd));
+		return (subcmd_expand(alloc, input, pos, str_cmd));
 	else if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);
 	if (str && (*input)[*pos + 1] == '{')

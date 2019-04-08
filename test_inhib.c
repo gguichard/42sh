@@ -6,27 +6,27 @@
 #include <stdio.h>
 #include <string.h>
 
-int main(int argc, char **argv)
-{
-	char **array;
-	int	i;
-
-	array = NULL;
-	i = 0;
-
-	printf("INPUT: %s\n", argv[1]);
-	if (argv[1])
-		array = inhib_expand_str(argv[1], NULL);
-	else
-		array = inhib_expand_str(NULL, NULL);
-	while (array && array[i])
-	{
-		printf("arr[%d]: |%s|\n",i ,array[i]);
-		i += 1;
-	}
-
-	return (0);
-}
+// int main(int argc, char **argv)
+// {
+// 	char **array;
+// 	int	i;
+//
+// 	array = NULL;
+// 	i = 0;
+//
+// 	printf("INPUT: %s\n", argv[1]);
+// 	if (argv[1])
+// 		array = inhib_expand_str(argv[1], NULL);
+// 	else
+// 		array = inhib_expand_str(NULL, NULL);
+// 	while (array && array[i])
+// 	{
+// 		printf("arr[%d]: |%s|\n",i ,array[i]);
+// 		i += 1;
+// 	}
+//
+// 	return (0);
+// }
 
 // int	main(int argc, char **argv)
 // {
@@ -43,3 +43,15 @@ int main(int argc, char **argv)
 // 	printf("STR: |%s|\n", dup);
 // 	return (0);
 // }
+
+int	main(int argc, char **argv)
+{
+	char *str;
+
+	(void)argc;
+	(void)argv;
+	str = ft_strdup("coucou\\\nfin");
+	remove_only_escaped_backslash_n(&str);
+	ft_printf("STR: |%s|\n", str);
+	return (0);
+}

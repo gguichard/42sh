@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:01 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 20:27:33 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 13:34:27 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,32 @@ void	remove_last_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos,
 		str_cmd->pos += 1;
 		*pos += 1;
 	}
+}
+
+int		remove_only_escaped_backslash_n(char **str)
+{
+	t_str_cmd_inf	str_cmd;
+	size_t			pos;
+
+	pos = 0;
+	if (!scmd_init(&str_cmd, *str))
+		return (0);
+	while (scmd_cur_char(&str_cmd))
+	{
+		if (str_cmd.is_in_quote)
+			while (scmd_cur_char(&str_cmd) && str_cmd.is_in_quote)
+				pos += scmd_move_to_next_char(&str_cmd);
+		else if (scmd_cur_char(&str_cmd) == '\n'
+				&& scmd_cur_char_is_escaped(&str_cmd))
+		{
+			ft_memmove((void *)(*str + pos - 1), (void *)(*str + pos + 1)
+				, ft_strlen(*str + pos));
+			(*str)[pos + ft_strlen(*str + pos)] = '\0';
+			scmd_move_to_next_char(&str_cmd);
+		}
+		else
+			pos += scmd_move_to_next_char(&str_cmd);
+	}
+	scmd_clean(&str_cmd);
+	return (1);
 }

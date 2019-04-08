@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 14:05:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 16:37:52 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 13:32:25 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	read_n_execute(t_alloc *alloc, char *buffer, size_t buff_size)
 		{
 			buffer[scmd_inf.pos] = '\0';
 			remove_nul_inside(start, buffer + scmd_inf.pos);
-			lexer_parser(start, alloc, 0);
+			alloc->ret_val = lexer_parser(start, alloc, 0);
 			start = buffer + scmd_inf.pos + 1;
 		}
 		move_scmd_cursors(&scmd_inf);
