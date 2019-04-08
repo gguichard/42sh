@@ -62,6 +62,12 @@ t_ac_suff_inf		*autocomplete_cmdline(t_str_cmd_inf *scmd, t_alloc *alloc);
 ** PRIVATE
 */
 
+const char			*find_last_var_start(const char *str, int *is_in_bracket);
+
+const char			*find_last_assign_start(const char *str);
+
+const char			*find_last_home_user(const char *str);
+
 /*
 ** Remplie le t_ac_suff_inf avec les informations pour autocompleter le word
 ** passe en parametre, si is_a_cmd est vrai le suffix ne peut etre qu'un

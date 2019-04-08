@@ -145,6 +145,8 @@ $(PATH_AUTOCOMPL)/autocomplete.c \
 $(PATH_AUTOCOMPL)/autocomplete_utils.c \
 $(PATH_AUTOCOMPL)/ac_check_for.c \
 $(PATH_AUTOCOMPL)/ac_cmdline.c \
+$(PATH_AUTOCOMPL)/ac_cmdline_tk.c \
+$(PATH_AUTOCOMPL)/ac_cmdline_find.c \
 $(PATH_AUTOCOMPL)/ac_rdir_utils.c \
 $(PATH_AUTOCOMPL)/ac_suff_utils.c \
 $(PATH_AUTOCOMPL)/utils.c \
