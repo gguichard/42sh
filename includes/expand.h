@@ -24,6 +24,5 @@ void	del_all_alloc(char **sub, char ***array, char ***new_array);
 int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
 		, size_t save);
 char	**ft_splitwhitespace(char const *s);
-int		remove_only_escaped_backslash_n(char **str);
 
 #endif
