@@ -18,7 +18,7 @@
 static t_alloc	alloc;
 
 //JE SAIS PAS POURAUOI C'EST LA MAIS JE LAISSE
-void	lexer_parser(const char *line, t_alloc *alloc)
+void		lexer_parser(const char *line, t_alloc *alloc, int fork)
 {
 	t_str_cmd_inf	scmd;
 	t_list			*lst_tk;
@@ -32,12 +32,17 @@ void	lexer_parser(const char *line, t_alloc *alloc)
 	scmd_clean(&scmd);
 	sigs_wait_line(alloc);
 	if (!(sort_ast = parser(lst_tk)))
+	{
+		ft_lstdel(&lst_tk, del_token);
+		alloc->ret_val = 1;
 		return ;
+	}
 	ft_lstdel(&lst_tk, del_token);
 	sigs_wait_line(alloc);
 	// if (sort_ast)
 	// 	read_sort_descent(sort_ast, 0);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
+	exec_opt.fork = fork;
 	alloc->ret_val = analyzer(alloc, sort_ast, &exec_opt);
 	if (g_sig == SIGINT)
 		g_sig = 0;
