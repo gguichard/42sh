@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 16:01:24 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 16:25:23 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static void	handler_signals(int sig)
 {
 	if (sig == SIGTERM)
 		return (handler_sigterm());
-	g_sig = sig;
 	if (sig == SIGINT)
 	{
 		handle_end_of_text(g_cmdline);
@@ -51,6 +50,7 @@ static void	handler_signals(int sig)
 				, g_cmdline->prompt.offset);
 		return ;
 	}
+	g_sig = sig;
 	close(STDIN_FILENO);
 }
 
