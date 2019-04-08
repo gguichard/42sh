@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 14:48:21 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 14:48:49 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "shell.h"
 #include "parser_lexer.h"
 #include "expand.h"
@@ -27,7 +39,6 @@ int			expand_var(char **str, t_alloc *alloc, const char *exp
 	return (1);
 }
 
-
 static int	subcmd_expand(t_alloc *alloc, char **input
 		, size_t *pos, t_str_cmd_inf *str_cmd)
 {
@@ -43,7 +54,7 @@ static int	subcmd_expand(t_alloc *alloc, char **input
 				&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD);
 		x += scmd_move_to_next_char(str_cmd);
 		if (was_in_subcmd && !((str_cmd->sub_str_cmd != NULL
-						&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)))
+			&& str_cmd->sub_str_cmd->cur_str_cmd_type == SCMD_TYPE_SUBCMD)))
 			break ;
 	}
 	cmd = ft_strsub(*input, *pos + 2, x - 3);
@@ -70,7 +81,8 @@ int			expand(char **input, t_alloc *alloc, size_t *pos
 		return (0);
 	if (str && (*input)[*pos + 1] == '{')
 		ft_strreplace_inside(input, *pos, len + 3, str);
-	else if (str && !ft_isalnum((*input)[*pos + 1]) && is_special_char(*input + *pos, 1) == 0)
+	else if (str && !ft_isalnum((*input)[*pos + 1])
+				&& is_special_char(*input + *pos, 1) == 0)
 	{
 		free(str);
 		*pos += 1;

@@ -172,6 +172,7 @@ $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \
 $(PATH_EXPAND)/ft_splitwhitespace.c \
 $(PATH_EXPAND)/cmd_substitute.c \
+$(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
