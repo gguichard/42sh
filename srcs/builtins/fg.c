@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:12 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 20:35:16 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 22:23:51 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,11 @@
 #include "execution.h"
 #include "job.h"
 
-static int	bring_back_pid(t_list *tmp, int index)
+static int	bring_back_pid(t_list *tmp)
 {
 	t_job	*job;
 	char	*cmd;
 
-	if (index == -1)
-		while (tmp && tmp->next)
-			tmp = tmp->next;
-	else
-		while (tmp && --index > 0)
-			tmp = tmp->next;
 	job = tmp->content;
 	cmd = job_cmd(job);
 	ft_printf("%s\n", cmd);
@@ -44,15 +38,13 @@ static int	bring_back_pid(t_list *tmp, int index)
 
 int			builtin_fg(t_ast *elem, t_alloc *alloc)
 {
-	int		index;
 	t_list	*tmp;
 
 	(void)alloc;
-	index = -1;
 	tmp = g_jobs;
 	if (elem->input[1])
-		index = ft_atoi(elem->input[1]);
-	if (!tmp || (index > (int)ft_lstsize(tmp)) || (index < 1 && elem->input[1]))
+		get_job_id(elem->input[1], &tmp, "fg");
+	if (!tmp)
 	{
 		if (!elem->input[1])
 			ft_dprintf(STDERR_FILENO, "42sh: fg: no current job\n");
@@ -61,5 +53,5 @@ int			builtin_fg(t_ast *elem, t_alloc *alloc)
 						, elem->input[1]);
 		return (1);
 	}
-	return (bring_back_pid(tmp, index));
+	return (bring_back_pid(tmp));
 }

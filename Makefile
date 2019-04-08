@@ -168,6 +168,7 @@ $(PATH_JOB)/redirect_terminal_control.c \
 $(PATH_JOB)/refresh_jobs.c \
 $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
+$(PATH_JOB)/job_id.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \

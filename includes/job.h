@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:58:55 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 19:31:33 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 22:22:49 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void			redirect_term_controller(pid_t new_controller, int type);
 
 t_job			*get_job_pid(pid_t process);
 t_job			*get_job_allpid(pid_t process);
+int				get_job_id(const char *arg, t_list **process, const char *bltin);
 
 void			refresh_state(t_list *tmp, int print_state);
 void			refresh_jobs(void);

@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:28:10 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 20:25:29 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 21:06:28 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char		*create_cmd_job(t_ast *elem, int addpipe)
 		elem = elem->back;
 	while (elem != NULL)
 	{
-		actual = ft_join(elem->input, " ");
+		actual = ft_join(elem->input, (elem->type == AST_REDIR) ? "" : " ");
 		prev = output;
 		if (output)
 		{
