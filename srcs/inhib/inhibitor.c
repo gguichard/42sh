@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 15:52:06 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 17:11:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int		inhib_only_str(char *str)
 	return (1);
 }
 
-int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
-			t_alloc *alloc)
+int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
+		, t_alloc *alloc)
 {
 	size_t	index;
 
@@ -45,7 +45,7 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 			remove_escaped_char(str_cmd, &(array[index]), pos, 1);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			if (!expand(&(array[index]), alloc, pos, str_cmd))
+			if (!expand(&(array[index]), alloc, pos))
 				return (0);
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index(str_cmd);
@@ -56,8 +56,8 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 	return (1);
 }
 
-int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array,
-		t_alloc *alloc)
+int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
+		, t_alloc *alloc)
 {
 	while (scmd_cur_char(str_cmd))
 	{
@@ -67,8 +67,8 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array,
 				return (error_inhib_expand(str_cmd, *array));
 		}
 		else if (scmd_cur_char_is_escaped(str_cmd))
-			remove_escaped_char(str_cmd, &((*array)[get_pos_in_array(*array)]),
-				pos_array, 1);
+			remove_escaped_char(str_cmd, &((*array)[get_pos_in_array(*array)])
+					, pos_array, 1);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
 			if (!do_expand(array, alloc, pos_array, str_cmd))

@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 17:48:43 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 16:47:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	update_pos_index(t_str_cmd_inf *str_cmd)
 		while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
 				&& scmd_cur_char(str_cmd)
 				&& (ft_isalnum(scmd_cur_char(str_cmd))
-				|| scmd_cur_char(str_cmd) == '_'))
+					|| scmd_cur_char(str_cmd) == '_'))
 			scmd_move_to_next_char(str_cmd);
 	}
 	else if (scmd_cur_char(str_cmd) == '{')

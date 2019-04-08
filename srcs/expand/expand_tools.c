@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:41:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 14:49:47 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:46:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	insert_var_input(char *str, char **input, int type, size_t start)
 	else if (!ft_isdigit((*input)[i]))
 	{
 		while ((*input)[i] && (ft_isalnum((*input)[i]) == 1
-				|| (*input)[i] == '_'))
+					|| (*input)[i] == '_'))
 			i += 1;
 		i -= 1;
 	}
@@ -94,7 +94,7 @@ char	*get_expand_value(const char *exp, int type, t_alloc *alloc, size_t *i)
 }
 
 int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array
-	, t_str_cmd_inf *str_cmd)
+		, t_str_cmd_inf *str_cmd)
 {
 	size_t	save;
 	size_t	index;
@@ -103,7 +103,7 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array
 	len = 0;
 	save = *pos_array;
 	index = get_pos_in_array(*array);
-	if (!expand(&((*array)[index]), alloc, pos_array, str_cmd))
+	if (!expand(&((*array)[index]), alloc, pos_array))
 		return (0);
 	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote && *pos_array != save)
 	{

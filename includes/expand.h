@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:58:38 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 14:58:49 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:40:05 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 # include "vars.h"
 
 int		expand_var(char **str, t_alloc *alloc, const char *exp, size_t *len);
-int		expand(char **input, t_alloc *alloc, size_t *pos
-		, t_str_cmd_inf *str_cmd);
+int		expand(char **input, t_alloc *alloc, size_t *pos);
 char	*subcmd_exec(t_alloc *alloc, const char *cmd);
 
 /*
