@@ -134,6 +134,7 @@ $(PATH_CMDLINE)/mode_common/cursor_words.c \
 $(PATH_CMDLINE)/mode_common/enter_exit_visual.c \
 $(PATH_CMDLINE)/mode_common/mode_utils.c \
 $(PATH_CMDLINE)/mode_common/special_hooks.c \
+$(PATH_CMDLINE)/mode_insert/append_ac_cmdline.c \
 $(PATH_CMDLINE)/mode_insert/autocomplete.c \
 $(PATH_CMDLINE)/mode_insert/del_hooks.c \
 $(PATH_CMDLINE)/mode_insert/history_hooks.c \
