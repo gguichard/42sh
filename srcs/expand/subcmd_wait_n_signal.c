@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:41:21 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 14:45:10 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 17:10:20 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,25 @@
 #include "shell.h"
 #include "job.h"
 
+static void	del_subshell_job(t_list *sub_shell)
+{
+	t_list	*prev;
+
+	prev = g_jobs;
+	while (prev->next != NULL && prev->next != sub_shell)
+		prev = prev->next;
+	if (prev == sub_shell)
+		g_jobs = NULL;
+	ft_memdel((void **)&(tmp->content));
+	ft_memdel((void **)&tmp);
+	if (g_jobs)
+		prev->next = NULL;
+}
+
 static void	wait_sub_shell(pid_t child, t_alloc *alloc)
 {
 	t_list	*tmp;
 	int		ret;
-	t_list	*prev;
 
 	if (!(tmp = add_pid_lst(child, 0, 0)))
 		return ;
@@ -30,16 +44,11 @@ static void	wait_sub_shell(pid_t child, t_alloc *alloc)
 	else if (WIFSTOPPED(ret))
 		alloc->ret_val = WSTOPSIG(ret) + 128;
 	else if (WIFSIGNALED(ret))
+	{
 		alloc->ret_val = WTERMSIG(ret) + 128;
-	prev = g_jobs;
-	while (prev->next != NULL && prev->next != tmp)
-		prev = prev->next;
-	if (prev == tmp)
-		g_jobs = NULL;
-	ft_memdel((void **)&(tmp->content));
-	ft_memdel((void **)&tmp);
-	if (g_jobs)
-		prev->next = NULL;
+		(WTERMSIG(ret) == SIGINT) ? write(STDOUT_FILENO, "\n", 1) : 0;
+	}
+	del_subshell_job(tmp);
 }
 
 static void	handler_subcmd(int sig)
@@ -51,7 +60,6 @@ static void	handler_subcmd(int sig)
 		tmp = tmp->next;
 	if (tmp != NULL)
 		kill(((t_job *)tmp->content)->pid, sig);
-	write(STDOUT_FILENO, "\n", 1);
 	g_sig = sig;
 }
 
