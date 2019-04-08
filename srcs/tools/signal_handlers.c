@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal_handlers.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 15:33:10 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include "shell.h"
 #include "signals.h"
@@ -59,7 +71,7 @@ void		set_signals_handlers(void)
 	set_sigmask(SIG_UNBLOCK);
 }
 
-void	print_nl_sigint(t_list *tmp)
+void		print_nl_sigint(t_list *tmp)
 {
 	t_job	*job;
 	int		print;
