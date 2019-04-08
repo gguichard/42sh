@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fwerner <fwerner@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 14:02:46 by fwerner           #+#    #+#             */
+/*   Updated: 2019/04/08 14:31:46 by tcollard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 
@@ -16,7 +28,6 @@ typedef enum	e_error
 	ERRC_INCOMPLETECMD
 }				t_error;
 
-void			ft_exit_malloc(void);
 void			exec_file_error(t_error err, const char *file);
 
 /*

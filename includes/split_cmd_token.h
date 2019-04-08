@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split_cmd_token.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 14:03:28 by fwerner           #+#    #+#             */
+/*   Updated: 2019/04/08 14:03:29 by fwerner          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SPLIT_CMD_TOKEN_H
 # define SPLIT_CMD_TOKEN_H
 
@@ -40,6 +52,13 @@ int				get_cur_spe_char_token_len_and_set_type(
 int				cur_token_is_number(t_split_cmd_inf *sp_cmd);
 
 int				is_a_spe_char(char c);
+
+t_list			*internal_split_cmd_token(t_split_cmd_inf *sp_cmd);
+
+/*
+** Retourne 1 si un expand a eu lieu.
+*/
+int				expand_alias(t_split_cmd_inf *sp_cmd);
 
 int				add_cur_token_to_lst(t_split_cmd_inf *sp_cmd);
 

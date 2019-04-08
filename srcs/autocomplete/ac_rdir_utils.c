@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ac_rdir_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 11:49:55 by fwerner           #+#    #+#             */
+/*   Updated: 2019/04/08 11:49:56 by fwerner          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
@@ -19,7 +31,7 @@ int		valid_file_for_ac(t_ac_rdir_inf *acrd)
 		}
 		if (acrd->dir_type == DTYPE_IS_A_DIR)
 		{
-			if(!S_ISDIR(acrd->stat_buf.st_mode))
+			if (!S_ISDIR(acrd->stat_buf.st_mode))
 				return (0);
 		}
 		if (acrd->dir_type == DTYPE_NOT_A_DIR)

@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 23:34:29 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:22:36 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array,
 			remove_escaped_char(str_cmd, &(array[index]), pos, 1);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			if (!expand(&(array[index]), alloc, pos))
+			if (!expand(&(array[index]), alloc, pos, str_cmd))
 				return (0);
 			scmd_move_to_next_char(str_cmd);
 			update_pos_index(str_cmd);
@@ -102,11 +102,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 		return (NULL);
 	scmd_clean(str_cmd);
 	free(str_cmd);
-	if (!array)
-	{
-		array = (char **)malloc((sizeof(char *) * 1));
+	if (!array && (array = (char **)malloc((sizeof(char *) * 1))))
 		array[0] = NULL;
-	}
 	return (array);
 }
 

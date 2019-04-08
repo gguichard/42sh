@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 21:08:49 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 21:08:50 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:35:39 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ static int	search_type(t_alloc *alloc, const char *elem)
 	else if (ft_strchr(elem, '/') != NULL && access(elem, F_OK | X_OK) == 0)
 		ret = ft_printf("%s is %s\n", elem, elem);
 	else if (ft_strchr(elem, '/') == NULL
-			&& (freed_path = search_in_path(alloc->vars, elem, X_OK
-					, &error)) != NULL)
+			&& !(freed_path = search_in_path(alloc->vars, elem, X_OK, &error)))
 	{
 		ret = ft_printf("%s is %s\n", elem, freed_path);
 		free(freed_path);

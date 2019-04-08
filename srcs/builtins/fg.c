@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fg.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 13:27:12 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 14:36:34 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include <sys/wait.h>
 #include "shell.h"
@@ -32,7 +44,7 @@ static int	bring_back_pid(t_list *tmp, int index)
 	return (ret_status(job->status, job->pid, job, 0));
 }
 
-int	builtin_fg(t_ast *elem, t_alloc *alloc)
+int			builtin_fg(t_ast *elem, t_alloc *alloc)
 {
 	int		index;
 	t_list	*tmp;
@@ -47,7 +59,8 @@ int	builtin_fg(t_ast *elem, t_alloc *alloc)
 		if (!elem->input[1])
 			ft_dprintf(STDERR_FILENO, "42sh: fg: no current job\n");
 		else
-			ft_dprintf(STDERR_FILENO, "42sh: fg: job not found: %s\n", elem->input[1]);
+			ft_dprintf(STDERR_FILENO, "42sh: fg: job not found: %s\n"
+						, elem->input[1]);
 		return (1);
 	}
 	return (bring_back_pid(tmp, index));

@@ -96,6 +96,8 @@ int					exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	else if (child == 0 && (opt->fork = 1) == 1)
 	{
+		sig_set_all(SIG_DFL);
+		set_sigmask(SIG_UNBLOCK);
 		update_var(&alloc->vars, "_", path_exec);
 		sig_set_all(SIG_DFL);
 		set_sigmask(SIG_UNBLOCK);
