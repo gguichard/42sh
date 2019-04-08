@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:29:06 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 16:35:11 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 20:27:43 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static pid_t	add_pid_pipe(t_ast *elem, int last_pipe_cmd, pid_t child
 		first_cmd = NULL;
 	if (ret == -1)
 	{
-		kill_zombie_boy(child);
+		kill_zombie_boy(child, 1);
 		return (-1);
 	}
 	return (child);

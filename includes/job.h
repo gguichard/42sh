@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:58:55 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 15:02:00 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 19:31:33 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void			print_job(pid_t process, int after_signal);
 
 void			delete_jobs_terminated(t_list *tmp);
 void			terminate_all_jobs(int sig);
-void			kill_zombie_boy(pid_t boy);
+void			kill_zombie_boy(pid_t boy, int display_err);
 
 char			*sig_str(int status);
 char			*last_sig_process(t_list *tmp, int foreground);
