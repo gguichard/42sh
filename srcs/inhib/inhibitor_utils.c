@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:49:12 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 17:58:40 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 16:52:36 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ int		initialize_inhib_expand(t_str_cmd_inf **str_cmd, char ***array,
 {
 	if (!(*array = (char **)malloc(sizeof(char *) * 2)))
 		return (0);
+	(*array)[0] = NULL;
+	(*array)[1] = NULL;
 	if (!(*str_cmd = (t_str_cmd_inf*)malloc(sizeof(t_str_cmd_inf))))
 		return (0);
+	ft_bzero(*str_cmd, sizeof(t_str_cmd_inf));
 	if (!scmd_init(*str_cmd, str))
 		return (0);
 	if (!((*array)[0] = ft_strdup(str)))
 		return (0);
-	(*array)[1] = NULL;
 	return (1);
 }
 
