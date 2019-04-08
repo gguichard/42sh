@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:01 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 13:34:27 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:25:20 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,9 @@ int		remove_only_escaped_backslash_n(char **str)
 		return (0);
 	while (scmd_cur_char(&str_cmd))
 	{
-		if (str_cmd.is_in_quote)
-			while (scmd_cur_char(&str_cmd) && str_cmd.is_in_quote)
+		if (str_cmd.is_in_quote || str_cmd.is_in_dbquote)
+			while (scmd_cur_char(&str_cmd) && (str_cmd.is_in_quote
+					|| str_cmd.is_in_dbquote))
 				pos += scmd_move_to_next_char(&str_cmd);
 		else if (scmd_cur_char(&str_cmd) == '\n'
 				&& scmd_cur_char_is_escaped(&str_cmd))
