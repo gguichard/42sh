@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:29:06 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 13:29:07 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:35:11 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static pid_t	add_pid_pipe(t_ast *elem, int last_pipe_cmd, pid_t child
 }
 
 pid_t			process_pipe_fork(t_alloc *alloc, t_ast *elem, int last_pipe_cmd
-		, int wait_hand)
+				, int wait_hand)
 {
 	pid_t	child;
 
