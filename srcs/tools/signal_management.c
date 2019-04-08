@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal_management.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 15:33:17 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 15:34:06 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include "shell.h"
 #include "builtins.h"
 #include "job.h"
 
-void		set_sigmask(int type)
+void	set_sigmask(int type)
 {
 	sigset_t			mask;
 
@@ -31,7 +43,7 @@ void	action_sigs(struct sigaction *act)
 	sigaction(SIGUSR2, act, 0);
 }
 
-void		sig_set_all(void(*handler)(int))
+void	sig_set_all(void (*handler)(int))
 {
 	struct sigaction	act;
 
@@ -48,14 +60,14 @@ void		sig_set_all(void(*handler)(int))
 	action_sigs(&act);
 }
 
-void		sig_reset(void)
+void	sig_reset(void)
 {
 	sig_set_all(SIG_IGN);
 	set_sigmask(SIG_UNBLOCK);
 	sig_set_all(SIG_DFL);
 }
 
-void		sigs_wait_line(t_alloc *alloc)
+void	sigs_wait_line(t_alloc *alloc)
 {
 	sigset_t	mask;
 	int			x;

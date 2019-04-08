@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   waitline_pipes.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 15:34:42 by jocohen           #+#    #+#             */
+/*   Updated: 2019/04/08 15:35:13 by jocohen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <sys/wait.h>
 #include <signal.h>
 #include "shell.h"
@@ -49,7 +61,8 @@ static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 	return (stop);
 }
 
-int		waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc, t_exec_opt *opt)
+int			waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc
+			, t_exec_opt *opt)
 {
 	if (!tmp)
 	{
@@ -74,7 +87,7 @@ int		waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc, t_exec_opt *opt)
 	return (get_ret_val(tmp, opt));
 }
 
-void	kill_zombie_boy(pid_t boy)
+void		kill_zombie_boy(pid_t boy)
 {
 	kill(boy, SIGKILL);
 	waitpid(boy, 0, WUNTRACED);
@@ -82,7 +95,7 @@ void	kill_zombie_boy(pid_t boy)
 			, "42sh: child setpgid: operation not permitted\n");
 }
 
-void	wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
+void		wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	int		ret;
 

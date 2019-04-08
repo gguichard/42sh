@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/26 11:13:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 00:23:46 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 15:35:53 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,12 @@ int			expand_history_events(t_history *history, char **input)
 				&& (exp_inf.is_in_quote || !is_char_escaped(&exp_inf)))
 			exp_inf.is_in_quote = !exp_inf.is_in_quote;
 		else if ((*exp_inf.input)[exp_inf.offset] == '!'
+				&& (*exp_inf.input)[exp_inf.offset + 1] != '='
 				&& !exp_inf.is_in_quote && !is_char_escaped(&exp_inf)
 				&& (exp_inf.offset < 2 || !ft_strnequ(*exp_inf.input
-						+ (exp_inf.offset - 2), "${", 2)))
-		{
-			if (!expand_event(history, &exp_inf))
-				return (0);
-		}
+						+ (exp_inf.offset - 2), "${", 2))
+				&& !expand_event(history, &exp_inf))
+			return (0);
 		exp_inf.offset++;
 	}
 	if (exp_inf.has_been_expanded)

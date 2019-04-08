@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:49:55 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 11:49:56 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/08 15:00:26 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,12 @@ int		readdir_to_dirent(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs)
 		}
 		if (stat(acrd->cur_file_path, &(acrd->stat_buf)) == -1)
 		{
-			ft_memdel((void**)&(acrd->cur_file_path));
-			continue ;
+			if (acrd->need_to_be_cmd
+					|| lstat(acrd->cur_file_path, &(acrd->stat_buf)) == -1)
+			{
+				ft_memdel((void**)&(acrd->cur_file_path));
+				continue ;
+			}
 		}
 		return (1);
 	}

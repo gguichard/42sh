@@ -31,7 +31,6 @@ PATH_JOB		=	job
 SRC_DIR	=	srcs
 SRC 	=	\
 main.c		\
-$(PATH_ERROR)/error_malloc.c \
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
 $(PATH_LEXER)/replace_quote.c \
@@ -64,6 +63,7 @@ $(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
+$(PATH_TOOLS)/execution_path.c \
 $(PATH_BUILT)/cd.c \
 $(PATH_BUILT)/cd_path.c \
 $(PATH_BUILT)/cd_utils.c \
@@ -173,6 +173,7 @@ $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \
 $(PATH_EXPAND)/ft_splitwhitespace.c \
 $(PATH_EXPAND)/cmd_substitute.c \
+$(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
