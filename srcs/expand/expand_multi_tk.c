@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:43:30 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 23:43:36 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 18:46:56 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
 	sub = NULL;
 	if (!(new_array = init_new_array(*array, save, *pos_array, &len)))
 		return (1);
-	if (!(replace = (char **)malloc(sizeof(char*) * (len + 1))))
+	if (!(replace = ft_memalloc(sizeof(char*) * (len + 1))))
 		return (0);
 	replace[len] = NULL;
 	replace_in_tab(&i, &replace, *array);
