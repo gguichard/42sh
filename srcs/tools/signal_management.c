@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:17 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 16:47:20 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 21:41:29 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	action_sigs(struct sigaction *act)
 	sigaction(SIGABRT, act, 0);
 	sigaction(SIGEMT, act, 0);
 	sigaction(SIGFPE, act, 0);
-	sigaction(SIGBUS, act, 0);
 	sigaction(SIGSEGV, act, 0);
+	sigaction(SIGBUS, act, 0);
 	sigaction(SIGSYS, act, 0);
 	sigaction(SIGPIPE, act, 0);
 	sigaction(SIGALRM, act, 0);

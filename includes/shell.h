@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 16:26:52 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 17:55:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 21:24:27 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 /*
 *********************************** INCLUDES ***********************************
 */
+
+//for atom completion
+# include "../libft/includes/libft.h"
+# include "../libft/includes/get_next_line.h"
+# include "../libft/includes/printf.h"
 
 # include "libft.h"
 # include "cmdline.h"

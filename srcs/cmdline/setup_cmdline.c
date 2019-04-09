@@ -6,13 +6,12 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 18:20:51 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 22:21:22 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
-#include <signal.h>
 #include <term.h>
 #include <unistd.h>
 #include "shell.h"
@@ -34,7 +33,6 @@ void	reset_cmdline(t_cmdline *cmdline, const char *prompt, size_t offset)
 
 int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 {
-	struct sigaction	act;
 	const char			*term;
 
 	g_cmdline = cmdline;
@@ -47,13 +45,5 @@ int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 		return (0);
 	ft_memset(cmdline->input.buffer, 0, sizeof(cmdline->input.buffer));
 	cmdline->input.capacity = sizeof(cmdline->input.buffer) - 1;
-	if (alloc->is_interactive)
-	{
-		update_winsize(cmdline);
-		act.sa_handler = handle_sigwinch;
-		act.sa_flags = SA_RESTART;
-		sigfillset(&act.sa_mask);
-		sigaction(SIGWINCH, &act, 0);
-	}
 	return (1);
 }
