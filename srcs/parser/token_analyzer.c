@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 18:05:44 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/07 02:10:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 14:20:37 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ static t_recall_prompt	recall_prompt_type(t_list *lst_tk)
 	return (PR_ERROR);
 }
 
-static int				check_red_ope(t_list **lst_tk, int prompt_hdoc)
+static int				check_red_ope(t_list **lst_tk, int prompt_hdc)
 {
 	char	*heredoc;
 
-	if (ft_strequ(get_tk(*lst_tk)->token, "<<") && (*lst_tk)->next != NULL
-			&& get_tk((*lst_tk)->next)->type == TK_RED_ROPT_FILE
-			&& prompt_hdoc)
+	if (prompt_hdc && get_tk(*lst_tk)->type == TK_RED_OPE
+			&& ft_strequ(get_tk(*lst_tk)->token, "<<")
+			&& (*lst_tk)->next != NULL
+			&& get_tk((*lst_tk)->next)->type == TK_RED_ROPT_FILE)
 	{
 		heredoc = prompt_heredoc(g_cmdline, get_tk((*lst_tk)->next)->token);
 		if (heredoc == NULL)
@@ -63,15 +64,15 @@ static int				check_red_ope(t_list **lst_tk, int prompt_hdoc)
 	return (1);
 }
 
-static int				check_lred_opt(t_list **lst_tk)
+static int				check_lred_opt(t_list **lst_tk, int prompt_hdc)
 {
 	*lst_tk = (*lst_tk)->next;
 	if ((*lst_tk) == NULL || get_tk(*lst_tk)->type != TK_RED_OPE)
 		return (0);
-	return (check_red_ope(lst_tk, 0));
+	return (check_red_ope(lst_tk, prompt_hdc));
 }
 
-t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
+t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_hdc)
 {
 	t_token_type	type;
 
@@ -85,9 +86,9 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 			break ;
 		else if (type == TK_CMD_SEP && get_tk(lst_tk->next)->type == TK_CMD_SEP)
 			return (syntax_error(get_tk(lst_tk->next)));
-		else if (type == TK_RED_LOPT_FD && !check_lred_opt(&lst_tk))
+		else if (type == TK_RED_LOPT_FD && !check_lred_opt(&lst_tk, prompt_hdc))
 			return (syntax_error(get_tk(lst_tk)));
-		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk, prompt_heredoc))
+		else if (type == TK_RED_OPE && !check_red_ope(&lst_tk, prompt_hdc))
 			return (syntax_error(get_tk(lst_tk)));
 		lst_tk = lst_tk->next;
 	}
@@ -97,5 +98,5 @@ t_recall_prompt			token_analyser(t_list *lst_tk, int prompt_heredoc)
 		return (recall_prompt_type(lst_tk));
 	else if (lst_tk && !(lst_tk->next) && get_tk(lst_tk)->type == TK_RED_OPE)
 		return (syntax_error(NULL));
-	return (lst_tk ? token_analyser(lst_tk->next, prompt_heredoc) : PR_SUCCESS);
+	return (lst_tk ? token_analyser(lst_tk->next, prompt_hdc) : PR_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 18:50:03 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 14:09:48 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	t_redirect_inf	redirect_inf;
 	int				ret;
 
-	if (!ft_strequ("<<", elem->input[0]) && !inhib_expand_tab(elem, alloc))
+	if (!ft_strequ("<<", elem->input[0]) && !ft_strequ("<<", elem->input[1])
+			&& !inhib_expand_tab(elem, alloc))
 		return (1);
 	if (!fill_redirect_inf(&redirect_inf, elem->input))
 	{
