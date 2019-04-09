@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:39:34 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 12:35:30 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,9 @@ char		*prompt_heredoc(t_cmdline *cmdline, const char *redir_word)
 	char	*heredoc;
 	size_t	len;
 
-	word = ft_strdup(redir_word);
+	word = only_inhib_str(redir_word);
 	if (word == NULL)
 		return (NULL);
-	else if (!inhib_only_str(word))
-	{
-		free(word);
-		return (NULL);
-	}
 	heredoc = read_heredoc(cmdline, word);
 	if (heredoc != NULL && heredoc[0] != '\0')
 	{
