@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 16:14:42 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 18:08:20 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	}
 	ret = 0;
-	if (!setup_redirection(alloc, &redirect_inf)
-			|| !process_redirection(&redirect_inf, opt))
-		ret = 1;
+	//if (!setup_redirection(alloc, &redirect_inf)
+	//		|| !process_redirection(&redirect_inf, opt))
+	//	ret = 1;
 	clean_redirect(&redirect_inf);
 	if (ret == 0)
 		ret = analyzer(alloc, elem->left, opt);
@@ -69,9 +69,11 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 	if (!ft_strequ(elem->input[0], "exit"))
 		alloc->exit_rdy = 0;
-	ret = try_builtin_execution(alloc, elem, opt);
-	if (ret == -1)
-		ret = exec_input(alloc, elem, opt);
+	(void)opt;
+	ret = 0;
+	//ret = try_builtin_execution(alloc, elem, opt);
+	//if (ret == -1)
+	//	ret = exec_input(alloc, elem, opt);
 	update_var(&alloc->vars, "_"
 			, elem->input[ft_strtab_count(elem->input) - 1]);
 	return (ret);

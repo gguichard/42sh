@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 10:17:47 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 18:27:43 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ static char		*join_command(t_cmdline *cmdline, char *full_input
 {
 	char	*tmp[3];
 
+	(void)cmdline;
 	if (new_line == NULL)
 		return (full_input);
-	else if (!expand_history_events(&cmdline->history, &new_line))
-		ft_strdel(&full_input);
+	//else if (!expand_history_events(&cmdline->history, &new_line))
+	//	ft_strdel(&full_input);
 	else
 	{
 		if (full_input == NULL)
@@ -141,7 +142,7 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	else if (state == RSTATE_EOT)
 	{
 		if (alloc->full_input == NULL)
-			builtin_exit(NULL, alloc);
+			; //builtin_exit(NULL, alloc);
 		else
 			ft_dprintf(2, "42sh: syntax error: unexpected end of file\n");
 	}

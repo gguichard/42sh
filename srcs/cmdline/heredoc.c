@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 12:35:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 18:07:01 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 	if (heredoc == NULL)
 		return (NULL);
 	setup_term(cmdline);
-	while (1)
+	int	i = 0;
+	while (++i < 50)
 	{
 		new_line = create_prompt_and_read_input(cmdline, PROMPT_HEREDOC
 				, &state);
