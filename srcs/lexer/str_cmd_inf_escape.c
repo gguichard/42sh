@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:51:49 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 11:51:50 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 12:00:39 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,27 @@ static int		is_dollared_spe_char(t_str_cmd_inf *str_cmd_inf, size_t at_pos
 int				scmd_char_at_is_escaped(t_str_cmd_inf *str_cmd_inf
 		, size_t at_pos)
 {
-	while (str_cmd_inf->sub_str_cmd != NULL)
-		str_cmd_inf = str_cmd_inf->sub_str_cmd;
+	str_cmd_inf = scmd_get_last_depth(str_cmd_inf);
 	if (str_cmd_inf->is_in_quote)
-		return (str_cmd_inf->str[str_cmd_inf->pos] != '\'');
-	if (str_cmd_inf->is_in_dbquote
-			&& !is_dollared_spe_char(str_cmd_inf, at_pos, "{(")
-			&& ft_strchr(DBQUOTE_SPE_CHAR, str_cmd_inf->str[at_pos])
-			== NULL)
-		return (1);
-	if (str_cmd_inf->cur_str_cmd_type == SCMD_TYPE_SUBCMD
-			&& !is_dollared_spe_char(str_cmd_inf, at_pos, "{(")
-			&& ft_strchr(SUBCMD_SPE_CHAR, str_cmd_inf->str[at_pos])
-			== NULL)
+		return (str_cmd_inf->str[at_pos] != '\'');
+	if (!scmd_char_at_can_be_spe(str_cmd_inf, at_pos))
 		return (1);
 	return (at_pos > 0 && str_cmd_inf->str[at_pos - 1] == '\\'
 			&& !scmd_char_at_is_escaped(str_cmd_inf, at_pos - 1));
+}
+
+int				scmd_char_at_can_be_spe(t_str_cmd_inf *str_cmd_inf
+		, size_t at_pos)
+{
+	str_cmd_inf = scmd_get_last_depth(str_cmd_inf);
+	if (str_cmd_inf->is_in_quote)
+		return (str_cmd_inf->str[at_pos] == '\'');
+	else if (str_cmd_inf->is_in_dbquote)
+	{
+		return (is_dollared_spe_char(str_cmd_inf, at_pos, "{(")
+				|| ft_strchr(DBQUOTE_SPE_CHAR, str_cmd_inf->str[at_pos])
+				!= NULL);
+	}
+	else
+		return (1);
 }

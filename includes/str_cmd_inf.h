@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:03:36 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 14:03:38 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 12:00:25 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <stdlib.h>
 
 # define DBQUOTE_SPE_CHAR "$\"\\\n"
-# define SUBCMD_SPE_CHAR "$\\)"
 # define SCMD_TYPE_NOTHING 0
 # define SCMD_TYPE_VAR 1
 # define SCMD_TYPE_SUBCMD 2
@@ -77,11 +76,20 @@ int				scmd_cur_char_is_in_nothing(t_str_cmd_inf *str_cmd_inf);
 */
 int				scmd_cur_char_is_escaped(t_str_cmd_inf *str_cmd_inf);
 
+int				scmd_cur_char_can_be_spe(t_str_cmd_inf *str_cmd_inf);
+
+void			scmd_move_pos(t_str_cmd_inf *str_cmd_inf, int pos_move);
+
+t_str_cmd_inf	*scmd_get_last_depth(t_str_cmd_inf *str_cmd_inf);
+
 /*
 ** Retourne 1 si le curseur a la position passee en parametre est echappe,
 ** 0 sinon.
 */
 int				scmd_char_at_is_escaped(t_str_cmd_inf *str_cmd_inf
+		, size_t at_pos);
+
+int				scmd_char_at_can_be_spe(t_str_cmd_inf *str_cmd_inf
 		, size_t at_pos);
 
 /*

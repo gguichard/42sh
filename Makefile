@@ -37,6 +37,7 @@ $(PATH_LEXER)/str_cmd_inf.c \
 $(PATH_LEXER)/str_cmd_inf_utils.c \
 $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
+$(PATH_LEXER)/str_cmd_inf_del.c \
 $(PATH_LEXER)/tilde_replace.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
@@ -168,6 +169,7 @@ $(PATH_JOB)/refresh_jobs.c \
 $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
 $(PATH_JOB)/job_id.c \
+$(PATH_JOB)/job_id_nb.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \
@@ -178,7 +180,8 @@ $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c \
-$(PATH_INHIB)/inhibitor_update_pos.c
+$(PATH_INHIB)/inhibitor_update_pos.c \
+$(PATH_INHIB)/only_inhib_str.c
 
 OBJ_DIR		=	.obj
 OBJ			=	$(SRC:.c=.o)

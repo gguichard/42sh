@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 10:28:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 11:28:06 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,11 @@ static void	shell_loop(t_alloc *alloc)
 		reset_term(&alloc->cmdline);
 		if (alloc->full_input != NULL)
 		{
-			set_sigmask(SIG_BLOCK);
+			if (alloc->is_interactive)
+				set_sigmask(SIG_BLOCK);
 			alloc->ret_val = lexer_parser(alloc->full_input, alloc, 0);
 			ft_strdel(&alloc->full_input);
-			set_signals_handlers();
+			set_signals_handlers(alloc->is_interactive);
 		}
 	}
 }
@@ -81,10 +82,9 @@ int			main(int argc, char **argv, char **environ)
 		ft_dprintf(STDERR_FILENO, "42sh: unable to init term\n");
 	else
 	{
-		alloc.is_interactive = isatty(STDIN_FILENO);
 		source_rc_file(&alloc);
 		load_history_file_entries(&alloc, &alloc.cmdline.history);
-		set_signals_handlers();
+		set_signals_handlers(alloc.is_interactive);
 		shell_loop(&alloc);
 	}
 	terminate_all_jobs(SIGTERM);

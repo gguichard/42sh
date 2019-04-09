@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 16:23:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:23:23 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 11:26:42 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int						setup_alloc(t_alloc *alloc, int argc, char **argv
 	alloc->argc = argc;
 	alloc->argv = argv;
 	alloc->exit_rdy = 1;
+	alloc->is_interactive = isatty(STDIN_FILENO);
 	alloc->ppid = getpid();
 	alloc->vars = parse_env(environ);
 	setup_def_vars(alloc);

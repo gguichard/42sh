@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:34 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 13:27:34 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 10:58:28 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,9 @@ void		terminate_all_jobs(int sig)
 	while (tmp)
 	{
 		job = tmp->content;
+		kill(job->pid, SIGCONT);
 		kill(job->pid, sig);
-		waitpid(job->pid, 0, 0);
+		waitpid(job->pid, 0, WNOHANG);
 		job->state = DONE;
 		if (job->pipe)
 		{

@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:29:03 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 19:40:02 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 11:21:06 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ int			job_control(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	while (elem)
 	{
-		opt->wait_hang = 1;
-		if (elem->left && elem->left->type != AST_PIPE)
+		if (alloc->is_interactive)
+			opt->wait_hang = 1;
+		if (alloc->is_interactive && elem->left && elem->left->type != AST_PIPE)
 			job_fork(alloc, elem->left, opt);
 		else
 			analyzer(alloc, elem->left, opt);
