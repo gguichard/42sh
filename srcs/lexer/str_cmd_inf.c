@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:51:44 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 11:51:46 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 12:01:01 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ int				scmd_cur_char_is_in_nothing(t_str_cmd_inf *str_cmd_inf)
 
 int				scmd_move_to_next_char(t_str_cmd_inf *str_cmd_inf)
 {
-	t_str_cmd_inf *tmp_scmd;
-
 	if (str_cmd_inf->str[str_cmd_inf->pos] == '\0')
 		return (0);
 	if (!scmd_cur_char_is_escaped(str_cmd_inf))
@@ -102,11 +100,6 @@ int				scmd_move_to_next_char(t_str_cmd_inf *str_cmd_inf)
 			interpret_char_in_sub_str_cmd(str_cmd_inf);
 		}
 	}
-	tmp_scmd = str_cmd_inf;
-	while (tmp_scmd != NULL)
-	{
-		++(tmp_scmd->pos);
-		tmp_scmd = tmp_scmd->sub_str_cmd;
-	}
+	scmd_move_pos(str_cmd_inf, 1);
 	return (1);
 }

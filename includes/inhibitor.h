@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:50:15 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 14:15:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 10:38:48 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 char	**inhib_expand_str(const char *str, t_alloc *alloc);
 int		inhib_expand_tab(t_ast *elem, t_alloc *alloc);
 int		inhib_only_str(char *str);
+char	*only_inhib_str(const char *str);
 
 /*
 ************************************ TOOLS *************************************
