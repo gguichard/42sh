@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:50:15 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 10:38:48 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 13:48:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 	, t_alloc *alloc);
 char	**inhib_expand_str(const char *str, t_alloc *alloc);
 int		inhib_expand_tab(t_ast *elem, t_alloc *alloc);
-int		inhib_only_str(char *str);
+
 char	*only_inhib_str(const char *str);
 
 /*
@@ -41,7 +41,6 @@ int		go_to_end_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos);
 int		inhib_expand_in_quote(t_str_cmd_inf *str_cmd, char **array
 	, size_t *pos, t_alloc *alloc);
 void	delete_line_tab(char ***array, int i);
-void	do_only_inhib(t_str_cmd_inf *str_cmd, char **str, size_t *pos);
 size_t	get_pos_in_array(char **array);
 void	update_pos_index(t_str_cmd_inf *str_cmd);
 char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem);

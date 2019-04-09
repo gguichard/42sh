@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 17:11:05 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 13:47:40 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,6 @@
 #include "inhibitor.h"
 #include "str_cmd_inf.h"
 #include "error.h"
-
-int		inhib_only_str(char *str)
-{
-	t_str_cmd_inf	str_cmd;
-	size_t			pos;
-
-	pos = 0;
-	if (!str || !scmd_init(&str_cmd, str))
-		return (0);
-	while (scmd_cur_char(&str_cmd))
-		do_only_inhib(&str_cmd, &str, &pos);
-	scmd_clean(&str_cmd);
-	return (1);
-}
 
 int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 		, t_alloc *alloc)
