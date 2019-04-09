@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:43:30 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 18:46:56 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 21:31:34 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ char	**init_new_array(char **array, size_t save, size_t pos, size_t *len)
 	return (new_array);
 }
 
-void	del_all_alloc(char **sub, char ***array, char ***new_array)
+void	del_all_alloc(char **sub, char **array, char **new_array)
 {
 	ft_memdel((void *)sub);
-	ft_strtab_free(*array);
-	ft_strtab_free(*new_array);
+	ft_strtab_free(array);
+	ft_strtab_free(new_array);
 }
 
 int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
@@ -73,18 +73,18 @@ int		expand_var_to_tab(char ***array, size_t len, size_t *pos_array
 	sub = NULL;
 	if (!(new_array = init_new_array(*array, save, *pos_array, &len)))
 		return (1);
-	if (!(replace = ft_memalloc(sizeof(char*) * (len + 1))))
-		return (0);
-	replace[len] = NULL;
+	if (!(replace = malloc(sizeof(char*) * (len + 1))))
+		return (!!ft_strtab_free(new_array));
 	replace_in_tab(&i, &replace, *array);
 	sub = ft_strsub((*array)[get_pos_in_array(*array)], 0, save);
 	replace[i++] = ft_strjoin(sub, new_array[0]);
-	while (new_array[x] && i < len - 1)
+	while (new_array[x] && i < (len - 1))
 		replace[i++] = ft_strdup(new_array[x++]);
-	replace[i] = ft_strjoin(new_array[x]
+	replace[i++] = ft_strjoin(new_array[x]
 			, &((*array)[get_pos_in_array(*array)][*pos_array]));
+	replace[i] = NULL;
 	(new_array[x]) ? *pos_array = ft_strlen(new_array[x]) : 0;
-	del_all_alloc(&sub, array, &new_array);
+	del_all_alloc(&sub, *array, new_array);
 	*array = replace;
 	return (1);
 }

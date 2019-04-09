@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 17:42:58 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 19:28:16 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,18 @@ void		check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 		, size_t *pos)
 {
 	size_t	len;
+	int		balance;
 
 	len = ft_strlen(*s);
+	balance = 1;
 	if ((*s)[0] != '~')
 		return (check_expand_home_assign(s, vars, str_cmd, pos));
 	scmd_move_to_next_char(str_cmd);
-	if ((*s)[1] == '/' || (*s)[1] == '-' || (*s)[1] == '+' || (*s)[1] == '-')
-		scmd_move_to_next_char(str_cmd);
-	if ((*s)[1] && (*s)[2] && (*s)[2] == '/')
-		scmd_move_to_next_char(str_cmd);
+	if ((*s)[1] == '/' || (*s)[1] == '-' || (*s)[1] == '+' || (*s)[1] == '-'
+			|| (*s)[1] == ':')
+		balance += scmd_move_to_next_char(str_cmd);
+	if ((*s)[1] && (*s)[2] && ((*s)[2] == '/' || (*s)[2] == ':'))
+		balance += scmd_move_to_next_char(str_cmd);
 	expand_home_shortcut(s, vars);
-	*pos = ft_strlen(*s) - len + 1;
+	*pos = ft_strlen(*s) - len + balance;
 }

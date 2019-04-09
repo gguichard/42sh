@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 15:54:21 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 19:03:02 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	get_pos_in_array(char **array)
 	size_t	i;
 
 	i = 0;
-	if (!array || !(*array))
+	if (!array)
 		return (i);
 	while (array[i])
 		i += 1;
