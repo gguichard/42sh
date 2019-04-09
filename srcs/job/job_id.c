@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 12:25:42 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 12:53:08 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 13:48:41 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	look_for_str_job(t_list **tmp, const char *arg
 	while (voyager)
 	{
 		cmd = job_cmd(voyager->content);
-		if (str_check(cmd, (arg[1] == '?') ? arg + 2 : arg + 1))
+		if (str_check(cmd, arg))
 		{
 			ft_strdel(&cmd);
 			if (!(*tmp))
@@ -54,7 +54,7 @@ static int	look_for_str_job(t_list **tmp, const char *arg
 	}
 	if (voyager)
 		(*tmp) = NULL;
-	return (index);
+	return ((!voyager && !(*tmp)) ? -1 : index);
 }
 
 static int	job_id_string(const char *arg, t_list **tmp, const char *bltin)
@@ -64,10 +64,10 @@ static int	job_id_string(const char *arg, t_list **tmp, const char *bltin)
 	index = 1;
 	(*tmp) = NULL;
 	if (arg[1] == '?')
-		index = look_for_str_job(tmp, arg, ft_strstr);
+		index = look_for_str_job(tmp, arg + 2, ft_strstr);
 	else
-		index = look_for_str_job(tmp, arg, ft_strstr_start);
-	if (!(*tmp))
+		index = look_for_str_job(tmp, arg + 1, ft_strstr_start);
+	if (!(*tmp) && index != -1)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: %s: %s: ambiguous job spec\n"
 					, bltin, (arg[1] == '?') ? arg + 2 : arg + 1);
