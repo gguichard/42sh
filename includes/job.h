@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:58:55 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 13:53:58 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 17:00:02 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ void			update_job_state(t_list *tmp, t_job_state state);
 t_job			*check_job_state(t_list *tmp, t_job_state state);
 int				job_state_done(t_list *tmp);
 int				job_state_run_or_done(t_list *tmp);
+int				check_stopped_job(void);
 
 #endif
