@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:41:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 00:10:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:08:48 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,12 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array
 				&& !(expand_var_to_tab(array, len, pos_array, save)))
 			return (0);
 	}
-	else if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote
-			&& ft_strequ((*array)[*pos_array], "") == 1)
-		delete_line_tab(array, *pos_array);
+	else
+	{
+		if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote
+			&& ft_strequ((*array)[index], "") == 1)
+		delete_line_tab(array, index);
+	}
 	scmd_move_to_next_char(str_cmd);
 	update_pos_index(str_cmd);
 	return (1);
