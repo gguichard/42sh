@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 17:48:43 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:17:35 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,6 @@ size_t	get_pos_in_array(char **array)
 	while (array[i])
 		i += 1;
 	return (i - 1);
-}
-
-void	update_pos_index(t_str_cmd_inf *str_cmd)
-{
-	if (scmd_cur_char(str_cmd) == '?' || scmd_cur_char(str_cmd) == '!'
-			|| scmd_cur_char(str_cmd) == '$' || scmd_cur_char(str_cmd) == ')')
-	{
-		scmd_move_to_next_char(str_cmd);
-		return ;
-	}
-	if (scmd_cur_char(str_cmd) != '{')
-	{
-		while (scmd_cur_is_of(str_cmd, DBQUOTE_SPE_CHAR) == 0
-				&& scmd_cur_char(str_cmd)
-				&& (ft_isalnum(scmd_cur_char(str_cmd))
-				|| scmd_cur_char(str_cmd) == '_'))
-			scmd_move_to_next_char(str_cmd);
-	}
-	else if (scmd_cur_char(str_cmd) == '{')
-	{
-		while (scmd_cur_char(str_cmd) && scmd_cur_char(str_cmd) != '}')
-			scmd_move_to_next_char(str_cmd);
-		scmd_move_to_next_char(str_cmd);
-	}
 }
 
 char	**insert_new_tab(char **modify, int *i, char **new, t_ast *elem)

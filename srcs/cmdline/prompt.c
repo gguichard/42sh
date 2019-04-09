@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:47:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 23:52:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 10:18:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char		*get_prompt(t_cmdline *cmdline, t_prompt type, size_t *offset)
 	return (str);
 }
 
-static char	*non_interact_input(t_cmdline *cmdline, t_rstate *state)
+static char	*non_interactive_input(t_cmdline *cmdline, t_rstate *state)
 {
 	char	*str;
 	int		ret;
@@ -59,8 +59,8 @@ char		*create_prompt_and_read_input(t_cmdline *cmdline, t_prompt type
 	char	*prompt;
 	size_t	offset;
 
-	if (!isatty(STDIN_FILENO))
-		return (non_interact_input(cmdline, state));
+	if (!cmdline->alloc->is_interactive)
+		return (non_interactive_input(cmdline, state));
 	prompt = get_prompt(cmdline, type, &offset);
 	if (prompt == NULL)
 		*state = read_input(cmdline, "> ", 2);

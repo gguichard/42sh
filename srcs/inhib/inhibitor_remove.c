@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:01 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 15:51:50 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:14:30 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,13 @@ void	remove_escaped_char(t_str_cmd_inf *str_cmd, char **input, size_t *pos
 	if (str_cmd->pos == 0)
 		*pos = 1;
 	len = ft_strlen(*input + *pos);
-	ft_memmove((void*)(*input + *pos - 1),
-			(const void*)(*input + *pos), len);
+	ft_memmove(*input + *pos - 1, *input + *pos, len);
 	(*input)[*pos + len - 1] = '\0';
 	if (scmd_cur_char_is_escaped(str_cmd) == 1
 			&& scmd_cur_char(str_cmd) == '\n' && !str_cmd->is_in_quote)
 	{
 		len = ft_strlen(*input + *pos);
-		ft_memmove((void*)(*input + *pos - 1),
-				(const void*)(*input + *pos), len);
+		ft_memmove(*input + *pos - 1, *input + *pos, len);
 		(*input)[*pos + len - 1] = '\0';
 		if (*pos > 0)
 			*pos -= 1;

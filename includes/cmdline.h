@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 14:02:53 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 15:50:00 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/08 16:28:39 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,25 @@
 # define CMDLINE_H
 
 # include <string.h>
+# include "history.h"
 # include "struct_cmdline.h"
 
 # define INPUT_SIZE_INCR 1024
 # define VISUAL_STRING "(visual) "
 
+typedef struct s_alloc			t_alloc;
 typedef struct s_str_cmd_inf	t_str_cmd_inf;
 typedef struct s_ac_suff_inf	t_ac_suff_inf;
 typedef struct s_list			t_list;
 
 t_cmdline	*g_cmdline;
+
+int			init_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char		*read_cmdline(t_alloc *alloc, t_cmdline *cmdline);
+char		*get_history_file_path(t_alloc *alloc);
+int			load_history_file_entries(t_alloc *alloc, t_history *history);
+int			save_history_entries(t_alloc *alloc, t_history *history);
+void		del_history_entries(t_history *history);
 
 void		reset_cmdline(t_cmdline *cmdline, const char *prompt
 		, size_t offset);

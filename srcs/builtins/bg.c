@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:26:58 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 14:35:39 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 22:23:59 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@
 static int	get_indexed_job(t_ast *elem, t_list **tmp, int *index)
 {
 	if (elem->input[1])
-	{
-		*index = ft_atoi(elem->input[1]);
-		while (--(*index) > 0 && (*tmp))
-			(*tmp) = (*tmp)->next;
-	}
+		*index = get_job_id(elem->input[1], tmp, "bg");
 	else
 	{
 		while ((*tmp) && (*tmp)->next)
@@ -42,14 +38,12 @@ static int	get_indexed_job(t_ast *elem, t_list **tmp, int *index)
 	return (0);
 }
 
-static void	bring_to_bg_process(t_ast *elem, t_list *tmp, int index)
+static void	bring_to_bg_process(t_list *tmp, int index)
 {
 	t_job	*job;
 	char	*cmd;
 
 	job = tmp->content;
-	if (index < 1 && elem->input[1])
-		index = ft_atoi(elem->input[1]);
 	cmd = job_cmd(job);
 	ft_printf("[%d] %s &\n", index, cmd);
 	ft_memdel((void **)&cmd);
@@ -87,6 +81,6 @@ int			builtin_bg(t_ast *elem, t_alloc *alloc)
 		return (0);
 	}
 	alloc->last_bg = ((t_job *)tmp->content)->pid;
-	bring_to_bg_process(elem, tmp, index);
+	bring_to_bg_process(tmp, index);
 	return (0);
 }

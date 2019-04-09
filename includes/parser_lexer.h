@@ -6,13 +6,14 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:02:12 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 15:02:29 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 00:09:19 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_LEXER_H
 # define PARSER_LEXER_H
 
+# include "libft.h"
 # include "shell.h"
 # include "str_cmd_inf.h"
 
@@ -33,13 +34,7 @@ int				lexer_parser(const char *line, t_alloc *alloc, int fork);
 
 int				expand_home_shortcut(char **s, t_list *vars);
 void			check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
-				, size_t *pos);
-
-/*
-********************************* LEXER TOOLS **********************************
-*/
-
-void			ft_insert(char **source, char *insert, int pos1, int pos2);
+		, size_t *pos);
 
 /*
 ************************************ PARSER ************************************
@@ -53,7 +48,7 @@ t_ast			*parser(t_list *lst_tk);
 
 t_recall_prompt	token_analyser(t_list *lst_tk, int prompt_heredoc);
 int				link_branch(t_ast **elem, t_ast **branch, t_ast **sort
-				, t_list **lst_tk);
+		, t_list **lst_tk);
 t_ast			*create_ast_branch(t_list **lst_tk);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 15:29:37 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 20:16:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 00:15:25 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ void	insert_new_elem(t_list **lst, t_list *new)
 	tmp = *lst;
 	if (!lst || !tmp)
 		*lst = new;
-	else if (ft_strcmp(((t_var *)new->content)->key,
-			((t_var *)tmp->content)->key) <= 0)
+	else if (ft_strcmp(((t_var *)new->content)->key
+				, ((t_var *)tmp->content)->key) <= 0)
 	{
 		new->next = tmp;
 		*lst = new;
 	}
 	else
 	{
-		while (tmp && tmp->next && ft_strcmp(((t_var *)new->content)->key,
-				((t_var *)tmp->next->content)->key) > 0)
+		while (tmp && tmp->next && ft_strcmp(((t_var *)new->content)->key
+					, ((t_var *)tmp->next->content)->key) > 0)
 			tmp = tmp->next;
 		new->next = tmp->next;
 		tmp->next = new;

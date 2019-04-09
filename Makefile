@@ -33,11 +33,11 @@ SRC 	=	\
 test_main.c		\
 $(PATH_ERROR)/exec_error.c \
 $(PATH_ERROR)/error_utils.c \
-$(PATH_LEXER)/replace_quote.c \
 $(PATH_LEXER)/str_cmd_inf.c \
 $(PATH_LEXER)/str_cmd_inf_utils.c \
 $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
+$(PATH_LEXER)/tilde_replace.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
 $(PATH_PARSER)/ast_creation.c \
@@ -58,8 +58,6 @@ $(PATH_OPERATOR)/pipe.c \
 $(PATH_OPERATOR)/pipe_fork.c \
 $(PATH_TOOLS)/clean_tools.c \
 $(PATH_TOOLS)/home_tools.c \
-$(PATH_TOOLS)/printer_ast.c \
-$(PATH_TOOLS)/lexer_tools.c \
 $(PATH_TOOLS)/ast_tools.c \
 $(PATH_TOOLS)/builtins_tools.c \
 $(PATH_TOOLS)/alloc_starter_tools.c \
@@ -169,6 +167,7 @@ $(PATH_JOB)/redirect_terminal_control.c \
 $(PATH_JOB)/refresh_jobs.c \
 $(PATH_JOB)/simple_display_job.c \
 $(PATH_JOB)/state_jobs_tools.c \
+$(PATH_JOB)/job_id.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \
@@ -178,7 +177,8 @@ $(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
-$(PATH_INHIB)/inhibitor_tools.c
+$(PATH_INHIB)/inhibitor_tools.c \
+$(PATH_INHIB)/inhibitor_update_pos.c
 
 OBJ_DIR		=	.obj
 OBJ			=	$(SRC:.c=.o)

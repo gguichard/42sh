@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 09:58:02 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/08 18:50:03 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	if (elem->type != AST_REDIR && !inhib_expand_tab(elem, alloc))
-		return (1);
+		return (0);
 	if (elem->type == AST_JOB)
 		return (job_control(alloc, elem, opt));
 	else if (elem->type == AST_LOGIC)

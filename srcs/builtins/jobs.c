@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:15 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 14:39:12 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 22:24:08 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int			builtin_jobs(t_ast *elem, t_alloc *alloc)
 		return (2);
 	}
 	if (elem->input[opts.index])
-		param = ft_atoi(elem->input[opts.index]);
+		param = get_job_id(elem->input[opts.index], 0, "jobs");
 	if (param > (int)ft_lstsize(g_jobs)
 			|| (param < 1 && elem->input[opts.index]))
 	{

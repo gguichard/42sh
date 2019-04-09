@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 14:25:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 10:17:47 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ static t_error	read_complete_command(t_alloc *alloc, t_cmdline *cmdline
 
 	error = ERRC_INCOMPLETECMD;
 	type = PROMPT_DEFAULT;
+	*state = RSTATE_END;
 	while (error == ERRC_INCOMPLETECMD)
 	{
 		new_line = create_prompt_and_read_input(cmdline, type, state);
@@ -131,13 +132,10 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	t_rstate	state;
 	t_error		error;
 
-	state = RSTATE_END;
 	error = read_complete_command(alloc, cmdline, &state);
-	if (alloc->full_input != NULL)
-	{
-		remove_only_escaped_newline(&alloc->full_input);
+	if (alloc->is_interactive && alloc->full_input != NULL
+			&& remove_only_escaped_newline(&alloc->full_input))
 		push_history_entry(&cmdline->history, alloc->full_input);
-	}
 	if (state == RSTATE_ETX)
 		alloc->ret_val = 1;
 	else if (state == RSTATE_EOT)

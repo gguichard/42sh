@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:29:03 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 13:29:03 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/08 19:40:02 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	job_fork(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	else if (child > 0)
 	{
 		if (setpgid(child, 0) == -1)
-			kill_zombie_boy(child);
+			kill_zombie_boy(child, 1);
 		else
 		{
 			add_pid_lst(child, elem, 0);
