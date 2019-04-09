@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:01 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 15:12:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 20:43:19 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ void		remove_last_quote(t_str_cmd_inf *str_cmd, char **array, size_t *pos
 	else if (scmd_cur_char(str_cmd) == '\\')
 	{
 		str_cmd->pos += 1;
-		*pos += 1;
 		remove_escaped_char(str_cmd, &(array[index]), pos, 0);
-		*pos -= 1;
 	}
 	else
 	{
