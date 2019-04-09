@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 20:20:24 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 20:24:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 14:46:02 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ const char	*get_var_value(t_list *vars, const char *key)
 	t_var	*var;
 
 	var = get_var(vars, key);
-	return (var == NULL ? "" : var->value);
+	return ((var == NULL || var->value == NULL) ? "" : var->value);
 }
 
 const char	*get_var_value_or_null(t_list *vars, const char *key)
