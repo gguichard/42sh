@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:17 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 11:22:15 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 16:47:20 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	sigs_wait_line(t_alloc *alloc)
 	int			x;
 
 	x = 1;
-	if (!alloc->is_interactive)
+	if (!alloc->is_interactive || SIGNALS_ON == 0)
 		return ;
 	sigemptyset(&mask);
 	sigpending(&mask);

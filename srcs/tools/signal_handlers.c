@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 11:21:03 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 17:43:57 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	handler_sigterm(void)
 			return ;
 		tmp = tmp->next;
 	}
-	if (!g_cmdline->alloc->exit_rdy)
+	if (check_stopped_job() && !g_cmdline->alloc->exit_rdy)
 	{
 		ft_dprintf(STDERR_FILENO, "exit\nThere are stopped jobs.\n");
 		print_prompt_and_cmdline(g_cmdline);
@@ -58,7 +58,7 @@ void		set_signals_handlers(int is_interactive)
 {
 	struct sigaction	act;
 
-	if (!is_interactive)
+	if (!is_interactive || SIGNALS_ON == 0)
 		return ;
 	sigfillset(&act.sa_mask);
 	act.sa_handler = handler_signals;

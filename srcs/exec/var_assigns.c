@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 19:42:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/05 20:05:31 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:13:33 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	reset_tmp_var(t_alloc *alloc, t_list *cur, t_list *next
 	else
 	{
 		ft_lstdelone(&cur, free_var);
-		if (prev == NULL)
+		if (*prev == NULL)
 			alloc->vars = next;
 		else
 			(*prev)->next = next;

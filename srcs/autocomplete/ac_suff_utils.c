@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:49:59 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 11:50:01 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 16:49:03 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	autocomplete_with_infs(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs)
 {
 	if ((acrd->dir = opendir(acrd->dir_to_use)) != NULL)
 	{
-		while (readdir_to_dirent(acrd, acs))
+		while (readdir_to_dirent(acrd))
 		{
 			if (!try_ac_for_this_file(acrd, acs))
 			{

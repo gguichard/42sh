@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 17:34:08 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:42:58 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void		check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 	scmd_move_to_next_char(str_cmd);
 	if ((*s)[1] == '/' || (*s)[1] == '-' || (*s)[1] == '+' || (*s)[1] == '-')
 		scmd_move_to_next_char(str_cmd);
-	if ((*s)[2] && (*s)[2] == '/')
+	if ((*s)[1] && (*s)[2] && (*s)[2] == '/')
 		scmd_move_to_next_char(str_cmd);
 	expand_home_shortcut(s, vars);
 	*pos = ft_strlen(*s) - len + 1;
