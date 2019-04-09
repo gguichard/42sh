@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:19 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 10:27:00 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 16:59:37 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "signals.h"
 #include "builtins.h"
 
-static int	check_stopped_job(void)
+int			check_stopped_job(void)
 {
 	t_list	*tmp;
 
