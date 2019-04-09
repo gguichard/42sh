@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 13:51:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:49:10 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 14:27:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,17 @@ static int	redirect_file(t_redirect_inf *redirect_inf)
 
 int			setup_redirection(t_alloc *alloc, t_redirect_inf *redirect_inf)
 {
-	if (redirect_inf->red_type == RD_LL)
-		return (redirect_tempfile(alloc, redirect_inf));
+	if (redirect_inf->lopt_fd == FD_ERROR || redirect_inf->ropt_fd == FD_ERROR)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: -1: file descriptor out of range\n");
+		return (0);
+	}
 	else
 	{
-		if (redirect_inf->ropt_fd == FD_NOTSET)
+		if (redirect_inf->red_type == RD_LL)
+			return (redirect_tempfile(alloc, redirect_inf));
+		else if (redirect_inf->ropt_fd == FD_NOTSET)
 			return (redirect_file(redirect_inf));
-		else if (redirect_inf->ropt_fd == FD_ERROR)
-		{
-			ft_dprintf(STDERR_FILENO, "42sh: -1: bad file descriptor\n");
-			return (0);
-		}
 	}
 	return (1);
 }

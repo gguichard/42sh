@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_prompt_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: fwerner <fwerner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:17:04 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 14:17:06 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 14:12:54 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char		*shorten_home(char *str, int only_last_dir, t_list *vars)
 		ft_memmove(str + 1, str + home_len, ft_strlen(str) - home_len + 1);
 		str[0] = '~';
 	}
-	if (only_last_dir)
+	if (only_last_dir && !ft_strequ(str, "/"))
 	{
 		last_slash_pos = ft_strrchr(str, '/');
 		if (last_slash_pos != NULL)

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 16:28:07 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 16:56:32 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:01:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,12 @@ static void		print_unterminated_line(t_cmdline *cmdline)
 	char	*buffer;
 
 	buff_len = cmdline->winsize.ws_col - 1;
-	buffer = (char *)malloc(buff_len * sizeof(char));
-	if (buffer == NULL)
+	if (buff_len <= 0
+			|| (buffer = (char *)malloc(buff_len * sizeof(char))) == NULL)
+	{
+		write(STDOUT_FILENO, "\n", 1);
 		return ;
+	}
 	ft_memset(buffer, ' ', buff_len);
 	tputs(tgetstr("mr", NULL), 1, t_putchar);
 	write(STDOUT_FILENO, "%", 1);

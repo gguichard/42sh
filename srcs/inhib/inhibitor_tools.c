@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/08 18:17:35 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 15:54:21 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	create_new_input(t_ast *elem, int *i, char **new)
 	if (!(modify = (char**)malloc(sizeof(char*) * (len_input + len_new))))
 	{
 		ft_strtab_free(elem->input);
+		elem->input = NULL;
 		ft_strtab_free(new);
 		return ;
 	}

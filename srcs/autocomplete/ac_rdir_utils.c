@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:49:55 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 15:00:26 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 16:48:05 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_list	*make_new_choice(t_ac_rdir_inf *acrd)
 	return (new_elem);
 }
 
-int		readdir_to_dirent(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs)
+int		readdir_to_dirent(t_ac_rdir_inf *acrd)
 {
 	struct dirent	*tmp_dirent;
 
@@ -78,7 +78,6 @@ int		readdir_to_dirent(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs)
 		if ((acrd->cur_file_path = ft_strjoin(acrd->dir_to_use
 						, acrd->cur_file_name)) == NULL)
 		{
-			acs->suff = NULL;
 			return (0);
 		}
 		if (stat(acrd->cur_file_path, &(acrd->stat_buf)) == -1)

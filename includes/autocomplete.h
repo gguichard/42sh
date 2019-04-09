@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:02:04 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 15:48:57 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 16:51:02 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,9 @@ t_list				*make_new_choice(t_ac_rdir_inf *acrd);
 /*
 ** Remplie les inforamtions du prochain fichier a lire present dans le dossier
 ** contenu dans le t_ac_rdir_inf. Retourne 1 si un fichier a ete trouve et 0
-** sinon. Met le suffix du t_ac_suff_inf a NULL s'il y a eu une erreur.
+** sinon.
 */
-int					readdir_to_dirent(t_ac_rdir_inf *acrd, t_ac_suff_inf *acs);
+int					readdir_to_dirent(t_ac_rdir_inf *acrd);
 
 /*
 ** Initialise le contenu du t_ac_rdir_inf avec les informations passes en

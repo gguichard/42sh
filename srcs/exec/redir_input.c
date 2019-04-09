@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 12:06:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:52:16 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 14:24:29 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 {
 	int	fd;
 	int	ret;
+	int	in_fd;
 
 	fd = open(redirect_inf->ropt_file, O_RDONLY);
 	unlink(redirect_inf->ropt_file);
@@ -75,7 +76,12 @@ int			redirect_heredoc(t_redirect_inf *redirect_inf, t_exec_opt *opt)
 		ft_dprintf(STDERR_FILENO, "42sh: unable to read heredoc temp file\n");
 		return (0);
 	}
-	ret = dup2_with_rc(opt, fd, STDIN_FILENO);
+	in_fd = redirect_inf->lopt_fd;
+	if (in_fd == FD_DEFAULT)
+		in_fd = STDIN_FILENO;
+	ret = dup2_with_rc(opt, fd, in_fd);
+	if (!ret)
+		ft_dprintf(STDERR_FILENO, "42sh: %d: bad file descriptor\n", in_fd);
 	close(fd);
 	return (ret);
 }
