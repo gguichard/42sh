@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 16:26:52 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 17:35:07 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:55:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,10 @@
 # define SHELL_H
 
 # define SIGNALS_ON		1
+
 /*
 *********************************** INCLUDES ***********************************
 */
-
-//for atom completion
-# include "../libft/includes/libft.h"
-# include "../libft/includes/get_next_line.h"
-# include "../libft/includes/printf.h"
 
 # include "libft.h"
 # include "cmdline.h"
