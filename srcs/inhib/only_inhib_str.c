@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 09:22:28 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/09 11:50:13 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 12:44:14 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,15 @@ static int		move_and_remove_englobing_chars(t_str_cmd_inf *scmd)
 	return (1);
 }
 
+static void		change_all_str_scmd(t_str_cmd_inf *scmd, char *new_str)
+{
+	while (scmd != NULL)
+	{
+		scmd->str = new_str;
+		scmd = scmd->sub_str_cmd;
+	}
+}
+
 char			*only_inhib_str(const char *str)
 {
 	t_str_cmd_inf	scmd;
@@ -70,7 +79,7 @@ char			*only_inhib_str(const char *str)
 			cur_char_ptr = scmd.str + scmd.pos;
 			ft_memmove(cur_char_ptr - 1, cur_char_ptr + del_cur_char
 					, ft_strlen(cur_char_ptr + del_cur_char) + 1);
-			scmd.str = (cur_char_ptr - del_cur_char);
+			change_all_str_scmd(&scmd, cur_char_ptr - del_cur_char);
 			scmd_move_pos(&scmd, -(scmd.pos));
 		}
 		else if (!move_and_remove_englobing_chars(&scmd))
