@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:19 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 17:45:33 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:50:28 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int			check_stopped_job(void)
 	t_list	*tmp;
 
 	tmp = g_jobs;
-	sleep(5);
 	while (tmp != NULL)
 	{
 		if (check_job_state(tmp, STOPPED))
