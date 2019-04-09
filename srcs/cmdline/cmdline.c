@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 15:22:21 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:25:37 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 10:17:47 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ char			*read_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	t_error		error;
 
 	error = read_complete_command(alloc, cmdline, &state);
-	if (alloc->full_input != NULL
+	if (alloc->is_interactive && alloc->full_input != NULL
 			&& remove_only_escaped_newline(&alloc->full_input))
 		push_history_entry(&cmdline->history, alloc->full_input);
 	if (state == RSTATE_ETX)

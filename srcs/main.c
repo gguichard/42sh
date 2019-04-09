@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:35:50 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 10:28:16 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int			main(int argc, char **argv, char **environ)
 		ft_dprintf(STDERR_FILENO, "42sh: unable to init term\n");
 	else
 	{
+		alloc.is_interactive = isatty(STDIN_FILENO);
 		source_rc_file(&alloc);
 		load_history_file_entries(&alloc, &alloc.cmdline.history);
 		set_signals_handlers();

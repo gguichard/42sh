@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:47:08 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 23:47:10 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 10:08:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,5 @@ void		del_alloc(t_alloc *alloc)
 		del_lst_ast(&alloc->ast);
 		alloc->ast = NULL;
 	}
-	alloc = NULL;
+	del_history_entries(&alloc->cmdline.history);
 }

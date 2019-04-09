@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 16:26:52 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 16:30:30 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 10:14:09 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ struct					s_alloc
 {
 	int					argc;
 	char				**argv;
+	int					is_interactive;
 	int					exit_rdy;
 	int					ret_val;
 	pid_t				last_bg;
