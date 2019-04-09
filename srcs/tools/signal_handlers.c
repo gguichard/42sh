@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 16:25:23 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/09 11:21:03 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,12 @@ static void	handler_signals(int sig)
 	close(STDIN_FILENO);
 }
 
-void		set_signals_handlers(void)
+void		set_signals_handlers(int is_interactive)
 {
 	struct sigaction	act;
 
+	if (!is_interactive)
+		return ;
 	sigfillset(&act.sa_mask);
 	act.sa_handler = handler_signals;
 	act.sa_flags = SA_RESTART;
