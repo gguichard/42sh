@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:44:01 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 12:37:31 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 13:47:05 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ int			remove_only_escaped_newline(char **str)
 		else if (scmd_cur_char(&str_cmd) == '\n'
 				&& scmd_cur_char_is_escaped(&str_cmd))
 		{
-			ft_memmove((void *)(((*str)[pos + 1] != '\0') ? *str + pos - 1 : *str + pos), (void *)(*str + pos + 1)
-					, ft_strlen(*str + pos));
+			ft_memmove(((*str)[pos + 1] != '\0') ? *str + pos - 1 : *str + pos
+					, *str + pos + 1, ft_strlen(*str + pos));
 			(*str)[pos + ft_strlen(*str + pos)] = '\0';
 			scmd_move_to_next_char(&str_cmd);
 		}
