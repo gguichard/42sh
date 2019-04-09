@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 14:09:48 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 16:14:42 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	dispatch_command(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	if (elem->type != AST_REDIR && !inhib_expand_tab(elem, alloc))
-		return (0);
+		return (alloc->ret_val);
 	if (elem->type == AST_JOB)
 		return (job_control(alloc, elem, opt));
 	else if (elem->type == AST_LOGIC)
@@ -93,8 +93,7 @@ static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (dispatch_command(alloc, elem, opt));
 	else if (elem->type == AST_REDIR)
 		return (dispatch_redirection(alloc, elem, opt));
-	else
-		return (1);
+	return (1);
 }
 
 int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
@@ -104,7 +103,7 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	{
 		if (elem == NULL && opt->red_save != NULL && !opt->from_builtin)
 			use_rc_on_shell(opt);
-		return (0);
+		return ((!elem) ? 0 : alloc->ret_val);
 	}
 	if (elem->type != AST_CMD_SEP)
 		return (assign_analyzer(alloc, elem, opt));
