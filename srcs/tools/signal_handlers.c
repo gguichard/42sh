@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 17:43:57 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/09 20:33:21 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "job.h"
 #include "builtins.h"
 
-static void	handler_sigterm(void)
+static int	check_running_jobs(void)
 {
 	t_list	*tmp;
 
@@ -25,9 +25,16 @@ static void	handler_sigterm(void)
 	while (tmp)
 	{
 		if (check_job_state(tmp, RUNNING_FG))
-			return ;
+			return (1);
 		tmp = tmp->next;
 	}
+	return (0);
+}
+
+static void	handler_sigterm(void)
+{
+	if (check_running_jobs())
+		return ;
 	if (check_stopped_job() && !g_cmdline->alloc->exit_rdy)
 	{
 		ft_dprintf(STDERR_FILENO, "exit\nThere are stopped jobs.\n");
@@ -45,9 +52,12 @@ static void	handler_signals(int sig)
 		return (handler_sigterm());
 	if (sig == SIGINT)
 	{
-		handle_end_of_text(g_cmdline);
-		reset_cmdline(g_cmdline, g_cmdline->prompt.str
-				, g_cmdline->prompt.offset);
+		if (!check_running_jobs())
+		{
+			handle_end_of_text(g_cmdline);
+			reset_cmdline(g_cmdline, g_cmdline->prompt.str
+					, g_cmdline->prompt.offset);
+		}
 		return ;
 	}
 	g_sig = sig;
