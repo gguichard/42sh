@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:38:22 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 15:41:10 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 09:10:39 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@ static void	add_char_and_esc_if_needed(t_cmdline *cmdline, char char_to_add
 		add_spestr_to_input(cmdline, "\'@\'", char_to_add);
 	else if (scmd->is_in_quote && char_to_add == '\'')
 		add_spestr_to_input(cmdline, "\'\\@\'", char_to_add);
+	else if (char_to_add == '~')
+	{
+		if (scmd->is_in_quote)
+			add_spestr_to_input(cmdline, "\'\\@\'", char_to_add);
+		else if (scmd->is_in_dbquote)
+			add_spestr_to_input(cmdline, "\"\\@\"", char_to_add);
+		else if (scmd_cur_char_is_in_nothing(scmd))
+			add_spestr_to_input(cmdline, "\\@", char_to_add);
+	}
 	else
 		add_char_to_input(cmdline, char_to_add);
 }
