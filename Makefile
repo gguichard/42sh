@@ -37,6 +37,7 @@ $(PATH_LEXER)/str_cmd_inf.c \
 $(PATH_LEXER)/str_cmd_inf_utils.c \
 $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
+$(PATH_LEXER)/str_cmd_inf_del.c \
 $(PATH_LEXER)/tilde_replace.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \

@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:51:55 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/09 10:36:45 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/09 13:06:06 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,39 +23,6 @@ int				scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str)
 	}
 	else
 		return (1);
-}
-
-void			scmd_delete_sub_str(t_str_cmd_inf *str_cmd_inf)
-{
-	if (str_cmd_inf != NULL)
-	{
-		scmd_delete_sub_str(str_cmd_inf->sub_str_cmd);
-		free(str_cmd_inf);
-	}
-}
-
-void			scmd_clean(t_str_cmd_inf *str_cmd_inf)
-{
-	if (str_cmd_inf != NULL)
-	{
-		scmd_delete_sub_str(str_cmd_inf->sub_str_cmd);
-		free(str_cmd_inf->str);
-		scmd_init(str_cmd_inf, NULL);
-	}
-}
-
-int				scmd_reset(t_str_cmd_inf *str_cmd_inf, const char *new_str)
-{
-	t_str_cmd_inf	new_scmd;
-
-	if (scmd_init(&new_scmd, new_str))
-	{
-		scmd_clean(str_cmd_inf);
-		ft_memcpy(str_cmd_inf, &new_scmd, sizeof(t_str_cmd_inf));
-		return (1);
-	}
-	else
-		return (0);
 }
 
 void			scmd_move_pos(t_str_cmd_inf *str_cmd_inf, int pos_move)
