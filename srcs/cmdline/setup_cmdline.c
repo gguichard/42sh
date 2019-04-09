@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 10:23:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 22:21:22 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 00:32:24 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ int		init_cmdline(t_alloc *alloc, t_cmdline *cmdline)
 	g_cmdline = cmdline;
 	cmdline->alloc = alloc;
 	term = get_var_value(alloc->vars, "TERM");
-	cmdline->stdin_dup = dup(STDIN_FILENO);
+	if (dup2(STDIN_FILENO, 255) == -1)
+		return (0);
+	cmdline->stdin_dup = 255;
 	if (term == NULL || term[0] == '\0')
 		term = "xterm-256color";
 	if (tgetent(NULL, term) == -1)
