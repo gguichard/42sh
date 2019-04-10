@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 14:12:28 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 14:13:05 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 14:28:58 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int					check_expand_home_assign(char **s, t_list *vars
 			break ;
 		i -= 1;
 	}
-	if ((i < 0 && !ft_isalpha((*s)[0])) || (i >= 0 && !ft_isalpha((*s)[i])))
+	if ((i < 0 && !ft_isalpha((*s)[0]) && (*s)[0] != '_')
+			|| (i >= 0 && !ft_isalpha((*s)[i]) && (*s)[i] != '_'))
 		return (1);
 	return (do_expand_home_assign(s, vars, str_cmd, pos));
 }
