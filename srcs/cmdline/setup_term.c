@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:08:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 11:45:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 22:21:15 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,24 @@
 #include <term.h>
 #include <termios.h>
 #include <unistd.h>
+#include <signal.h>
 #include "cmdline.h"
+#include "signals.h"
 
 int	setup_term(t_cmdline *cmdline)
 {
-	struct termios	term;
+	struct termios		term;
+	struct sigaction	act;
 
+	set_signals_handlers(cmdline->alloc->is_interactive, 1);
+	if (cmdline->alloc->is_interactive)
+	{
+		update_winsize(cmdline);
+		act.sa_handler = handle_sigwinch;
+		act.sa_flags = SA_RESTART;
+		sigfillset(&act.sa_mask);
+		sigaction(SIGWINCH, &act, 0);
+	}
 	if (!cmdline->term_init
 			&& tcgetattr(STDIN_FILENO, &cmdline->default_term) == -1)
 		return (0);
@@ -35,6 +47,15 @@ int	setup_term(t_cmdline *cmdline)
 
 int	reset_term(t_cmdline *cmdline)
 {
+	struct sigaction	act;
+
+	if (cmdline->alloc->is_interactive && SIGNALS_ON)
+	{
+		act.sa_handler = SIG_IGN;
+		act.sa_flags = 0;
+		sigaction(SIGWINCH, &act, 0);
+		set_sigmask(SIG_BLOCK);
+	}
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &cmdline->default_term) == -1)
 		return (0);
 	return (1);

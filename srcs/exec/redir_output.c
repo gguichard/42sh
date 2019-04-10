@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/22 11:58:43 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/31 19:55:07 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 00:39:03 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	open_redirect_file(t_redirect_inf *redirect_inf, int append_to_file)
 		oflag |= O_APPEND;
 	else
 		oflag |= O_TRUNC;
-	fd = open(redirect_inf->ropt_file, oflag, 0644);
+	fd = open_redir_file(redirect_inf->ropt_file, oflag);
 	return (fd);
 }
 

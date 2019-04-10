@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:41:38 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 00:10:04 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/09 18:46:26 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int		error_expand(const char *exp)
 {
-	ft_dprintf(STDOUT_FILENO, "42sh: %s: bad substitution\n", exp);
+	ft_dprintf(STDERR_FILENO, "42sh: %s: bad substitution\n", exp);
 	return (0);
 }
 
@@ -86,8 +86,8 @@ int		do_expand(char ***array, t_alloc *alloc, size_t *pos_array
 			return (0);
 	}
 	else if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote
-			&& ft_strequ((*array)[*pos_array], "") == 1)
-		delete_line_tab(array, *pos_array);
+			&& ft_strequ((*array)[index], "") == 1)
+		delete_line_tab(array, index);
 	scmd_move_to_next_char(str_cmd);
 	update_pos_index(str_cmd);
 	return (1);
