@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 11:41:27 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 12:33:26 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "str_cmd_inf.h"
 #include "error.h"
 
-int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
+int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 		, t_alloc *alloc)
 {
 	size_t	index;
@@ -42,7 +42,7 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 	return (1);
 }
 
-int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
+int			do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 		, t_alloc *alloc)
 {
 	while (scmd_cur_char(str_cmd))
@@ -84,7 +84,7 @@ static void	clean_empty_line_tab(char ***array)
 	}
 }
 
-char	**inhib_expand_str(const char *str, t_alloc *alloc)
+char		**inhib_expand_str(const char *str, t_alloc *alloc)
 {
 	size_t			pos_array;
 	t_str_cmd_inf	*str_cmd;
@@ -112,7 +112,7 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	return (array);
 }
 
-int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
+int			inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 {
 	int		i;
 	char	**new_array;
