@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 10:22:28 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/02 14:13:22 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 21:32:49 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static char	*search_path_for_source(t_alloc *alloc, const char *file_name
 {
 	char	*path;
 
+	path = NULL;
 	*error = ERRC_FILENOTFOUND;
 	if (ft_strchr(file_name, '/') == NULL)
 		path = search_in_path(alloc->vars, file_name, R_OK, error);
