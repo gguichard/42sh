@@ -343,6 +343,20 @@ void test_inhib_expand()
 	test_this_inhib_expand("\"coucou$DEUXMOTSESPACEPREFSUFF\"", (char*[]){"coucou LOL MDR ", NULL});
 	test_this_inhib_expand("\"$DEUXMOTSESPACEPREFSUFF/ok\"", (char*[]){" LOL MDR /ok", NULL});
 	test_this_inhib_expand("\"coucou$DEUXMOTSESPACEPREFSUFF/ok\"", (char*[]){"coucou LOL MDR /ok", NULL});
+	//home
+	test_this_inhib_expand("~", (char*[]){"MAISON", NULL});
+	test_this_inhib_expand("~userexistepas", (char*[]){"~userexistepas", NULL});
+	test_this_inhib_expand("~+non", (char*[]){"~+non", NULL});
+	test_this_inhib_expand("\'~\'", (char*[]){"~", NULL});
+	test_this_inhib_expand("\"~\"", (char*[]){"~", NULL});
+	test_this_inhib_expand("\\~", (char*[]){"~", NULL});
+	test_this_inhib_expand("\"\\~\"", (char*[]){"\\~", NULL});
+	test_this_inhib_expand("~/", (char*[]){"MAISON/", NULL});
+	test_this_inhib_expand("~/$EXISTE", (char*[]){"MAISON/CECI", NULL});
+	test_this_inhib_expand("$EXISTEPAS~", (char*[]){"~", NULL});
+	test_this_inhib_expand("${EXISTEPAS}~", (char*[]){"~", NULL});
+	test_this_inhib_expand("oui/~", (char*[]){"oui/~", NULL});
+	test_this_inhib_expand("oui/~/", (char*[]){"oui/~/", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
@@ -369,6 +383,7 @@ int		main(int argc, char **argv, char **environ)
 	create_var(&alloc.vars, "DEUXMOTSESPACESUFF", "LOL MDR ", 1);
 	create_var(&alloc.vars, "DEUXMOTSESPACEPREFSUFF", " LOL MDR ", 1);
 	create_var(&alloc.vars, "ESTVIDE", "", 1);
+	create_var(&alloc.vars, "HOME", "MAISON", 1);
 	unset_var(&alloc.vars, "EXISTEPAS");
 	test_autocomplete();
 	ft_printf("\n");
