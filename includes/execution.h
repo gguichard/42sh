@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/10 00:38:53 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 12:58:06 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct	s_exec_opt
 	int			fork;
 	int			wait_hang;
 	t_list		*red_save;
-	int			from_builtin;
+	int			from_cmd;
 	int			sigint;
 }				t_exec_opt;
 

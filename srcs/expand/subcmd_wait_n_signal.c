@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:41:21 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 20:31:56 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:19:55 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,12 @@ static void	handler_subcmd(int sig)
 
 int			sig_wait_subcmd(pid_t child, t_alloc *alloc)
 {
-	sigset_t			mask;
 	struct sigaction	act;
 
 	sigfillset(&act.sa_mask);
 	act.sa_handler = handler_subcmd;
 	act.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act, 0);
-	sigemptyset(&mask);
-	sigaddset(&mask, SIGINT);
-	sigprocmask(SIG_UNBLOCK, &mask, 0);
 	wait_sub_shell(child, alloc);
 	act.sa_flags = 0;
 	sigaction(SIGINT, &act, 0);
