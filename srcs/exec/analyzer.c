@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/10 12:15:14 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 13:01:19 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,13 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	}
 	ret = 0;
+	if (!opt->from_cmd)
+		sig_redir();
 	if (!setup_redirection(alloc, &redirect_inf)
 			|| !process_redirection(&redirect_inf, opt))
 		ret = 1;
+	if (!opt->from_cmd)
+		set_sigread(1, 0, 0);
 	clean_redirect(&redirect_inf);
 	if (ret == 0)
 		ret = analyzer(alloc, elem->left, opt);
@@ -100,7 +104,7 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
 	if (elem == NULL || opt->sigint || g_sig)
 	{
-		if (elem == NULL && opt->red_save != NULL && !opt->from_builtin)
+		if (elem == NULL && opt->red_save != NULL && !opt->from_cmd)
 			use_rc_on_shell(opt);
 		return ((!elem) ? 0 : alloc->ret_val);
 	}

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 20:36:38 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/10 12:37:16 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:59:39 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,20 @@
 #include "execution.h"
 #include "builtins.h"
 
-static void	handler_builtin(int sig)
+static void	handler_redir(int sig)
 {
 	g_sig = sig;
 	write(1, "\n", 1);
 }
 
-static void	sig_builtin(void)
+void		sig_redir(void)
 {
 	struct sigaction	act;
 	sigset_t			mask;
 
 	sigfillset(&act.sa_mask);
 	act.sa_flags = 0;
-	act.sa_handler = handler_builtin;
+	act.sa_handler = handler_redir;
 	sigaction(SIGINT, &act, 0);
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGINT);
@@ -48,8 +48,8 @@ static int	execute_builtin(t_alloc *alloc, t_ast *elem, t_exec_opt *opt
 	new_opt = *opt;
 	if (builtin->built_fun == builtin_exec)
 		new_opt.fork = 1;
-	new_opt.from_builtin = 1;
-	sig_builtin();
+	new_opt.from_cmd = 1;
+	sig_redir();
 	if (elem->left != NULL)
 		ret = analyzer(alloc, elem->left, &new_opt);
 	set_sigread(1, 0, 0);

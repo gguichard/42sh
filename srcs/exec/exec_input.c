@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:52 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/10 12:08:39 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:59:19 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ void		execute_cmd(t_alloc *alloc, char **argv, char *path_exec)
 }
 
 static void	prepare_execute(t_alloc *alloc, t_ast *elem
-							, t_exec_opt *opt, char *path_exec)
+			, t_exec_opt *opt, char *path_exec)
 {
 	int	ret;
 
 	ret = 0;
 	update_var(&alloc->vars, "_", path_exec);
 	sig_set_all(SIG_DFL);
+	opt->from_cmd = 1;
 	if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 		exit(ret);
 }
