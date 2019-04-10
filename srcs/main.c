@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/10 12:27:12 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:33:38 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 	exec_opt.fork = fork;
 	set_sigmask(SIG_UNBLOCK);
 	ret = analyzer(alloc, alloc->ast, &exec_opt);
-	if (g_sig == SIGINT)
-		g_sig = 0;
+	(g_sig) ? ret = g_sig + 128 : 0;
+	(g_sig == SIGINT) ? g_sig = 0 : 0;
 	del_ast(&alloc->ast);
 	return (ret);
 }

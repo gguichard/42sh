@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/10 13:25:24 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 14:25:23 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "inhibitor.h"
 #include "signals.h"
 #include "vars.h"
+#include "job.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -111,6 +112,7 @@ int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 	else
 	{
 		alloc->ret_val = analyzer(alloc, elem->left, opt);
+		refresh_jobs();
 		return (analyzer(alloc, elem->right, opt));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:02:12 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 00:09:19 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 15:40:12 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int				lexer_parser(const char *line, t_alloc *alloc, int fork);
 int				expand_home_shortcut(char **s, t_list *vars);
 void			check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 		, size_t *pos);
+int				check_expand_home_assign(char **s, t_list *vars
+		, t_str_cmd_inf *str_cmd, size_t *pos);
+char			*get_path_tilde(const char *log_search, int join);
 
 /*
 ************************************ PARSER ************************************

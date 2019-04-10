@@ -182,7 +182,7 @@ void	print_str_tab(char **strtab)
 
 void	test_this_inhib_expand(char *strbase, char **result_needed)
 {
-	char	**head = inhib_expand_str(strbase, &alloc);
+	char	**head = inhib_expand_str(strbase, &alloc, 0);
 	char	**str_tab = head;
 
 	ft_printf("Test inhib/exp « %s » :\n", strbase);

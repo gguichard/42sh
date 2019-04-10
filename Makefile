@@ -39,6 +39,7 @@ $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
 $(PATH_LEXER)/str_cmd_inf_del.c \
 $(PATH_LEXER)/tilde_replace.c \
+$(PATH_LEXER)/tilde_replace_assign.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
 $(PATH_PARSER)/ast_creation.c \
@@ -177,6 +178,7 @@ $(PATH_EXPAND)/ft_split_whitespaces.c \
 $(PATH_EXPAND)/cmd_substitute.c \
 $(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhib_autocomplete.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c \
