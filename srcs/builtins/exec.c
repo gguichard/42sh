@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/31 19:02:34 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 15:30:20 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:11:28 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	builtin_exec(t_ast *elem, t_alloc *alloc)
 	}
 	save_history_entries(alloc, &alloc->cmdline.history);
 	sig_set_all(SIG_DFL);
-	set_sigmask(SIG_UNBLOCK);
 	execute_cmd(alloc, elem->input + 1, path_exec);
 	return (0);
 }

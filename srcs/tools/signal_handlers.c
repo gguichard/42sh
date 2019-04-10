@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 21:56:56 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 14:30:31 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,46 @@ static void	handler_sigterm(void)
 
 static void	handler_signals(int sig)
 {
-	if (sig == SIGTERM)
+	if (sig == SIGWINCH)
+		return (handle_sigwinch(sig));
+	else if (sig == SIGTERM)
 		return (handler_sigterm());
-	if (sig == SIGINT)
+	else if (sig == SIGINT)
 	{
 		handle_end_of_text(g_cmdline);
 		reset_cmdline(g_cmdline, g_cmdline->prompt.str
 				, g_cmdline->prompt.offset);
+		g_cmdline->alloc->ret_val = 128 + sig;
 		return ;
 	}
 	g_sig = sig;
 	close(STDIN_FILENO);
 }
 
-void		set_signals_handlers(int is_interactive, int read)
+void		set_sigread(int is_interactive, int read, t_cmdline *cmdline)
+{
+	struct sigaction	act;
+
+	if (!is_interactive || SIGNALS_ON == 0)
+		return ;
+	sigfillset(&act.sa_mask);
+	if (read)
+	{
+		act.sa_flags = SA_RESTART;
+		act.sa_handler = handler_signals;
+		update_winsize(cmdline);
+	}
+	else
+	{
+		act.sa_handler = SIG_IGN;
+		act.sa_flags = 0;
+	}
+	sigaction(SIGWINCH, &act, 0);
+	sigaction(SIGINT, &act, 0);
+	sigaction(SIGTERM, &act, 0);
+}
+
+void		set_sig_handlers(int is_interactive)
 {
 	struct sigaction	act;
 
@@ -53,8 +79,6 @@ void		set_signals_handlers(int is_interactive, int read)
 		return ;
 	sigfillset(&act.sa_mask);
 	act.sa_handler = handler_signals;
-	act.sa_flags = SA_RESTART;
-	sigaction(SIGHUP, &act, 0);
 	act.sa_flags = 0;
 	action_sigs(&act);
 	act.sa_handler = SIG_IGN;
@@ -62,13 +86,6 @@ void		set_signals_handlers(int is_interactive, int read)
 	sigaction(SIGTSTP, &act, 0);
 	sigaction(SIGTTOU, &act, 0);
 	sigaction(SIGTTIN, &act, 0);
-	if (read)
-	{
-		act.sa_handler = handler_signals;
-		act.sa_flags = SA_RESTART;
-	}
-	sigaction(SIGINT, &act, 0);
-	sigaction(SIGTERM, &act, 0);
 	set_sigmask(SIG_UNBLOCK);
 }
 

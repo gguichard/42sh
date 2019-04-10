@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:12 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 22:23:51 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 18:20:46 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ int			builtin_fg(t_ast *elem, t_alloc *alloc)
 	tmp = g_jobs;
 	if (elem->input[1])
 		get_job_id(elem->input[1], &tmp, "fg");
+	else
+	{
+		while (tmp && tmp->next)
+			tmp = tmp->next;
+	}
 	if (!tmp)
 	{
 		if (!elem->input[1])

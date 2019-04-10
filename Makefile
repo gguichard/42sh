@@ -7,7 +7,7 @@ GREEN	=	\x1b[32m
 INC_DIR	=	includes
 
 CC		=	gcc
-CFLAGS 	=	-Wall -g -Werror -Wextra -I libft/includes -I $(INC_DIR)
+CFLAGS 	=	-Wall -Werror -Wextra -I libft/includes -I $(INC_DIR)
 LDFLAGS	=	-Llibft
 LDLIBS	=	-lft -ltermcap
 
@@ -39,6 +39,7 @@ $(PATH_LEXER)/str_cmd_inf_escape.c \
 $(PATH_LEXER)/str_cmd_inf_get.c \
 $(PATH_LEXER)/str_cmd_inf_del.c \
 $(PATH_LEXER)/tilde_replace.c \
+$(PATH_LEXER)/tilde_replace_assign.c \
 $(PATH_PARSER)/parser.c \
 $(PATH_PARSER)/sort_ast.c \
 $(PATH_PARSER)/ast_creation.c \
@@ -173,10 +174,11 @@ $(PATH_JOB)/job_id_nb.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \
-$(PATH_EXPAND)/ft_splitwhitespace.c \
+$(PATH_EXPAND)/ft_split_whitespaces.c \
 $(PATH_EXPAND)/cmd_substitute.c \
 $(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhib_autocomplete.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c \
