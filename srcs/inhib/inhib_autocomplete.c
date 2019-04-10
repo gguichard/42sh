@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 15:01:41 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 15:24:42 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 17:26:46 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int		do_expand_auto(char ***array, t_alloc *alloc, size_t *pos_array
 	len = 0;
 	save = *pos_array;
 	index = get_pos_in_array(*array);
-	if (!expand(&((*array)[index]), alloc, pos_array, 0))
+	if (!expand(&((*array)[index]), alloc, pos_array, 1))
 		return (0);
 	if (!str_cmd->is_in_quote && !str_cmd->is_in_dbquote && *pos_array != save)
 	{
