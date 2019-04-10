@@ -362,6 +362,32 @@ void test_inhib_expand()
 	test_this_inhib_expand("var=~/oui", (char*[]){"var=MAISON/oui", NULL});
 	test_this_inhib_expand("var=~:oui", (char*[]){"var=MAISON:oui", NULL});
 	test_this_inhib_expand("var=oui:~", (char*[]){"var=oui:MAISON", NULL});
+	test_this_inhib_expand("=\\~", (char*[]){"=~", NULL});
+	test_this_inhib_expand("var=\\~", (char*[]){"var=~", NULL});
+	test_this_inhib_expand("var=\'~\'", (char*[]){"var=~", NULL});
+	test_this_inhib_expand("var=\"~\"", (char*[]){"var=~", NULL});
+	test_this_inhib_expand("var=\'oui\':~", (char*[]){"var=oui:MAISON~", NULL});
+	test_this_inhib_expand("var=\'oui:\'~", (char*[]){"var=oui:~", NULL});
+	test_this_inhib_expand("var=\'oui:~\'", (char*[]){"var=oui:~", NULL});
+	test_this_inhib_expand("var=\"oui\":~", (char*[]){"var=oui:MAISON~", NULL});
+	test_this_inhib_expand("var=\"oui:\"~", (char*[]){"var=oui:~", NULL});
+	test_this_inhib_expand("var=\"oui:~\"", (char*[]){"var=oui:~", NULL});
+	test_this_inhib_expand("\'=~\'", (char*[]){"=~", NULL});
+	test_this_inhib_expand("\'var=~\'", (char*[]){"var=~", NULL});
+	test_this_inhib_expand("\"=~\"", (char*[]){"=~", NULL});
+	test_this_inhib_expand("\"var=~\"", (char*[]){"var=~", NULL});
+	test_this_inhib_expand("=\\~:", (char*[]){"=~:", NULL});
+	test_this_inhib_expand("var=\\~:", (char*[]){"var=~:", NULL});
+	test_this_inhib_expand("\'=~:\'", (char*[]){"=~:", NULL});
+	test_this_inhib_expand("\'var=~:\'", (char*[]){"var=~:", NULL});
+	test_this_inhib_expand("\"=~:\"", (char*[]){"=~:", NULL});
+	test_this_inhib_expand("\"var=~:\"", (char*[]){"var=~:", NULL});
+	test_this_inhib_expand("=oui:\\~", (char*[]){"=oui:~", NULL});
+	test_this_inhib_expand("var=oui:\\~", (char*[]){"var=oui:~", NULL});
+	test_this_inhib_expand("\'=oui:~\'", (char*[]){"=oui:~", NULL});
+	test_this_inhib_expand("\'var=oui:~\'", (char*[]){"var=oui:~", NULL});
+	test_this_inhib_expand("\"=oui:~\"", (char*[]){"=oui:~", NULL});
+	test_this_inhib_expand("\"var=oui:~\"", (char*[]){"var=oui:~", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
