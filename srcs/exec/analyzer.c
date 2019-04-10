@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/10 13:21:44 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 13:25:24 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	if (opt->sigint || g_sig)
-		return (alloc->ret_val);
+	if (elem == NULL || opt->sigint || g_sig)
+		return ((elem == NULL) ? 0 : alloc->ret_val);
 	if (elem->type != AST_CMD_SEP)
 		return (assign_analyzer(alloc, elem, opt));
 	else
