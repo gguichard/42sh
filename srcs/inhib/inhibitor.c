@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 11:47:46 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 14:17:34 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 int			do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 		, t_alloc *alloc)
 {
+	int	bool;
+
+	bool = 0;
 	while (scmd_cur_char(str_cmd))
-	{
 		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
 		{
 			if (!(inhib_expand_in_quote(str_cmd, *array, pos_array, alloc)))
@@ -57,12 +59,15 @@ int			do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 					, pos_array, 1);
 		else if (scmd_cur_char(str_cmd) == '$')
 		{
-			if (!do_expand(array, alloc, pos_array, str_cmd))
+			if (!(bool = do_expand(array, alloc, pos_array, str_cmd)))
 				return (error_inhib_expand(str_cmd, *array));
 		}
+		else if (scmd_cur_char(str_cmd) == '=' && bool == 0)
+			bool = check_expand_home_assign(
+				&((*array)[get_pos_in_array(*array)])
+				, alloc->vars, str_cmd, pos_array);
 		else
 			*pos_array += scmd_move_to_next_char(str_cmd);
-	}
 	remove_last_char(str_cmd, pos_array, &((*array)[get_pos_in_array(*array)]));
 	return (1);
 }
