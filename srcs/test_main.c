@@ -278,6 +278,40 @@ void test_inhib_expand()
 	test_this_inhib_expand("$DEUXMOTS\"\'ok", (char*[]){"DEUX", "MOTS\'ok", NULL});
 	test_this_inhib_expand("$DEUXMOTS\'ok", (char*[]){"DEUX", "MOTSok", NULL});
 	test_this_inhib_expand("$DEUXMOTS\"ok", (char*[]){"DEUX", "MOTSok", NULL});
+	//expand 1 mot espace pref/suff
+	test_this_inhib_expand("$ESPACEPREF", (char*[]){"LOL", NULL});
+	test_this_inhib_expand("coucou$ESPACEPREF", (char*[]){"coucou", "LOL", NULL});
+	test_this_inhib_expand("$ESPACEPREF/ok", (char*[]){"LOL/ok", NULL});
+	test_this_inhib_expand("coucou$ESPACEPREF/ok", (char*[]){"coucou", "LOL/ok", NULL});
+	test_this_inhib_expand("$ESPACESUFF", (char*[]){"LOL", NULL});
+	test_this_inhib_expand("coucou$ESPACESUFF", (char*[]){"coucouLOL", NULL});
+	test_this_inhib_expand("$ESPACESUFF/ok", (char*[]){"LOL", "/ok", NULL});
+	test_this_inhib_expand("coucou$ESPACESUFF/ok", (char*[]){"coucouLOL", "/ok", NULL});
+	test_this_inhib_expand("\"$ESPACEPREF\"", (char*[]){" LOL", NULL});
+	test_this_inhib_expand("\"coucou$ESPACEPREF\"", (char*[]){"coucou LOL", NULL});
+	test_this_inhib_expand("\"$ESPACEPREF/ok\"", (char*[]){" LOL/ok", NULL});
+	test_this_inhib_expand("\"coucou$ESPACEPREF/ok\"", (char*[]){"coucou LOL/ok", NULL});
+	test_this_inhib_expand("\"$ESPACESUFF\"", (char*[]){"LOL ", NULL});
+	test_this_inhib_expand("\"coucou$ESPACESUFF\"", (char*[]){"coucouLOL ", NULL});
+	test_this_inhib_expand("\"$ESPACESUFF/ok\"", (char*[]){"LOL /ok", NULL});
+	test_this_inhib_expand("\"coucou$ESPACESUFF/ok\"", (char*[]){"coucouLOL /ok", NULL});
+	//expand 2 mot espace pref/suff
+	test_this_inhib_expand("$DEUXMOTSESPACEPREF", (char*[]){"LOL", "MDR", NULL});
+	test_this_inhib_expand("coucou$DEUXMOTSESPACEPREF", (char*[]){"coucou", "LOL", "MDR", NULL});
+	test_this_inhib_expand("$DEUXMOTSESPACEPREF/ok", (char*[]){"LOL", "MDR/ok", NULL});
+	test_this_inhib_expand("coucou$DEUXMOTSESPACEPREF/ok", (char*[]){"coucou", "LOL", "MDR/ok", NULL});
+	test_this_inhib_expand("$DEUXMOTSESPACESUFF", (char*[]){"LOL", "MDR", NULL});
+	test_this_inhib_expand("coucou$DEUXMOTSESPACESUFF", (char*[]){"coucouLOL", "MDR", NULL});
+	test_this_inhib_expand("$DEUXMOTSESPACESUFF/ok", (char*[]){"LOL", "MDR", "/ok", NULL});
+	test_this_inhib_expand("coucou$DEUXMOTSESPACESUFF/ok", (char*[]){"coucouLOL", "MDR", "/ok", NULL});
+	test_this_inhib_expand("\"$DEUXMOTSESPACEPREF\"", (char*[]){" LOL MDR", NULL});
+	test_this_inhib_expand("\"coucou$DEUXMOTSESPACEPREF\"", (char*[]){"coucou LOL MDR", NULL});
+	test_this_inhib_expand("\"$DEUXMOTSESPACEPREF/ok\"", (char*[]){" LOL MDR/ok", NULL});
+	test_this_inhib_expand("\"coucou$DEUXMOTSESPACEPREF/ok\"", (char*[]){"coucou LOL MDR/ok", NULL});
+	test_this_inhib_expand("\"$DEUXMOTSESPACESUFF\"", (char*[]){"LOL MDR ", NULL});
+	test_this_inhib_expand("\"coucou$DEUXMOTSESPACESUFF\"", (char*[]){"coucouLOL MDR ", NULL});
+	test_this_inhib_expand("\"$DEUXMOTSESPACESUFF/ok\"", (char*[]){"LOL MDR /ok", NULL});
+	test_this_inhib_expand("\"coucou$DEUXMOTSESPACESUFF/ok\"", (char*[]){"coucouLOL MDR /ok", NULL});
 }
 
 int		main(int argc, char **argv, char **environ)
@@ -297,6 +331,13 @@ int		main(int argc, char **argv, char **environ)
 	create_var(&alloc.vars, "TROISMOTS", "TROIS\tMOTS  \t  VOILA", 1);
 	create_var(&alloc.vars, "DEUX", "", 1);
 	create_var(&alloc.vars, "TROIS", "_3_", 1);
+	create_var(&alloc.vars, "ESPACEPREF", " LOL", 1);
+	create_var(&alloc.vars, "ESPACESUFF", "LOL ", 1);
+	create_var(&alloc.vars, "ESPACEPREFSUFF", " LOL ", 1);
+	create_var(&alloc.vars, "DEUXMOTSESPACEPREF", " LOL MDR", 1);
+	create_var(&alloc.vars, "DEUXMOTSESPACESUFF", "LOL MDR ", 1);
+	create_var(&alloc.vars, "DEUXMOTSESPACEPREFSUFF", " LOL MDR ", 1);
+	create_var(&alloc.vars, "ESTVIDE", "", 1);
 	unset_var(&alloc.vars, "EXISTEPAS");
 	test_autocomplete();
 	ft_printf("\n");
