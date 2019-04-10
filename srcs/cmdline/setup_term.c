@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/11 15:08:25 by gguichar          #+#    #+#             */
-/*   Updated: 2019/03/27 11:45:41 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 12:37:05 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 #include <term.h>
 #include <termios.h>
 #include <unistd.h>
+#include <signal.h>
 #include "cmdline.h"
+#include "signals.h"
 
 int	setup_term(t_cmdline *cmdline)
 {
-	struct termios	term;
+	struct termios		term;
 
+	set_sig_handlers(cmdline->alloc->is_interactive);
+	set_sigread(cmdline->alloc->is_interactive, 1, cmdline);
 	if (!cmdline->term_init
 			&& tcgetattr(STDIN_FILENO, &cmdline->default_term) == -1)
 		return (0);
@@ -35,6 +39,7 @@ int	setup_term(t_cmdline *cmdline)
 
 int	reset_term(t_cmdline *cmdline)
 {
+	set_sigread(cmdline->alloc->is_interactive, 0, 0);
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &cmdline->default_term) == -1)
 		return (0);
 	return (1);

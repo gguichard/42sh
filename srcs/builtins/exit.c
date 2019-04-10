@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:19 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 17:50:28 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:34:13 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static int	check_numeric_arg(const char *arg, int *status)
 
 static void	clean_everything_before_exit(t_alloc *alloc, int is_from_cmdline)
 {
-	if (alloc->ppid == getpid() && alloc->is_interactive)
+	if (alloc->ppid == getpid()
+		&& alloc->is_interactive && (!g_sig || g_sig == 15))
 		ft_dprintf(STDERR_FILENO, "exit\n");
 	save_history_entries(alloc, &alloc->cmdline.history);
 	terminate_all_jobs(g_sig == SIGHUP ? SIGHUP : SIGTERM);
@@ -77,7 +78,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 		if (elem != NULL && elem->input[1] != NULL
 				&& !check_numeric_arg(elem->input[1], &status))
 			return (2);
-		else if (check_stopped_job() && !alloc->exit_rdy)
+		else if (!g_sig && check_stopped_job() && !alloc->exit_rdy)
 		{
 			ft_putstr_fd("There are stopped jobs.\n", STDERR_FILENO);
 			alloc->exit_rdy = 1;

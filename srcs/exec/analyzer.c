@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 09:58:00 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 18:08:20 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 17:32:56 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "inhibitor.h"
 #include "signals.h"
 #include "vars.h"
+#include "job.h"
 
 static int	dispatch_logic(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
@@ -54,12 +55,18 @@ static int	dispatch_redirection(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		return (1);
 	}
 	ret = 0;
+	if (!opt->from_cmd)
+		sig_redir();
 	//if (!setup_redirection(alloc, &redirect_inf)
 	//		|| !process_redirection(&redirect_inf, opt))
 	//	ret = 1;
+	if (!opt->from_cmd)
+		set_sigread(1, 0, 0);
 	clean_redirect(&redirect_inf);
 	if (ret == 0)
 		ret = analyzer(alloc, elem->left, opt);
+	if (!opt->from_cmd)
+		use_rc_on_shell(opt);
 	return (ret);
 }
 
@@ -100,18 +107,14 @@ static int	assign_analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 
 int			analyzer(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 {
-	sigs_wait_line(alloc);
-	if (elem == NULL || opt->sigint || g_sig == SIGINT)
-	{
-		if (elem == NULL && opt->red_save != NULL && !opt->from_builtin)
-			use_rc_on_shell(opt);
-		return ((!elem) ? 0 : alloc->ret_val);
-	}
+	if (elem == NULL || opt->sigint || g_sig)
+		return ((elem == NULL) ? 0 : alloc->ret_val);
 	if (elem->type != AST_CMD_SEP)
 		return (assign_analyzer(alloc, elem, opt));
 	else
 	{
 		alloc->ret_val = analyzer(alloc, elem->left, opt);
+		refresh_jobs();
 		return (analyzer(alloc, elem->right, opt));
 	}
 }

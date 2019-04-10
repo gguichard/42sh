@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:35:09 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 21:03:25 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:37:24 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "shell.h"
+#include "signals.h"
 #include "job.h"
 #include "expand.h"
 #include "parser_lexer.h"
@@ -25,10 +26,7 @@ static char	*read_subcmd_file(int fd)
 	char		*output;
 	char		*prev;
 	ssize_t		len;
-	sigset_t	mask;
 
-	sigemptyset(&mask);
-	sigaddset(&mask, SIGINT);
 	output = NULL;
 	while ((len = read(fd, buffer, 4096)) > 0)
 	{
@@ -38,7 +36,7 @@ static char	*read_subcmd_file(int fd)
 		if (g_sig == SIGINT)
 			break ;
 	}
-	sigprocmask(SIG_BLOCK, &mask, 0);
+	set_sigread(1, 0, 0);
 	(g_sig == SIGINT) ? ft_strdel(&output) : 0;
 	if (output == NULL)
 		return (NULL);

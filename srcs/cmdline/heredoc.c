@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/27 14:51:18 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 18:07:01 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 17:33:34 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 	char		*heredoc;
 	char		*new_line;
 	t_rstate	state;
+	int			i;
 
 	heredoc = ft_strdup("");
 	if (heredoc == NULL)
 		return (NULL);
 	setup_term(cmdline);
-	int	i = 0;
-	while (++i < 50)
+	i = 0;
+	while (i < 50)
 	{
 		new_line = create_prompt_and_read_input(cmdline, PROMPT_HEREDOC
 				, &state);
@@ -55,6 +56,7 @@ static char	*read_heredoc(t_cmdline *cmdline, const char *word)
 		}
 		heredoc = join_heredoc(heredoc, new_line);
 		free(new_line);
+		i++;
 	}
 	reset_term(cmdline);
 	return (heredoc);
@@ -69,7 +71,7 @@ static int	expand_heredoc(t_alloc *alloc, char **heredoc)
 	while ((tmp = ft_strchr(*heredoc + offset, '$')) != NULL)
 	{
 		offset = (size_t)(tmp - *heredoc);
-		if (!expand(heredoc, alloc, &offset))
+		if (!expand(heredoc, alloc, &offset, 0))
 			return (0);
 	}
 	return (1);

@@ -6,12 +6,11 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 16:37:49 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 15:33:38 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <signal.h>
 #include <stdlib.h>
 #include "libft.h"
 #include "shell.h"
@@ -35,6 +34,7 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 		return (1);
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 	scmd_clean(&scmd);
+	sigs_wait_line(alloc);
 	if (!(alloc->ast = parser(lst_tk)))
 	{
 		ft_lstdel(&lst_tk, del_token);
@@ -44,9 +44,10 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 	sigs_wait_line(alloc);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
 	exec_opt.fork = fork;
+	set_sigmask(SIG_UNBLOCK);
 	ret = analyzer(alloc, alloc->ast, &exec_opt);
-	if (g_sig == SIGINT)
-		g_sig = 0;
+	(g_sig) ? ret = g_sig + 128 : 0;
+	(g_sig == SIGINT) ? g_sig = 0 : 0;
 	del_ast(&alloc->ast);
 	return (ret);
 }
@@ -61,11 +62,8 @@ static void	shell_loop(t_alloc *alloc)
 		reset_term(&alloc->cmdline);
 		if (alloc->full_input != NULL)
 		{
-			if (alloc->is_interactive && SIGNALS_ON)
-				set_sigmask(SIG_BLOCK);
 			alloc->ret_val = lexer_parser(alloc->full_input, alloc, 0);
 			ft_strdel(&alloc->full_input);
-			set_signals_handlers(alloc->is_interactive);
 		}
 	}
 }
@@ -84,7 +82,6 @@ int			main(int argc, char **argv, char **environ)
 	{
 		source_rc_file(&alloc);
 		load_history_file_entries(&alloc, &alloc.cmdline.history);
-		set_signals_handlers(alloc.is_interactive);
 		shell_loop(&alloc);
 	}
 	terminate_all_jobs(SIGTERM);

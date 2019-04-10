@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 12:25:42 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 13:48:41 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:20:56 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	job_id_string(const char *arg, t_list **tmp, const char *bltin)
 
 	index = 1;
 	(*tmp) = NULL;
-	if (arg[1] == '?')
+	if (arg[1] == '?' && arg[2])
 		index = look_for_str_job(tmp, arg + 2, ft_strstr);
 	else
 		index = look_for_str_job(tmp, arg + 1, ft_strstr_start);

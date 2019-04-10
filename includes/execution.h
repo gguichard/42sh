@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 15:29:13 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/07 22:48:12 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 12:58:06 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct	s_exec_opt
 	int			fork;
 	int			wait_hang;
 	t_list		*red_save;
-	int			from_builtin;
+	int			from_cmd;
 	int			sigint;
 }				t_exec_opt;
 
@@ -56,6 +56,7 @@ int				try_builtin_execution(t_alloc *alloc, t_ast *elem
 		, t_exec_opt *opt);
 
 void			use_rc_on_shell(t_exec_opt *opt);
+int				open_redir_file(const char *path, int oflag);
 int				dup2_with_rc(t_exec_opt *opt, int lopt_fd, int ropt_fd);
 int				close_with_rc(t_exec_opt *opt, int fd);
 

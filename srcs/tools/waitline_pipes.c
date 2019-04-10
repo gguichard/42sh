@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:34:42 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 19:39:51 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:19:05 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ static void	pipe_waits(t_list *lst, int wait_opt)
 	t_job	*job;
 
 	job = lst->content;
-	waitpid(job->pid, &job->status, wait_opt);
+	if (!g_sig || g_sig == SIGINT)
+		waitpid(job->pid, &job->status, wait_opt);
 	lst = job->pipe;
 	while (lst)
 	{
 		job = lst->content;
-		waitpid(job->pid, &job->status, wait_opt);
+		if (!g_sig || g_sig == SIGINT)
+			waitpid(job->pid, &job->status, wait_opt);
 		lst = lst->next;
 	}
 }
@@ -72,7 +74,7 @@ int			waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc
 		if (!tmp)
 			return (1);
 	}
-	pipe_waits(tmp, WNOHANG);
+	pipe_waits(tmp, WNOHANG | WUNTRACED);
 	if (!wait_hang)
 	{
 		pipe_waits(tmp, WUNTRACED);
@@ -105,7 +107,7 @@ void		wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		kill_zombie_boy(child, 1);
 	else
 		add_pid_lst(child, elem, 0);
-	if (!opt->wait_hang && !ret)
+	if (!opt->wait_hang && !ret && (!g_sig || g_sig == SIGINT))
 	{
 		redirect_term_controller(child, 0);
 		waitpid(child, &alloc->ret_val, WUNTRACED);

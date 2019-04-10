@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:17 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 16:47:20 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 12:28:29 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,25 @@ void	set_sigmask(int type)
 	sigset_t			mask;
 
 	sigfillset(&mask);
+	sigdelset(&mask, 16);
+	sigdelset(&mask, 19);
+	sigdelset(&mask, 20);
+	sigdelset(&mask, 23);
+	sigdelset(&mask, 28);
+	sigdelset(&mask, 29);
 	sigprocmask(type, &mask, 0);
 }
 
 void	action_sigs(struct sigaction *act)
 {
+	sigaction(SIGHUP, act, 0);
 	sigaction(SIGILL, act, 0);
 	sigaction(SIGTRAP, act, 0);
 	sigaction(SIGABRT, act, 0);
 	sigaction(SIGEMT, act, 0);
 	sigaction(SIGFPE, act, 0);
-	sigaction(SIGBUS, act, 0);
 	sigaction(SIGSEGV, act, 0);
+	sigaction(SIGBUS, act, 0);
 	sigaction(SIGSYS, act, 0);
 	sigaction(SIGPIPE, act, 0);
 	sigaction(SIGALRM, act, 0);

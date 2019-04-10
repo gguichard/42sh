@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ac_cmdline.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: fwerner <fwerner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:49:37 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 11:49:39 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:04:40 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char				*inhibe_this_str_for_autocomplete(const char *str
 
 	*has_several_words = 0;
 	new_str = NULL;
-	str_tab = inhib_expand_str(str, alloc);
+	str_tab = inhib_expand_str(str, alloc, 1);
 	tmp_tab = str_tab;
 	while (tmp_tab != NULL && *tmp_tab != NULL)
 	{
