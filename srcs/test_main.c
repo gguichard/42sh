@@ -357,7 +357,13 @@ void test_inhib_expand()
 	test_this_inhib_expand("${EXISTEPAS}~", (char*[]){"~", NULL});
 	test_this_inhib_expand("oui/~", (char*[]){"oui/~", NULL});
 	test_this_inhib_expand("oui/~/", (char*[]){"oui/~/", NULL});
-	test_this_inhib_expand("=~", (char*[]){"=MAISON", NULL});
+	test_this_inhib_expand("=~", (char*[]){"=~", NULL});
+	test_this_inhib_expand("1=~", (char*[]){"1=~", NULL});
+	test_this_inhib_expand("15non=~", (char*[]){"15non=~", NULL});
+	test_this_inhib_expand("/=~", (char*[]){"/=~", NULL});
+	test_this_inhib_expand("==~", (char*[]){"==~", NULL});
+	test_this_inhib_expand("oui%%non=~", (char*[]){"oui%%non=~", NULL});
+	test_this_inhib_expand("var\\=~", (char*[]){"var=~", NULL});
 	test_this_inhib_expand("var=~", (char*[]){"var=MAISON", NULL});
 	test_this_inhib_expand("var=~/oui", (char*[]){"var=MAISON/oui", NULL});
 	test_this_inhib_expand("var=~:oui", (char*[]){"var=MAISON:oui", NULL});
