@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:52 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 22:23:24 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:08:39 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static void	prepare_execute(t_alloc *alloc, t_ast *elem
 	ret = 0;
 	update_var(&alloc->vars, "_", path_exec);
 	sig_set_all(SIG_DFL);
-	set_sigmask(SIG_UNBLOCK);
 	if (elem->left != NULL && (ret = analyzer(alloc, elem->left, opt)) != 0)
 		exit(ret);
 }
@@ -69,7 +68,6 @@ int			exec_input(t_alloc *alloc, t_ast *elem, t_exec_opt *opt)
 		prepare_execute(alloc, elem, opt, path_exec);
 		execute_cmd(alloc, elem->input, path_exec);
 	}
-	set_signals_handlers(alloc->is_interactive, 0);
 	ft_strdel(&path_exec);
 	wait_pid(child, alloc, elem, opt);
 	return (!opt->wait_hang ? ret_status(alloc->ret_val, child, 0, opt) : 0);

@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:32:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 22:21:42 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:27:12 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 		return (1);
 	lst_tk = split_cmd_token(&scmd, alloc->aliastable);
 	scmd_clean(&scmd);
+	sigs_wait_line(alloc);
 	if (!(alloc->ast = parser(lst_tk)))
 	{
 		ft_lstdel(&lst_tk, del_token);
@@ -43,6 +44,7 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 	sigs_wait_line(alloc);
 	ft_memset(&exec_opt, 0, sizeof(t_exec_opt));
 	exec_opt.fork = fork;
+	set_sigmask(SIG_UNBLOCK);
 	ret = analyzer(alloc, alloc->ast, &exec_opt);
 	if (g_sig == SIGINT)
 		g_sig = 0;

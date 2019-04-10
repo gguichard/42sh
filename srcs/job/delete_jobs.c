@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:34 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/09 10:58:28 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 11:22:02 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ static void	actualize_pipe_job_status(t_list **main, t_list *prev)
 
 	delete = 1;
 	job = (*main)->content;
-	if (job->state > RUNNING_FG && job->state < SIG)
+	if (job->state < SIG)
 		delete = 0;
 	tmp = job->pipe;
 	while (tmp)
 	{
 		job = tmp->content;
-		if (job->state > RUNNING_FG && job->state < SIG)
+		if (job->state < SIG)
 			delete = 0;
 		tmp = tmp->next;
 	}

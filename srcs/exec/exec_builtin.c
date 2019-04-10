@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/28 20:36:38 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/08 13:38:26 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 12:37:16 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "shell.h"
+#include "signals.h"
 #include "execution.h"
 #include "builtins.h"
 
@@ -35,7 +36,6 @@ static void	sig_builtin(void)
 	sigaction(SIGINT, &act, 0);
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGINT);
-	sigprocmask(SIG_UNBLOCK, &mask, 0);
 }
 
 static int	execute_builtin(t_alloc *alloc, t_ast *elem, t_exec_opt *opt
@@ -43,7 +43,6 @@ static int	execute_builtin(t_alloc *alloc, t_ast *elem, t_exec_opt *opt
 {
 	int					ret;
 	t_exec_opt			new_opt;
-	sigset_t			mask;
 
 	ret = 0;
 	new_opt = *opt;
@@ -53,9 +52,7 @@ static int	execute_builtin(t_alloc *alloc, t_ast *elem, t_exec_opt *opt
 	sig_builtin();
 	if (elem->left != NULL)
 		ret = analyzer(alloc, elem->left, &new_opt);
-	sigemptyset(&mask);
-	sigaddset(&mask, SIGINT);
-	sigprocmask(SIG_BLOCK, &mask, 0);
+	set_sigread(1, 0, 0);
 	if (ret == 0 && g_sig != SIGINT)
 		ret = builtin->built_fun(elem, alloc);
 	use_rc_on_shell(&new_opt);
