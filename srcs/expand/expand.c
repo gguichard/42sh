@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:48:21 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 21:02:37 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:07:10 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ static int		subcmd_expand(t_alloc *alloc, char **input, size_t *pos)
 	return ((g_sig == SIGINT) ? 0 : 1);
 }
 
-int				expand(char **input, t_alloc *alloc, size_t *pos)
+int				expand(char **input, t_alloc *alloc, size_t *pos, int i)
 {
 	char		*str;
 	size_t		len;
 
 	str = NULL;
-	if ((*input)[*pos + 1] == '(')
+	if (i == 0 && (*input)[*pos + 1] == '(')
 		return (subcmd_expand(alloc, input, pos));
 	else if (!expand_var(&str, alloc, *input + *pos, &len))
 		return (0);

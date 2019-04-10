@@ -178,6 +178,7 @@ $(PATH_EXPAND)/ft_split_whitespaces.c \
 $(PATH_EXPAND)/cmd_substitute.c \
 $(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \
+$(PATH_INHIB)/inhib_autocomplete.c \
 $(PATH_INHIB)/inhibitor_remove.c \
 $(PATH_INHIB)/inhibitor_utils.c \
 $(PATH_INHIB)/inhibitor_tools.c \

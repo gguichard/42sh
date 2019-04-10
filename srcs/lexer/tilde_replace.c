@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 14:13:08 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 14:49:00 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "parser_lexer.h"
 #include "vars.h"
 
-static char	*get_path_tilde(const char *log_search)
+char	*get_path_tilde(const char *log_search)
 {
 	size_t			i;
 	char			*login;
@@ -41,7 +41,7 @@ static char	*get_path_tilde(const char *log_search)
 	return (NULL);
 }
 
-int			expand_home_shortcut(char **s, t_list *vars)
+int		expand_home_shortcut(char **s, t_list *vars)
 {
 	char	*dir;
 	char	*tmp;
@@ -68,7 +68,7 @@ int			expand_home_shortcut(char **s, t_list *vars)
 	return (0);
 }
 
-void		check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
+void	check_expand_home(char **s, t_list *vars, t_str_cmd_inf *str_cmd
 		, size_t *pos)
 {
 	size_t	len;
