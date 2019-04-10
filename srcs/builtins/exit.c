@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:19 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/10 10:58:00 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 14:34:11 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int			builtin_exit(t_ast *elem, t_alloc *alloc)
 		if (elem != NULL && elem->input[1] != NULL
 				&& !check_numeric_arg(elem->input[1], &status))
 			return (2);
-		else if (check_stopped_job() && !alloc->exit_rdy)
+		else if (!g_sig && check_stopped_job() && !alloc->exit_rdy)
 		{
 			ft_putstr_fd("There are stopped jobs.\n", STDERR_FILENO);
 			alloc->exit_rdy = 1;

@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:28:20 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 15:17:54 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 15:16:38 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,15 @@ char		*last_sig_process(t_list *tmp, int foreground)
 void		print_refreshed_jobs(t_list *tmp, int print
 								, int stop_print, int index)
 {
-	char	*cmd;
+	char		*cmd;
+	static int	after_stop = 1;
 
 	(void)index;
 	if (stop_print)
-		print_job(((t_job *)tmp->content)->pid, 1);
+	{
+		print_job(((t_job *)tmp->content)->pid, after_stop);
+		after_stop = 0;
+	}
 	else if (!print && check_job_state(tmp, SIG) && !job_state_done(tmp))
 	{
 		cmd = last_sig_process(tmp, 1);
@@ -114,4 +118,6 @@ void		print_refreshed_jobs(t_list *tmp, int print
 	}
 	else if (print && !job_state_done(tmp))
 		print_job(((t_job *)tmp->content)->pid, 0);
+	if (!tmp->next)
+		after_stop = 1;
 }

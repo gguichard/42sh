@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:33:00 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/10 12:36:56 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 14:30:31 by jocohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	handler_signals(int sig)
 		handle_end_of_text(g_cmdline);
 		reset_cmdline(g_cmdline, g_cmdline->prompt.str
 				, g_cmdline->prompt.offset);
+		g_cmdline->alloc->ret_val = 128 + sig;
 		return ;
 	}
 	g_sig = sig;
