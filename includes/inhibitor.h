@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:50:15 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 15:35:20 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/10 16:10:05 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 char	**inhib_expand_str(const char *str, t_alloc *alloc, int i);
 int		inhib_expand_tab(t_ast *elem, t_alloc *alloc);
 int		do_inhib_auto(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
-		, t_alloc *alloc);
-int		inhib_in_db_auto(t_str_cmd_inf *str_cmd, size_t *pos, char **array
-		, t_alloc *alloc);
-int		inhib_expand_in_quote_auto(t_str_cmd_inf *str_cmd, char **array
-		, size_t *pos, t_alloc *alloc);
+	, t_alloc *alloc);
+int			inhib_in_db_auto(t_str_cmd_inf *str_cmd, size_t *pos, char **array
+	, t_alloc *alloc);
+int		inhib_expand_quote_auto(t_str_cmd_inf *str_cmd, char **array
+	, size_t *pos, t_alloc *alloc);
 
 char	*only_inhib_str(const char *str);
 

@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:45:48 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 14:49:00 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 15:40:28 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "parser_lexer.h"
 #include "vars.h"
 
-char	*get_path_tilde(const char *log_search)
+char	*get_path_tilde(const char *log_search, int join)
 {
 	size_t			i;
 	char			*login;
@@ -35,6 +35,8 @@ char	*get_path_tilde(const char *log_search)
 		ft_memdel((void **)&login);
 	if (pass)
 	{
+		if (join == 0)
+			return (pass->pw_dir);
 		login = ft_strjoin(pass->pw_dir, &(log_search[i]));
 		return (login);
 	}
@@ -58,7 +60,7 @@ int		expand_home_shortcut(char **s, t_list *vars)
 				|| (*s)[2] == ':' || (*s)[2] == '='))
 		dir = ft_strjoin(get_var_value(vars, "PWD"), (*s) + 2);
 	else if ((*s)[0] == '~' && (ft_isalpha((*s)[1]) || (*s)[1] == '_'))
-		dir = get_path_tilde(&((*s)[1]));
+		dir = get_path_tilde(&((*s)[1]), 1);
 	if (dir)
 	{
 		ft_memdel((void **)&(*s));

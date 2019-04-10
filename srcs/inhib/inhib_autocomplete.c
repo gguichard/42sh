@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 15:01:41 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 15:15:41 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 15:24:42 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		do_inhib_auto(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 	while (scmd_cur_char(str_cmd))
 		if (str_cmd->is_in_quote || str_cmd->is_in_dbquote)
 		{
-			if (!(inhib_expand_in_quote_auto(str_cmd, *array, pos_array, alloc)))
+			if (!(inhib_expand_quote_auto(str_cmd, *array, pos_array, alloc)))
 				return (error_inhib_expand(str_cmd, *array));
 		}
 		else if (scmd_cur_char_is_escaped(str_cmd))
@@ -102,7 +102,7 @@ int		inhib_in_db_auto(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 	return (1);
 }
 
-int		inhib_expand_in_quote_auto(t_str_cmd_inf *str_cmd, char **array
+int		inhib_expand_quote_auto(t_str_cmd_inf *str_cmd, char **array
 		, size_t *pos, t_alloc *alloc)
 {
 	if (str_cmd->is_in_quote)

@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 14:12:28 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 15:11:00 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 16:06:04 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,8 @@
 #include "parser_lexer.h"
 #include "vars.h"
 
-static const char	*get_home_value(const char *s, size_t pos, t_list *vars
-			, size_t *len)
+static const char	*get_home_value(const char *s, size_t pos, t_list *vars)
 {
-	char	*cst;
-	char	*dir;
-
-	dir = NULL;
-	cst = NULL;
-	(void)len;
 	if (s[pos] == '~' && (s[pos + 1] == '/' || s[pos + 1] == '\0'
 			|| s[pos + 1] == ':' || s[pos + 1] == '='))
 		return (get_home_directory(vars));
@@ -36,19 +29,6 @@ static const char	*get_home_value(const char *s, size_t pos, t_list *vars
 	else if (ft_strnequ("~+", &(s[pos]), 2) && (s[pos + 2] == '/'
 			|| s[pos + 2] == '\0' || s[pos + 2] == ':' || s[pos + 2] == '='))
 		return (get_var_value(vars, "PWD"));
-	// else if (s[pos] == '~' && (ft_isalpha(s[pos + 1]) || s[pos + 1] == '_'))
-	// {
-	// 	if ((dir = get_path_tilde(&(s[pos + 1]))))
-	// 	{
-	// 		while (s[pos + *len] && s[pos + *len] != '/'
-	// 				&& s[pos + *len] != ':')
-	// 			*len += 1;
-	// 		*len -= 1;
-	// 		cst = dir;
-	// 		ft_memdel((void **)&dir);
-	// 	}
-	// 	return (cst);
-	// }
 	return (NULL);
 }
 
@@ -57,22 +37,19 @@ static int			do_expand_home_assign(char **s, t_list *vars
 {
 	size_t	i;
 	size_t	len;
-	size_t	user_len;
 	char	*cst;
 
 	i = 1;
 	cst = NULL;
 	len = ft_strlen(*s);
-	user_len = 0;
 	if ((*s)[*pos - 1] == '=' && (*s)[*pos] == '~')
 	{
-		if ((cst = (char *)get_home_value(*s, *pos, vars, &user_len)))
+		if ((cst = (char *)get_home_value(*s, *pos, vars)))
 		{
 			if ((*s)[*pos + 1] == '-' || (*s)[*pos + 1] == '+')
 				i += scmd_move_to_next_char(str_cmd);
-			ft_strreplace_inside(s, *pos, i + user_len, cst);
-			*pos = ft_strlen(*s) - len + 1;
-			scmd_move_to_next_char(str_cmd);
+			ft_strreplace_inside(s, *pos, i, cst);
+			*pos = (ft_strlen(*s) - len) + 1;
 		}
 	}
 	return (1);
