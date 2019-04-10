@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 13:47:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 11:41:27 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,23 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 	return (1);
 }
 
+static void	clean_empty_line_tab(char ***array)
+{
+	size_t	i;
+
+	i = 0;
+	if (ft_strtab_count(*array) == 1)
+		return ;
+	if (ft_strequ((*array)[i], "") == 1)
+		delete_line_tab(array, i);
+	if (*array)
+	{
+		i = ft_strtab_count(*array) - 1;
+		if (ft_strequ((*array)[i], "") == 1)
+			delete_line_tab(array, i);
+	}
+}
+
 char	**inhib_expand_str(const char *str, t_alloc *alloc)
 {
 	size_t			pos_array;
@@ -90,6 +107,8 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	free(str_cmd);
 	if (!array && (array = (char **)malloc((sizeof(char *) * 1))))
 		array[0] = NULL;
+	else if (array)
+		clean_empty_line_tab(&array);
 	return (array);
 }
 
