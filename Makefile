@@ -173,7 +173,7 @@ $(PATH_JOB)/job_id_nb.c \
 $(PATH_EXPAND)/expand.c \
 $(PATH_EXPAND)/expand_tools.c \
 $(PATH_EXPAND)/expand_multi_tk.c \
-$(PATH_EXPAND)/ft_splitwhitespace.c \
+$(PATH_EXPAND)/ft_split_whitespaces.c \
 $(PATH_EXPAND)/cmd_substitute.c \
 $(PATH_EXPAND)/subcmd_wait_n_signal.c \
 $(PATH_INHIB)/inhibitor.c \

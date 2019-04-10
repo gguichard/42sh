@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 23:43:30 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 21:31:34 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 10:58:31 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**init_new_array(char **array, size_t save, size_t pos, size_t *len)
 	sub = NULL;
 	index = get_pos_in_array(array);
 	sub = ft_strsub(array[index], save, pos - save);
-	new_array = ft_splitwhitespace(sub);
+	new_array = ft_split_whitespaces(sub);
 	ft_memdel((void *)&sub);
 	*len = get_pos_in_array(new_array) + 1;
 	*len += index;
