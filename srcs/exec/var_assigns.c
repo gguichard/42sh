@@ -6,25 +6,29 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 19:42:08 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/09 17:13:33 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 12:06:51 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "libft.h"
 #include "shell.h"
 #include "execution.h"
+#include "hashtable.h"
 #include "vars.h"
 
-static void	update_var_or_create_local(t_list **vars, const char *key
+static void	update_var_or_create_local(t_alloc *alloc, const char *key
 		, const char *value, int is_tmp)
 {
 	t_var	*var;
 
-	var = get_var(*vars, key);
+	var = get_var(alloc->vars, key);
 	if (var == NULL)
-		create_var(vars, key, value, is_tmp ? 2 : 0);
+		create_var(&alloc->vars, key, value, is_tmp ? 2 : 0);
 	else
 	{
+		if (ft_strequ(key, "PATH"))
+			delete_hashentries(alloc->exectable);
 		if (is_tmp && var->is_env != 2 && var->tmp_value == NULL)
 		{
 			var->tmp_value = var->value;
@@ -47,7 +51,7 @@ static void	assign_local_vars(t_alloc *alloc, t_ast *elem, int is_tmp)
 		if (tmp != NULL)
 		{
 			*tmp = '\0';
-			update_var_or_create_local(&alloc->vars, elem->input[idx], tmp + 1
+			update_var_or_create_local(alloc, elem->input[idx], tmp + 1
 					, is_tmp);
 			*tmp = '=';
 		}
