@@ -345,6 +345,7 @@ void test_inhib_expand()
 	test_this_inhib_expand("\"coucou$DEUXMOTSESPACEPREFSUFF/ok\"", (char*[]){"coucou LOL MDR /ok", NULL});
 	//home
 	test_this_inhib_expand("~", (char*[]){"MAISON", NULL});
+	test_this_inhib_expand("~~", (char*[]){"~~", NULL});
 	test_this_inhib_expand("~userexistepas", (char*[]){"~userexistepas", NULL});
 	test_this_inhib_expand("~+non", (char*[]){"~+non", NULL});
 	test_this_inhib_expand("\'~\'", (char*[]){"~", NULL});
@@ -365,6 +366,7 @@ void test_inhib_expand()
 	test_this_inhib_expand("oui%%non=~", (char*[]){"oui%%non=~", NULL});
 	test_this_inhib_expand("var\\=~", (char*[]){"var=~", NULL});
 	test_this_inhib_expand("var=~", (char*[]){"var=MAISON", NULL});
+	test_this_inhib_expand("var=~~", (char*[]){"var=~~", NULL});
 	test_this_inhib_expand("var=~/oui", (char*[]){"var=MAISON/oui", NULL});
 	test_this_inhib_expand("var=~:oui", (char*[]){"var=MAISON:oui", NULL});
 	test_this_inhib_expand("var=oui:~", (char*[]){"var=oui:MAISON", NULL});
@@ -372,10 +374,10 @@ void test_inhib_expand()
 	test_this_inhib_expand("var=\\~", (char*[]){"var=~", NULL});
 	test_this_inhib_expand("var=\'~\'", (char*[]){"var=~", NULL});
 	test_this_inhib_expand("var=\"~\"", (char*[]){"var=~", NULL});
-	test_this_inhib_expand("var=\'oui\':~", (char*[]){"var=oui:MAISON~", NULL});
+	test_this_inhib_expand("var=\'oui\':~", (char*[]){"var=oui:MAISON", NULL});
 	test_this_inhib_expand("var=\'oui:\'~", (char*[]){"var=oui:~", NULL});
 	test_this_inhib_expand("var=\'oui:~\'", (char*[]){"var=oui:~", NULL});
-	test_this_inhib_expand("var=\"oui\":~", (char*[]){"var=oui:MAISON~", NULL});
+	test_this_inhib_expand("var=\"oui\":~", (char*[]){"var=oui:MAISON", NULL});
 	test_this_inhib_expand("var=\"oui:\"~", (char*[]){"var=oui:~", NULL});
 	test_this_inhib_expand("var=\"oui:~\"", (char*[]){"var=oui:~", NULL});
 	test_this_inhib_expand("\'=~\'", (char*[]){"=~", NULL});
