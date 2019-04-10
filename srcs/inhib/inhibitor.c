@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/09 13:47:40 by gguichar         ###   ########.fr       */
+/*   Updated: 2019/04/10 11:47:46 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "str_cmd_inf.h"
 #include "error.h"
 
-int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
+int			inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 		, t_alloc *alloc)
 {
 	size_t	index;
@@ -42,7 +42,7 @@ int		inhib_in_db(t_str_cmd_inf *str_cmd, size_t *pos, char **array
 	return (1);
 }
 
-int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
+int			do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 		, t_alloc *alloc)
 {
 	while (scmd_cur_char(str_cmd))
@@ -67,7 +67,24 @@ int		do_inhib(t_str_cmd_inf *str_cmd, char ***array, size_t *pos_array
 	return (1);
 }
 
-char	**inhib_expand_str(const char *str, t_alloc *alloc)
+static void	clean_empty_line_tab(char ***array)
+{
+	size_t	i;
+
+	i = 0;
+	if (ft_strtab_count(*array) == 1)
+		return ;
+	if (ft_strequ((*array)[i], "") == 1)
+		delete_line_tab(array, i);
+	if (*array)
+	{
+		i = ft_strtab_count(*array) - 1;
+		if (ft_strequ((*array)[i], "") == 1)
+			delete_line_tab(array, i);
+	}
+}
+
+char		**inhib_expand_str(const char *str, t_alloc *alloc)
 {
 	size_t			pos_array;
 	t_str_cmd_inf	*str_cmd;
@@ -90,10 +107,12 @@ char	**inhib_expand_str(const char *str, t_alloc *alloc)
 	free(str_cmd);
 	if (!array && (array = (char **)malloc((sizeof(char *) * 1))))
 		array[0] = NULL;
+	else if (array)
+		clean_empty_line_tab(&array);
 	return (array);
 }
 
-int		inhib_expand_tab(t_ast *elem, t_alloc *alloc)
+int			inhib_expand_tab(t_ast *elem, t_alloc *alloc)
 {
 	int		i;
 	char	**new_array;
