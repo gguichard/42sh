@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 17:59:39 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 15:12:49 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 16:39:41 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char		**inhib_expand_str(const char *str, t_alloc *alloc, int i)
 	}
 	check_expand_home(&(array[0]), alloc->vars, str_cmd, &pos_array);
 	if ((i == 0 && !do_inhib(str_cmd, &array, &pos_array, alloc))
-		&& (i == 1 && !do_inhib_auto(str_cmd, &array, &pos_array, alloc)))
+		|| (i == 1 && !do_inhib_auto(str_cmd, &array, &pos_array, alloc)))
 		return (NULL);
 	scmd_clean(str_cmd);
 	free(str_cmd);
