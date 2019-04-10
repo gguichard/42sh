@@ -6,7 +6,7 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 14:12:28 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/10 16:06:04 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 16:58:28 by tcollard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int					check_expand_home_assign(char **s, t_list *vars
 	if (i == 0)
 		return (1);
 	i -= 1;
-	while ((*s)[i] && i >= 0)
+	while (i >= 0 && (*s)[i])
 	{
 		if (!ft_isalnum((*s)[i]) && (*s)[i] != '_')
 			break ;
