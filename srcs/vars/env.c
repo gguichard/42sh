@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 14:39:11 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/03 16:56:21 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/10 17:20:44 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char		**get_environ_from_list(t_list *env)
 		while (env != NULL)
 		{
 			var = (t_var *)env->content;
-			if (var->value != NULL && var->is_env)
+			if (var->value != NULL && (var->is_env || var->tmp_value != NULL))
 			{
 				environ[index] = env_key_equal_value(var);
 				if (environ[index] == NULL)
