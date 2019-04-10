@@ -7,7 +7,7 @@ GREEN	=	\x1b[32m
 INC_DIR	=	includes
 
 CC		=	gcc
-CFLAGS 	=	-Wall -g -Werror -Wextra -I libft/includes -I $(INC_DIR)
+CFLAGS 	=	-Wall -Werror -Wextra -I libft/includes -I $(INC_DIR)
 LDFLAGS	=	-Llibft
 LDLIBS	=	-lft -ltermcap
 
