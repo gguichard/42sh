@@ -16,6 +16,8 @@
 #include "inhibitor.h"
 
 static t_alloc	alloc;
+static size_t	test_nb_count = 0;
+static size_t	test_err_count = 0;
 
 //JE SAIS PAS POURAUOI C'EST LA MAIS JE LAISSE
 int			lexer_parser(const char *line, t_alloc *alloc, int fork)
@@ -50,6 +52,19 @@ int			lexer_parser(const char *line, t_alloc *alloc, int fork)
 	return (ret);
 }
 
+void	print_ok()
+{
+	++test_nb_count;
+	ft_printf("\033[1;32mOK !\033[0m\n");
+}
+
+void	print_error()
+{
+	++test_nb_count;
+	++test_err_count;
+	ft_printf("\033[1;31mFAUX !\033[0m\n");
+}
+
 void	test_this_autocomplete(char *strbase, char *result_needed
 		, t_ac_suff_type type_needed)
 {
@@ -66,9 +81,9 @@ void	test_this_autocomplete(char *strbase, char *result_needed
 	ft_printf("(str) Attendu : « %s », resultat : « %s »\n", result_needed, (acs != NULL ? acs->suff : "ERREUR"));
 	ft_printf("(typ) Attendu : « %d », resultat : « %d »\n", type_needed, (acs != NULL ? acs->suff_type : -1));
 	if (acs != NULL && ft_strequ(result_needed, acs->suff) && type_needed == acs->suff_type)
-		ft_printf("\033[1;32mOK !\033[0m\n");
+		print_ok();
 	else
-		ft_printf("\033[1;31mFAUX !\033[0m\n");
+		print_error();
 	if (acs != NULL)
 		delete_ac_suff_inf(acs);
 	scmd_clean(&scmd);
@@ -119,9 +134,9 @@ void	test_this_alias(char *strbase, char *result_needed)
 	tk_lst = split_cmd_token(&scmd, alloc.aliastable);
 	ft_printf("(str) Attendu : « %s », resultat : « %s »\n", result_needed, scmd.str);
 	if (ft_strequ(result_needed, scmd.str))
-		ft_printf("\033[1;32mOK !\033[0m\n");
+		print_ok();
 	else
-		ft_printf("\033[1;31mFAUX !\033[0m\n");
+		print_error();
 	ft_lstdel(&tk_lst, del_token);
 	scmd_clean(&scmd);
 }
@@ -185,9 +200,9 @@ void	test_this_inhib_expand(char *strbase, char **result_needed)
 	}
 	if ((result_needed == NULL && str_tab == NULL)
 			|| (result_needed != NULL && str_tab != NULL && *str_tab == NULL && *result_needed == NULL))
-		ft_printf("\033[1;32mOK !\033[0m\n");
+		print_ok();
 	else
-		ft_printf("\033[1;31mFAUX !\033[0m\n");
+		print_error();
 	ft_strtab_free(head);
 }
 
@@ -344,6 +359,14 @@ int		main(int argc, char **argv, char **environ)
 	test_alias();
 	ft_printf("\n");
 	test_inhib_expand();
+	if (test_err_count > 0)
+	{
+		ft_printf("\033[1;31m%zu erreurs pour %zu tests !\033[0m\n", test_err_count, test_nb_count);
+	}
+	else
+	{
+		ft_printf("\033[1;32mPas d'erreurs pour %zu tests !\033[0m\n", test_nb_count);
+	}
 	del_alloc(&alloc);
 	return (0);
 }
