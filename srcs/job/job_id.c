@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/09 12:25:42 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/10 15:20:56 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/11 13:56:50 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char	*ft_strstr_start(const char *haystack, const char *needle)
 }
 
 static int	look_for_str_job(t_list **tmp, const char *arg
-			, char *(*str_check)(const char *, const char *))
+		, char *(*str_check)(const char *, const char *))
 {
 	char	*cmd;
 	int		index;
@@ -70,14 +70,14 @@ static int	job_id_string(const char *arg, t_list **tmp, const char *bltin)
 	if (!(*tmp) && index != -1)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: %s: %s: ambiguous job spec\n"
-					, bltin, (arg[1] == '?') ? arg + 2 : arg + 1);
+				, bltin, (arg[1] == '?') ? arg + 2 : arg + 1);
 		return (0);
 	}
 	return (index);
 }
 
 static int	check_job_id_nb_str(const char *arg, t_list **tmp
-			, const char *bltin)
+		, const char *bltin)
 {
 	char	*endptr;
 	int		value;

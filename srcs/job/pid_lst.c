@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:28:10 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 21:06:28 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/11 13:56:27 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 	t_list	*node;
 
 	if (!create_job(&job, process, elem, addpipe)
-		|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
+			|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
 	{
 		kill_zombie_boy(process, 0);
 		ft_memdel((void **)&(job.cmd));
@@ -74,7 +74,7 @@ t_list			*add_pid_lst(pid_t process, t_ast *elem, int addpipe)
 }
 
 int				add_pid_lst_pipe(t_list *attach, pid_t process
-								, t_ast *elem, int addpipe)
+		, t_ast *elem, int addpipe)
 {
 	t_job	job;
 	t_list	*node;
@@ -85,7 +85,7 @@ int				add_pid_lst_pipe(t_list *attach, pid_t process
 		return (-1);
 	}
 	if (!create_job(&job, process, elem, addpipe)
-		|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
+			|| (node = ft_lstnew(&job, sizeof(t_job))) == NULL)
 	{
 		kill_zombie_boy(process, 0);
 		ft_memdel((void **)&(job.cmd));

@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:27:47 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/10 11:23:04 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/11 13:56:55 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		ret_status(int ret, pid_t process, t_job *job, t_exec_opt *opt)
 	if (!job && WIFSIGNALED(ret) && WTERMSIG(ret) == SIGINT)
 		write(1, "\n", 1);
 	if ((!job && !(job = get_job_pid(process)))
-		|| (g_sig && g_sig != SIGINT))
+			|| (g_sig && g_sig != SIGINT))
 		return (1);
 	if (WIFEXITED(ret))
 	{
