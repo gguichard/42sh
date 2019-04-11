@@ -6,11 +6,13 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:29:35 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 13:29:37 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/11 12:59:02 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <unistd.h>
+#include "libft.h"
 #include "shell.h"
 #include "options.h"
 #include "aliastable.h"
@@ -25,6 +27,8 @@
 static int	print_alias_hashentry(t_hashentry *alias_entry
 		, const char *searched_name)
 {
+	char	*escaped_str;
+
 	if (alias_entry == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: alias: %s: not found\n"
@@ -33,9 +37,13 @@ static int	print_alias_hashentry(t_hashentry *alias_entry
 	}
 	else
 	{
-		if (ft_printf("alias %s='%s'\n", alias_entry->key
-					, (char*)alias_entry->value) == -1)
+		escaped_str = ft_strreplace(alias_entry->value, "\'", "\'\\\'\'");
+		if (ft_printf("alias %s='%s'\n", alias_entry->key, escaped_str) == -1)
+		{
+			free(escaped_str);
 			return (0);
+		}
+		free(escaped_str);
 		return (1);
 	}
 }
