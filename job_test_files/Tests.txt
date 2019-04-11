@@ -1,0 +1,12 @@
+Signaux :
+	-prompt = SIGINT SIGTERM SIGWINCH & killing
+	-exec = same
+	-exec subcmd = same
+	-exec fifo (builtin) = same
+Jobs Control :
+	-signaux
+	-pipe
+	-jobs id
+	-fg
+	-bg
+	-ctrl c
