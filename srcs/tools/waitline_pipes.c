@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:34:42 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/10 12:19:05 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/11 13:57:47 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	get_ret_val(t_list *tmp, t_exec_opt *opt)
 }
 
 int			waiting_line(t_list *tmp, int wait_hang, t_alloc *alloc
-			, t_exec_opt *opt)
+		, t_exec_opt *opt)
 {
 	if (!tmp)
 	{
@@ -95,7 +95,7 @@ void		kill_zombie_boy(pid_t boy, int display_err)
 	waitpid(boy, 0, WUNTRACED);
 	if (display_err == 1)
 		ft_dprintf(STDERR_FILENO
-			, "42sh: child setpgid: operation not permitted\n");
+				, "42sh: child setpgid: operation not permitted\n");
 }
 
 void		wait_pid(pid_t child, t_alloc *alloc, t_ast *elem, t_exec_opt *opt)

@@ -238,8 +238,4 @@ re:
 	$(MAKE) fclean
 	$(MAKE) all
 
-debug: $(addprefix $(OBJ_DIR)/,$(OBJ))
-	$(MAKE) -C libft
-	$(CC) $(CFLAGS) -fsanitize=address -g $(LDFLAGS) $(LDLIBS) -o $@ $^
-
 .PHONY: all clean fclean $(OBJ_RULE)
