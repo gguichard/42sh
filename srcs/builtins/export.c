@@ -6,10 +6,11 @@
 /*   By: tcollard <tcollard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 21:08:24 by tcollard          #+#    #+#             */
-/*   Updated: 2019/04/05 21:08:27 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/11 13:02:39 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <unistd.h>
 #include "libft.h"
 #include "options.h"
@@ -22,6 +23,7 @@
 static void	display_env_vars(t_list *vars)
 {
 	t_var	*var;
+	char	*escaped_str;
 
 	while (vars)
 	{
@@ -29,7 +31,11 @@ static void	display_env_vars(t_list *vars)
 		if (var->is_env)
 		{
 			if (var->value != NULL)
-				ft_printf("export %s=\"%s\"\n", var->key, var->value);
+			{
+				escaped_str = ft_strreplace(var->value, "\'", "\'\\\'\'");
+				ft_printf("export %s=\'%s\'\n", var->key, escaped_str);
+				free(escaped_str);
+			}
 			else
 				ft_printf("export %s\n", var->key);
 		}
