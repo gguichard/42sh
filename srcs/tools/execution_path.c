@@ -6,7 +6,7 @@
 /*   By: jocohen <jocohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 15:23:54 by jocohen           #+#    #+#             */
-/*   Updated: 2019/04/08 15:23:55 by jocohen          ###   ########.fr       */
+/*   Updated: 2019/04/12 11:30:57 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ char				*exec_path(t_alloc *alloc, const char *name, int *hashable
 	*hashable = 0;
 	if (!ft_strchr(name, '/'))
 	{
-		if ((alias = get_exec_path(alloc->exectable, name, 1)) != NULL)
-			path_exec = ft_strdup(check_right_alias(alias, err));
-		else
+		if ((alias = get_exec_path(alloc->exectable, name, 1)) == NULL)
 			path_exec = search_exec(alloc->vars, name, hashable, err);
+		else if ((alias = check_right_alias(alias, err)) != NULL)
+			path_exec = ft_strdup(alias);
 	}
 	else
 	{
