@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:26:40 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 13:26:41 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/16 11:19:15 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ static int	replace_token_with_alias_res_and_clean(t_split_cmd_inf *sp_cmd
 		return (0);
 	}
 	scmd_clean(alias_scmd);
-	sp_cmd->scmd->pos = tk_start_pos;
+	scmd_move_pos(sp_cmd->scmd, -sp_cmd->scmd->pos);
+	scmd_move_pos(sp_cmd->scmd, tk_start_pos);
+	sp_cmd->last_char_was_spe = 1;
 	sp_cmd->tk_start = sp_cmd->scmd->str + tk_start_pos;
 	sp_cmd->alias_has_expanded = 1;
 	return (1);
