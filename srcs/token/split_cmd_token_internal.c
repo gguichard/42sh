@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:26:43 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/16 12:42:02 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/16 13:57:15 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,15 @@ t_list			*internal_split_cmd_token(t_split_cmd_inf *sp_cmd)
 {
 	if (sp_cmd->alias_recur_lvl > 500)
 		return (NULL);
-	while (1)
+	while ((sp_cmd->alias_has_expanded = 0) == 0)
 	{
-		sp_cmd->alias_has_expanded = 0;
 		while (sp_cmd->scmd->str[sp_cmd->scmd->pos] != '\0')
 		{
 			if (!split_at_pos(sp_cmd))
 				return (end_sp_cmd_inf(sp_cmd, 1));
+			if (!sp_cmd->alias_has_expanded)
+				scmd_move_to_next_char(sp_cmd->scmd);
 			sp_cmd->alias_has_expanded = 0;
-			scmd_move_to_next_char(sp_cmd->scmd);
 		}
 		if (sp_cmd->disable_last_alias_expand)
 			sp_cmd->pos_alias_can_start = -1;
