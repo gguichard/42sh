@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:03:36 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/09 12:00:25 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/16 11:51:04 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int				scmd_cur_char_is_escaped(t_str_cmd_inf *str_cmd_inf);
 int				scmd_cur_char_can_be_spe(t_str_cmd_inf *str_cmd_inf);
 
 void			scmd_move_pos(t_str_cmd_inf *str_cmd_inf, int pos_move);
+
+void			scmd_set_pos(t_str_cmd_inf *str_cmd_inf, size_t new_pos);
 
 t_str_cmd_inf	*scmd_get_last_depth(t_str_cmd_inf *str_cmd_inf);
 

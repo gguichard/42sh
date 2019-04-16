@@ -6,7 +6,7 @@
 /*   By: gguichar <gguichar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:33:19 by gguichar          #+#    #+#             */
-/*   Updated: 2019/04/04 09:46:51 by tcollard         ###   ########.fr       */
+/*   Updated: 2019/04/11 23:09:30 by gguichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char		*search_in_cd_path(t_alloc *alloc, const char *path
 		if ((next_sep = ft_strchr(cd_path, ':')) != NULL)
 			*next_sep = '\0';
 		full_path = get_full_path_if_valid(path, pwd, cd_path, alloc);
-		if (full_path == NULL || next_sep == NULL)
+		if (full_path != NULL || next_sep == NULL)
 			break ;
 		cd_path = next_sep + 1;
 	}

@@ -6,30 +6,27 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 11:51:55 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/09 13:06:06 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/16 13:27:58 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "str_cmd_inf.h"
 
-int				scmd_init(t_str_cmd_inf *str_cmd_inf, const char *str)
-{
-	ft_bzero(str_cmd_inf, sizeof(t_str_cmd_inf));
-	if (str != NULL)
-	{
-		str_cmd_inf->str = ft_strdup(str);
-		return (str_cmd_inf->str != NULL);
-	}
-	else
-		return (1);
-}
-
 void			scmd_move_pos(t_str_cmd_inf *str_cmd_inf, int pos_move)
 {
 	while (str_cmd_inf != NULL)
 	{
 		str_cmd_inf->pos += pos_move;
+		str_cmd_inf = str_cmd_inf->sub_str_cmd;
+	}
+}
+
+void			scmd_set_pos(t_str_cmd_inf *str_cmd_inf, size_t new_pos)
+{
+	while (str_cmd_inf != NULL)
+	{
+		str_cmd_inf->pos = new_pos;
 		str_cmd_inf = str_cmd_inf->sub_str_cmd;
 	}
 }

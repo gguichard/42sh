@@ -6,7 +6,7 @@
 /*   By: fwerner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:26:36 by fwerner           #+#    #+#             */
-/*   Updated: 2019/04/08 13:26:37 by fwerner          ###   ########.fr       */
+/*   Updated: 2019/04/16 15:01:21 by fwerner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static int	update_sp_cmd_with_inf(t_split_cmd_inf *sp_cmd
 {
 	if (sp_cmd->pos_alias_can_start <= sp_cmd->tk_start - sp_cmd->scmd->str)
 	{
-		sp_cmd->pos_alias_can_start = -1;
+		if (sp_cmd->cur_tk_type == TK_CMD
+				|| sp_cmd->last_alias_ended_with_blank)
+			sp_cmd->pos_alias_can_start = -1;
 		if (sp_cmd->cur_tk_type == TK_CMD_SEP)
 			sp_cmd->pos_alias_can_start = 0;
 		sp_cmd->last_alias_ended_with_blank = 0;
