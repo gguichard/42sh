@@ -20,7 +20,7 @@ It's a command-line interpreter
 ##  How to do
 ```
 $>  git clone https://github.com/tcollard/42sh.git
-$>  make
+$>  cd 42sh && make
 $>  ./42sh
 ```
 ## Rules make
