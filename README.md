@@ -6,6 +6,7 @@ It's a command-line interpreter
   - Prompt with line edition
   - Builtins `alias`, `bg`, `cd`, `echo`, `exit`, `export`, `fg`, `hash`, `jobs`, `set`, `source`, `test`, `type`, `unalias`, `unset`
   - Executing simple commands
+  - Execute in background `&`
   - Redirection `>`, `>>`, `<` and `|`
   - Heredoc `<<`
   - Logical operands `&&` and `||`
@@ -14,10 +15,10 @@ It's a command-line interpreter
   - Environment and local variables `$VAR` or `${VAR}`
   - Command substitution `$(CMD)`
   - Dynamical autocompletion
-  - History
+  - History (saved in `~/.42sh_history`)
+  - PS1 environment variable to custom shell prompt ([wiki](https://ss64.com/bash/syntax-prompt.html))
   
 # Installation
-##  How to do
 ```
 $>  git clone https://github.com/tcollard/42sh.git
 $>  cd 42sh && make
@@ -31,11 +32,19 @@ $>  ./42sh
 
 # Shell
 
-## Line editing
+## History 
+Commands|Functions|
+:-:|:--
+`!!`|Last command in history
+`!word`|Look for the last command starting by `word`
+`![-]number`|Look for the command at index `number`, `-` define that the search start from the end
 
-## History
-
-## Autocompletion
+## Alias
+Commands|Functions|
+:-:|:--
+`alias`|List all the current aliases set
+`alias [name[=value] ...]`|Sets an alias for `name` so it replaces as `value` internally 
+`unalias [-a] name [name ...]`|Remove the `name` arguments of the alias table. `-a` removes all aliases
 
 ## Hash table
 Commands|Functions|
@@ -46,13 +55,11 @@ Commands|Functions|
 ## Job control
 Commands|Functions|
 :-:|:--
-`jobs`|List all the current running jobs
-`fg`|Bring the most recent process to foreground
-`fg n`|Bring the specified jobs to foreground where `n` is the numerical value of the process found in `jobs`
+`jobs [n]`|List all the current running jobs, `n` specify the job you want (the form is in [job id form](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_204) or it can be a numerical value) 
+`fg [n]`|Bring the specified job to foreground
+`bg [n]`|Bring the specified job to background
 
-# Easter egg
-If you know [konami code](https://en.wikipedia.org/wiki/Konami_Code)\
-Just press <kbd>esc</kbd> and do it
+All of our shell functionalities are in [Posix norm](https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/).
 
 # Author
 Name|Mail|Github
