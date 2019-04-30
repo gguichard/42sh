@@ -37,7 +37,7 @@ Commands|Functions|
 :-:|:--
 `!!`|Last command in history
 `!word`|Look for the last command starting by `word`
-`![-]number`|Look for the command at index `number`, `-` define that the search start from the end
+`![-]number`|Look for the command at index `number`, `-` define that the search starts from the end
 
 ## Alias
 Commands|Functions|
