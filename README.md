@@ -61,7 +61,7 @@ Commands|Functions|
 
 All of our shell functionalities are in [Posix norm](https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/).
 
-# Author
+# Authors
 Name|Mail|Github
 :-:|:-:|:--
 Gwennaël Guichard|gguichar@student.42.fr|https://github.com/gguichard
